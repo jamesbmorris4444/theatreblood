@@ -3,7 +3,7 @@ package com.greendot.rewards.home
 import com.greendot.rewards.Constants.API_KEY
 import com.greendot.rewards.Constants.LANGUAGE
 import com.greendot.rewards.logger.LogUtils
-import com.greendot.rewards.logger.LogUtils.TAG_FILTER.ANX
+import com.greendot.rewards.logger.LogUtils.TagFilter.ANX
 import com.greendot.rewards.repository.APIClient
 import com.greendot.rewards.repository.APIInterface
 import com.greendot.rewards.repository.Movie

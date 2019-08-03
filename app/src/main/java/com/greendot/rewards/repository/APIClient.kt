@@ -4,7 +4,7 @@ import com.google.gson.GsonBuilder
 import com.greendot.rewards.Constants.MOVIE_ARRAY_LIST_CLASS_TYPE
 import com.greendot.rewards.Constants.POPULAR_MOVIES_BASE_URL
 import com.greendot.rewards.logger.LogUtils
-import com.greendot.rewards.logger.LogUtils.TAG_FILTER.ANX
+import com.greendot.rewards.logger.LogUtils.TagFilter.ANX
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

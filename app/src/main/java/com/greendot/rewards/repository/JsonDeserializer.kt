@@ -6,7 +6,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
 import com.greendot.rewards.Constants
 import com.greendot.rewards.logger.LogUtils
-import com.greendot.rewards.logger.LogUtils.TAG_FILTER.ANX
+import com.greendot.rewards.logger.LogUtils.TagFilter.ANX
 import java.lang.reflect.Type
 
 internal class JsonDeserializer : JsonDeserializer<Any> {
