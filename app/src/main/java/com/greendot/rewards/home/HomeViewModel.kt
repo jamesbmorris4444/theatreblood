@@ -1,11 +1,15 @@
 package com.greendot.rewards.home
 
+import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.greendot.rewards.Constants
 import com.greendot.rewards.activity.MainActivity
 import com.greendot.rewards.repository.Movie
+import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -19,6 +23,19 @@ class HomeViewModel(activity: MainActivity) : ViewModel() {
     var posterPath: ObservableField<String>? = ObservableField("")
     private var disposable: Disposable? = null
     private val mainActivity: MainActivity = activity
+
+    companion object {
+        @BindingAdapter("android:src")
+        @JvmStatic
+        fun setImageUrl(view: ImageView, url: String?) {
+            if (url != null) {
+                Picasso
+                    .get()
+                    .load(Constants.SMALL_IMAGE_URL_PREFIX + url)
+                    .into(view)
+            }
+        }
+    }
 
     init {
         disposable = homeDataModel.getMovieList()
@@ -40,9 +57,9 @@ class HomeViewModel(activity: MainActivity) : ViewModel() {
     fun liveDataUpdate() {
         val rand = Random(System.currentTimeMillis())
         val movie: Movie? = liveDataMovieList.value?.let { it[rand.nextInt(20)] }
-        title?.set(movie?.let { it.title })
-        releaseDate?.set(movie?.let { it.releaseDate })
-        posterPath?.set(movie?.let { it.posterPath })
+        title?.set(movie?.title)
+        releaseDate?.set(movie?.releaseDate)
+        posterPath?.set(movie?.posterPath)
     }
 
     fun onItemClick() {
