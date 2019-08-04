@@ -20,7 +20,7 @@ class HomeDataModel : Callback<ArrayList<Movie>> {
     private var movieObservable: ReplaySubject<ArrayList<Movie>> = ReplaySubject.create()
     private val moviesService: APIInterface = APIClient.client
 
-    init {
+    fun loadData() {
         val callBack: Call<ArrayList<Movie>> = moviesService.getMovies(API_KEY, LANGUAGE, 1)
         callBack.enqueue(this)
     }

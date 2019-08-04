@@ -12,18 +12,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-        <!--
         <android.widget.ImageView
                 android:id="@+id/cover"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
+                android:layout_width="150dp"
+                android:layout_height="200dp"
                 android:src="@{homeViewModel.posterPath}"
+                android:onClick="@{() -> homeViewModel.onItemClick()}"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/posterImage"
+                android:scaleType="fitXY"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/title"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
-        -->
 
         <android.widget.TextView
                 android:id="@+id/title"
@@ -33,9 +34,8 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:background="@color/green"
-                android:onClick="@{() -> homeViewModel.onItemClick()}"
                 android:text="@{homeViewModel.title}"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cover"
                 app:layout_constraintBottom_toTopOf="@+id/release_date"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
