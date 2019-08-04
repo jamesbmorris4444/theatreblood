@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         }
         false
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.plant(Timber.DebugTree())
@@ -36,4 +37,5 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 }

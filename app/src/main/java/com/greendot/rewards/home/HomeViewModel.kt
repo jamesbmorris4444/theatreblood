@@ -1,20 +1,28 @@
 package com.greendot.rewards.home
 
-import androidx.databinding.Bindable
+import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.greendot.rewards.repository.Movie
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 class HomeViewModel : ViewModel() {
-    private val homeDataModel = HomeDataModel()
+    private var homeDataModel = HomeDataModel()
+    var title: ObservableField<String>? = ObservableField("")
+    var releaseDate: ObservableField<String>? = ObservableField("")
+    private var disposable: Disposable? = null
 
-    fun getTitle0(): String? {
-        val movie: Movie? = homeDataModel?.let { it.getSingleMovie(0)}
-        return movie?.let { it.title }
+    init {
+        disposable = homeDataModel.getMovieList()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe{ movieList -> liveDataUpdate(movieList) }
     }
 
-    fun getReleaseDate0(): String? {
-        val movie: Movie? = homeDataModel?.let { it.getSingleMovie(0)}
-        return movie?.let { it.releaseDate }
+    private fun liveDataUpdate(movieList: ArrayList<Movie>) {
+        val movie: Movie? = movieList?.let { it.get(0) }
+        title?.set(movie?.let { it.title })
+        releaseDate?.set(movie?.let { it.releaseDate })
     }
-
 }

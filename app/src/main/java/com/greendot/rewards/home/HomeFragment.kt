@@ -1,12 +1,10 @@
 package com.greendot.rewards.home
 
 import android.os.Bundle
-import android.provider.SyncStateContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.lifecycle.Observer
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -36,6 +34,7 @@ class HomeFragment : Fragment() {
         val binding: HomeScreenBinding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.home_screen, container, false) as HomeScreenBinding
         binding.lifecycleOwner = this
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        binding.homeViewModel = viewModel
         return binding.root
     }
 

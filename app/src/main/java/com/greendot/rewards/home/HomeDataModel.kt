@@ -7,13 +7,17 @@ import com.greendot.rewards.logger.LogUtils.TagFilter.ANX
 import com.greendot.rewards.repository.APIClient
 import com.greendot.rewards.repository.APIInterface
 import com.greendot.rewards.repository.Movie
+import io.reactivex.Observable
+import io.reactivex.subjects.ReplaySubject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+private val TAG = HomeDataModel::class.java.simpleName
 class HomeDataModel : Callback<ArrayList<Movie>> {
 
-    private lateinit var movieList: ArrayList<Movie>
+    private var movieList = ArrayList<Movie>()
+    private var movieObservable: ReplaySubject<ArrayList<Movie>> = ReplaySubject.create()
     private val moviesService: APIInterface = APIClient.client
 
     init {
@@ -24,10 +28,11 @@ class HomeDataModel : Callback<ArrayList<Movie>> {
     override fun onResponse(call: Call<ArrayList<Movie>>, response: Response<ArrayList<Movie>>) {
         if (response.isSuccessful) {
             response.body()?.let { movieList = it }
+            movieObservable.onNext(movieList)
         } else {
-            println(response.errorBody())
+            LogUtils.W(TAG, LogUtils.FilterTags.withTags(ANX), String.format("RetroFit response error: %s", response.errorBody().toString()))
         }
-}
+    }
 
     override fun onFailure(call: Call<ArrayList<Movie>>, t: Throwable) {
         t.message?.let {
@@ -35,12 +40,8 @@ class HomeDataModel : Callback<ArrayList<Movie>> {
         }
     }
 
-    fun getSingleMovie(position: Int): Movie? {
-        if (position >= 0 && position < movieList.size) {
-            return movieList[position]
-        } else {
-            return null
-        }
+    fun getMovieList(): Observable<ArrayList<Movie>> {
+        return movieObservable
     }
 
 }
