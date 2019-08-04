@@ -11,9 +11,10 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.greendot.rewards.Constants
-import com.greendot.rewards.R
+import com.greendot.rewards.activity.MainActivity
 import com.greendot.rewards.databinding.HomeScreenBinding
 import com.squareup.picasso.Picasso
+
 
 class HomeFragment : Fragment() {
 
@@ -25,15 +26,21 @@ class HomeFragment : Fragment() {
         @JvmStatic
         fun setImageUrl(view: ImageView, url: String?) {
             if (url != null) {
-                Picasso.get().load(Constants.BIG_IMAGE_URL_PREFIX + url).into(view)
+                Picasso.get().load(Constants.SMALL_IMAGE_URL_PREFIX + url).into(view)
             }
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.unsubscribe()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding: HomeScreenBinding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.home_screen, container, false) as HomeScreenBinding
+        val binding: HomeScreenBinding = DataBindingUtil.inflate<ViewDataBinding>(inflater, com.greendot.rewards.R.layout.home_screen, container, false) as HomeScreenBinding
         binding.lifecycleOwner = this
-        viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, HomeViewModelFactory(activity as MainActivity))
+            .get(HomeViewModel::class.java)
         binding.homeViewModel = viewModel
         return binding.root
     }
