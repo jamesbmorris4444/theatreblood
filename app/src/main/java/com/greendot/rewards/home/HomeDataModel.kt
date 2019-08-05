@@ -23,7 +23,9 @@ class HomeDataModel : Callback<ArrayList<Movie>> {
     private lateinit var homeViewData: HomeViewData
 
     fun loadData() {
-        val callBack: Call<ArrayList<Movie>> = moviesService.getMovies(API_KEY, LANGUAGE, 3)
+        val rand = Random(System.currentTimeMillis())
+        val page = rand.nextInt(500)
+        val callBack: Call<ArrayList<Movie>> = moviesService.getMovies(API_KEY, LANGUAGE, page)
         callBack.enqueue(this)
     }
 
@@ -45,8 +47,10 @@ class HomeDataModel : Callback<ArrayList<Movie>> {
     fun storeHomeViewData() {
         val rand = Random(System.currentTimeMillis())
         val movie: Movie? = movieList?.let { it[rand.nextInt(20)] }
-        homeViewData = HomeViewData(movie?.title, movie?.releaseDate, movie?.posterPath)
-        homeViewDataObservable.onNext(homeViewData)
+        if (movie != null) {
+            homeViewData = HomeViewData(movie.title, movie.releaseDate, movie.posterPath)
+            homeViewDataObservable.onNext(homeViewData)
+        }
     }
 
     fun getHomeViewData(): Observable<HomeViewData> {
