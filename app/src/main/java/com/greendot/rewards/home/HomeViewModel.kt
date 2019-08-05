@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class HomeViewModel(activity: MainActivity) : ViewModel() {
-    private var homeDataModel = HomeDataModel()
+    private val homeDataModel = HomeDataModel()
     private val liveDataMovieList: MutableLiveData<ArrayList<Movie>> = MutableLiveData()
     var title: ObservableField<String>? = ObservableField("")
     var releaseDate: ObservableField<String>? = ObservableField("")
@@ -46,8 +46,10 @@ class HomeViewModel(activity: MainActivity) : ViewModel() {
     }
 
     fun unsubscribe() {
-        disposable?.let { it.dispose() }
-        disposable = null
+        disposable?.let {
+            it.dispose()
+            disposable = null
+        }
     }
 
     fun getArrayListMovie(): LiveData<ArrayList<Movie>> {
@@ -65,8 +67,9 @@ class HomeViewModel(activity: MainActivity) : ViewModel() {
     fun onItemClick() {
         homeDataModel.loadData()
 //        mainActivity.supportFragmentManager.beginTransaction()
+//            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
 //            .replace(R.id.fragments_container, HomeFragment.newInstance())
 //            .addToBackStack(null)
-//            .commitNow()
+//            .commitAllowingStateLoss()
     }
 }

@@ -1,8 +1,8 @@
 package com.greendot.rewards.activity
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.greendot.rewards.R
 import com.greendot.rewards.home.HomeFragment
 import timber.log.Timber
@@ -14,7 +14,11 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_home -> {
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
+            R.id.navigation_dashboard -> {supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+                .replace(R.id.fragments_container, HomeFragment.newInstance())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
@@ -32,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
                 .add(R.id.fragments_container, HomeFragment.newInstance())
                 .commitNow()
         }

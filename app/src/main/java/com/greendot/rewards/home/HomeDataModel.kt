@@ -16,28 +16,24 @@ import retrofit2.Response
 private val TAG = HomeDataModel::class.java.simpleName
 class HomeDataModel : Callback<ArrayList<Movie>> {
 
-    private var movieList = ArrayList<Movie>()
-    private var movieObservable: ReplaySubject<ArrayList<Movie>> = ReplaySubject.create()
+    private val movieObservable: ReplaySubject<ArrayList<Movie>> = ReplaySubject.create()
     private val moviesService: APIInterface = APIClient.client
 
     fun loadData() {
-        val callBack: Call<ArrayList<Movie>> = moviesService.getMovies(API_KEY, LANGUAGE, 1)
+        val callBack: Call<ArrayList<Movie>> = moviesService.getMovies(API_KEY, LANGUAGE, 3)
         callBack.enqueue(this)
     }
 
     override fun onResponse(call: Call<ArrayList<Movie>>, response: Response<ArrayList<Movie>>) {
         if (response.isSuccessful) {
-            response.body()?.let { movieList = it }
-            movieObservable.onNext(movieList)
+            response.body()?.let { movieObservable.onNext(it) }
         } else {
             LogUtils.W(TAG, LogUtils.FilterTags.withTags(ANX), String.format("RetroFit response error: %s", response.errorBody().toString()))
         }
     }
 
     override fun onFailure(call: Call<ArrayList<Movie>>, t: Throwable) {
-        t.message?.let {
-            LogUtils.E(LogUtils.FilterTags.withTags(ANX), it, t)
-        }
+        t.message?.let { LogUtils.E(LogUtils.FilterTags.withTags(ANX), it, t) }
     }
 
     fun getMovieList(): Observable<ArrayList<Movie>> {
