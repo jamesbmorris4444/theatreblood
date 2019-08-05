@@ -32,7 +32,7 @@ class HomeFragment : Fragment() {
         binding.lifecycleOwner = this
         viewModel = ViewModelProviders.of(this, HomeViewModelFactory(activity as MainActivity)).get(HomeViewModel::class.java)
         binding.homeViewModel = viewModel
-        viewModel.getArrayListMovie().observe(this, Observer { viewModel.liveDataUpdate() })
+        viewModel.getLiveHomeViewData().observe(this, Observer { viewModel.liveDataUpdate() })
         return binding.root
     }
 

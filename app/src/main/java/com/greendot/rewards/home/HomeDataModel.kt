@@ -12,12 +12,15 @@ import io.reactivex.subjects.ReplaySubject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 private val TAG = HomeDataModel::class.java.simpleName
 class HomeDataModel : Callback<ArrayList<Movie>> {
 
-    private val movieObservable: ReplaySubject<ArrayList<Movie>> = ReplaySubject.create()
+    private lateinit var movieList: ArrayList<Movie>
+    private val homeViewDataObservable: ReplaySubject<HomeViewData> = ReplaySubject.create()
     private val moviesService: APIInterface = APIClient.client
+    private lateinit var homeViewData: HomeViewData
 
     fun loadData() {
         val callBack: Call<ArrayList<Movie>> = moviesService.getMovies(API_KEY, LANGUAGE, 3)
@@ -26,7 +29,10 @@ class HomeDataModel : Callback<ArrayList<Movie>> {
 
     override fun onResponse(call: Call<ArrayList<Movie>>, response: Response<ArrayList<Movie>>) {
         if (response.isSuccessful) {
-            response.body()?.let { movieObservable.onNext(it) }
+            response.body()?.let {
+                movieList = it
+                storeHomeViewData()
+            }
         } else {
             LogUtils.W(TAG, LogUtils.FilterTags.withTags(ANX), String.format("RetroFit response error: %s", response.errorBody().toString()))
         }
@@ -36,8 +42,15 @@ class HomeDataModel : Callback<ArrayList<Movie>> {
         t.message?.let { LogUtils.E(LogUtils.FilterTags.withTags(ANX), it, t) }
     }
 
-    fun getMovieList(): Observable<ArrayList<Movie>> {
-        return movieObservable
+    fun storeHomeViewData() {
+        val rand = Random(System.currentTimeMillis())
+        val movie: Movie? = movieList?.let { it[rand.nextInt(20)] }
+        homeViewData = HomeViewData(movie?.title, movie?.releaseDate, movie?.posterPath)
+        homeViewDataObservable.onNext(homeViewData)
+    }
+
+    fun getHomeViewData(): Observable<HomeViewData> {
+        return homeViewDataObservable
     }
 
 }
