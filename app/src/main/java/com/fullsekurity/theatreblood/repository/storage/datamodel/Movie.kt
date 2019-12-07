@@ -1,4 +1,4 @@
-package com.greendot.rewards.repository
+package com.fullsekurity.theatreblood.repository.storage.datamodel
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.room.ColumnInfo

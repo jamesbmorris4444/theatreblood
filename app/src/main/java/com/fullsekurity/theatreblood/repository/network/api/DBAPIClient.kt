@@ -1,21 +1,21 @@
-package com.greendot.rewards.repository
+package com.fullsekurity.theatreblood.repository.network.api
 
+import com.fullsekurity.theatreblood.logger.LogUtils
+import com.fullsekurity.theatreblood.utils.Constants.MOVIE_ARRAY_LIST_CLASS_TYPE
+import com.fullsekurity.theatreblood.utils.Constants.POPULAR_MOVIES_BASE_URL
 import com.google.gson.GsonBuilder
-import com.greendot.rewards.Constants.MOVIE_ARRAY_LIST_CLASS_TYPE
-import com.greendot.rewards.Constants.POPULAR_MOVIES_BASE_URL
-import com.greendot.rewards.logger.LogUtils
-import com.greendot.rewards.logger.LogUtils.TagFilter.ANX
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object APIClient {
+
+object DBAPIClient {
     val client: APIInterface
         get() {
             val interceptor = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
                 override fun log(message: String) {
-                    LogUtils.D(APIClient::class.java.simpleName, LogUtils.FilterTags.withTags(ANX), String.format("okHttp logging interceptor=%s", message))
+                    LogUtils.D(DBAPIClient::class.java.simpleName, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("okHttp logging interceptor=%s", message))
                 }
             })
             interceptor.level = HttpLoggingInterceptor.Level.BASIC
@@ -23,7 +23,7 @@ object APIClient {
                 .addInterceptor(interceptor)
                 .build()
             val gson = GsonBuilder()
-                .registerTypeAdapter(MOVIE_ARRAY_LIST_CLASS_TYPE, JsonDeserializer())
+                .registerTypeAdapter(MOVIE_ARRAY_LIST_CLASS_TYPE, MoviesJsonDeserializer())
                 .create()
             val builder = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))

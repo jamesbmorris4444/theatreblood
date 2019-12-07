@@ -1,4 +1,4 @@
-package com.greendot.rewards
+package com.fullsekurity.theatreblood
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("com.greendot.rewards", appContext.packageName)
+        assertEquals("com.fullsekurity.theatreblood", appContext.packageName)
     }
 }

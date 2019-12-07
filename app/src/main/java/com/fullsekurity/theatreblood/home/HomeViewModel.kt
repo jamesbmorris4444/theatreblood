@@ -1,4 +1,4 @@
-package com.greendot.rewards.home
+package com.fullsekurity.theatreblood.home
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
@@ -6,14 +6,13 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.greendot.rewards.Constants
-import com.greendot.rewards.activity.MainActivity
+import com.fullsekurity.theatreblood.utils.Constants
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class HomeViewModel(activity: MainActivity) : ViewModel() {
+class HomeViewModel(activity: com.fullsekurity.theatreblood.activity.MainActivity) : ViewModel() {
     private val homeDataModel = HomeDataModel()
     private val liveHomeViewData: MutableLiveData<HomeViewData> = MutableLiveData()
     private lateinit var homeViewData: HomeViewData
@@ -21,7 +20,7 @@ class HomeViewModel(activity: MainActivity) : ViewModel() {
     var releaseDate: ObservableField<String> = ObservableField("")
     var posterPath: ObservableField<String> = ObservableField("")
     private var disposable: Disposable? = null
-    private val mainActivity: MainActivity = activity
+    private val mainActivity: com.fullsekurity.theatreblood.activity.MainActivity = activity
 
     companion object {
         @BindingAdapter("android:src")

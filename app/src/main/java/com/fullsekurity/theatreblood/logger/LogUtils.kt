@@ -1,7 +1,7 @@
-package com.greendot.rewards.logger
+package com.fullsekurity.theatreblood.logger
 
 import android.text.TextUtils
-import com.greendot.rewards.logger.LogUtils.LogType.*
+import com.fullsekurity.theatreblood.logger.LogUtils.LogType.*
 import timber.log.Timber
 
 object LogUtils {

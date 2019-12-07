@@ -1,12 +1,12 @@
-package com.greendot.rewards.home
+package com.fullsekurity.theatreblood.home
 
-import com.greendot.rewards.Constants.API_KEY
-import com.greendot.rewards.Constants.LANGUAGE
-import com.greendot.rewards.logger.LogUtils
-import com.greendot.rewards.logger.LogUtils.TagFilter.ANX
-import com.greendot.rewards.repository.APIClient
-import com.greendot.rewards.repository.APIInterface
-import com.greendot.rewards.repository.Movie
+import com.fullsekurity.theatreblood.logger.LogUtils
+import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.ANX
+import com.fullsekurity.theatreblood.repository.network.api.APIInterface
+import com.fullsekurity.theatreblood.repository.network.api.DBAPIClient
+import com.fullsekurity.theatreblood.repository.storage.datamodel.Movie
+import com.fullsekurity.theatreblood.utils.Constants.API_KEY
+import com.fullsekurity.theatreblood.utils.Constants.LANGUAGE
 import io.reactivex.Observable
 import io.reactivex.subjects.ReplaySubject
 import retrofit2.Call
@@ -19,7 +19,7 @@ class HomeDataModel : Callback<ArrayList<Movie>> {
 
     private lateinit var movieList: ArrayList<Movie>
     private val homeViewDataObservable: ReplaySubject<HomeViewData> = ReplaySubject.create()
-    private val moviesService: APIInterface = APIClient.client
+    private val moviesService: APIInterface = DBAPIClient.client
     private lateinit var homeViewData: HomeViewData
 
     fun loadData() {

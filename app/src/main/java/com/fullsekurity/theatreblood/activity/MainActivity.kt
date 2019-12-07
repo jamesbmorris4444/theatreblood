@@ -1,10 +1,10 @@
-package com.greendot.rewards.activity
+package com.fullsekurity.theatreblood.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.greendot.rewards.R
-import com.greendot.rewards.home.HomeFragment
+import com.fullsekurity.theatreblood.R
+import com.fullsekurity.theatreblood.home.HomeFragment
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -14,11 +14,12 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_home -> {
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-                .replace(R.id.fragments_container, HomeFragment.newInstance())
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
+            R.id.navigation_dashboard -> {
+                supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+                    .replace(R.id.fragments_container, HomeFragment.newInstance())
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {

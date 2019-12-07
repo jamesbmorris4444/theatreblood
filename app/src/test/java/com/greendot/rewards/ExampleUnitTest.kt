@@ -1,4 +1,4 @@
-package com.greendot.rewards
+package com.fullsekurity.theatreblood
 
 import org.junit.Test
 
