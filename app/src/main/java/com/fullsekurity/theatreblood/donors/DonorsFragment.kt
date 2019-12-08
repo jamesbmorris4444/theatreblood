@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.home
+package com.fullsekurity.theatreblood.donors
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,18 +7,17 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
-import com.fullsekurity.theatreblood.databinding.HomeScreenBinding
+import com.fullsekurity.theatreblood.databinding.DonorsScreenBinding
 
-class HomeFragment : Fragment() {
+class DonorsFragment : Fragment() {
 
-    private lateinit var viewModel: HomeViewModel
+    private lateinit var viewModel: DonorsListViewModel
 
     companion object {
-        fun newInstance(): HomeFragment { return HomeFragment() }
+        fun newInstance(): DonorsFragment { return DonorsFragment() }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -26,11 +25,11 @@ class HomeFragment : Fragment() {
 //            .mapperInjectorModule(MapperInjectorModule(context))
 //            .build()
 //            .inject(this)
-        val binding: HomeScreenBinding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.home_screen, container, false) as HomeScreenBinding
+        val binding: DonorsScreenBinding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.donors_screen, container, false) as DonorsScreenBinding
         binding.lifecycleOwner = this
-        viewModel = ViewModelProviders.of(this, HomeViewModelFactory((activity as MainActivity).application)).get(HomeViewModel::class.java)
-        binding.homeViewModel = viewModel
-        viewModel.getLiveHomeDataObject().observe(this, Observer { viewModel.liveDataUpdate() })
+        viewModel = ViewModelProviders.of(this, DonorsListViewModelFactory((activity as MainActivity).application)).get(DonorsListViewModel::class.java)
+        binding.donorsListViewModel = viewModel
+        //viewModel.liveDonorsDataObject.observe(this, Observer { viewModel.liveDataUpdate() })
         return binding.root
     }
 

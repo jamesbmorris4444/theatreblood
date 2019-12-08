@@ -1,6 +1,6 @@
 package com.fullsekurity.theatreblood.repository.network.api
 
-import com.fullsekurity.theatreblood.repository.storage.datamodel.Movie
+import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
 import com.google.gson.annotations.SerializedName
 
 class APIResult(
@@ -11,5 +11,5 @@ class APIResult(
     @field:SerializedName("total_pages")
     var totalPages: Int?,
     @field:SerializedName("results")
-    var results: List<Movie> = ArrayList()
+    var results: List<Donor> = ArrayList()
 )

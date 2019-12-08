@@ -4,7 +4,7 @@ import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.ANX
 import com.fullsekurity.theatreblood.repository.network.api.APIInterface
 import com.fullsekurity.theatreblood.repository.network.api.DBAPIClient
-import com.fullsekurity.theatreblood.repository.storage.datamodel.Movie
+import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
 import com.fullsekurity.theatreblood.utils.Constants.API_KEY
 import com.fullsekurity.theatreblood.utils.Constants.LANGUAGE
 import io.reactivex.Observable
@@ -14,47 +14,47 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-private val TAG = HomeDataModel::class.java.simpleName
-class HomeDataModel : Callback<ArrayList<Movie>> {
+class HomeDataModel : Callback<ArrayList<Donor>> {
 
-    private lateinit var movieList: ArrayList<Movie>
-    private val homeViewDataObservable: ReplaySubject<HomeViewData> = ReplaySubject.create()
+    private val TAG = HomeDataModel::class.java.simpleName
+    private lateinit var donorList: ArrayList<Donor>
+    private val homeDataObjectObservable: ReplaySubject<HomeDataObject> = ReplaySubject.create()
     private val moviesService: APIInterface = DBAPIClient.client
-    private lateinit var homeViewData: HomeViewData
+    private lateinit var homeDataObject: HomeDataObject
 
     fun loadData() {
         val rand = Random(System.currentTimeMillis())
         val page = rand.nextInt(500)
-        val callBack: Call<ArrayList<Movie>> = moviesService.getMovies(API_KEY, LANGUAGE, page)
+        val callBack: Call<ArrayList<Donor>> = moviesService.getMovies(API_KEY, LANGUAGE, page)
         callBack.enqueue(this)
     }
 
-    override fun onResponse(call: Call<ArrayList<Movie>>, response: Response<ArrayList<Movie>>) {
+    override fun onResponse(call: Call<ArrayList<Donor>>, response: Response<ArrayList<Donor>>) {
         if (response.isSuccessful) {
             response.body()?.let {
-                movieList = it
-                storeHomeViewData()
+                donorList = it
+                storeHomeDataObject()
             }
         } else {
             LogUtils.W(TAG, LogUtils.FilterTags.withTags(ANX), String.format("RetroFit response error: %s", response.errorBody().toString()))
         }
     }
 
-    override fun onFailure(call: Call<ArrayList<Movie>>, t: Throwable) {
+    override fun onFailure(call: Call<ArrayList<Donor>>, t: Throwable) {
         t.message?.let { LogUtils.E(LogUtils.FilterTags.withTags(ANX), it, t) }
     }
 
-    fun storeHomeViewData() {
+    fun storeHomeDataObject() {
         val rand = Random(System.currentTimeMillis())
-        val movie: Movie? = movieList?.let { it[rand.nextInt(20)] }
-        if (movie != null) {
-            homeViewData = HomeViewData(movie.title, movie.releaseDate, movie.posterPath)
-            homeViewDataObservable.onNext(homeViewData)
+        val donor: Donor? = donorList?.let { it[rand.nextInt(20)] }
+        if (donor != null) {
+            homeDataObject = HomeDataObject(donor.title, donor.releaseDate, donor.posterPath)
+            homeDataObjectObservable.onNext(homeDataObject)
         }
     }
 
-    fun getHomeViewData(): Observable<HomeViewData> {
-        return homeViewDataObservable
+    fun getHomeDataObject(): Observable<HomeDataObject> {
+        return homeDataObjectObservable
     }
 
 }

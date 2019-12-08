@@ -1,14 +1,19 @@
 package com.fullsekurity.theatreblood.utils
 
 import android.content.Context
+import com.fullsekurity.theatreblood.donors.DonorsItemViewModel
+import com.fullsekurity.theatreblood.home.HomeViewModel
+import com.fullsekurity.theatreblood.repository.Repository
 import dagger.Component
 import dagger.Module
+import dagger.Provides
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [MapperInjectorModule::class])
-interface MapperDependencyInjector {
-//    fun inject(viewModel: DashboardViewModel)
+@Component(modules = [ContextInjectorModule::class])
+interface ContextDependencyInjector {
+    fun inject(donorsItemViewModel: DonorsItemViewModel)
+    fun inject(homeViewModel: HomeViewModel)
 //    fun inject(viewModel: AccountsViewModel)
 //    fun inject(viewModel: RewardsViewModel)
 //    fun inject(viewModel: P2pUiViewModel)
@@ -76,7 +81,7 @@ interface ViewModelDependencyInjector {
 }
 
 @Module
-class MapperInjectorModule(val context: Context) {
+class ContextInjectorModule(val context: Context) {
 //    @Provides
 //    @Singleton
 //    fun colorMapperProvider() : ColorMapper {
@@ -105,11 +110,11 @@ class MapperInjectorModule(val context: Context) {
 //        fileNameMapper.initialize()
 //        return fileNameMapper
 //    }
-//    @Provides
-//    @Singleton
-//    fun resourceMapperProvider() : ResourceMapper {
-//        return ResourceMapper(context)
-//    }
+    @Provides
+    @Singleton
+    fun repositoryProvider() : Repository {
+        return Repository(context)
+    }
 }
 
 @Module

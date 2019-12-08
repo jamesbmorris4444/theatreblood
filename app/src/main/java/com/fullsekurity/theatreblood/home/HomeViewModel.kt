@@ -1,26 +1,44 @@
 package com.fullsekurity.theatreblood.home
 
+import android.app.Application
+import android.content.Context
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableField
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import androidx.recyclerview.widget.RecyclerView
+import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
+import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.utils.Constants
+import com.fullsekurity.theatreblood.utils.ContextInjectorModule
+import com.fullsekurity.theatreblood.utils.DaggerContextDependencyInjector
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class HomeViewModel(activity: com.fullsekurity.theatreblood.activity.MainActivity) : ViewModel() {
+@Suppress("UNCHECKED_CAST")
+class HomeViewModelFactory(private val activity: Application) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return HomeViewModel(activity) as T
+    }
+}
+
+@Suppress("UNCHECKED_CAST")
+class HomeViewModel(val activity: Application) : AndroidViewModel(activity) {
     private val homeDataModel = HomeDataModel()
-    private val liveHomeViewData: MutableLiveData<HomeViewData> = MutableLiveData()
-    private lateinit var homeViewData: HomeViewData
+    private val liveHomeDataObject: MutableLiveData<HomeDataObject> = MutableLiveData()
+    private lateinit var homeDataObject: HomeDataObject
+    private var disposable: Disposable? = null
+    private val context: Context = getApplication<Application>().applicationContext
+
+    @Inject
+    lateinit var repository: Repository
+
     var title: ObservableField<String> = ObservableField("")
     var releaseDate: ObservableField<String> = ObservableField("")
     var posterPath: ObservableField<String> = ObservableField("")
-    private var disposable: Disposable? = null
-    private val mainActivity: com.fullsekurity.theatreblood.activity.MainActivity = activity
 
     companion object {
         @BindingAdapter("android:src")
@@ -36,36 +54,40 @@ class HomeViewModel(activity: com.fullsekurity.theatreblood.activity.MainActivit
     }
 
     init {
-        disposable = homeDataModel.getHomeViewData()
+        DaggerContextDependencyInjector.builder()
+            .contextInjectorModule(ContextInjectorModule(context))
+            .build()
+            .inject(this)
+        disposable = homeDataModel.getHomeDataObject()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe{
-                homeViewData -> liveHomeViewData.postValue(homeViewData)
-                this.homeViewData = homeViewData
+                homeViewData -> liveHomeDataObject.postValue(homeViewData)
+                this.homeDataObject = homeViewData
             }
         homeDataModel.loadData()
     }
 
-    fun unsubscribe() {
+    override fun onCleared() {
         disposable?.let {
             it.dispose()
             disposable = null
         }
     }
 
-    fun getLiveHomeViewData(): LiveData<HomeViewData> {
-        return liveHomeViewData
+    fun getLiveHomeDataObject(): LiveData<HomeDataObject> {
+        return liveHomeDataObject
     }
 
     fun liveDataUpdate() {
-        val ( title_, releaseDate_, posterPath_ ) = homeViewData
-        title.set(title_ ?: "NO DATA")
-        releaseDate.set(releaseDate_ ?: "NO DATA")
-        posterPath.set(posterPath_ ?: "NO DATA")
+        val ( title_, releaseDate_, posterPath_ ) = homeDataObject
+        title.set(title_)
+        releaseDate.set(releaseDate_)
+        posterPath.set(posterPath_)
     }
 
     fun onItemClick() {
-        homeDataModel.storeHomeViewData()
+        homeDataModel.storeHomeDataObject()
 //        mainActivity.supportFragmentManager.beginTransaction()
 //            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
 //            .replace(R.id.fragments_container, HomeFragment.newInstance())

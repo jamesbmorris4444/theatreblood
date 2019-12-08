@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "moviesObservable")
-data class Movie(
+data class Donor(
 
     @PrimaryKey(autoGenerate = true) var id: Int,
     @ColumnInfo(name = "vote_count") @SerializedName(value = "vote_count") var voteCount: Int,
@@ -25,11 +25,11 @@ data class Movie(
 
 ) {
     companion object {
-        var DIFF_CALLBACK: DiffUtil.ItemCallback<Movie> = object : DiffUtil.ItemCallback<Movie>() {
-            override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        var diffCallback: DiffUtil.ItemCallback<Donor> = object : DiffUtil.ItemCallback<Donor>() {
+            override fun areItemsTheSame(oldItem: Donor, newItem: Donor): Boolean {
                 return oldItem.id == newItem.id
             }
-            override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+            override fun areContentsTheSame(oldItem: Donor, newItem: Donor): Boolean {
                 return oldItem.id == newItem.id
             }
         }

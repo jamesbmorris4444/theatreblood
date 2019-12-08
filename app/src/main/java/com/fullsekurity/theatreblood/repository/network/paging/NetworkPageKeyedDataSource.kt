@@ -6,7 +6,7 @@ import androidx.paging.PageKeyedDataSource
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.repository.network.api.APIInterface
 import com.fullsekurity.theatreblood.repository.network.api.DBAPIClient
-import com.fullsekurity.theatreblood.repository.storage.datamodel.Movie
+import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
 import com.fullsekurity.theatreblood.repository.storage.datamodel.NetworkState
 import com.fullsekurity.theatreblood.utils.Constants.API_KEY
 import com.fullsekurity.theatreblood.utils.Constants.LANGUAGE
@@ -17,23 +17,23 @@ import retrofit2.Response
 import java.util.concurrent.atomic.AtomicInteger
 
 val TAG = NetworkPageKeyedDataSource::class.java.simpleName
-class NetworkPageKeyedDataSource internal constructor() : PageKeyedDataSource<String, Movie>() {
+class NetworkPageKeyedDataSource internal constructor() : PageKeyedDataSource<String, Donor>() {
 
     private val moviesService: APIInterface = DBAPIClient.client
     val networkState: MutableLiveData<NetworkState> = MutableLiveData()
-    val moviesObservable: ReplaySubject<Movie> = ReplaySubject.create()
+    val moviesObservable: ReplaySubject<Donor> = ReplaySubject.create()
 
-    override fun loadInitial(params: LoadInitialParams<String>, callback: LoadInitialCallback<String, Movie>) {
+    override fun loadInitial(params: LoadInitialParams<String>, callback: LoadInitialCallback<String, Donor>) {
         LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("loadInitial(): Loading Initial Range, Count %d", params.requestedLoadSize))
         networkState.postValue(NetworkState.LOADING)
-        val callBack: Call<ArrayList<Movie>> = moviesService.getMovies(API_KEY, LANGUAGE, 1)
-        callBack.enqueue(object : Callback<ArrayList<Movie>> {
-            override fun onResponse(call: Call<ArrayList<Movie>>, response: Response<ArrayList<Movie>>) {
+        val callBack: Call<ArrayList<Donor>> = moviesService.getMovies(API_KEY, LANGUAGE, 1)
+        callBack.enqueue(object : Callback<ArrayList<Donor>> {
+            override fun onResponse(call: Call<ArrayList<Donor>>, response: Response<ArrayList<Donor>>) {
                 if (response.isSuccessful) {
                     LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("onResponse(): SUCCESS"))
-                    callback.onResult(response.body() as MutableList<Movie>, 1.toString(), 2.toString())
+                    callback.onResult(response.body() as MutableList<Donor>, 1.toString(), 2.toString())
                     networkState.postValue(NetworkState.LOADED)
-                    for (movie in response.body() as MutableList<Movie>) {
+                    for (movie in response.body() as MutableList<Donor>) {
                         LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("onResponse(): movie=%s", movie.title))
                         moviesObservable.onNext(movie)
                     }
@@ -43,7 +43,7 @@ class NetworkPageKeyedDataSource internal constructor() : PageKeyedDataSource<St
                 }
             }
 
-            override fun onFailure(call: Call<ArrayList<Movie>>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<Donor>>, t: Throwable) {
                 val errorMessage: String
                 if (t.message == null) {
                     errorMessage = "unknown error"
@@ -58,7 +58,7 @@ class NetworkPageKeyedDataSource internal constructor() : PageKeyedDataSource<St
     }
 
 
-    override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, Movie>) {
+    override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, Donor>) {
         LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("loadInitial(): Loading After Range, Count %d", params.requestedLoadSize))
         networkState.postValue(NetworkState.LOADING)
         val page = AtomicInteger(0)
@@ -69,12 +69,12 @@ class NetworkPageKeyedDataSource internal constructor() : PageKeyedDataSource<St
         }
 
         val callBack = moviesService.getMovies(API_KEY, LANGUAGE, page.get())
-        callBack.enqueue(object : Callback<ArrayList<Movie>> {
-            override fun onResponse(call: Call<ArrayList<Movie>>, response: Response<ArrayList<Movie>>) {
+        callBack.enqueue(object : Callback<ArrayList<Donor>> {
+            override fun onResponse(call: Call<ArrayList<Donor>>, response: Response<ArrayList<Donor>>) {
                 if (response.isSuccessful) {
-                    callback.onResult(response.body() as MutableList<Movie>, (page.get() + 1).toString())
+                    callback.onResult(response.body() as MutableList<Donor>, (page.get() + 1).toString())
                     networkState.postValue(NetworkState.LOADED)
-                    for (movie in response.body() as MutableList<Movie>) {
+                    for (movie in response.body() as MutableList<Donor>) {
                         moviesObservable.onNext(movie)
                     }
                 } else {
@@ -83,7 +83,7 @@ class NetworkPageKeyedDataSource internal constructor() : PageKeyedDataSource<St
                 }
             }
 
-            override fun onFailure(call: Call<ArrayList<Movie>>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<Donor>>, t: Throwable) {
                 val errorMessage = if (t.message == null) {
                     "unknown error"
                 } else {
@@ -95,7 +95,7 @@ class NetworkPageKeyedDataSource internal constructor() : PageKeyedDataSource<St
         })
     }
 
-    override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, Movie>) {
+    override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, Donor>) {
 
     }
 

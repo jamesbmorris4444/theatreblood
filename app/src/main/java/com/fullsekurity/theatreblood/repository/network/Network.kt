@@ -6,7 +6,7 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.repository.network.paging.NetworkDataSourceFactory
-import com.fullsekurity.theatreblood.repository.storage.datamodel.Movie
+import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
 import com.fullsekurity.theatreblood.repository.storage.datamodel.NetworkState
 import com.fullsekurity.theatreblood.utils.Constants.LOADING_PAGE_SIZE
 import com.fullsekurity.theatreblood.utils.Constants.NUMBER_OF_THREADS
@@ -14,9 +14,9 @@ import java.util.concurrent.Executors
 
 class Network(
     dataSourceFactory: NetworkDataSourceFactory,
-    boundaryCallback: PagedList.BoundaryCallback<Movie>
+    boundaryCallback: PagedList.BoundaryCallback<Donor>
 ) {
-    val pagedMovies: LiveData<PagedList<Movie>>
+    val pagedMovies: LiveData<PagedList<Donor>>
     var networkState: LiveData<NetworkState>
 
     init {

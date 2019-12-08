@@ -1,11 +1,11 @@
 package com.fullsekurity.theatreblood.utils
 
-import com.fullsekurity.theatreblood.repository.storage.datamodel.Movie
+import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
 
 object Constants {
 
     const val MOVIES_ARRAY_DATA_TAG = "results"
-    val MOVIE_ARRAY_LIST_CLASS_TYPE = (ArrayList<Movie>()).javaClass
+    val MOVIE_ARRAY_LIST_CLASS_TYPE = (ArrayList<Donor>()).javaClass
     const val POPULAR_MOVIES_BASE_URL = "https://api.themoviedb.org/3/discover/"
     private const val IMAGE_URL_PREFIX = "https://image.tmdb.org/t/p/"
     const val SMALL_IMAGE_URL_PREFIX = IMAGE_URL_PREFIX + "w300"
