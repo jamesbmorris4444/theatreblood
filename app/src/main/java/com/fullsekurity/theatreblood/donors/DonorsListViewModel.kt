@@ -10,26 +10,28 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
+import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.ArrayList
 
 @Suppress("UNCHECKED_CAST")
-class DonorsListViewModelFactory(private val activity: Application) : ViewModelProvider.Factory {
+class DonorsListViewModelFactory(private val activity: MainActivity) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return DonorsListViewModel(activity) as T
     }
 }
 
 @Suppress("UNCHECKED_CAST")
-class DonorsListViewModel(val activity: Application) : RecyclerViewViewModel(activity) {
+class DonorsListViewModel(val activity: MainActivity) : RecyclerViewViewModel(activity.application) {
 
     private val TAG = DonorsListViewModel::class.java.simpleName
     private val donorsDataModel = DonorsDataModel()
-    val liveDonorsDataObject: MutableLiveData<DonorsDataObject> = MutableLiveData()
+    val liveDonorsDataObject: MutableLiveData<ArrayList<Donor>> = MutableLiveData()
     private lateinit var donorsDataObject: DonorsDataObject
     private val context: Context = getApplication<Application>().applicationContext
-    override var adapter: DonorsAdapter = DonorsAdapter((activity as MainActivity), context)
+    override var adapter: DonorsAdapter = DonorsAdapter(activity, context)
     private var disposable: Disposable? = null
     override val itemDecorator: RecyclerView.ItemDecoration? = null
 
@@ -50,8 +52,7 @@ class DonorsListViewModel(val activity: Application) : RecyclerViewViewModel(act
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe{
-                donorsDataObject -> liveDonorsDataObject.postValue(donorsDataObject)
-                this.donorsDataObject = donorsDataObject
+                adapter.addAll(it)
             }
         donorsDataModel.loadData()
     }
@@ -63,7 +64,4 @@ class DonorsListViewModel(val activity: Application) : RecyclerViewViewModel(act
         }
     }
 
-    fun getLiveDonorsDataObject(): LiveData<DonorsDataObject> {
-        return liveDonorsDataObject
-    }
 }

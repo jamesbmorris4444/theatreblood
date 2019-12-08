@@ -16,9 +16,8 @@ class DonorsDataModel : Callback<ArrayList<Donor>> {
 
     private val TAG = DonorsDataModel::class.java.simpleName
     private lateinit var donorList: ArrayList<Donor>
-    private val donorsDataObjectObservable: ReplaySubject<DonorsDataObject> = ReplaySubject.create()
+    private val donorsDataObjectObservable: ReplaySubject<ArrayList<Donor>> = ReplaySubject.create()
     private val donorsService: APIInterface = DBAPIClient.client
-    lateinit var donorsDataObject: DonorsDataObject
 
     fun loadData() {
         val rand = Random(System.currentTimeMillis())
@@ -30,8 +29,7 @@ class DonorsDataModel : Callback<ArrayList<Donor>> {
     override fun onResponse(call: Call<ArrayList<Donor>>, response: Response<ArrayList<Donor>>) {
         if (response.isSuccessful) {
             response.body()?.let {
-                donorList = it
-                storeDonorsDataObject()
+                donorsDataObjectObservable.onNext(it)
             }
         } else {
             LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("RetroFit response error: %s", response.errorBody().toString()))
@@ -42,16 +40,7 @@ class DonorsDataModel : Callback<ArrayList<Donor>> {
         t.message?.let { LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), it, t) }
     }
 
-    fun storeDonorsDataObject() {
-        val rand = Random(System.currentTimeMillis())
-        val donor: Donor? = donorList?.let { it[rand.nextInt(20)] }
-        if (donor != null) {
-            //homeDataObject = DonorsDataObject(donor.title, donor.releaseDate, donor.posterPath)
-            donorsDataObjectObservable.onNext(donorsDataObject)
-        }
-    }
-
-    fun getDonorsDataObject(): Observable<DonorsDataObject> {
+    fun getDonorsDataObject(): Observable<ArrayList<Donor>> {
         return donorsDataObjectObservable
     }
 
