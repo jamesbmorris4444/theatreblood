@@ -25,7 +25,7 @@ class HomeDataModel : Callback<ArrayList<Donor>> {
     fun loadData() {
         val rand = Random(System.currentTimeMillis())
         val page = rand.nextInt(500)
-        val callBack: Call<ArrayList<Donor>> = moviesService.getMovies(API_KEY, LANGUAGE, page)
+        val callBack: Call<ArrayList<Donor>> = moviesService.getDonors(API_KEY, LANGUAGE, page)
         callBack.enqueue(this)
     }
 

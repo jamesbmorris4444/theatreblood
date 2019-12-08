@@ -11,7 +11,7 @@ import java.util.*
 
 interface APIInterface {
     @GET("movie")
-    fun getMovies(
+    fun getDonors(
         @Query(API_KEY_REQUEST_PARAM) apiKey: String,
         @Query(LANGUAGE_REQUEST_PARAM) language: String,
         @Query(PAGE_REQUEST_PARAM) page: Int

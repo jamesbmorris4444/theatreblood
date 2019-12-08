@@ -26,7 +26,7 @@ class NetworkPageKeyedDataSource internal constructor() : PageKeyedDataSource<St
     override fun loadInitial(params: LoadInitialParams<String>, callback: LoadInitialCallback<String, Donor>) {
         LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("loadInitial(): Loading Initial Range, Count %d", params.requestedLoadSize))
         networkState.postValue(NetworkState.LOADING)
-        val callBack: Call<ArrayList<Donor>> = moviesService.getMovies(API_KEY, LANGUAGE, 1)
+        val callBack: Call<ArrayList<Donor>> = moviesService.getDonors(API_KEY, LANGUAGE, 1)
         callBack.enqueue(object : Callback<ArrayList<Donor>> {
             override fun onResponse(call: Call<ArrayList<Donor>>, response: Response<ArrayList<Donor>>) {
                 if (response.isSuccessful) {
@@ -68,7 +68,7 @@ class NetworkPageKeyedDataSource internal constructor() : PageKeyedDataSource<St
             e.printStackTrace()
         }
 
-        val callBack = moviesService.getMovies(API_KEY, LANGUAGE, page.get())
+        val callBack = moviesService.getDonors(API_KEY, LANGUAGE, page.get())
         callBack.enqueue(object : Callback<ArrayList<Donor>> {
             override fun onResponse(call: Call<ArrayList<Donor>>, response: Response<ArrayList<Donor>>) {
                 if (response.isSuccessful) {

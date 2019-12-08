@@ -23,7 +23,7 @@ class DonorsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: DonorsScreenBinding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.donors_screen, container, false) as DonorsScreenBinding
         binding.lifecycleOwner = this
-        viewModel = ViewModelProviders.of(this, DonorsListViewModelFactory((activity as MainActivity))).get(DonorsListViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, DonorsListViewModelFactory(activity as MainActivity)).get(DonorsListViewModel::class.java)
         binding.donorsListViewModel = viewModel
         return binding.root
     }

@@ -1,9 +1,11 @@
 package com.fullsekurity.theatreblood.utils
 
 import android.content.Context
+import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.donors.DonorsItemViewModel
 import com.fullsekurity.theatreblood.home.HomeViewModel
 import com.fullsekurity.theatreblood.repository.Repository
+import com.fullsekurity.theatreblood.repository.storage.BloodDatabase
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -14,6 +16,7 @@ import javax.inject.Singleton
 interface ContextDependencyInjector {
     fun inject(donorsItemViewModel: DonorsItemViewModel)
     fun inject(homeViewModel: HomeViewModel)
+    fun inject(activity: MainActivity)
 //    fun inject(viewModel: AccountsViewModel)
 //    fun inject(viewModel: RewardsViewModel)
 //    fun inject(viewModel: P2pUiViewModel)
@@ -112,8 +115,10 @@ class ContextInjectorModule(val context: Context) {
 //    }
     @Provides
     @Singleton
-    fun repositoryProvider() : Repository {
-        return Repository(context)
+    fun repositoryProvider() : Repository? {
+        val bloodDatabase = BloodDatabase.newInstance(context)
+        bloodDatabase ?: return null
+        return Repository(bloodDatabase)
     }
 }
 

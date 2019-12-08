@@ -2,11 +2,13 @@ package com.fullsekurity.theatreblood.donors
 
 import android.app.Application
 import android.content.Context
-import androidx.databinding.ObservableField
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 import com.fullsekurity.theatreblood.repository.Repository
+import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
 import com.fullsekurity.theatreblood.utils.ContextInjectorModule
 import com.fullsekurity.theatreblood.utils.DaggerContextDependencyInjector
 import javax.inject.Inject
@@ -19,25 +21,25 @@ class DonorsItemViewModelFactory(private val activity: Application) : ViewModelP
 }
 
 @Suppress("UNCHECKED_CAST")
-class DonorsItemViewModel(val activity: Application) : RecyclerViewItemViewModel<DonorsDataModel>(activity) {
+class DonorsItemViewModel(val activity: Application) : RecyclerViewItemViewModel<Donor>(activity) {
 
     private val context: Context = getApplication<Application>().applicationContext
 
-    @Inject
-    lateinit var repository: Repository
+    internal var repository: Repository? = null
+        @Inject set
 
-    var voteCount: ObservableField<Int> = ObservableField(0)
-    var video: ObservableField<String> = ObservableField("")
-    var voteAverage: ObservableField<Float> = ObservableField(0f)
-    var title: ObservableField<String> = ObservableField("")
-    var popularity: ObservableField<Float> = ObservableField(0f)
-    var posterPath: ObservableField<String> = ObservableField("")
-    var originalLanguage: ObservableField<String> = ObservableField("")
-    var originalTitle: ObservableField<String> = ObservableField("")
-    var backdropPath: ObservableField<String> = ObservableField("")
-    var adult: ObservableField<String> = ObservableField("")
-    var overview: ObservableField<String> = ObservableField("")
-    var releaseDate: ObservableField<String> = ObservableField("")
+    private val _voteCount = MutableLiveData<Int>().apply { value = 0 } ; val voteCount: LiveData<Int> = _voteCount
+    private val _video = MutableLiveData<String>().apply { value = "" } ; val video: LiveData<String> = _video
+    private val _voteAverage = MutableLiveData<Float>().apply { value = 0f } ; val voteAverage: LiveData<Float> = _voteAverage
+    private val _title = MutableLiveData<String>().apply { value = "" } ; val title: LiveData<String> = _title
+    private val _popularity = MutableLiveData<Float>().apply { value = 0f } ; val popularity: LiveData<Float> = _popularity
+    private val _posterPath = MutableLiveData<String>().apply { value = "" } ; val posterPath: LiveData<String> = _posterPath
+    private val _originalLanguage = MutableLiveData<String>().apply { value = "" } ; val originalLanguage: LiveData<String> = _originalLanguage
+    private val _originalTitle = MutableLiveData<String>().apply { value = "" } ; val originalTitle: LiveData<String> = _originalTitle
+    private val _backdropPath = MutableLiveData<String>().apply { value = "" } ; val backdropPath: LiveData<String> = _backdropPath
+    private val _adult = MutableLiveData<String>().apply { value = "" } ; val adult: LiveData<String> = _adult
+    private val _overview = MutableLiveData<String>().apply { value = "" } ; val overview: LiveData<String> = _overview
+    private val _releaseDate = MutableLiveData<String>().apply { value = "" } ; val releaseDate: LiveData<String> = _releaseDate
 
     init {
         DaggerContextDependencyInjector.builder()
@@ -46,20 +48,20 @@ class DonorsItemViewModel(val activity: Application) : RecyclerViewItemViewModel
             .inject(this)
     }
 
-    override fun setItem(donorsDataModel: DonorsDataModel) {
-        val ( voteCount_, video_, voteAverage_, title_, popularity_, posterPath_, originalLanguage_, originalTitle_, backdropPath_, adult_, overview_, releaseDate_) = donorsDataModel.donorsDataObject
-        voteCount.set(voteCount_)
-        video.set(if (video_) "T" else "F")
-        voteAverage.set(voteAverage_)
-        title.set(title_)
-        popularity.set(popularity_)
-        posterPath.set(posterPath_)
-        originalLanguage.set(originalLanguage_)
-        originalTitle.set(originalTitle_)
-        backdropPath.set(backdropPath_)
-        adult.set(if (adult_) "T" else "F")
-        overview.set(overview_ )
-        releaseDate.set(releaseDate_)
+    override fun setItem(donor: Donor) {
+        val ( id, voteCount, video, voteAverage, title, popularity, posterPath, originalLanguage, originalTitle, backdropPath, adult, overview, releaseDate) = donor
+        _voteCount.value = voteCount
+        _video.value = if (video) "T" else "F"
+        _voteAverage.value = voteAverage
+        _title.value = title
+        _popularity.value = popularity
+        _posterPath.value = posterPath
+        _originalLanguage.value = originalLanguage
+        _originalTitle.value = originalTitle
+        _backdropPath.value = backdropPath
+        _adult.value = if (adult) "T" else "F"
+        _overview.value = overview
+        _releaseDate.value = releaseDate
     }
 
 }

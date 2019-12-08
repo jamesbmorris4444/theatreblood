@@ -4,10 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import androidx.databinding.ObservableField
 import androidx.lifecycle.*
-import androidx.recyclerview.widget.RecyclerView
-import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.ContextInjectorModule
@@ -33,12 +30,12 @@ class HomeViewModel(val activity: Application) : AndroidViewModel(activity) {
     private var disposable: Disposable? = null
     private val context: Context = getApplication<Application>().applicationContext
 
-    @Inject
-    lateinit var repository: Repository
+    internal var repository: Repository? = null
+        @Inject set
 
-    var title: ObservableField<String> = ObservableField("")
-    var releaseDate: ObservableField<String> = ObservableField("")
-    var posterPath: ObservableField<String> = ObservableField("")
+    private val _title = MutableLiveData<String>().apply { value = "" } ; val title: LiveData<String> = _title
+    private val _releaseDate = MutableLiveData<String>().apply { value = "" } ; val releaseDate: LiveData<String> = _releaseDate
+    private val _posterPath = MutableLiveData<String>().apply { value = "" } ; val posterPath: LiveData<String> = _posterPath
 
     companion object {
         @BindingAdapter("android:src")
@@ -80,10 +77,10 @@ class HomeViewModel(val activity: Application) : AndroidViewModel(activity) {
     }
 
     fun liveDataUpdate() {
-        val ( title_, releaseDate_, posterPath_ ) = homeDataObject
-        title.set(title_)
-        releaseDate.set(releaseDate_)
-        posterPath.set(posterPath_)
+        val ( title, releaseDate, posterPath ) = homeDataObject
+        _title.value = title
+        _releaseDate.value = releaseDate
+        _posterPath.value = posterPath
     }
 
     fun onItemClick() {

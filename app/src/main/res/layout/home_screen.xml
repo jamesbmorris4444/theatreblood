@@ -9,13 +9,14 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@color/blue"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="260dp" >
 
         <android.widget.ImageView
                 android:id="@+id/cover"
-                android:layout_width="150dp"
-                android:layout_height="200dp"
+                android:layout_width="120dp"
+                android:layout_height="160dp"
                 android:src="@{homeViewModel.posterPath}"
                 android:onClick="@{() -> homeViewModel.onItemClick()}"
                 android:background="?attr/selectableItemBackgroundBorderless"
@@ -29,7 +30,7 @@
         <android.widget.TextView
                 android:id="@+id/title"
                 android:layout_width="300dp"
-                android:layout_height="80dp"
+                android:layout_height="40dp"
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -43,11 +44,11 @@
         <android.widget.TextView
                 android:id="@+id/release_date"
                 android:layout_width="120dp"
-                android:layout_height="80dp"
+                android:layout_height="40dp"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                android:background="@color/blue"
+                android:background="@color/red"
                 android:text="@{homeViewModel.releaseDate}"
                 app:layout_constraintTop_toBottomOf="@+id/title"
                 app:layout_constraintBottom_toBottomOf="parent"
