@@ -11,10 +11,6 @@ import com.fullsekurity.theatreblood.repository.network.api.APIClient
 import com.fullsekurity.theatreblood.repository.network.api.APIInterface
 import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
 import com.fullsekurity.theatreblood.utils.Constants
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.ReplaySubject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,10 +28,12 @@ class DonorsListViewModel(val activity: MainActivity) : Callback<ArrayList<Donor
 
     private val TAG = DonorsListViewModel::class.java.simpleName
     override var adapter: DonorsAdapter = DonorsAdapter(activity)
-    private var disposable: Disposable? = null
     override val itemDecorator: RecyclerView.ItemDecoration? = null
-    private val donorsDataObjectObservable: ReplaySubject<ArrayList<Donor>> = ReplaySubject.create()
     private val donorsService: APIInterface = APIClient.client
+
+    init {
+        loadData()
+    }
 
     override fun setLayoutManager(): RecyclerView.LayoutManager {
         return object : LinearLayoutManager(activity.applicationContext) {
@@ -49,23 +47,6 @@ class DonorsListViewModel(val activity: MainActivity) : Callback<ArrayList<Donor
         }
     }
 
-    init {
-        disposable = donorsDataObjectObservable
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe{
-                adapter.addAll(it)
-            }
-        loadData()
-    }
-
-    override fun onCleared() {
-        disposable?.let {
-            it.dispose()
-            disposable = null
-        }
-    }
-
     private fun loadData() {
         val callBack: Call<ArrayList<Donor>> = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, 1)
         callBack.enqueue(this)
@@ -74,7 +55,7 @@ class DonorsListViewModel(val activity: MainActivity) : Callback<ArrayList<Donor
     override fun onResponse(call: Call<ArrayList<Donor>>, response: Response<ArrayList<Donor>>) {
         if (response.isSuccessful) {
             response.body()?.let {
-                donorsDataObjectObservable.onNext(it)
+                adapter.addAll(it)
             }
         } else {
             LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("RetroFit response error: %s", response.errorBody().toString()))
