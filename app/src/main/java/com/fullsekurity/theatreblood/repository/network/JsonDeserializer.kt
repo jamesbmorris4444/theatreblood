@@ -1,7 +1,6 @@
 package com.fullsekurity.theatreblood.repository.network
 
 import android.util.Log
-import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.Constants
 import com.google.gson.JsonDeserializationContext
@@ -16,7 +15,11 @@ internal class DonorsJsonDeserializer : JsonDeserializer<Any> {
 
     @Throws(JsonParseException::class)
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Any? {
-        LogUtils.W("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("JSON DESERIAL: %s", json.toString()))
+        // Jim Morris, 12/9/2019
+        // This code does not appear to ever execute, although it did while I was using Retrofit and OkHttp callbacks
+        // It stopped executiing when I added the line
+        //     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        // to APIClient, which was added for the purpose of using RxJava calls for Retrofit and OkHttp, instead of callbacks
         var donors: ArrayList<Donor>? = null
         try {
             val jsonObject = json.asJsonObject

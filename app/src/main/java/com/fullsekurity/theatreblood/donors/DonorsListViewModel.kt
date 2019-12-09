@@ -10,17 +10,12 @@ import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.network.APIClient
 import com.fullsekurity.theatreblood.repository.network.APIInterface
-import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.ContextInjectorModule
 import com.fullsekurity.theatreblood.utils.DaggerContextDependencyInjector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.*
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
@@ -31,7 +26,7 @@ class DonorsListViewModelFactory(private val activity: MainActivity) : ViewModel
 }
 
 @Suppress("UNCHECKED_CAST")
-class DonorsListViewModel(val activity: MainActivity) : Callback<ArrayList<Donor>>, RecyclerViewViewModel(activity.application) {
+class DonorsListViewModel(val activity: MainActivity) : RecyclerViewViewModel(activity.application) {
 
     private val TAG = DonorsListViewModel::class.java.simpleName
     override var adapter: DonorsAdapter = DonorsAdapter(activity)
@@ -62,38 +57,16 @@ class DonorsListViewModel(val activity: MainActivity) : Callback<ArrayList<Donor
         }
     }
 
-    private fun loadData2() {
-//        val callBack: Call<ArrayList<Donor>> = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, "popularity.desc", "false", "false", 1)
-//        callBack.enqueue(this)
-    }
-
     private fun loadData() {
-        LogUtils.W("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("HERE 1 "))
-        disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, 1)
+        disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, "popularity.desc", "false", "false", 1)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe {
+            .subscribe ({
                 adapter.addAll(it.results)
-            }
-    }
-
-    override fun onResponse(call: Call<ArrayList<Donor>>, response: Response<ArrayList<Donor>>) {
-        if (response.isSuccessful) {
-            response.body()?.let {
-                adapter.addAll(it)
-                for (donor in it) {
-                    repository?.insertIntoDatabase(donor)
-                    LogUtils.W("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("store donors: %s", donor.title))
-                }
-
-            }
-        } else {
-            LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("RetroFit response error: %s", response.errorBody().toString()))
-        }
-    }
-
-    override fun onFailure(call: Call<ArrayList<Donor>>, t: Throwable) {
-        t.message?.let { LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), it, t) }
+            },
+            {
+                throwable -> LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Exception getting Donor in DonorsListViewModel", throwable)
+            })
     }
 
 }
