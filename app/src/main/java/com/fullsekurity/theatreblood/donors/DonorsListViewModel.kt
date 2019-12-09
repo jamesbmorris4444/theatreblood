@@ -7,14 +7,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
-import com.fullsekurity.theatreblood.repository.network.api.APIClient
-import com.fullsekurity.theatreblood.repository.network.api.APIInterface
-import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
+import com.fullsekurity.theatreblood.repository.Repository
+import com.fullsekurity.theatreblood.repository.network.APIClient
+import com.fullsekurity.theatreblood.repository.network.APIInterface
+import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.Constants
+import com.fullsekurity.theatreblood.utils.ContextInjectorModule
+import com.fullsekurity.theatreblood.utils.DaggerContextDependencyInjector
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
 class DonorsListViewModelFactory(private val activity: MainActivity) : ViewModelProvider.Factory {
@@ -30,8 +37,16 @@ class DonorsListViewModel(val activity: MainActivity) : Callback<ArrayList<Donor
     override var adapter: DonorsAdapter = DonorsAdapter(activity)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     private val donorsService: APIInterface = APIClient.client
+    private var disposable: Disposable? = null
+
+    internal var repository: Repository? = null
+        @Inject set
 
     init {
+        DaggerContextDependencyInjector.builder()
+            .contextInjectorModule(ContextInjectorModule(activity.applicationContext))
+            .build()
+            .inject(this)
         loadData()
     }
 
@@ -47,15 +62,30 @@ class DonorsListViewModel(val activity: MainActivity) : Callback<ArrayList<Donor
         }
     }
 
+    private fun loadData2() {
+//        val callBack: Call<ArrayList<Donor>> = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, "popularity.desc", "false", "false", 1)
+//        callBack.enqueue(this)
+    }
+
     private fun loadData() {
-        val callBack: Call<ArrayList<Donor>> = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, 1)
-        callBack.enqueue(this)
+        LogUtils.W("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("HERE 1 "))
+        disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, 1)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                adapter.addAll(it.results)
+            }
     }
 
     override fun onResponse(call: Call<ArrayList<Donor>>, response: Response<ArrayList<Donor>>) {
         if (response.isSuccessful) {
             response.body()?.let {
                 adapter.addAll(it)
+                for (donor in it) {
+                    repository?.insertIntoDatabase(donor)
+                    LogUtils.W("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("store donors: %s", donor.title))
+                }
+
             }
         } else {
             LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("RetroFit response error: %s", response.errorBody().toString()))

@@ -1,12 +1,11 @@
-package com.fullsekurity.theatreblood.repository.storage.datamodel
+package com.fullsekurity.theatreblood.repository.storage
 
-import androidx.recyclerview.widget.DiffUtil
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "moviesObservable")
+@Entity(tableName = "donorsObservable")
 data class Donor(
 
     @PrimaryKey(autoGenerate = true) var id: Int,
@@ -23,16 +22,4 @@ data class Donor(
     @ColumnInfo(name = "overview") @SerializedName(value = "overview") var overview: String,
     @ColumnInfo(name = "release_date") @SerializedName(value = "release_date") var releaseDate: String
 
-) {
-    companion object {
-        var diffCallback: DiffUtil.ItemCallback<Donor> = object : DiffUtil.ItemCallback<Donor>() {
-            override fun areItemsTheSame(oldItem: Donor, newItem: Donor): Boolean {
-                return oldItem.id == newItem.id
-            }
-            override fun areContentsTheSame(oldItem: Donor, newItem: Donor): Boolean {
-                return oldItem.id == newItem.id
-            }
-        }
-    }
-
-}
+)

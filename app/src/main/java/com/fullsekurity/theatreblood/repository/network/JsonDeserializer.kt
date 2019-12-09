@@ -1,7 +1,8 @@
-package com.fullsekurity.theatreblood.repository.network.api
+package com.fullsekurity.theatreblood.repository.network
 
 import android.util.Log
-import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
+import com.fullsekurity.theatreblood.logger.LogUtils
+import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.Constants
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
@@ -9,12 +10,13 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
 import java.lang.reflect.Type
 
-internal class MoviesJsonDeserializer : JsonDeserializer<Any> {
+internal class DonorsJsonDeserializer : JsonDeserializer<Any> {
 
-    private val TAG = MoviesJsonDeserializer::class.java.simpleName
+    private val TAG = DonorsJsonDeserializer::class.java.simpleName
 
     @Throws(JsonParseException::class)
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Any? {
+        LogUtils.W("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("JSON DESERIAL: %s", json.toString()))
         var donors: ArrayList<Donor>? = null
         try {
             val jsonObject = json.asJsonObject

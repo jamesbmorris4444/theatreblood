@@ -8,20 +8,10 @@
             type="com.fullsekurity.theatreblood.donors.DonorsListViewModel" />
 </data>
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/moviesRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/moviesRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:recyclerViewViewModel="@{donorsListViewModel}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            app:recyclerViewViewModel="@{donorsListViewModel}"/>
 
 </layout>

@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.repository.network.api
+package com.fullsekurity.theatreblood.repository.network
 
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.utils.Constants.MOVIE_ARRAY_LIST_CLASS_TYPE
@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 
@@ -20,21 +21,22 @@ object APIClient {
                 }
             })
 
-            interceptor.level = HttpLoggingInterceptor.Level.BASIC
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
 
             val client = OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .build()
 
             val gson = GsonBuilder()
-                .registerTypeAdapter(MOVIE_ARRAY_LIST_CLASS_TYPE, MoviesJsonDeserializer())
+                .registerTypeAdapter(MOVIE_ARRAY_LIST_CLASS_TYPE,
+                    DonorsJsonDeserializer()
+                )
                 .create()
-
             val builder = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
                 .baseUrl(POPULAR_MOVIES_BASE_URL)
-
             return builder.build().create(APIInterface::class.java)
         }
 

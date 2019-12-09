@@ -8,7 +8,7 @@ import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.databinding.DonorsItemBinding
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFilterAdapter
-import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
+import com.fullsekurity.theatreblood.repository.storage.Donor
 
 class DonorsAdapter(val activity: MainActivity) : RecyclerViewFilterAdapter<Donor, DonorsItemViewModel>(activity.applicationContext) {
 

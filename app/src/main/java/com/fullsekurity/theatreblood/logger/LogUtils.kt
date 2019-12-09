@@ -11,6 +11,7 @@ object LogUtils {
     enum class TagFilter constructor(
         val key: String) {
             ANX("ANX"),
+            DAO("DAO"),
             WAR("WAR"),
             EXC("EXC"),
             APP("APP")

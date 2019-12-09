@@ -1,6 +1,6 @@
 package com.fullsekurity.theatreblood.utils
 
-import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
+import com.fullsekurity.theatreblood.repository.storage.Donor
 
 object Constants {
 
@@ -13,6 +13,9 @@ object Constants {
     const val API_KEY_REQUEST_PARAM = "api_key"
     const val LANGUAGE_REQUEST_PARAM = "language"
     const val PAGE_REQUEST_PARAM = "page"
+    const val SORT_BY_PARAM = "sort_by"
+    const val INCLUDE_ADULT_PARAM = "include_adult"
+    const val INCLUDE_VIDEO_PARAM = "include_video"
     const val API_KEY = "17c5889b399d3c051099e4098ad83493"
     const val LANGUAGE = "en"
     const val LOADING_PAGE_SIZE = 20

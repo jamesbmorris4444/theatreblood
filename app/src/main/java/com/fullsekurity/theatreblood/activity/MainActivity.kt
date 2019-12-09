@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
                     .addToBackStack(null)
                     .commitAllowingStateLoss()
                 supportFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.donors_container, DonorsFragment.newInstance())
                     .addToBackStack(null)
                     .commitAllowingStateLoss()
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.home_container, HomeFragment.newInstance())
                 .commitNow()
             supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+                .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
                 .add(R.id.donors_container, DonorsFragment.newInstance())
                 .commitNow()
         }

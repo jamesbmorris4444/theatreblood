@@ -14,9 +14,19 @@ import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-
+import com.squareup.picasso.Picasso
 
 @BindingAdapter("android:src")
+fun setImageUrl(view: ImageView, url: String?) {
+    if (url != null) {
+        Picasso
+            .get()
+            .load(Constants.SMALL_IMAGE_URL_PREFIX + url)
+            .into(view)
+    }
+}
+
+@BindingAdapter("android:src2")
 fun setImageViewResource(imageView: ImageView, resource: Int) {
     imageView.setImageResource(resource)
 }

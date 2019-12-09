@@ -2,12 +2,14 @@ package com.fullsekurity.theatreblood.home
 
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.ANX
-import com.fullsekurity.theatreblood.repository.network.api.APIInterface
-import com.fullsekurity.theatreblood.repository.network.api.APIClient
-import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
-import com.fullsekurity.theatreblood.utils.Constants.API_KEY
-import com.fullsekurity.theatreblood.utils.Constants.LANGUAGE
+import com.fullsekurity.theatreblood.repository.network.APIClient
+import com.fullsekurity.theatreblood.repository.network.APIInterface
+import com.fullsekurity.theatreblood.repository.storage.Donor
+import com.fullsekurity.theatreblood.utils.Constants
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.ReplaySubject
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,16 +19,26 @@ import java.util.*
 class HomeDataModel : Callback<ArrayList<Donor>> {
 
     private val TAG = HomeDataModel::class.java.simpleName
-    private lateinit var donorList: ArrayList<Donor>
+    private lateinit var donorList: List<Donor>
     private val homeDataObjectObservable: ReplaySubject<HomeDataObject> = ReplaySubject.create()
-    private val moviesService: APIInterface = APIClient.client
+    private val donorsService: APIInterface = APIClient.client
     private lateinit var homeDataObject: HomeDataObject
+    private var disposable: Disposable? = null
 
     fun loadData() {
-        val rand = Random(System.currentTimeMillis())
-        val page = rand.nextInt(500)
-        val callBack: Call<ArrayList<Donor>> = moviesService.getDonors(API_KEY, LANGUAGE, page)
-        callBack.enqueue(this)
+//        val rand = Random(System.currentTimeMillis())
+//        val page = rand.nextInt(500)
+//        val callBack: Call<ArrayList<Donor>> = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, "popularity.desc", "false", "false", 1)
+//        callBack.enqueue(this)
+        LogUtils.W("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("HERE 2 "))
+            disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE,1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe{
+                    donorList = it.results
+                    storeHomeDataObject()
+                }
+
     }
 
     override fun onResponse(call: Call<ArrayList<Donor>>, response: Response<ArrayList<Donor>>) {

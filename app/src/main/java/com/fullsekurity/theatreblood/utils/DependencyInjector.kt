@@ -3,6 +3,7 @@ package com.fullsekurity.theatreblood.utils
 import android.content.Context
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.donors.DonorsItemViewModel
+import com.fullsekurity.theatreblood.donors.DonorsListViewModel
 import com.fullsekurity.theatreblood.home.HomeViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.BloodDatabase
@@ -15,6 +16,7 @@ import javax.inject.Singleton
 @Component(modules = [ContextInjectorModule::class])
 interface ContextDependencyInjector {
     fun inject(donorsItemViewModel: DonorsItemViewModel)
+    fun inject(donorsListViewModel: DonorsListViewModel)
     fun inject(homeViewModel: HomeViewModel)
     fun inject(activity: MainActivity)
 //    fun inject(viewModel: AccountsViewModel)
