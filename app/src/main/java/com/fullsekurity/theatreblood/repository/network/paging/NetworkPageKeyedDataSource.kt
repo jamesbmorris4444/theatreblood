@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.repository.network.api.APIInterface
-import com.fullsekurity.theatreblood.repository.network.api.DBAPIClient
+import com.fullsekurity.theatreblood.repository.network.api.APIClient
 import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
 import com.fullsekurity.theatreblood.repository.storage.datamodel.NetworkState
 import com.fullsekurity.theatreblood.utils.Constants.API_KEY
@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger
 val TAG = NetworkPageKeyedDataSource::class.java.simpleName
 class NetworkPageKeyedDataSource internal constructor() : PageKeyedDataSource<String, Donor>() {
 
-    private val moviesService: APIInterface = DBAPIClient.client
+    private val moviesService: APIInterface = APIClient.client
     val networkState: MutableLiveData<NetworkState> = MutableLiveData()
     val moviesObservable: ReplaySubject<Donor> = ReplaySubject.create()
 

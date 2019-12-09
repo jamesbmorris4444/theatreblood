@@ -6,7 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.recyclerview.widget.RecyclerView
 
 
-abstract class RecyclerViewViewModel(activity: Application) : AndroidViewModel(activity) {
+abstract class RecyclerViewViewModel(application: Application) : AndroidViewModel(application) {
 
     abstract val adapter: RecyclerView.Adapter<*>
 

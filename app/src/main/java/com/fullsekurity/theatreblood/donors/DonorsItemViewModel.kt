@@ -1,11 +1,8 @@
 package com.fullsekurity.theatreblood.donors
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
@@ -14,16 +11,7 @@ import com.fullsekurity.theatreblood.utils.DaggerContextDependencyInjector
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
-class DonorsItemViewModelFactory(private val activity: Application) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DonorsItemViewModel(activity) as T
-    }
-}
-
-@Suppress("UNCHECKED_CAST")
-class DonorsItemViewModel(val activity: Application) : RecyclerViewItemViewModel<Donor>(activity) {
-
-    private val context: Context = getApplication<Application>().applicationContext
+class DonorsItemViewModel(val activity: Application) : RecyclerViewItemViewModel<Donor>() {
 
     internal var repository: Repository? = null
         @Inject set
@@ -43,7 +31,7 @@ class DonorsItemViewModel(val activity: Application) : RecyclerViewItemViewModel
 
     init {
         DaggerContextDependencyInjector.builder()
-            .contextInjectorModule(ContextInjectorModule(context))
+            .contextInjectorModule(ContextInjectorModule(activity.applicationContext))
             .build()
             .inject(this)
     }

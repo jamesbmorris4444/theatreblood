@@ -1,21 +1,17 @@
 package com.fullsekurity.theatreblood.donors
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModelProviders
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.databinding.DonorsItemBinding
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFilterAdapter
 import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
 
-class DonorsAdapter(val activity: MainActivity, context: Context) : RecyclerViewFilterAdapter<Donor, DonorsItemViewModel>(context) {
+class DonorsAdapter(val activity: MainActivity) : RecyclerViewFilterAdapter<Donor, DonorsItemViewModel>(activity.applicationContext) {
 
-    private var donorList: List<Donor> = arrayListOf()
     private var itemsFilter: ItemsFilter? = null
 
     override fun getFilter(): ItemsFilter {
@@ -27,8 +23,7 @@ class DonorsAdapter(val activity: MainActivity, context: Context) : RecyclerView
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DonorsViewHolder {
         val donorsItemBinding: DonorsItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.donors_item, parent, false)
-        donorsItemBinding.lifecycleOwner = activity
-        val donorsItemViewModel = ViewModelProviders.of(activity, DonorsItemViewModelFactory(activity.application)).get(DonorsItemViewModel::class.java)
+        val donorsItemViewModel = DonorsItemViewModel(activity.application)
         donorsItemBinding.donorsItemViewModel = donorsItemViewModel
         return DonorsViewHolder(donorsItemBinding.root, donorsItemViewModel, donorsItemBinding)
     }
@@ -36,7 +31,7 @@ class DonorsAdapter(val activity: MainActivity, context: Context) : RecyclerView
     inner class DonorsViewHolder internal constructor(
         itemView: View,
         viewModel: DonorsItemViewModel,
-        viewDataBinding: ViewDataBinding
+        viewDataBinding: DonorsItemBinding
     ) : ItemViewHolder<Donor, DonorsItemViewModel> (
         itemView,
         viewModel,

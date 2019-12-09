@@ -3,7 +3,7 @@ package com.fullsekurity.theatreblood.home
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.ANX
 import com.fullsekurity.theatreblood.repository.network.api.APIInterface
-import com.fullsekurity.theatreblood.repository.network.api.DBAPIClient
+import com.fullsekurity.theatreblood.repository.network.api.APIClient
 import com.fullsekurity.theatreblood.repository.storage.datamodel.Donor
 import com.fullsekurity.theatreblood.utils.Constants.API_KEY
 import com.fullsekurity.theatreblood.utils.Constants.LANGUAGE
@@ -19,7 +19,7 @@ class HomeDataModel : Callback<ArrayList<Donor>> {
     private val TAG = HomeDataModel::class.java.simpleName
     private lateinit var donorList: ArrayList<Donor>
     private val homeDataObjectObservable: ReplaySubject<HomeDataObject> = ReplaySubject.create()
-    private val moviesService: APIInterface = DBAPIClient.client
+    private val moviesService: APIInterface = APIClient.client
     private lateinit var homeDataObject: HomeDataObject
 
     fun loadData() {
