@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <data>
+        <variable
+                name="uiViewModel"
+                type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+        <variable
+                name="standardModal"
+                type="com.fullsekurity.theatreblood.modal.StandardModal" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/standard_modal_list_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:id="@+id/initials_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" >
+
+            <android.widget.ImageView
+                android:id="@+id/header_circle_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@{standardModal.transIcon}"
+                android:scaleType="fitXY" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/center_text"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            app:text_font="@{uiViewModel.standardDialogListCenterTextTypeface}"
+            app:text_color="@{uiViewModel.standardDialogListCenterTextColor}"
+            app:text_size="@{safeUnbox(uiViewModel.standardDialogListCenterTextSize)}"
+            app:layout_marginLeft="@{safeUnbox(uiViewModel.standardDialogListCenterTextMarginLeft)}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/initials_circle" />
+
+        <TextView
+            android:id="@+id/amount_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+            app:text_font="@{uiViewModel.standardDialogListAmountTextTypeface}"
+            app:text_color="@{uiViewModel.standardDialogListAmountTextColor}"
+            app:text_size="@{safeUnbox(uiViewModel.standardDialogListAmountTextSize)}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="@+id/standard_modal_list_root" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

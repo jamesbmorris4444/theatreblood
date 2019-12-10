@@ -14,8 +14,16 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
+    private val TAG = MainActivity::class.java.simpleName
+
     internal var repository: Repository? = null
         @Inject set
+
+    enum class UITheme {
+        LIGHT, DARK, NOT_ASSIGNED,
+    }
+
+    var currentTheme: UITheme = UITheme.LIGHT
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -48,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             .contextInjectorModule(ContextInjectorModule(applicationContext))
             .build()
             .inject(this)
-        repository ?: return completeActivity()
+        repository ?: return
         Timber.plant(Timber.DebugTree())
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
@@ -63,12 +71,6 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.donors_container, DonorsFragment.newInstance())
                 .commitNow()
         }
-
-    }
-
-    private fun completeActivity() {
-        finish()
-        // TODO: popup a modal here and then finish after a click
     }
 
 }

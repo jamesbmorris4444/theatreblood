@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <data>
+        <variable
+            name="uiViewModel"
+            type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+        <variable
+            name="standardModal"
+            type="com.fullsekurity.theatreblood.modal.StandardModal" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/standard_dialog_root_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/standard_dialog_root"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+            app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+            app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardDialogWidth)}"
+            android:background="@{uiViewModel.standardDialogBackground}">
+
+            <LinearLayout
+                android:id="@+id/top_spacer"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardDialogTopSpacerHeight)}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.widget.ImageView
+                android:id="@+id/dialog_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardDialogIconHeight)}"
+                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardDialogIconWidth)}"
+                android:visibility="@{safeUnbox(standardModal.iconVisibility)}"
+                android:src="@{standardModal.icon}"
+                android:scaleType="fitXY"
+                app:layout_constraintTop_toBottomOf="@+id/top_spacer"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <LinearLayout
+                android:id="@+id/sub_icon_spacer"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{safeUnbox(standardModal.iconVisibility)}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardDialogSubIconHeight)}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_icon" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:barrierAllowsGoneWidgets="true"
+                app:constraint_referenced_ids="top_spacer, dialog_icon, sub_icon_spacer" >
+            </androidx.constraintlayout.widget.Barrier>
+
+            <TextView
+                android:id="@+id/dialog_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardDialogInternalWidth)}"
+                android:visibility="@{safeUnbox(standardModal.titleVisibility)}"
+                android:text="@{standardModal.titleText}"
+                app:text_font="@{uiViewModel.standardDialogTitleTextTypeface}"
+                app:text_color="@{uiViewModel.standardDialogTitleTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.standardDialogTitleTextSize)}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barrier1"/>
+
+            <LinearLayout
+                android:id="@+id/sub_title_spacer"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{safeUnbox(standardModal.titleSpacerVisibility)}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardDialogSubTitleHeight)}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_title" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:barrierAllowsGoneWidgets="true"
+                app:constraint_referenced_ids="dialog_title, sub_title_spacer" >
+            </androidx.constraintlayout.widget.Barrier>
+
+            <TextView
+                android:id="@+id/dialog_body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{standardModal.bodyText}"
+                android:visibility="@{safeUnbox(standardModal.bodyVisibility)}"
+                app:textview_gravity="@{standardModal.bodyGravity}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_width_dynamic="@{uiViewModel.standardDialogInternalWidth}"
+                app:text_font="@{uiViewModel.standardDialogBodyTextTypeface}"
+                app:text_color="@{uiViewModel.standardDialogBodyTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.standardDialogBodyTextSize)}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barrier2"/>
+
+            <LinearLayout
+                android:id="@+id/sub_body_spacer"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{safeUnbox(standardModal.bodySpacerVisibility)}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardDialogSubBodyHeight)}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_body" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:barrierAllowsGoneWidgets="true"
+                app:constraint_referenced_ids="dialog_body, sub_body_spacer" >
+            </androidx.constraintlayout.widget.Barrier>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dialog_password_input_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_width_dynamic="@{uiViewModel.standardDialogInternalWidth}"
+                app:layout_height_dynamic="@{uiViewModel.standardDialogPasswordHeight}"
+                android:visibility="@{safeUnbox(standardModal.passwordVisibility)}"
+                app:passwordToggleEnabled="true"
+                app:hintEnabled="false"
+                app:password_toggle_tint="@{uiViewModel.standardDialogPasswordToggleColor}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barrier3" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pwd_input_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:set_hint="@{standardModal.hintText}"
+                    app:layout_height_dynamic="@{uiViewModel.standardDialogPasswordHeight}"
+                    android:text="@={standardModal.editTextInput}"
+                    android:onTextChanged="@{standardModal::onTextChanged}"
+                    android:inputType="textPassword"
+                    app:text_hint_color="@{uiViewModel.standardDialogPasswordHintColor}"
+                    app:text_font="@{uiViewModel.standardDialogPasswordTextTypeface}"
+                    app:text_color="@{uiViewModel.standardDialogPasswordTextColor}"
+                    app:edit_text_underline_color="@{uiViewModel.standardDialogPasswordHintColor}"
+                    app:text_size="@{uiViewModel.standardDialogPasswordTextSize}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:barrierAllowsGoneWidgets="true"
+                app:constraint_referenced_ids="dialog_password_input_field" >
+            </androidx.constraintlayout.widget.Barrier>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/modal_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{safeUnbox(standardModal.listVisibility)}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barrier4" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:barrierAllowsGoneWidgets="true"
+                app:constraint_referenced_ids="modal_list_view" >
+            </androidx.constraintlayout.widget.Barrier>
+
+            <LinearLayout
+                android:id="@+id/bottom_spacer"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardDialogTopSpacerHeight)}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barrier5"
+                app:layout_constraintBottom_toTopOf="@+id/dialog_bottom_line" />
+
+            <LinearLayout
+                android:id="@+id/dialog_bottom_line"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:background_color="@{uiViewModel.standardDialogDividerColor}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bottom_spacer" />
+
+            <TextView
+                android:id="@+id/dialog_neutral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@{standardModal.neutralText}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardDialogButtonHeight)}"
+                android:visibility="@{safeUnbox(standardModal.neutralButtonVisibility)}"
+                app:text_font="@{uiViewModel.standardDialogButtonTextTypeface}"
+                app:text_color="@{uiViewModel.standardDialogButtonTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.standardDialogButtonTextSize)}"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/dialog_vertical_line1"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_bottom_line"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/dialog_vertical_line1"
+                android:orientation="horizontal"
+                android:layout_width="1dp"
+                app:background_color="@{uiViewModel.standardDialogDividerColor}"
+                android:visibility="@{safeUnbox(standardModal.neutralButtonVisibility)}"
+                android:layout_height="wrap_content"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardDialogButtonHeight)}"
+                app:layout_constraintStart_toEndOf="@+id/dialog_neutral"
+                app:layout_constraintEnd_toStartOf="@+id/dialog_negative"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+
+            <TextView
+                android:id="@+id/dialog_negative"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@{standardModal.negativeText}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardDialogButtonHeight)}"
+                android:visibility="@{safeUnbox(standardModal.negativeButtonVisibility)}"
+                app:text_font="@{uiViewModel.standardDialogButtonTextTypeface}"
+                app:text_color="@{uiViewModel.standardDialogButtonTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.standardDialogButtonTextSize)}"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/dialog_vertical_line1"
+                app:layout_constraintEnd_toStartOf="@+id/dialog_vertical_line2"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_bottom_line"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/dialog_vertical_line2"
+                android:orientation="horizontal"
+                android:layout_width="1dp"
+                app:background_color="@{uiViewModel.standardDialogDividerColor}"
+                android:visibility="@{safeUnbox(standardModal.negativeButtonVisibility)}"
+                android:layout_height="wrap_content"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardDialogButtonHeight)}"
+                app:layout_constraintStart_toEndOf="@+id/dialog_negative"
+                app:layout_constraintEnd_toStartOf="@+id/dialog_positive"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:id="@+id/dialog_positive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@{standardModal.positiveText}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardDialogButtonHeight)}"
+                android:visibility="@{safeUnbox(standardModal.positiveButtonVisibility)}"
+                app:text_font="@{uiViewModel.standardDialogButtonTextColor}"
+                app:text_color="@{uiViewModel.standardDialogButtonTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.standardDialogButtonTextSize)}"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/dialog_vertical_line2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_bottom_line"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

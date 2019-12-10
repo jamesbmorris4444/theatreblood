@@ -1,12 +1,16 @@
 package com.fullsekurity.theatreblood.utils
 
 import android.content.Context
+import androidx.lifecycle.ViewModelProviders
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.donors.DonorsItemViewModel
 import com.fullsekurity.theatreblood.donors.DonorsListViewModel
 import com.fullsekurity.theatreblood.home.HomeViewModel
+import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.BloodDatabase
+import com.fullsekurity.theatreblood.ui.UIViewModel
+import com.fullsekurity.theatreblood.ui.UIViewModelFactory
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -25,6 +29,31 @@ interface ContextDependencyInjector {
 //    fun inject(viewModel: DirectDepositUiViewModel)
 //    fun inject(generator: GridDashboardFragment.GridDashboardAdapter)
 //    fun inject(generator: P2PDashboardFragment.P2PDashboardAdapter)
+}
+
+@Singleton
+@Component(modules = [MapperInjectorModule::class])
+interface MapperDependencyInjector {
+    fun inject(viewModel: UIViewModel)
+
+}
+
+@Module
+class MapperInjectorModule(val context: Context) {
+    @Provides
+    @Singleton
+    fun colorMapperProvider() : ColorMapper {
+        val colorMapper = ColorMapper()
+        colorMapper.initialize()
+        return colorMapper
+    }
+    @Provides
+    @Singleton
+    fun textSizeMapperProvider() : TextSizeMapper {
+        val textSizeMapper = TextSizeMapper()
+        textSizeMapper.initialize()
+        return textSizeMapper
+    }
 }
 
 @Singleton
@@ -78,7 +107,7 @@ interface ViewModelDependencyInjector {
 //    fun inject(fragment: SupportFAQFragment)
 //    fun inject(fragment: RewardsWalletFragment)
 //    fun inject(fragment: RewardPurchaseConfirmationFragment)
-//    fun inject(fragment: StandardThemedModal)
+    fun inject(modal: StandardModal)
 //    fun inject(fragment: RewardsSendAsGiftRecipientFragment)
 //    fun inject(fragment: DirectDepositFAQDialogFragment)
 //    fun inject(fragment: DDEmailEmployerFragment)
@@ -87,27 +116,27 @@ interface ViewModelDependencyInjector {
 
 @Module
 class ContextInjectorModule(val context: Context) {
-//    @Provides
-//    @Singleton
-//    fun colorMapperProvider() : ColorMapper {
-//        val colorMapper = ColorMapper()
-//        colorMapper.initialize()
-//        return colorMapper
-//    }
-//    @Provides
-//    @Singleton
-//    fun textSizeMapperProvider() : TextSizeMapper {
-//        val textSizeMapper = TextSizeMapper()
-//        textSizeMapper.initialize()
-//        return textSizeMapper
-//    }
-//    @Provides
-//    @Singleton
-//    fun typefaceMapperProvider() : TypefaceMapper {
-//        val typefaceMapper = TypefaceMapper()
-//        typefaceMapper.initialize()
-//        return typefaceMapper
-//    }
+    @Provides
+    @Singleton
+    fun colorMapperProvider() : ColorMapper {
+        val colorMapper = ColorMapper()
+        colorMapper.initialize()
+        return colorMapper
+    }
+    @Provides
+    @Singleton
+    fun textSizeMapperProvider() : TextSizeMapper {
+        val textSizeMapper = TextSizeMapper()
+        textSizeMapper.initialize()
+        return textSizeMapper
+    }
+    @Provides
+    @Singleton
+    fun typefaceMapperProvider() : TypefaceMapper {
+        val typefaceMapper = TypefaceMapper()
+        typefaceMapper.initialize()
+        return typefaceMapper
+    }
 //    @Provides
 //    @Singleton
 //    fun fileNameMapperProvider() : FileNameMapper {
@@ -126,11 +155,11 @@ class ContextInjectorModule(val context: Context) {
 
 @Module
 class ViewModelInjectorModule(val activity: com.fullsekurity.theatreblood.activity.MainActivity) {
-//    @Provides
-//    @Singleton
-//    fun dashboardViewModelProvider() : DashboardViewModel {
-//        return ViewModelProviders.of(activity, DashboardViewModelFactory(activity.application)).get(DashboardViewModel::class.java)
-//    }
+    @Provides
+    @Singleton
+    fun uiViewModelProvider() : UIViewModel {
+        return ViewModelProviders.of(activity, UIViewModelFactory(activity.application)).get(UIViewModel::class.java)
+    }
 //    @Provides
 //    @Singleton
 //    fun rewardsViewModelProvider() : RewardsViewModel {

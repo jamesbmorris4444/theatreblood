@@ -4,4 +4,11 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="posterImage">poster image</string>
+
+    <!-- standard modals -->
+    <string name="std_modal_no_repository_title">Repository cannot be created. App cannot continue.</string>
+    <string name="std_modal_password_authentication_hint">Password</string>
+    <string name="std_modal_submit">Submit</string>
+    <string name="std_modal_cancel">Cancel</string>
+    <string name="std_modal_ok">OK</string>
 </resources>

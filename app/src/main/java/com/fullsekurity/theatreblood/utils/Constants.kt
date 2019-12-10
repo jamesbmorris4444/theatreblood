@@ -20,5 +20,6 @@ object Constants {
     const val LANGUAGE = "en"
     const val LOADING_PAGE_SIZE = 20
     const val NUMBER_OF_THREADS = 3
-    val DATA_BASE_NAME = "TheatreBlood.db"
+    const val DATA_BASE_NAME = "TheatreBlood.db"
+    const val STANDARD_LEFT_AND_RIGHT_MARGIN = 20f
 }

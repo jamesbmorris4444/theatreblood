@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <data>
+        <variable
+                name="uiViewModel"
+                type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/footer_dashed_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_marginLeft="@{safeUnbox(uiViewModel.standardDialogListLongMarginLeft)}"
+            android:src="@{uiViewModel.standardDialogDashedLine}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:id="@+id/modal_text_footer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:text_font="@{uiViewModel.standardDialogListFooterTextTypeface}"
+            app:text_color="@{uiViewModel.standardDialogListFooterTextColor}"
+            app:text_size="@{safeUnbox(uiViewModel.standardDialogListFooterTextSize)}"
+            app:layout_marginLeft="@{safeUnbox(uiViewModel.standardDialogListLongMarginLeft)}"
+            app:layout_marginTop="@{safeUnbox(uiViewModel.standardDialogListLine1MarginTop)}"
+            app:layout_constraintTop_toBottomOf="@+id/footer_dashed_line"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
