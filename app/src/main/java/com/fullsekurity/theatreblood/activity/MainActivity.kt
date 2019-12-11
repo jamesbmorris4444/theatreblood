@@ -1,10 +1,12 @@
 package com.fullsekurity.theatreblood.activity
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.donors.DonorsFragment
-import com.fullsekurity.theatreblood.home.HomeFragment
+import com.fullsekurity.theatreblood.input.HomeFragment
+import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.utils.ContextInjectorModule
 import com.fullsekurity.theatreblood.utils.DaggerContextDependencyInjector
@@ -24,6 +26,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     var currentTheme: UITheme = UITheme.LIGHT
+
+    override fun onResume() {
+        super.onResume()
+        val settings = getSharedPreferences("THEME", Context.MODE_PRIVATE)
+        val name: String? = settings.getString("THEME", UITheme.LIGHT.name)
+        if (name != null) {
+            currentTheme = UITheme.valueOf(name)
+        }
+    }
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -56,7 +67,6 @@ class MainActivity : AppCompatActivity() {
             .contextInjectorModule(ContextInjectorModule(applicationContext))
             .build()
             .inject(this)
-        repository ?: return
         Timber.plant(Timber.DebugTree())
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
@@ -70,7 +80,27 @@ class MainActivity : AppCompatActivity() {
                 .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
                 .add(R.id.donors_container, DonorsFragment.newInstance())
                 .commitNow()
+            if (repository == null) {
+                StandardModal(
+                    this,
+                    modalType = StandardModal.ModalType.STANDARD,
+                    titleText = getString(R.string.std_modal_no_repository_title),
+                    bodyText = getString(R.string.std_modal_no_repository_body),
+                    positiveText = getString(R.string.std_modal_ok),
+                    dialogFinishedListener = object : StandardModal.DialogFinishedListener {
+                        override fun onPositive(password: String) {
+                            finish()
+                        }
+                        override fun onNegative() { }
+                        override fun onNeutral() { }
+                        override fun onBackPressed() {
+                            finish()
+                        }
+                    }
+                ).show(supportFragmentManager, "MODAL")
+            }
         }
+
     }
 
 }

@@ -18,8 +18,8 @@ class UIDataClass(
     val standardDialogBodyTextColor: String,              // Standard dialog body text color
     val standardDialogBodyTextSize: String,               // Standard dialog body text size
     val standardDialogButtonHeight: Float,                // Standard dialog button height
-    val standardDialogButtonTextColor: String,          // Standard dialog positive button text color
-    val standardDialogButtonTextSize: String,           // Standard dialog positive button text size
+    val standardDialogButtonTextColor: String,            // Standard dialog positive button text color
+    val standardDialogButtonTextSize: String,             // Standard dialog positive button text size
     val standardDialogPasswordHeight: Float,              // Standard dialog password entry field height
     val standardDialogPasswordTextColor: String,          // Standard dialog password entry field text color
     val standardDialogPasswordTextSize: String,           // Standard dialog password entry field text size
@@ -39,6 +39,11 @@ class UIDataClass(
     val standardDialogListLine1MarginTop: Float,          // Standard dialog list item (all but first item) top margin (between line 1 text and dashed line above it)
     val standardDialogListLine2MarginTop: Float,          // Standard dialog list item (all but first item) top margin (between line 2 text and line 1 text above it)
     val standardDialogListFooterTextColor: String,        // Standard dialog footer text color
-    val standardDialogListFooterTextSize: String          // Standard dialog footer text size
+    val standardDialogListFooterTextSize: String,         // Standard dialog footer text size
+
+    val editTextNameHintColor: String,                    // Name EditText hint text color
+    val editTextNameColor: String,                        // Name EditText text color
+    val editTextNameSize: String,                         // Name EditText text size
+    val editTextNameUnderlineColor: String                // Name EditText underline color
 
     )

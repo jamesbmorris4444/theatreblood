@@ -9,16 +9,14 @@ import android.util.TypedValue
 import androidx.core.content.ContextCompat
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
+import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.utils.*
+import com.fullsekurity.theatreblood.utils.Constants.STANDARD_EDIT_TEXT_HEIGHT
 import com.fullsekurity.theatreblood.utils.Constants.STANDARD_LEFT_AND_RIGHT_MARGIN
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
@@ -30,7 +28,8 @@ class UIViewModelFactory(private val activity: Application) : ViewModelProvider.
 
 class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
 
-    // See DashboardDataClassHome class for description of fields
+    private val TAG = UIViewModel::class.java.simpleName
+
     val standardDialogWidth: ObservableField<Int> = ObservableField(0)
     val standardDialogDividerColor: ObservableField<String> = ObservableField("#ffffff")
     val standardDialogPasswordHintColor: ObservableField<String> = ObservableField("#ffffff")
@@ -79,8 +78,16 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val standardDialogListFooterTextSize: ObservableField<Float> = ObservableField(0f)
     val standardDialogListFooterTextTypeface: ObservableField<String> = ObservableField("")
 
+    val editTextNameHintColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextNameColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextNameSize: ObservableField<Float> = ObservableField(0f)
+    val editTextNameUnderlineColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextNameTypeface: ObservableField<String> = ObservableField("")
+
     var standardLeftAndRightMargin: ObservableField<Int> = ObservableField(0)
     var standardDialogInternalWidth: ObservableField<Int> = ObservableField(0)
+    var standardWidth: ObservableField<Int> = ObservableField(0)
+    var standardEditTextHeight: ObservableField<Int> = ObservableField(0)
 
     private val context: Context = getApplication<Application>().applicationContext
     val modalCloseErrorIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.mo_close_error)
@@ -95,29 +102,28 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     var currentTheme: MainActivity.UITheme = MainActivity.UITheme.NOT_ASSIGNED
         set(value) {
             if (value != currentTheme) {
-                uiDataModel.loadData(value)
+                LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("LOAD THEME for %s  ->  %s", currentTheme.name, value.name))
+                val settings = context.getSharedPreferences("THEME", Context.MODE_PRIVATE)
+                val editor = settings.edit()
+                editor.putString("THEME", value.name)
+                editor.apply()
+                uiDataClass = uiDataModel.loadData(value)
+                liveDataUpdate(value)
             }
             field = value
         }
     private val uiDataModel = UIDataModel()
-    val liveUIDataClass: MutableLiveData<UIDataClass> = MutableLiveData()
-    private var disposable: Disposable? = null
-    private lateinit var UIDataClass: UIDataClass
+    private var uiDataClass: UIDataClass? = null
 
     init {
         DaggerMapperDependencyInjector.builder()
                 .mapperInjectorModule(MapperInjectorModule(context))
                 .build()
                 .inject(this)
-        disposable = uiDataModel.uiDataClassObservable
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe { uiViewData ->
-                    liveUIDataClass.postValue(uiViewData)
-                    this.UIDataClass = uiViewData
-                }
         standardLeftAndRightMargin.set(convertDpToPixels(STANDARD_LEFT_AND_RIGHT_MARGIN))
         standardDialogInternalWidth.set(computeStandardInternalWidth())
+        standardWidth.set(computeStandardWidth())
+        standardEditTextHeight.set(convertDpToPixels(STANDARD_EDIT_TEXT_HEIGHT))
     }
 
     private fun convertDpToPixels(dp: Float): Int {
@@ -136,61 +142,76 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
         return internalWidth
     }
 
-    override fun onCleared() {
-        disposable?.let {
-            it.dispose()
-            disposable = null
+    private fun computeStandardWidth(): Int {
+        // |<--standard margin-->|<--standard width-->|<--standard margin-->|
+        // |<-----------------------total width---------------------------->|
+
+        val screenWidth = context.resources.displayMetrics.widthPixels
+        var internalWidth = screenWidth - 320 // margin in the extremely rare case that standardLeftAndRightMargin.get() is null
+        standardLeftAndRightMargin.get()?.let {
+            internalWidth = screenWidth - 2 * it
         }
+        return internalWidth
     }
 
-    fun liveDataUpdate() {
-        standardDialogBackground.set(ContextCompat.getDrawable(context, UIDataClass.standardDialogBackground))
-        standardDialogDashedLine.set(ContextCompat.getDrawable(context, UIDataClass.standardDialogDashedLine))
-        standardDialogWidth.set(convertDpToPixels(UIDataClass.standardDialogWidth))
-        standardDialogDividerColor.set(colorMapper.map(currentTheme, UIDataClass.standardDialogDividerColor))
-        standardDialogPasswordHintColor.set(colorMapper.map(currentTheme, UIDataClass.standardDialogPasswordHintColor))
-        standardDialogTopSpacerHeight.set(convertDpToPixels(UIDataClass.standardDialogTopSpacerHeight))
-        standardDialogSubTitleHeight.set(convertDpToPixels(UIDataClass.standardDialogSubTitleHeight))
-        standardDialogTitleTextColor.set(colorMapper.map(currentTheme, UIDataClass.standardDialogTitleTextColor))
-        standardDialogTitleTextSize.set(textSizeMapper.map(currentTheme, UIDataClass.standardDialogTitleTextSize))
-        standardDialogTitleTextTypeface.set(typefaceMapper.map(currentTheme, UIDataClass.standardDialogTitleTextSize))
-        standardDialogIconHeight.set(convertDpToPixels(UIDataClass.standardDialogIconHeight))
-        standardDialogIconWidth.set(convertDpToPixels(UIDataClass.standardDialogIconWidth))
-        standardDialogSubIconHeight.set(convertDpToPixels(UIDataClass.standardDialogSubIconHeight))
-        standardDialogSubBodyHeight.set(convertDpToPixels(UIDataClass.standardDialogSubBodyHeight))
-        standardDialogBodyTextColor.set(colorMapper.map(currentTheme, UIDataClass.standardDialogBodyTextColor))
-        standardDialogBodyTextSize.set(textSizeMapper.map(currentTheme, UIDataClass.standardDialogBodyTextSize))
-        standardDialogBodyTextTypeface.set(typefaceMapper.map(currentTheme, UIDataClass.standardDialogBodyTextSize))
-        standardDialogButtonHeight.set(convertDpToPixels(UIDataClass.standardDialogButtonHeight))
-        standardDialogButtonTextColor.set(colorMapper.map(currentTheme, UIDataClass.standardDialogButtonTextColor))
-        standardDialogButtonTextSize.set(textSizeMapper.map(currentTheme, UIDataClass.standardDialogButtonTextSize))
-        standardDialogButtonTextTypeface.set(typefaceMapper.map(currentTheme, UIDataClass.standardDialogButtonTextSize))
-        standardDialogPasswordHeight.set(convertDpToPixels(UIDataClass.standardDialogPasswordHeight))
-        standardDialogPasswordTextColor.set(colorMapper.map(currentTheme, UIDataClass.standardDialogPasswordTextColor))
-        standardDialogPasswordTextSize.set(textSizeMapper.map(currentTheme, UIDataClass.standardDialogPasswordTextSize))
-        standardDialogPasswordTextTypeface.set(typefaceMapper.map(currentTheme, UIDataClass.standardDialogPasswordTextSize))
-        standardDialogPasswordToggleColor.set(colorMapper.map(currentTheme, UIDataClass.standardDialogPasswordToggleColor))
-        standardDialogListCenterTextColor.set(colorMapper.map(currentTheme, UIDataClass.standardDialogListCenterTextColor))
-        standardDialogListCenterTextSize.set(textSizeMapper.map(currentTheme, UIDataClass.standardDialogListCenterTextSize))
-        standardDialogListCenterTextTypeface.set(typefaceMapper.map(currentTheme, UIDataClass.standardDialogListCenterTextSize))
-        standardDialogListCenterTextMarginLeft.set(convertDpToPixels(UIDataClass.standardDialogListCenterTextMarginLeft))
-        standardDialogListAmountTextColor.set(colorMapper.map(currentTheme, UIDataClass.standardDialogListAmountTextColor))
-        standardDialogListAmountTextSize.set(textSizeMapper.map(currentTheme, UIDataClass.standardDialogListAmountTextSize))
-        standardDialogListAmountTextTypeface.set(typefaceMapper.map(currentTheme, UIDataClass.standardDialogListAmountTextSize))
-        standardDialogListLongMarginLeft.set(convertDpToPixels(UIDataClass.standardDialogListLongMarginLeft))
-        standardDialogListTextColor.set(colorMapper.map(currentTheme, UIDataClass.standardDialogListTextColor))
-        standardDialogListTextSize.set(textSizeMapper.map(currentTheme, UIDataClass.standardDialogListTextSize))
-        standardDialogListTextTypeface.set(typefaceMapper.map(currentTheme, UIDataClass.standardDialogListTextSize))
-        standardDialogListSmallTextColor.set(colorMapper.map(currentTheme, UIDataClass.standardDialogListSmallTextColor))
-        standardDialogListSmallTextSize.set(textSizeMapper.map(currentTheme, UIDataClass.standardDialogListSmallTextSize))
-        standardDialogListSmallTextTypeface.set(typefaceMapper.map(currentTheme, UIDataClass.standardDialogListSmallTextSize))
-        standardDialogListTitleMarginTop.set(convertDpToPixels(UIDataClass.standardDialogListTitleMarginTop))
-        standardDialogListTitleHeight.set(convertDpToPixels(UIDataClass.standardDialogListTitleHeight))
-        standardDialogListLine1MarginTop.set(convertDpToPixels(UIDataClass.standardDialogListLine1MarginTop))
-        standardDialogListLine2MarginTop.set(convertDpToPixels(UIDataClass.standardDialogListLine2MarginTop))
-        standardDialogListFooterTextColor.set(colorMapper.map(currentTheme, UIDataClass.standardDialogListFooterTextColor))
-        standardDialogListFooterTextSize.set(textSizeMapper.map(currentTheme, UIDataClass.standardDialogListFooterTextSize))
-        standardDialogListFooterTextTypeface.set(typefaceMapper.map(currentTheme, UIDataClass.standardDialogListFooterTextSize))
+    private fun liveDataUpdate(theme: MainActivity.UITheme) {
+
+        uiDataClass?.let { uiDataClass ->
+            standardDialogBackground.set(ContextCompat.getDrawable(context, uiDataClass.standardDialogBackground))
+            standardDialogDashedLine.set(ContextCompat.getDrawable(context, uiDataClass.standardDialogDashedLine))
+            standardDialogWidth.set(convertDpToPixels(uiDataClass.standardDialogWidth))
+            standardDialogDividerColor.set(colorMapper.map(theme, uiDataClass.standardDialogDividerColor))
+            standardDialogPasswordHintColor.set(colorMapper.map(theme, uiDataClass.standardDialogPasswordHintColor))
+            standardDialogTopSpacerHeight.set(convertDpToPixels(uiDataClass.standardDialogTopSpacerHeight))
+            standardDialogSubTitleHeight.set(convertDpToPixels(uiDataClass.standardDialogSubTitleHeight))
+            standardDialogTitleTextColor.set(colorMapper.map(theme, uiDataClass.standardDialogTitleTextColor))
+            standardDialogTitleTextSize.set(textSizeMapper.map(theme, uiDataClass.standardDialogTitleTextSize))
+            standardDialogTitleTextTypeface.set(typefaceMapper.map(theme, uiDataClass.standardDialogTitleTextSize))
+            standardDialogIconHeight.set(convertDpToPixels(uiDataClass.standardDialogIconHeight))
+            standardDialogIconWidth.set(convertDpToPixels(uiDataClass.standardDialogIconWidth))
+            standardDialogSubIconHeight.set(convertDpToPixels(uiDataClass.standardDialogSubIconHeight))
+            standardDialogSubBodyHeight.set(convertDpToPixels(uiDataClass.standardDialogSubBodyHeight))
+            standardDialogBodyTextColor.set(colorMapper.map(theme, uiDataClass.standardDialogBodyTextColor))
+            standardDialogBodyTextSize.set(textSizeMapper.map(theme, uiDataClass.standardDialogBodyTextSize))
+            standardDialogBodyTextTypeface.set(typefaceMapper.map(theme, uiDataClass.standardDialogBodyTextSize))
+            standardDialogButtonHeight.set(convertDpToPixels(uiDataClass.standardDialogButtonHeight))
+            standardDialogButtonTextColor.set(colorMapper.map(theme, uiDataClass.standardDialogButtonTextColor))
+            standardDialogButtonTextSize.set(textSizeMapper.map(theme, uiDataClass.standardDialogButtonTextSize))
+            standardDialogButtonTextTypeface.set(typefaceMapper.map(theme, uiDataClass.standardDialogButtonTextSize))
+            standardDialogPasswordHeight.set(convertDpToPixels(uiDataClass.standardDialogPasswordHeight))
+            standardDialogPasswordTextColor.set(colorMapper.map(theme, uiDataClass.standardDialogPasswordTextColor))
+            standardDialogPasswordTextSize.set(textSizeMapper.map(theme, uiDataClass.standardDialogPasswordTextSize))
+            standardDialogPasswordTextTypeface.set(typefaceMapper.map(theme, uiDataClass.standardDialogPasswordTextSize))
+            standardDialogPasswordToggleColor.set(colorMapper.map(theme, uiDataClass.standardDialogPasswordToggleColor))
+            standardDialogListCenterTextColor.set(colorMapper.map(theme, uiDataClass.standardDialogListCenterTextColor))
+            standardDialogListCenterTextSize.set(textSizeMapper.map(theme, uiDataClass.standardDialogListCenterTextSize))
+            standardDialogListCenterTextTypeface.set(typefaceMapper.map(theme, uiDataClass.standardDialogListCenterTextSize))
+            standardDialogListCenterTextMarginLeft.set(convertDpToPixels(uiDataClass.standardDialogListCenterTextMarginLeft))
+            standardDialogListAmountTextColor.set(colorMapper.map(theme, uiDataClass.standardDialogListAmountTextColor))
+            standardDialogListAmountTextSize.set(textSizeMapper.map(theme, uiDataClass.standardDialogListAmountTextSize))
+            standardDialogListAmountTextTypeface.set(typefaceMapper.map(theme, uiDataClass.standardDialogListAmountTextSize))
+            standardDialogListLongMarginLeft.set(convertDpToPixels(uiDataClass.standardDialogListLongMarginLeft))
+            standardDialogListTextColor.set(colorMapper.map(theme, uiDataClass.standardDialogListTextColor))
+            standardDialogListTextSize.set(textSizeMapper.map(theme, uiDataClass.standardDialogListTextSize))
+            standardDialogListTextTypeface.set(typefaceMapper.map(theme, uiDataClass.standardDialogListTextSize))
+            standardDialogListSmallTextColor.set(colorMapper.map(theme, uiDataClass.standardDialogListSmallTextColor))
+            standardDialogListSmallTextSize.set(textSizeMapper.map(theme, uiDataClass.standardDialogListSmallTextSize))
+            standardDialogListSmallTextTypeface.set(typefaceMapper.map(theme, uiDataClass.standardDialogListSmallTextSize))
+            standardDialogListTitleMarginTop.set(convertDpToPixels(uiDataClass.standardDialogListTitleMarginTop))
+            standardDialogListTitleHeight.set(convertDpToPixels(uiDataClass.standardDialogListTitleHeight))
+            standardDialogListLine1MarginTop.set(convertDpToPixels(uiDataClass.standardDialogListLine1MarginTop))
+            standardDialogListLine2MarginTop.set(convertDpToPixels(uiDataClass.standardDialogListLine2MarginTop))
+            standardDialogListFooterTextColor.set(colorMapper.map(theme, uiDataClass.standardDialogListFooterTextColor))
+            standardDialogListFooterTextSize.set(textSizeMapper.map(theme, uiDataClass.standardDialogListFooterTextSize))
+            standardDialogListFooterTextTypeface.set(typefaceMapper.map(theme, uiDataClass.standardDialogListFooterTextSize))
+
+            editTextNameHintColor.set(colorMapper.map(theme, uiDataClass.editTextNameHintColor))
+            editTextNameColor.set(colorMapper.map(theme, uiDataClass.editTextNameColor))
+            editTextNameSize.set(textSizeMapper.map(theme, uiDataClass.editTextNameSize))
+            editTextNameUnderlineColor.set(colorMapper.map(theme, uiDataClass.editTextNameUnderlineColor))
+            editTextNameTypeface.set(typefaceMapper.map(theme, uiDataClass.editTextNameSize))
+
+        }
     }
 
 }

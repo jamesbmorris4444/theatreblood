@@ -18,8 +18,8 @@ object Constants {
     const val INCLUDE_VIDEO_PARAM = "include_video"
     const val API_KEY = "17c5889b399d3c051099e4098ad83493"
     const val LANGUAGE = "en"
-    const val LOADING_PAGE_SIZE = 20
-    const val NUMBER_OF_THREADS = 3
     const val DATA_BASE_NAME = "TheatreBlood.db"
     const val STANDARD_LEFT_AND_RIGHT_MARGIN = 20f
+    const val STANDARD_EDIT_TEXT_HEIGHT = 40f
+
 }

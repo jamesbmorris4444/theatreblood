@@ -13,33 +13,28 @@ class ColorMapper @Inject constructor() {
     // colorMapper.map(theme, "primaryDark")
 
     enum class LightColors(var colorName: String, val colorValue: String) {
-        PRIMARY("primary", "#5B06F1"),
-        PRIMARY_TRANSPARENT("primary_transparent", "#CC5B06F1"),
-        PRIMARY_DARK("primaryDark", "#3F0A9D"),
-        SECONDARY("secondary", "#005CFF"),
-        TERTIARY("tertiary", "#E81388"),
+        PINK("pink", "#E81388"),
         SUCCESS("success", "#4FC143"),
         WARNING("warning", "#FF9900"),
         ERROR("error", "#E40449"),
         WHITE("white", "#FFFFFF"),
         BLACK("black", "#000000"),
-        DARKER_GRAY("darkerGray", "#CC000000"),
-        DARKEST_GRAY("darkestGray", "#E6000000")
+        LIGHT_GRAY("lightGray", "#33000000"),
+        MEDIUM_GRAY("mediumGray", "#86000000"),
+        DARK_GRAY("darkGray", "#E6000000")
     }
 
     enum class DarkColors(var colorName: String, val colorValue: String) {
-        PRIMARY("primary", "#5B06F1"),
-        PRIMARY_TRANSPARENT("primary_transparent", "#CC5B06F1"),
-        PRIMARY_DARK("primaryDark", "#3F0A9D"),
-        SECONDARY("secondary", "#005CFF"),
-        TERTIARY("tertiary", "#E81388"),
+
+        PINK("pink", "#E81388"),
         SUCCESS("success", "#4FC143"),
         WARNING("warning", "#FF9900"),
         ERROR("error", "#E40449"),
         WHITE("white", "#FFFFFF"),
         BLACK("black", "#000000"),
-        DARKER_GRAY("darkerGray", "#CC000000"),
-        DARKEST_GRAY("darkestGray", "#E6000000")
+        LIGHT_GRAY("lightGray", "#33FFFFFF"),
+        MEDIUM_GRAY("mediumGray", "#86FFFFFF"),
+        DARK_GRAY("darkGray", "#E6FFFFFF")
     }
 
     private val colorMap: MutableList<MutableMap<String,String>> = mutableListOf()

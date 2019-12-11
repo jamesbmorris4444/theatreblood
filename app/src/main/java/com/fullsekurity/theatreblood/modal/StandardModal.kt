@@ -14,7 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
@@ -80,6 +79,7 @@ class StandardModal (
                 fragment.fragmentManager?.let { dialog.show(it, TAG) }
          */
 
+        private val activity: MainActivity,
         private var modalType: ModalType = ModalType.STANDARD,
         private var iconType: IconType = IconType.NONE,
         titleText: String = "",
@@ -163,7 +163,7 @@ class StandardModal (
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         DaggerViewModelDependencyInjector.builder()
-                .viewModelInjectorModule(ViewModelInjectorModule(activity as MainActivity))
+                .viewModelInjectorModule(ViewModelInjectorModule(activity))
                 .build()
                 .inject(this)
 
@@ -213,7 +213,7 @@ class StandardModal (
                 val resultLayoutManager = LinearLayoutManager(activity)
                 lateinit var adapter: ModalListAdapter
                 context?.let {
-                    adapter = ModalListAdapter(activity as MainActivity, this, it)
+                    adapter = ModalListAdapter(activity, this, it)
                 }
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = resultLayoutManager
@@ -227,11 +227,6 @@ class StandardModal (
         binding.lifecycleOwner = this
         binding.standardModal = this
         binding.uiViewModel = uiViewModel
-        // Observer for theme initialized
-        uiViewModel.liveUIDataClass.observe(viewLifecycleOwner, Observer {
-            uiViewModel.liveDataUpdate()
-        })
-        uiViewModel.currentTheme = (activity as MainActivity).currentTheme
         val positive: TextView = binding.root.findViewById(R.id.dialog_positive)
         positive.setOnClickListener(onPositive)
         val negative: TextView = binding.root.findViewById(R.id.dialog_negative)
@@ -259,10 +254,10 @@ class StandardModal (
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return object: Dialog((activity as MainActivity).applicationContext, theme) {
+        return object: Dialog(activity, theme) {
             override fun onBackPressed() {
                 dismiss()
-                dialogFinishedListener?.onNegative()
+                dialogFinishedListener?.onBackPressed()
                 super.onBackPressed()
             }
         }
@@ -315,9 +310,9 @@ class StandardModal (
                     binding.uiViewModel = uiViewModel
                     binding.standardModal = fragment
                     // Observer for theme initialized
-                    uiViewModel.liveUIDataClass.observe(fragment, Observer {
-                        uiViewModel.liveDataUpdate()
-                    })
+//                    uiViewModel.liveUIDataClass.observe(fragment, Observer {
+//                        uiViewModel.liveDataUpdate()
+//                    })
                     uiViewModel.currentTheme = activity.currentTheme
                     return HeaderViewHolder(binding.root)
                 }
@@ -326,9 +321,9 @@ class StandardModal (
                     uiViewModel = fragment.uiViewModel
                     binding.uiViewModel = uiViewModel
                     // Observer for theme initialized
-                    uiViewModel.liveUIDataClass.observe(fragment, Observer {
-                        uiViewModel.liveDataUpdate()
-                    })
+//                    uiViewModel.liveUIDataClass.observe(fragment, Observer {
+//                        uiViewModel.liveDataUpdate()
+//                    })
                     uiViewModel.currentTheme = activity.currentTheme
                     return ListViewHolder(binding.root)
                 }
@@ -337,9 +332,9 @@ class StandardModal (
                     uiViewModel = fragment.uiViewModel
                     binding.uiViewModel = uiViewModel
                     // Observer for theme initialized
-                    uiViewModel.liveUIDataClass.observe(fragment, Observer {
-                        uiViewModel.liveDataUpdate()
-                    })
+//                    uiViewModel.liveUIDataClass.observe(fragment, Observer {
+//                        uiViewModel.liveDataUpdate()
+//                    })
                     uiViewModel.currentTheme = activity.currentTheme
                     return FooterViewHolder(binding.root)
                 }

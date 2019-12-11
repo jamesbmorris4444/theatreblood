@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <data>
+        <variable
+                name="uiViewModel"
+                type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+        <variable
+                name="inputViewModel"
+                type="com.fullsekurity.theatreblood.input.InputViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edit_text_input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardWidth)}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
+                android:visibility="@{safeUnbox(inputViewModel.editTextNameVisibility)}"
+                app:hintEnabled="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_input_name_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:set_hint="@{inputViewModel.hintTextName}"
+                    android:text="@={inputViewModel.editTextNameInput}"
+                    android:onTextChanged="@{inputViewModel::onTextNameChanged}"
+                    android:inputType="textPersonName"
+                    app:text_hint_color="@{uiViewModel.editTextNameHintColor}"
+                    app:text_font="@{uiViewModel.editTextNameTypeface}"
+                    app:text_color="@{uiViewModel.editTextNameColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.editTextNameSize)}"
+                    app:edit_text_underline_color="@{uiViewModel.editTextNameUnderlineColor}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

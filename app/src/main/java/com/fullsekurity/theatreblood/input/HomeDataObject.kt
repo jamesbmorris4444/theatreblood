@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.home
+package com.fullsekurity.theatreblood.input
 
 data class HomeDataObject (
     val title: String,

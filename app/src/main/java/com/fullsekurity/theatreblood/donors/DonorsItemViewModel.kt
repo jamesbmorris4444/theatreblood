@@ -36,8 +36,8 @@ class DonorsItemViewModel(val activity: Application) : RecyclerViewItemViewModel
             .inject(this)
     }
 
-    override fun setItem(donor: Donor) {
-        val ( id, voteCount, video, voteAverage, title, popularity, posterPath, originalLanguage, originalTitle, backdropPath, adult, overview, releaseDate) = donor
+    override fun setItem(item: Donor) {
+        val ( id, voteCount, video, voteAverage, title, popularity, posterPath, originalLanguage, originalTitle, backdropPath, adult, overview, releaseDate) = item
         _voteCount.value = voteCount.toString()
         _video.value = if (video) "T" else "F"
         _voteAverage.value = voteAverage.toString()

@@ -137,10 +137,8 @@ fun setMarginRightComputed(v: View, leftandRightMargin: Int) {
 
 @BindingAdapter("text_font")
 fun setFont(view: TextView, font: String) {
-    if (font != null) {
-        val typeface = FontFamily.newInstance().getFontResId(view.context, font)
-        view.typeface = typeface
-    }
+    val typeface = FontFamily.newInstance().getFontResId(view.context, font)
+    view.typeface = typeface
 }
 
 @BindingAdapter("include_font_padding")
@@ -233,7 +231,7 @@ fun setImageResource(editText: EditText, resource: Int) {
 }
 
 @BindingAdapter("text_hint_color")
-fun setTextHintColorGD(view: EditText, color: String) {
+fun setTextHintColor(view: EditText, color: String) {
     view.setHintTextColor(Color.parseColor(color))
 }
 
@@ -255,6 +253,6 @@ fun setRecyclerviewBackground(recyclerView: RecyclerView, color: String) {
 @BindingAdapter("recyclerViewViewModel")
 fun setRecyclerViewViewModel(recyclerView: RecyclerView, viewModel: RecyclerViewViewModel?) {
     if (viewModel != null) {
-        viewModel!!.setupRecyclerView(recyclerView)
+        viewModel.setupRecyclerView(recyclerView)
     }
 }
