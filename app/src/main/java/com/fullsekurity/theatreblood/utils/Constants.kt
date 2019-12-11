@@ -22,4 +22,10 @@ object Constants {
     const val STANDARD_LEFT_AND_RIGHT_MARGIN = 20f
     const val STANDARD_EDIT_TEXT_HEIGHT = 40f
 
+    // toolbar
+
+    const val INITIAL_TOOLBAR_TITLE = "Theatre Blood"
+    const val TOOLBAR_BACKGROUND_COLOR = "#ff0000"
+    const val TOOLBAR_TEXT_COLOR = "#ffffff"
+
 }

@@ -1,11 +1,8 @@
 package com.fullsekurity.theatreblood.input
 
-import android.app.Application
-import android.content.Context
 import android.view.View
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.activity.MainActivity
@@ -19,8 +16,6 @@ class InputViewModelFactory(private val activity: MainActivity) : ViewModelProvi
 
 @Suppress("UNCHECKED_CAST")
 class InputViewModel(val activity: MainActivity) : AndroidViewModel(activity.application) {
-    private val liveInputDataObject: MutableLiveData<String> = MutableLiveData()
-    private val context: Context = getApplication<Application>().applicationContext
 
     // observable used for two-way data binding. Values set into this field will show in view.
     // Text typed into EditText in view will be stored into this field after each character is typed.

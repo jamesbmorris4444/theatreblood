@@ -1,18 +1,23 @@
 package com.fullsekurity.theatreblood.activity
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.donors.DonorsFragment
 import com.fullsekurity.theatreblood.input.HomeFragment
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.Repository
+import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.ContextInjectorModule
 import com.fullsekurity.theatreblood.utils.DaggerContextDependencyInjector
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import timber.log.Timber
 import javax.inject.Inject
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -69,6 +74,8 @@ class MainActivity : AppCompatActivity() {
             .inject(this)
         Timber.plant(Timber.DebugTree())
         setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.toolbar))
+        setupToolbar()
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         if (savedInstanceState == null) {
@@ -100,7 +107,15 @@ class MainActivity : AppCompatActivity() {
                 ).show(supportFragmentManager, "MODAL")
             }
         }
+    }
 
+    private fun setupToolbar() {
+        supportActionBar?.let { actionBar ->
+            actionBar.setBackgroundDrawable(ColorDrawable(Color.parseColor(Constants.TOOLBAR_BACKGROUND_COLOR)))
+            val toolbar = findViewById<Toolbar>(R.id.toolbar)
+            toolbar.setTitleTextColor(Color.parseColor(Constants.TOOLBAR_TEXT_COLOR))
+            toolbar.title = Constants.INITIAL_TOOLBAR_TITLE
+        }
     }
 
 }
