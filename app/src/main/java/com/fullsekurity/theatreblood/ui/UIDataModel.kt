@@ -51,8 +51,10 @@ class UIDataModel {
                         "mediumText",
                         "mediumGray",
                         "black",
-                        "mediumText",
-                        "mediumGray"
+                        "subTitle",
+                        "veryLightGray",
+                        "pink",
+                        R.drawable.lt_edit_text_background
                     )
                 }
                 lightViewUIDataClass
@@ -100,8 +102,10 @@ class UIDataModel {
                         "mediumText",
                         "mediumGray",
                         "black",
-                        "mediumText",
-                        "mediumGray"
+                        "subTitle",
+                        "veryLightGray",
+                        "pink",
+                        R.drawable.lt_edit_text_background
                     )
                 }
                 darkViewUIDataClass

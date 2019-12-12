@@ -21,7 +21,7 @@ class InputViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     // Text typed into EditText in view will be stored into this field after each character is typed.
     var editTextNameInput: ObservableField<String> = ObservableField("")
 
-    var hintTextName: ObservableField<String> = ObservableField("")
+    var hintTextName: ObservableField<String> = ObservableField("Enter Donor Name")
     var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     fun onTextNameChanged(string: CharSequence, start: Int, before: Int, count: Int) {

@@ -83,6 +83,8 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val editTextNameSize: ObservableField<Float> = ObservableField(0f)
     val editTextNameUnderlineColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextNameTypeface: ObservableField<String> = ObservableField("")
+    val editTextNameUpperHintColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextNameBackground: ObservableField<Drawable> = ObservableField()
 
     var standardLeftAndRightMargin: ObservableField<Int> = ObservableField(0)
     var standardDialogInternalWidth: ObservableField<Int> = ObservableField(0)
@@ -210,6 +212,8 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             editTextNameSize.set(textSizeMapper.map(theme, uiDataClass.editTextNameSize))
             editTextNameUnderlineColor.set(colorMapper.map(theme, uiDataClass.editTextNameUnderlineColor))
             editTextNameTypeface.set(typefaceMapper.map(theme, uiDataClass.editTextNameSize))
+            editTextNameUpperHintColor.set(colorMapper.map(theme, uiDataClass.editTextNameUpperHintColor))
+            editTextNameBackground.set(ContextCompat.getDrawable(context, uiDataClass.editTextNameBackground))
 
         }
     }

@@ -10,11 +10,12 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.squareup.picasso.Picasso
+
 
 @BindingAdapter("android:src")
 fun setImageUrl(view: ImageView, url: String?) {
@@ -31,9 +32,10 @@ fun setImageViewResource(imageView: ImageView, resource: Int) {
     imageView.setImageResource(resource)
 }
 
-@BindingAdapter("tabBackground")
-fun setIndicator(view: TabLayout, drawable: Drawable?) {
+@BindingAdapter("background")
+fun setBackground(view: EditText, drawable: Drawable?) {
     view.background = drawable
+    view.requestLayout()
 }
 
 @BindingAdapter("layout_marginTop")
@@ -141,6 +143,12 @@ fun setFont(view: TextView, font: String) {
     view.typeface = typeface
 }
 
+@BindingAdapter("edit_text_font")
+fun setEditTextFont(view: EditText, font: String) {
+    val typeface = FontFamily.newInstance().getFontResId(view.context, font)
+    view.typeface = typeface
+}
+
 @BindingAdapter("include_font_padding")
 fun setIncludeFontPadding(view: TextView, apply: Boolean) {
     if (apply) {
@@ -150,6 +158,12 @@ fun setIncludeFontPadding(view: TextView, apply: Boolean) {
 
 @BindingAdapter("text_color")
 fun setTextColor(view: TextView, color: String) {
+    view.setTextColor(Color.parseColor(color))
+    // If color is ever needed as a drawable: Converters.convertColorToDrawable(0x00ff00)
+}
+
+@BindingAdapter("edit_text_color")
+fun setEditTextColor(view: EditText, color: String) {
     view.setTextColor(Color.parseColor(color))
     // If color is ever needed as a drawable: Converters.convertColorToDrawable(0x00ff00)
 }
@@ -177,9 +191,13 @@ fun setBackgroundColor(view: LinearLayout, color: String) {
     view.setBackgroundColor(Color.parseColor(color))
 }
 
-
 @BindingAdapter("text_size")
 fun setTextSize(view: TextView, size: Float) {
+    view.textSize = size
+}
+
+@BindingAdapter("edit_text_size")
+fun setEditTextSize(view: EditText, size: Float) {
     view.textSize = size
 }
 
@@ -255,4 +273,22 @@ fun setRecyclerViewViewModel(recyclerView: RecyclerView, viewModel: RecyclerView
     if (viewModel != null) {
         viewModel.setupRecyclerView(recyclerView)
     }
+}
+
+@BindingAdapter("upper_text_hint_color")
+fun setUpperHintColor(textInputLayout: TextInputLayout, color: String) {
+    try {
+        val field = TextInputLayout::class.java.getDeclaredField("focusedTextColor")
+        field.isAccessible = true
+        val states = arrayOf(intArrayOf())
+        val colors = intArrayOf(Color.parseColor(color))
+        val myList = ColorStateList(states, colors)
+        field.set(textInputLayout, myList)
+        val method = textInputLayout::class.java.getDeclaredMethod("updateLabelState", Boolean::class.javaPrimitiveType)
+        method.isAccessible = true
+        method.invoke(textInputLayout, true)
+    } catch (e: Exception) {
+        LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), e)
+    }
+
 }

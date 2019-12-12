@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.databinding.DonorsScreenBinding
-import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
@@ -33,13 +32,11 @@ class DonorsFragment : Fragment() {
             .viewModelInjectorModule(ViewModelInjectorModule(activity as MainActivity))
             .build()
             .inject(this)
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX=HERE 31"))
         val binding: DonorsScreenBinding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.donors_screen, container, false) as DonorsScreenBinding
         binding.lifecycleOwner = this
         viewModel = ViewModelProviders.of(this, DonorsListViewModelFactory(activity as MainActivity)).get(DonorsListViewModel::class.java)
         binding.donorsListViewModel = viewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX=HERE 33"))
         return binding.root
     }
 

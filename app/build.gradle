@@ -43,6 +43,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     // Room
     implementation 'androidx.room:room-runtime:2.2.2'

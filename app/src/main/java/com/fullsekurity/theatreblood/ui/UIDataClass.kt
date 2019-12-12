@@ -44,6 +44,8 @@ class UIDataClass(
     val editTextNameHintColor: String,                    // Name EditText hint text color
     val editTextNameColor: String,                        // Name EditText text color
     val editTextNameSize: String,                         // Name EditText text size
-    val editTextNameUnderlineColor: String                // Name EditText underline color
+    val editTextNameUnderlineColor: String,               // Name EditText underline color
+    val editTextNameUpperHintColor: String,               // Name EditText upper hint text color
+    val editTextNameBackground: Int                    // Name EditText background drawable
 
-    )
+)
