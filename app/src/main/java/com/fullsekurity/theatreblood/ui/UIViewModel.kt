@@ -15,6 +15,7 @@ import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.utils.*
+import com.fullsekurity.theatreblood.utils.Constants.STANDARD_BUTTON_HEIGHT
 import com.fullsekurity.theatreblood.utils.Constants.STANDARD_EDIT_TEXT_HEIGHT
 import com.fullsekurity.theatreblood.utils.Constants.STANDARD_LEFT_AND_RIGHT_MARGIN
 import javax.inject.Inject
@@ -90,6 +91,9 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     var standardDialogInternalWidth: ObservableField<Int> = ObservableField(0)
     var standardWidth: ObservableField<Int> = ObservableField(0)
     var standardEditTextHeight: ObservableField<Int> = ObservableField(0)
+    var standardWidthWithButton: ObservableField<Int> = ObservableField(0)
+    var standardButtonWidth: ObservableField<Int> = ObservableField(0)
+    var standardButtonHeight: ObservableField<Int> = ObservableField(0)
 
     private val context: Context = getApplication<Application>().applicationContext
     val modalCloseErrorIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.mo_close_error)
@@ -126,6 +130,9 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
         standardDialogInternalWidth.set(computeStandardInternalWidth())
         standardWidth.set(computeStandardWidth())
         standardEditTextHeight.set(convertDpToPixels(STANDARD_EDIT_TEXT_HEIGHT))
+        standardWidthWithButton.set(computeStandardWidthWithButton())
+        standardButtonWidth.set(computeStandarButtonWidth())
+        standardButtonHeight.set(convertDpToPixels(STANDARD_BUTTON_HEIGHT))
     }
 
     private fun convertDpToPixels(dp: Float): Int {
@@ -137,11 +144,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
         // |<---------------------------------------------------total width----------------------------------------------------->|
 
         val screenWidth = context.resources.displayMetrics.widthPixels
-        var internalWidth = screenWidth - 320 // internal margin in the extremely rare case that standardLeftAndRightMargin.get() is null
-        standardLeftAndRightMargin.get()?.let {
-            internalWidth = screenWidth - 4 * it
-        }
-        return internalWidth
+        return screenWidth - 4 * convertDpToPixels(STANDARD_LEFT_AND_RIGHT_MARGIN)
     }
 
     private fun computeStandardWidth(): Int {
@@ -149,11 +152,27 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
         // |<-----------------------total width---------------------------->|
 
         val screenWidth = context.resources.displayMetrics.widthPixels
-        var internalWidth = screenWidth - 320 // margin in the extremely rare case that standardLeftAndRightMargin.get() is null
-        standardLeftAndRightMargin.get()?.let {
-            internalWidth = screenWidth - 2 * it
-        }
-        return internalWidth
+        return screenWidth - 2 * convertDpToPixels(STANDARD_LEFT_AND_RIGHT_MARGIN)
+    }
+
+    private fun computeStandardWidthWithButton(): Int {
+        // |<--standard margin-->|<--standard width with button-->|<--standard margin-->|<--standard button width-->|<--standard margin-->|
+        // |<----------------------------------------------------total width------------------------------------------------------------->|
+
+        val screenWidth = context.resources.displayMetrics.widthPixels
+        val standardMargin = convertDpToPixels(STANDARD_LEFT_AND_RIGHT_MARGIN)
+        val totalButtonWidth = screenWidth - 3 * standardMargin
+        return totalButtonWidth * Constants.EDIT_TEXT_TO_BUTTON_RATIO / (Constants.EDIT_TEXT_TO_BUTTON_RATIO + 1)
+    }
+
+    private fun computeStandarButtonWidth(): Int {
+        // |<--standard margin-->|<--standard width with button-->|<--standard margin-->|<--standard button width-->|<--standard margin-->|
+        // |<----------------------------------------------------total width------------------------------------------------------------->|
+
+        val screenWidth = context.resources.displayMetrics.widthPixels
+        val standardMargin = convertDpToPixels(STANDARD_LEFT_AND_RIGHT_MARGIN)
+        val totalButtonWidth = screenWidth - 3 * standardMargin
+        return totalButtonWidth / (Constants.EDIT_TEXT_TO_BUTTON_RATIO + 1)
     }
 
     private fun liveDataUpdate(theme: MainActivity.UITheme) {

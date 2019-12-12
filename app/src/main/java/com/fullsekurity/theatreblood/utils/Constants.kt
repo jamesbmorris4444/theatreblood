@@ -21,6 +21,8 @@ object Constants {
     const val DATA_BASE_NAME = "TheatreBlood.db"
     const val STANDARD_LEFT_AND_RIGHT_MARGIN = 20f
     const val STANDARD_EDIT_TEXT_HEIGHT = 60f
+    const val STANDARD_BUTTON_HEIGHT = 50f
+    const val EDIT_TEXT_TO_BUTTON_RATIO = 3  // 3:1
 
     // toolbar
 

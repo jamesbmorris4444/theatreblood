@@ -5,17 +5,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.activity.MainActivity
-import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.network.APIClient
 import com.fullsekurity.theatreblood.repository.network.APIInterface
-import com.fullsekurity.theatreblood.utils.Constants
+import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.ContextInjectorModule
 import com.fullsekurity.theatreblood.utils.DaggerContextDependencyInjector
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
@@ -42,7 +39,6 @@ class DonorsListViewModel(val activity: MainActivity) : RecyclerViewViewModel(ac
             .contextInjectorModule(ContextInjectorModule(activity.applicationContext))
             .build()
             .inject(this)
-        loadData()
     }
 
     override fun setLayoutManager(): RecyclerView.LayoutManager {
@@ -57,16 +53,8 @@ class DonorsListViewModel(val activity: MainActivity) : RecyclerViewViewModel(ac
         }
     }
 
-    private fun loadData() {
-        disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, "popularity.desc", "false", "false", 1)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe ({
-                adapter.addAll(it.results)
-            },
-            {
-                throwable -> LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Exception getting Donor in DonorsListViewModel", throwable)
-            })
+    fun showDonors(donorList: List<Donor>) {
+        adapter.addAll(donorList)
     }
 
 }

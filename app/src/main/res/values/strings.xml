@@ -1,9 +1,13 @@
 <resources>
     <string name="app_name">Theatre Blood</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">Donations</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="posterImage">poster image</string>
+
+    <!-- toolbar menu actions -->
+    <string name="action_favorites">Favorites</string>
+    <string name="action_settings">Settings</string>
 
     <!-- standard modals -->
     <string name="std_modal_no_repository_title">Repository cannot be created</string>
@@ -12,4 +16,8 @@
     <string name="std_modal_submit">Submit</string>
     <string name="std_modal_cancel">Cancel</string>
     <string name="std_modal_ok">OK</string>
+
+    <!-- button text -->
+    <string name="button_submit">Submit</string>
+
 </resources>

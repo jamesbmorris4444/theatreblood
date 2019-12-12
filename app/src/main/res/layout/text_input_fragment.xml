@@ -15,31 +15,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
+        <!-- Start Search Box -->
+
         <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edit_text_input_name"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 app:hintTextAppearance="@style/TextInputLayout"
                 android:hint="@{inputViewModel.hintTextName}"
                 app:upper_text_hint_color="@{uiViewModel.editTextNameUpperHintColor}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardWidth)}"
                 android:visibility="@{safeUnbox(inputViewModel.editTextNameVisibility)}"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/submit_button_icon"
                 app:layout_constraintTop_toTopOf="parent" >
 
             <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_text_input_name_editText"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
+                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardWidthWithButton)}"
                     app:text_hint_color="@{uiViewModel.editTextNameHintColor}"
                     android:text="@={inputViewModel.editTextNameInput}"
                     android:onTextChanged="@{inputViewModel::onTextNameChanged}"
-                    android:paddingStart="20dp"
+                    android:paddingStart="10dp"
                     android:paddingEnd="0dp"
                     android:paddingTop="20dp"
                     android:inputType="textPersonName"
@@ -50,6 +52,39 @@
                     app:edit_text_underline_color="@{uiViewModel.editTextNameUnderlineColor}" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- End Search Box -->
+
+        <!-- Start Button -->
+
+        <android.widget.ImageView
+                android:id="@+id/submit_button_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/button"
+                android:scaleType="fitXY"
+                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardButtonWidth)}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
+                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_text_input_name"
+                app:layout_constraintLeft_toRightOf="@+id/edit_text_input_name"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+                android:id="@+id/submit_button_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/button_submit"
+                app:text_font="@{uiViewModel.editTextNameTypeface}"
+                app:text_color="@{uiViewModel.editTextNameColor}"
+                app:text_size="@{safeUnbox(uiViewModel.editTextNameSize)}"
+                app:layout_constraintStart_toStartOf="@+id/submit_button_icon"
+                app:layout_constraintEnd_toEndOf="@+id/submit_button_icon"
+                app:layout_constraintTop_toTopOf="@+id/submit_button_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/submit_button_icon" />
+
+        <!-- End Button -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

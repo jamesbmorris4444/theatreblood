@@ -2,15 +2,22 @@ package com.fullsekurity.theatreblood.activity
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.drawable.DrawableCompat
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.donors.DonorsFragment
-import com.fullsekurity.theatreblood.input.HomeFragment
+import com.fullsekurity.theatreblood.input.InputFragment
+import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.Repository
+import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.ContextInjectorModule
 import com.fullsekurity.theatreblood.utils.DaggerContextDependencyInjector
@@ -22,6 +29,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     private val TAG = MainActivity::class.java.simpleName
+    private lateinit var donorsFragment: DonorsFragment
 
     internal var repository: Repository? = null
         @Inject set
@@ -49,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_dashboard -> {
                 supportFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-                    .replace(R.id.home_container, HomeFragment.newInstance())
+                    .replace(R.id.home_container, InputFragment.newInstance())
                     .addToBackStack(null)
                     .commitAllowingStateLoss()
                 supportFragmentManager.beginTransaction()
@@ -81,11 +89,12 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-                .add(R.id.home_container, HomeFragment.newInstance())
+                .add(R.id.home_container, InputFragment.newInstance())
                 .commitNow()
+            donorsFragment = DonorsFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
-                .add(R.id.donors_container, DonorsFragment.newInstance())
+                .add(R.id.donors_container, donorsFragment)
                 .commitNow()
             if (repository == null) {
                 StandardModal(
@@ -113,9 +122,46 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.let { actionBar ->
             actionBar.setBackgroundDrawable(ColorDrawable(Color.parseColor(Constants.TOOLBAR_BACKGROUND_COLOR)))
             val toolbar = findViewById<Toolbar>(R.id.toolbar)
+            colorizeToolbarOverflowButton(toolbar, Color.parseColor(Constants.TOOLBAR_TEXT_COLOR))
             toolbar.setTitleTextColor(Color.parseColor(Constants.TOOLBAR_TEXT_COLOR))
             toolbar.title = Constants.INITIAL_TOOLBAR_TITLE
         }
+    }
+
+    private fun colorizeToolbarOverflowButton(toolbar: Toolbar, color: Int): Boolean {
+        val overflowIcon = toolbar.overflowIcon ?: return false
+        toolbar.overflowIcon = getTintedDrawable(overflowIcon, color)
+        return true
+    }
+
+    private fun getTintedDrawable(inputDrawable: Drawable, color: Int): Drawable {
+        val wrapDrawable = DrawableCompat.wrap(inputDrawable)
+        DrawableCompat.setTint(wrapDrawable, color)
+        DrawableCompat.setTintMode(wrapDrawable, PorterDuff.Mode.SRC_IN)
+        return wrapDrawable
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_settings -> {
+            LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("Settings Selected"))
+            true
+        }
+        R.id.action_favorite -> {
+            LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("Favorites Selected"))
+            true
+        }
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return true
+    }
+
+    fun showDonors(donorList: List<Donor>) {
+        donorsFragment.showDonors(donorList)
     }
 
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
@@ -16,12 +17,12 @@ import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import javax.inject.Inject
 
-class HomeFragment : Fragment() {
+class InputFragment : Fragment() {
 
     private lateinit var viewModel: InputViewModel
 
     companion object {
-        fun newInstance(): HomeFragment { return HomeFragment() }
+        fun newInstance(): InputFragment { return InputFragment() }
     }
 
     @Inject
@@ -38,6 +39,9 @@ class HomeFragment : Fragment() {
         binding.inputViewModel = viewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
+        viewModel.donorSearchLiveData.observe(this, Observer {
+            (activity as MainActivity).showDonors(it)
+        })
         return binding.root
     }
 

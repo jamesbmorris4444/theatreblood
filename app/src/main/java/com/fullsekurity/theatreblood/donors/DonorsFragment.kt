@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.databinding.DonorsScreenBinding
+import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
@@ -40,9 +41,8 @@ class DonorsFragment : Fragment() {
         return binding.root
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        uiViewModel.currentTheme = (activity as MainActivity).currentTheme
-//    }
+    fun showDonors(donorList: List<Donor>) {
+        viewModel.showDonors(donorList)
+    }
 
 }

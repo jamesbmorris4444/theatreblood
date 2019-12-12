@@ -17,7 +17,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.squareup.picasso.Picasso
 
 
-@BindingAdapter("android:src")
+@BindingAdapter("android:picasso_src")
 fun setImageUrl(view: ImageView, url: String?) {
     if (url != null) {
         Picasso
@@ -27,7 +27,7 @@ fun setImageUrl(view: ImageView, url: String?) {
     }
 }
 
-@BindingAdapter("android:src2")
+@BindingAdapter("android:src")
 fun setImageViewResource(imageView: ImageView, resource: Int) {
     imageView.setImageResource(resource)
 }

@@ -27,12 +27,12 @@ class UIDataModel {
                         "darkGray",
                         "mediumText",
                         48f,
-                        "pink",
+                        "blue",
                         "mediumText",
                         36f,
                         "darkGray",
                         "mediumText",
-                        "pink",
+                        "blue",
                         "darkGray",
                         "mediumText",
                         12f,
@@ -53,7 +53,7 @@ class UIDataModel {
                         "black",
                         "subTitle",
                         "veryLightGray",
-                        "pink",
+                        "blue",
                         R.drawable.lt_edit_text_background
                     )
                 }
@@ -78,12 +78,12 @@ class UIDataModel {
                         "darkGray",
                         "mediumText",
                         48f,
-                        "pink",
+                        "blue",
                         "mediumText",
                         36f,
                         "darkGray",
                         "mediumText",
-                        "pink",
+                        "blue",
                         "darkGray",
                         "mediumText",
                         12f,
@@ -104,7 +104,7 @@ class UIDataModel {
                         "black",
                         "subTitle",
                         "veryLightGray",
-                        "pink",
+                        "blue",
                         R.drawable.lt_edit_text_background
                     )
                 }

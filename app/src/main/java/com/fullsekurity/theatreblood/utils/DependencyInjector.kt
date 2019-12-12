@@ -6,7 +6,7 @@ import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.donors.DonorsFragment
 import com.fullsekurity.theatreblood.donors.DonorsItemViewModel
 import com.fullsekurity.theatreblood.donors.DonorsListViewModel
-import com.fullsekurity.theatreblood.input.HomeFragment
+import com.fullsekurity.theatreblood.input.InputFragment
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.BloodDatabase
@@ -60,7 +60,7 @@ class MapperInjectorModule(val context: Context) {
 @Singleton
 @Component(modules = [ViewModelInjectorModule::class])
 interface ViewModelDependencyInjector {
-    fun inject(fragment: HomeFragment)
+    fun inject(fragment: InputFragment)
     fun inject(fragment: DonorsFragment)
     fun inject(modal: StandardModal)
 }
