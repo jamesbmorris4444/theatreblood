@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.repository.network.APIClient
@@ -35,13 +36,12 @@ class InputViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     // observable used for two-way data binding. Values set into this field will show in view.
     // Text typed into EditText in view will be stored into this field after each character is typed.
     var editTextNameInput: ObservableField<String> = ObservableField("")
-
-    var hintTextName: ObservableField<String> = ObservableField("Enter Donor Name")
-    var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
-
     fun onTextNameChanged(string: CharSequence, start: Int, before: Int, count: Int) {
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
+
+    var hintTextName: ObservableField<String> = ObservableField(activity.getString(R.string.donor_search_string))
+    var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     fun onSubmitClicked(view: View) {
         loadData()

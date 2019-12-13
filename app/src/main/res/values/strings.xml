@@ -20,4 +20,19 @@
     <!-- button text -->
     <string name="button_submit">Submit</string>
 
+    <!-- donor strings -->
+    <string name="donor_search_string">Enter Search String</string>
+    <string name="donor_last_name">Enter Last Name</string>
+    <string name="donor_middle_name">Enter Middle Name</string>
+    <string name="donor_first_name">Enter First Name</string>
+    <string name="donor_dob">Enter DOB</string>
+    <string name="donor_gender">Enter Gender</string>
+    <string name="donor_abo_rh">Enter ABO/Rh</string>
+    <string name="donor_branch">Enter Branch</string>
+    <string name="donor_nationality">Enter Nationality</string>
+    <string name="donor_military_unit">Enter Military Unit</string>
+    <string name="donor_today_date">Enter Date</string>
+    <string name="dd_572_completed">DD-572 Completed?</string>
+    <string name="ttd_samples_collected">TTD Samples Collected?</string>
+
 </resources>
