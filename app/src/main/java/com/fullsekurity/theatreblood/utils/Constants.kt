@@ -5,8 +5,8 @@ import com.fullsekurity.theatreblood.repository.storage.Donor
 object Constants {
 
     const val MOVIES_ARRAY_DATA_TAG = "results"
-    val MOVIE_ARRAY_LIST_CLASS_TYPE = (ArrayList<Donor>()).javaClass
-    const val POPULAR_MOVIES_BASE_URL = "https://api.themoviedb.org/3/discover/"
+    val DONOR_LIST_CLASS_TYPE = (ArrayList<Donor>()).javaClass
+    const val THEATRE_BLOOD_BASE_URL = "https://api.themoviedb.org/3/discover/"
     private const val IMAGE_URL_PREFIX = "https://image.tmdb.org/t/p/"
     const val SMALL_IMAGE_URL_PREFIX = IMAGE_URL_PREFIX + "w300"
     const val BIG_IMAGE_URL_PREFIX = IMAGE_URL_PREFIX + "w500"
@@ -27,7 +27,7 @@ object Constants {
     // toolbar
 
     const val INITIAL_TOOLBAR_TITLE = "Theatre Blood"
-    const val TOOLBAR_BACKGROUND_COLOR = "#ff0000"
+    const val TOOLBAR_BACKGROUND_COLOR = "#e50239"
     const val TOOLBAR_TEXT_COLOR = "#ffffff"
 
 }

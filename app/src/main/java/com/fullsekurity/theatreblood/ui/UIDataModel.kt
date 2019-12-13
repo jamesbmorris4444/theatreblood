@@ -49,12 +49,26 @@ class UIDataModel {
                         3f,
                         "darkGray",
                         "mediumText",
+
                         "mediumGray",
                         "black",
                         "subTitle",
                         "veryLightGray",
                         "blue",
-                        R.drawable.lt_edit_text_background
+                        R.drawable.lt_edit_text_background,
+
+                        "mediumGray",
+                        "black",
+                        "subTitle",
+                        "veryLightGray",
+                        "blue",
+                        R.drawable.lt_edit_text_background,
+
+                        "white",
+                        "subTitle",
+
+                        "black",
+                        "largeText"
                     )
                 }
                 lightViewUIDataClass
@@ -100,12 +114,26 @@ class UIDataModel {
                         3f,
                         "darkGray",
                         "mediumText",
+
                         "mediumGray",
                         "black",
                         "subTitle",
                         "veryLightGray",
                         "blue",
-                        R.drawable.lt_edit_text_background
+                        R.drawable.lt_edit_text_background,
+
+                        "mediumGray",
+                        "black",
+                        "subTitle",
+                        "veryLightGray",
+                        "blue",
+                        R.drawable.lt_edit_text_background,
+
+                        "white",
+                        "subTitle",
+
+                        "black",
+                        "largeText"
                     )
                 }
                 darkViewUIDataClass

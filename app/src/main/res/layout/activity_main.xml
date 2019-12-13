@@ -45,4 +45,16 @@
             android:background="?android:attr/windowBackground"
             app:menu="@menu/bottom_nav_menu" />
 
+    <ProgressBar
+            android:id="@+id/main_progress_bar"
+            style="?android:attr/progressBarStyleLarge"
+            android:visibility="gone"
+            android:indeterminateTint="@color/red"
+            android:layout_centerInParent="true"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:max="100"
+            android:indeterminate="true"
+            android:progress="1" />
+
 </RelativeLayout>

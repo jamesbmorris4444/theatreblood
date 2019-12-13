@@ -168,6 +168,12 @@ fun setEditTextColor(view: EditText, color: String) {
     // If color is ever needed as a drawable: Converters.convertColorToDrawable(0x00ff00)
 }
 
+@BindingAdapter("edit_text_background_color")
+fun setEditTextBackgroundColor(view: TextInputEditText, color: String) {
+    val colorStateList = ColorStateList.valueOf(Color.parseColor(color))
+    view.supportBackgroundTintList = colorStateList
+}
+
 @BindingAdapter("edit_text_underline_color")
 fun setEditTextUnderlineColor(view: TextInputEditText, color: String) {
     val colorStateList = ColorStateList.valueOf(Color.parseColor(color))

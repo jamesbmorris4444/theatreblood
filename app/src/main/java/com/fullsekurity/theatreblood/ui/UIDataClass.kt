@@ -44,8 +44,21 @@ class UIDataClass(
     val editTextNameHintColor: String,                    // Name EditText hint text color
     val editTextNameColor: String,                        // Name EditText text color
     val editTextNameSize: String,                         // Name EditText text size
-    val editTextNameUnderlineColor: String,               // Name EditText underline color
+    val editTextNameBackgroundColor: String,               // Name EditText underline color
     val editTextNameUpperHintColor: String,               // Name EditText upper hint text color
-    val editTextNameBackground: Int                    // Name EditText background drawable
+    val editTextNameBackground: Int,                      // Name EditText background drawable
+
+    val editTextReleaseDateHintColor: String,             // ReleaseDate EditText hint text color
+    val editTextReleaseDateColor: String,                 // ReleaseDate EditText text color
+    val editTextReleaseDateSize: String,                  // ReleaseDate EditText text size
+    val editTextReleaseDateBackgroundColor: String,        // ReleaseDate EditText underline color
+    val editTextReleaseDateUpperHintColor: String,        // ReleaseDate EditText upper hint text color
+    val editTextReleaseDateBackground: Int,               // ReleaseDate EditText background drawable
+
+    val buttonTextColor: String,                          // Button text color
+    val buttonTextSize: String,                           // Button text size
+
+    val donorItemTextColor: String,                       // Donor item text color
+    val donorItemTextSize: String                         // Donor item text size
 
 )

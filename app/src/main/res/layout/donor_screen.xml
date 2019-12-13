@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <data>
+        <variable
+                name="uiViewModel"
+                type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+        <variable
+                name="donorViewModel"
+                type="com.fullsekurity.theatreblood.donor.DonorViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+        <!-- Start Search Box -->
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edit_text_input_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                app:hintTextAppearance="@style/TextInputLayout"
+                android:hint="@{donorViewModel.hintTextName}"
+                app:upper_text_hint_color="@{uiViewModel.editTextNameUpperHintColor}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                android:visibility="@{safeUnbox(donorViewModel.editTextNameVisibility)}"
+                app:layout_constraintVertical_chainStyle="spread_inside"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/edit_text_input_release_date"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_input_name_editText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
+                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardWidthWithButton)}"
+                    app:text_hint_color="@{uiViewModel.editTextNameHintColor}"
+                    android:text="@={donorViewModel.editTextNameInput}"
+                    android:onTextChanged="@{donorViewModel::onTextNameChanged}"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
+                    android:paddingTop="20dp"
+                    android:inputType="textPersonName"
+                    app:background="@{uiViewModel.editTextNameBackground}"
+                    app:edit_text_font="@{uiViewModel.editTextNameTypeface}"
+                    app:edit_text_color="@{uiViewModel.editTextNameColor}"
+                    app:edit_text_size="@{safeUnbox(uiViewModel.editTextNameSize)}"
+                    app:edit_text_background_color="@{uiViewModel.editTextNameBackgroundColor}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- End Search Box -->
+
+        <!-- Start Button -->
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edit_text_input_release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                app:hintTextAppearance="@style/TextInputLayout"
+                android:hint="@{donorViewModel.hintTextReleaseDate}"
+                app:upper_text_hint_color="@{uiViewModel.editTextReleaseDateUpperHintColor}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                android:visibility="@{safeUnbox(donorViewModel.editTextReleaseDateVisibility)}"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_input_name"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_input_release_date_editText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
+                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardButtonWidth)}"
+                    app:text_hint_color="@{uiViewModel.editTextReleaseDateHintColor}"
+                    android:text="@={donorViewModel.editTextReleaseDateInput}"
+                    android:onTextChanged="@{donorViewModel::onTextReleaseDateChanged}"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
+                    android:paddingTop="20dp"
+                    android:inputType="date"
+                    app:background="@{uiViewModel.editTextReleaseDateBackground}"
+                    app:edit_text_font="@{uiViewModel.editTextReleaseDateTypeface}"
+                    app:edit_text_color="@{uiViewModel.editTextReleaseDateColor}"
+                    app:edit_text_size="@{safeUnbox(uiViewModel.editTextReleaseDateSize)}"
+                    app:edit_text_background_color="@{uiViewModel.editTextReleaseDateBackgroundColor}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- End Button -->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.drawable.DrawableCompat
 import com.fullsekurity.theatreblood.R
+import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.donors.DonorsFragment
 import com.fullsekurity.theatreblood.input.InputFragment
 import com.fullsekurity.theatreblood.logger.LogUtils
@@ -25,10 +26,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import timber.log.Timber
 import javax.inject.Inject
 
-
 class MainActivity : AppCompatActivity() {
 
     private val TAG = MainActivity::class.java.simpleName
+    private val INPUT_FRAGMENT_TAG = "input"
+    private val DONORS_FRAGMENT_TAG = "donors"
+    private val DONOR_FRAGMENT_TAG = "donor"
     private lateinit var donorsFragment: DonorsFragment
 
     internal var repository: Repository? = null
@@ -57,12 +60,12 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_dashboard -> {
                 supportFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-                    .replace(R.id.home_container, InputFragment.newInstance())
+                    .replace(R.id.home_container, InputFragment.newInstance(), INPUT_FRAGMENT_TAG)
                     .addToBackStack(null)
                     .commitAllowingStateLoss()
                 supportFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
-                    .replace(R.id.donors_container, DonorsFragment.newInstance())
+                    .replace(R.id.donors_container, DonorsFragment.newInstance(), DONORS_FRAGMENT_TAG)
                     .addToBackStack(null)
                     .commitAllowingStateLoss()
                 return@OnNavigationItemSelectedListener true
@@ -89,12 +92,12 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-                .add(R.id.home_container, InputFragment.newInstance())
+                .add(R.id.home_container, InputFragment.newInstance(), INPUT_FRAGMENT_TAG)
                 .commitNow()
             donorsFragment = DonorsFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
-                .add(R.id.donors_container, donorsFragment)
+                .add(R.id.donors_container, donorsFragment, DONORS_FRAGMENT_TAG)
                 .commitNow()
             if (repository == null) {
                 StandardModal(
@@ -115,6 +118,37 @@ class MainActivity : AppCompatActivity() {
                     }
                 ).show(supportFragmentManager, "MODAL")
             }
+        }
+    }
+
+    fun transitionToSingleDonorFragment(donor: Donor) {
+        val inputFragment = supportFragmentManager.findFragmentByTag(INPUT_FRAGMENT_TAG)
+        val donorsFragment = supportFragmentManager.findFragmentByTag(DONORS_FRAGMENT_TAG)
+        if (inputFragment == null && donorsFragment == null) {
+            supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+                .add(R.id.home_container, DonorFragment.newInstance(donor), DONOR_FRAGMENT_TAG)
+                .commitNow()
+
+        } else if (inputFragment == null) {
+            supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+                .remove(donorsFragment!!)  // donorsFragment cannot be null
+                .add(R.id.home_container, DonorFragment.newInstance(donor), DONOR_FRAGMENT_TAG)
+                .commitNow()
+        } else if (donorsFragment == null) {
+            supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+                .remove(inputFragment)
+                .add(R.id.home_container, DonorFragment.newInstance(donor), DONOR_FRAGMENT_TAG)
+                .commitNow()
+        } else {
+            supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+                .remove(inputFragment)
+                .remove(donorsFragment)
+                .add(R.id.home_container, DonorFragment.newInstance(donor), DONOR_FRAGMENT_TAG)
+                .commitNow()
         }
     }
 

@@ -1,8 +1,8 @@
 package com.fullsekurity.theatreblood.donors
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -11,10 +11,12 @@ import com.fullsekurity.theatreblood.utils.DaggerContextDependencyInjector
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
-class DonorsItemViewModel(val activity: Application) : RecyclerViewItemViewModel<Donor>() {
+class DonorsItemViewModel(val activity: MainActivity) : RecyclerViewItemViewModel<Donor>() {
 
     internal var repository: Repository? = null
         @Inject set
+
+    private lateinit var donor: Donor
 
     private val _voteCount = MutableLiveData<String>().apply { value = "" } ; val voteCount: LiveData<String> = _voteCount
     private val _video = MutableLiveData<String>().apply { value = "" } ; val video: LiveData<String> = _video
@@ -37,6 +39,7 @@ class DonorsItemViewModel(val activity: Application) : RecyclerViewItemViewModel
     }
 
     override fun setItem(item: Donor) {
+        donor = item
         val ( id, voteCount, video, voteAverage, title, popularity, posterPath, originalLanguage, originalTitle, backdropPath, adult, overview, releaseDate) = item
         _voteCount.value = voteCount.toString()
         _video.value = if (video) "T" else "F"
@@ -50,6 +53,10 @@ class DonorsItemViewModel(val activity: Application) : RecyclerViewItemViewModel
         _adult.value = if (adult) "T" else "F"
         _overview.value = overview
         _releaseDate.value = releaseDate
+    }
+
+    fun onItemClicked() {
+        activity.transitionToSingleDonorFragment(donor)
     }
 
 }

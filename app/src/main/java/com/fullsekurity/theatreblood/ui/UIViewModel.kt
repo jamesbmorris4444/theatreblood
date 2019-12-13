@@ -82,10 +82,26 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val editTextNameHintColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextNameColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextNameSize: ObservableField<Float> = ObservableField(0f)
-    val editTextNameUnderlineColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextNameBackgroundColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextNameTypeface: ObservableField<String> = ObservableField("")
     val editTextNameUpperHintColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextNameBackground: ObservableField<Drawable> = ObservableField()
+
+    val editTextReleaseDateHintColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextReleaseDateColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextReleaseDateSize: ObservableField<Float> = ObservableField(0f)
+    val editTextReleaseDateBackgroundColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextReleaseDateTypeface: ObservableField<String> = ObservableField("")
+    val editTextReleaseDateUpperHintColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextReleaseDateBackground: ObservableField<Drawable> = ObservableField()
+
+    val buttonTextColor: ObservableField<String> = ObservableField("#ffffff")
+    val buttonTextSize: ObservableField<Float> = ObservableField(0f)
+    val buttonTextTypeface: ObservableField<String> = ObservableField("")
+
+    val donorItemTextColor: ObservableField<String> = ObservableField("#ffffff")
+    val donorItemTextSize: ObservableField<Float> = ObservableField(0f)
+    val donorItemTextTypeface: ObservableField<String> = ObservableField("")
 
     var standardLeftAndRightMargin: ObservableField<Int> = ObservableField(0)
     var standardDialogInternalWidth: ObservableField<Int> = ObservableField(0)
@@ -229,10 +245,26 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             editTextNameHintColor.set(colorMapper.map(theme, uiDataClass.editTextNameHintColor))
             editTextNameColor.set(colorMapper.map(theme, uiDataClass.editTextNameColor))
             editTextNameSize.set(textSizeMapper.map(theme, uiDataClass.editTextNameSize))
-            editTextNameUnderlineColor.set(colorMapper.map(theme, uiDataClass.editTextNameUnderlineColor))
+            editTextNameBackgroundColor.set(colorMapper.map(theme, uiDataClass.editTextNameBackgroundColor))
             editTextNameTypeface.set(typefaceMapper.map(theme, uiDataClass.editTextNameSize))
             editTextNameUpperHintColor.set(colorMapper.map(theme, uiDataClass.editTextNameUpperHintColor))
             editTextNameBackground.set(ContextCompat.getDrawable(context, uiDataClass.editTextNameBackground))
+
+            editTextReleaseDateHintColor.set(colorMapper.map(theme, uiDataClass.editTextReleaseDateHintColor))
+            editTextReleaseDateColor.set(colorMapper.map(theme, uiDataClass.editTextReleaseDateColor))
+            editTextReleaseDateSize.set(textSizeMapper.map(theme, uiDataClass.editTextReleaseDateSize))
+            editTextReleaseDateBackgroundColor.set(colorMapper.map(theme, uiDataClass.editTextReleaseDateBackgroundColor))
+            editTextReleaseDateTypeface.set(typefaceMapper.map(theme, uiDataClass.editTextReleaseDateSize))
+            editTextReleaseDateUpperHintColor.set(colorMapper.map(theme, uiDataClass.editTextReleaseDateUpperHintColor))
+            editTextReleaseDateBackground.set(ContextCompat.getDrawable(context, uiDataClass.editTextReleaseDateBackground))
+
+            buttonTextColor.set(colorMapper.map(theme, uiDataClass.buttonTextColor))
+            buttonTextSize.set(textSizeMapper.map(theme, uiDataClass.buttonTextSize))
+            buttonTextTypeface.set(typefaceMapper.map(theme, uiDataClass.buttonTextSize))
+
+            donorItemTextColor.set(colorMapper.map(theme, uiDataClass.donorItemTextColor))
+            donorItemTextSize.set(textSizeMapper.map(theme, uiDataClass.donorItemTextSize))
+            donorItemTextTypeface.set(typefaceMapper.map(theme, uiDataClass.donorItemTextSize))
 
         }
     }

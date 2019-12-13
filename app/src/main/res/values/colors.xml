@@ -8,8 +8,8 @@
     <color name="primaryText">#212121</color>
     <color name="secondaryText">#727272</color>
     <color name="divider">#B6B6B6</color>
-    <color name="red">#ff0000</color>
-    <color name="blue">#0000ff</color>
+    <color name="red">#e50239</color>
+    <color name="blue">#3a3aff</color>
     <color name="green">#00ff00</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>

@@ -12,9 +12,11 @@ import com.fullsekurity.theatreblood.repository.network.APIClient
 import com.fullsekurity.theatreblood.repository.network.APIInterface
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.Constants
+import com.fullsekurity.theatreblood.utils.Utils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_main.*
 
 @Suppress("UNCHECKED_CAST")
 class InputViewModelFactory(private val activity: MainActivity) : ViewModelProvider.Factory {
@@ -41,16 +43,20 @@ class InputViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
 
-    fun onItemClick() {
+    fun onSubmitClicked(view: View) {
         loadData()
+        Utils.hideKeyboard(view)
     }
 
     private fun loadData() {
-        disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, "popularity.desc", "false", "false", 1)
+        val progressBar = activity.main_progress_bar
+        progressBar.visibility = View.VISIBLE
+        disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, 5)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe ({ donorResponse ->
                 donorSearchLiveData.postValue(donorResponse.results)
+                progressBar.visibility = View.GONE
             },
             {
                 throwable -> LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Exception getting Donor in DonorsListViewModel", throwable)

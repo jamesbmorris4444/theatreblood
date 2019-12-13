@@ -4,23 +4,27 @@
 
     <data>
         <variable
+                name="uiViewModel"
+                type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+        <variable
                 name="donorsItemViewModel"
                 type="com.fullsekurity.theatreblood.donors.DonorsItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> donorsItemViewModel.onItemClicked()}">
 
         <android.widget.TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp"
                 android:text="@{donorsItemViewModel.title}"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
+                app:text_font="@{uiViewModel.donorItemTextTypeface}"
+                app:text_color="@{uiViewModel.donorItemTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintVertical_chainStyle="packed"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/release_date"
@@ -30,11 +34,11 @@
                 android:id="@+id/release_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="12sp"
                 android:text="@{donorsItemViewModel.releaseDate}"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
+                app:text_font="@{uiViewModel.donorItemTextTypeface}"
+                app:text_color="@{uiViewModel.donorItemTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintTop_toBottomOf="@+id/title"
                 app:layout_constraintBottom_toTopOf="@+id/vote_count"
                 app:layout_constraintLeft_toLeftOf="parent" />
@@ -43,11 +47,11 @@
                 android:id="@+id/vote_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="12sp"
                 android:text="@{donorsItemViewModel.voteCount}"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
+                app:text_font="@{uiViewModel.donorItemTextTypeface}"
+                app:text_color="@{uiViewModel.donorItemTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintTop_toBottomOf="@+id/release_date"
                 app:layout_constraintBottom_toTopOf="@+id/vote_average"
                 app:layout_constraintLeft_toLeftOf="parent" />
@@ -56,11 +60,11 @@
                 android:id="@+id/vote_average"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="12sp"
                 android:text="@{donorsItemViewModel.voteAverage}"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
+                app:text_font="@{uiViewModel.donorItemTextTypeface}"
+                app:text_color="@{uiViewModel.donorItemTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintTop_toBottomOf="@+id/vote_count"
                 app:layout_constraintBottom_toTopOf="@+id/popularity"
                 app:layout_constraintLeft_toLeftOf="parent" />
@@ -69,11 +73,11 @@
                 android:id="@+id/popularity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="12sp"
                 android:text="@{donorsItemViewModel.popularity}"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
+                app:text_font="@{uiViewModel.donorItemTextTypeface}"
+                app:text_color="@{uiViewModel.donorItemTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintTop_toBottomOf="@+id/vote_average"
                 app:layout_constraintBottom_toTopOf="@+id/original_title"
                 app:layout_constraintLeft_toLeftOf="parent" />
@@ -82,11 +86,11 @@
                 android:id="@+id/original_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="12sp"
                 android:text="@{donorsItemViewModel.originalTitle}"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
+                app:text_font="@{uiViewModel.donorItemTextTypeface}"
+                app:text_color="@{uiViewModel.donorItemTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintTop_toBottomOf="@+id/popularity"
                 app:layout_constraintBottom_toTopOf="@+id/divider"
                 app:layout_constraintLeft_toLeftOf="parent" />

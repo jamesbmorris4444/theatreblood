@@ -49,7 +49,7 @@
                     app:edit_text_font="@{uiViewModel.editTextNameTypeface}"
                     app:edit_text_color="@{uiViewModel.editTextNameColor}"
                     app:edit_text_size="@{safeUnbox(uiViewModel.editTextNameSize)}"
-                    app:edit_text_underline_color="@{uiViewModel.editTextNameUnderlineColor}" />
+                    app:edit_text_background_color="@{uiViewModel.editTextNameBackgroundColor}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/button"
                 android:scaleType="fitXY"
+                android:onClick="@{(view) -> inputViewModel.onSubmitClicked(view)}"
                 app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardButtonWidth)}"
                 app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
                 app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
@@ -76,9 +77,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/button_submit"
-                app:text_font="@{uiViewModel.editTextNameTypeface}"
-                app:text_color="@{uiViewModel.editTextNameColor}"
-                app:text_size="@{safeUnbox(uiViewModel.editTextNameSize)}"
+                app:text_font="@{uiViewModel.buttonTextTypeface}"
+                app:text_color="@{uiViewModel.buttonTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
                 app:layout_constraintStart_toStartOf="@+id/submit_button_icon"
                 app:layout_constraintEnd_toEndOf="@+id/submit_button_icon"
                 app:layout_constraintTop_toTopOf="@+id/submit_button_icon"

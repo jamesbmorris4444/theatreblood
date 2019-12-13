@@ -6,12 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
-import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.network.APIClient
 import com.fullsekurity.theatreblood.repository.network.APIInterface
 import com.fullsekurity.theatreblood.repository.storage.Donor
-import com.fullsekurity.theatreblood.utils.ContextInjectorModule
-import com.fullsekurity.theatreblood.utils.DaggerContextDependencyInjector
+import com.fullsekurity.theatreblood.ui.UIViewModel
+import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
+import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
@@ -31,14 +31,15 @@ class DonorsListViewModel(val activity: MainActivity) : RecyclerViewViewModel(ac
     private val donorsService: APIInterface = APIClient.client
     private var disposable: Disposable? = null
 
-    internal var repository: Repository? = null
-        @Inject set
+    @Inject
+    lateinit var uiViewModel: UIViewModel
 
     init {
-        DaggerContextDependencyInjector.builder()
-            .contextInjectorModule(ContextInjectorModule(activity.applicationContext))
+        DaggerViewModelDependencyInjector.builder()
+            .viewModelInjectorModule(ViewModelInjectorModule(activity))
             .build()
             .inject(this)
+        adapter.uiViewModel = uiViewModel
     }
 
     override fun setLayoutManager(): RecyclerView.LayoutManager {
