@@ -1,6 +1,8 @@
 package com.fullsekurity.theatreblood.donor
 
+import android.app.DatePickerDialog
 import android.view.View
+import android.widget.DatePicker
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +12,9 @@ import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.Utils
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 @Suppress("UNCHECKED_CAST")
 class DonorViewModelFactory(private val activity: MainActivity) : ViewModelProvider.Factory {
@@ -21,7 +26,12 @@ class DonorViewModelFactory(private val activity: MainActivity) : ViewModelProvi
 @Suppress("UNCHECKED_CAST")
 class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.application) {
 
-    val donorUpdateLiveData: MutableLiveData<Donor> = MutableLiveData()
+    private val donorUpdateLiveData: MutableLiveData<Donor> = MutableLiveData()
+    private val calendar = Calendar.getInstance()
+    private val year = calendar.get(Calendar.YEAR)
+    private val month = calendar.get(Calendar.MONTH)
+    private val day = calendar.get(Calendar.DAY_OF_MONTH)
+    private var dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.US)
 
     // observable used for two-way data binding. Values set into this field will show in view.
     // Text typed into EditText in view will be stored into this field after each character is typed.
@@ -41,6 +51,11 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     fun onTextMiddleNameChanged(string: CharSequence, start: Int, before: Int, count: Int) { }
     var hintTextMiddleName: ObservableField<String> = ObservableField(activity.getString(R.string.donor_middle_name))
     var editTextMiddleNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+
+    var editTextDisplayModifyDob: ObservableField<String> = ObservableField("")
+    fun onTextDobChanged(string: CharSequence, start: Int, before: Int, count: Int) { }
+    var hintTextDob: ObservableField<String> = ObservableField(activity.getString(R.string.donor_dob))
+    var editTextDobVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
 
 //    <string name="donor_search_string">Enter Search String</string>
@@ -62,10 +77,27 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
         Utils.hideKeyboard(view)
     }
 
+    fun onCalendarClicked(view: View) {
+        Utils.hideKeyboard(view)
+        dateDialog()
+        editTextDisplayModifyDob.set(dateFormatter.format(calendar.time))
+    }
+
+    private fun dateDialog() {
+        val listener = object:DatePickerDialog.OnDateSetListener {
+            override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int) {
+                calendar.set(year, monthOfYear, dayOfMonth)
+            }
+        }
+        DatePickerDialog(activity, listener, year, month, day).show()
+    }
+
+
     fun setDonor(donor: Donor) {
         editTextDisplayModifyLastName.set(donor.title)
         editTextDisplayModifyFirstName.set(donor.releaseDate)
         editTextDisplayModifyMiddleName.set(donor.posterPath)
+        editTextDisplayModifyDob.set(donor.releaseDate)
     }
 
     private fun loadData() {

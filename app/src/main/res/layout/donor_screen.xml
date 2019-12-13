@@ -116,7 +116,7 @@
                     app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                     android:visibility="@{safeUnbox(donorViewModel.editTextMiddleNameVisibility)}"
                     app:layout_constraintTop_toBottomOf="@+id/edit_text_display_first_name"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/edit_text_display_dob"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" >
 
@@ -142,6 +142,61 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- End Middle Name -->
+
+            <!-- Start DOB -->
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/edit_text_display_dob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    app:hintTextAppearance="@style/TextInputLayout"
+                    android:hint="@{donorViewModel.hintTextDob}"
+                    app:upper_text_hint_color="@{uiViewModel.editTextDisplayModifyUpperHintColor}"
+                    app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    android:visibility="@{safeUnbox(donorViewModel.editTextDobVisibility)}"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text_display_middle_name"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_display_dob_edit_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
+                        app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardWidth)}"
+                        app:text_hint_color="@{uiViewModel.editTextDisplayModifyHintColor}"
+                        android:text="@={donorViewModel.editTextDisplayModifyDob}"
+                        android:onTextChanged="@{donorViewModel::onTextDobChanged}"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="0dp"
+                        android:paddingTop="20dp"
+                        android:inputType="date"
+                        app:background="@{uiViewModel.editTextDisplayModifyBackground}"
+                        app:edit_text_font="@{uiViewModel.editTextDisplayModifyTypeface}"
+                        app:edit_text_color="@{uiViewModel.editTextDisplayModifyColor}"
+                        app:edit_text_size="@{safeUnbox(uiViewModel.editTextDisplayModifySize)}"
+                        app:edit_text_background_color="@{uiViewModel.editTextDisplayModifyBackgroundColor}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <android.widget.ImageView
+                    android:id="@+id/calendar_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_calendar"
+                    android:scaleType="fitXY"
+                    android:onClick="@{(view) -> donorViewModel.onCalendarClicked(view)}"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_text_display_dob"
+                    app:layout_constraintLeft_toLeftOf="@+id/edit_text_display_dob"
+                    app:layout_constraintEnd_toEndOf="@+id/edit_text_display_dob"/>
+
+            <!-- End DOB -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
