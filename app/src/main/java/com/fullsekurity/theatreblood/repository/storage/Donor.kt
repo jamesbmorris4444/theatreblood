@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "donorsObservable")
+@Entity(tableName = "donors")
 data class Donor(
 
     @PrimaryKey(autoGenerate = true) var id: Int,

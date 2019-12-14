@@ -31,7 +31,7 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     private val year = calendar.get(Calendar.YEAR)
     private val month = calendar.get(Calendar.MONTH)
     private val day = calendar.get(Calendar.DAY_OF_MONTH)
-    private var dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+    private var dateFormatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
 
     // observable used for two-way data binding. Values set into this field will show in view.
     // Text typed into EditText in view will be stored into this field after each character is typed.
@@ -80,13 +80,13 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     fun onCalendarClicked(view: View) {
         Utils.hideKeyboard(view)
         dateDialog()
-        editTextDisplayModifyDob.set(dateFormatter.format(calendar.time))
     }
 
     private fun dateDialog() {
-        val listener = object:DatePickerDialog.OnDateSetListener {
+        val listener = object : DatePickerDialog.OnDateSetListener {
             override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int) {
                 calendar.set(year, monthOfYear, dayOfMonth)
+                editTextDisplayModifyDob.set(dateFormatter.format(calendar.time))
             }
         }
         DatePickerDialog(activity, listener, year, month, day).show()
@@ -95,24 +95,9 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
 
     fun setDonor(donor: Donor) {
         editTextDisplayModifyLastName.set(donor.title)
-        editTextDisplayModifyFirstName.set(donor.releaseDate)
-        editTextDisplayModifyMiddleName.set(donor.posterPath)
+        editTextDisplayModifyFirstName.set(donor.posterPath)
+        editTextDisplayModifyMiddleName.set(donor.releaseDate)
         editTextDisplayModifyDob.set(donor.releaseDate)
-    }
-
-    private fun loadData() {
-//        val progressBar = activity.main_progress_bar
-//        progressBar.visibility = View.VISIBLE
-//        disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, 5)
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribeOn(Schedulers.io())
-//            .subscribe ({ donorResponse ->
-//                donorUpdateLiveData.postValue(donorResponse.results)
-//                progressBar.visibility = View.GONE
-//            },
-//                {
-//                        throwable -> LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Exception getting Donor in DonorsListViewModel", throwable)
-//                })
     }
 
 }

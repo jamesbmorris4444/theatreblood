@@ -9,29 +9,33 @@ import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.logger.LogUtils
-import com.fullsekurity.theatreblood.repository.network.APIClient
-import com.fullsekurity.theatreblood.repository.network.APIInterface
+import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
-import com.fullsekurity.theatreblood.utils.Constants
+import com.fullsekurity.theatreblood.utils.DaggerRepositoryDependencyInjector
+import com.fullsekurity.theatreblood.utils.RepositoryInjectorModule
 import com.fullsekurity.theatreblood.utils.Utils
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
-@Suppress("UNCHECKED_CAST")
 class InputViewModelFactory(private val activity: MainActivity) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return InputViewModel(activity) as T
     }
 }
 
-@Suppress("UNCHECKED_CAST")
 class InputViewModel(val activity: MainActivity) : AndroidViewModel(activity.application) {
 
     val donorSearchLiveData: MutableLiveData<List<Donor>> = MutableLiveData()
-    private val donorsService: APIInterface = APIClient.client
-    private var disposable: Disposable? = null
+
+    @Inject
+    lateinit var repository: Repository
+
+    init {
+        DaggerRepositoryDependencyInjector.builder()
+            .repositoryInjectorModule(RepositoryInjectorModule())
+            .build()
+            .inject(this)
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX   REPO 1   %s", repository))
+    }
 
     // observable used for two-way data binding. Values set into this field will show in view.
     // Text typed into EditText in view will be stored into this field after each character is typed.
@@ -49,18 +53,9 @@ class InputViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     }
 
     private fun loadData() {
-        val progressBar = activity.main_progress_bar
-        progressBar.visibility = View.VISIBLE
-        disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, 5)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe ({ donorResponse ->
-                donorSearchLiveData.postValue(donorResponse.results)
-                progressBar.visibility = View.GONE
-            },
-            {
-                throwable -> LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Exception getting Donor in DonorsListViewModel", throwable)
-            })
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX   REPO 2   %s", repository))
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX   LOAD   %s", repository.bloodDatabase))
+        donorSearchLiveData.postValue(repository.donorsFromFullName(editTextNameInput.get() ?: ""))
     }
 
 }

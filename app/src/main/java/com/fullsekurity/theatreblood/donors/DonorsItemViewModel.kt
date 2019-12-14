@@ -4,17 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
-import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
-import com.fullsekurity.theatreblood.utils.ContextInjectorModule
-import com.fullsekurity.theatreblood.utils.DaggerContextDependencyInjector
-import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
 class DonorsItemViewModel(val activity: MainActivity) : RecyclerViewItemViewModel<Donor>() {
-
-    internal var repository: Repository? = null
-        @Inject set
 
     private lateinit var donor: Donor
 
@@ -30,13 +23,6 @@ class DonorsItemViewModel(val activity: MainActivity) : RecyclerViewItemViewMode
     private val _adult = MutableLiveData<String>().apply { value = "" } ; val adult: LiveData<String> = _adult
     private val _overview = MutableLiveData<String>().apply { value = "" } ; val overview: LiveData<String> = _overview
     private val _releaseDate = MutableLiveData<String>().apply { value = "" } ; val releaseDate: LiveData<String> = _releaseDate
-
-    init {
-        DaggerContextDependencyInjector.builder()
-            .contextInjectorModule(ContextInjectorModule(activity.applicationContext))
-            .build()
-            .inject(this)
-    }
 
     override fun setItem(item: Donor) {
         donor = item

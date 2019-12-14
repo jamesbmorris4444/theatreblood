@@ -10,7 +10,7 @@
     <string name="action_settings">Settings</string>
 
     <!-- standard modals -->
-    <string name="std_modal_no_repository_title">Repository cannot be created</string>
+    <string name="std_modal_no_repository_title">Database cannot be created</string>
     <string name="std_modal_no_repository_body">App cannot continue</string>
     <string name="std_modal_password_authentication_hint">Password</string>
     <string name="std_modal_submit">Submit</string>

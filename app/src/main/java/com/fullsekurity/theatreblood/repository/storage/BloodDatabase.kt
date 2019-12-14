@@ -15,17 +15,16 @@ abstract class BloodDatabase : RoomDatabase() {
     abstract fun donorDao(): DBDao
 
     companion object {
-        private var instance: BloodDatabase? = null
+        private lateinit var instance: BloodDatabase
         private val sLock = Any()
-        fun newInstance(context: Context): BloodDatabase? {
+        fun newInstance(context: Context): BloodDatabase {
             synchronized(sLock) {
-                if (instance == null) {
-                    instance = Room.databaseBuilder(context, BloodDatabase::class.java, DATA_BASE_NAME)
-                        .allowMainThreadQueries()
-                        .build()
-                }
+                instance = Room.databaseBuilder(context, BloodDatabase::class.java, DATA_BASE_NAME)
+                    .allowMainThreadQueries()
+                    .build()
                 return instance
             }
         }
     }
+
 }

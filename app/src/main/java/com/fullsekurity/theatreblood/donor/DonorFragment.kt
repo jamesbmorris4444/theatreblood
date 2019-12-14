@@ -1,5 +1,6 @@
 package com.fullsekurity.theatreblood.donor
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +33,14 @@ class DonorFragment : Fragment() {
 
     @Inject
     lateinit var uiViewModel: UIViewModel
+
+    override fun onAttach(context: Context) {
+        DaggerViewModelDependencyInjector.builder()
+            .viewModelInjectorModule(ViewModelInjectorModule(activity as MainActivity))
+            .build()
+            .inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         DaggerViewModelDependencyInjector.builder()

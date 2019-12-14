@@ -139,7 +139,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
 
     init {
         DaggerMapperDependencyInjector.builder()
-                .mapperInjectorModule(MapperInjectorModule(context))
+                .mapperInjectorModule(MapperInjectorModule())
                 .build()
                 .inject(this)
         standardLeftAndRightMargin.set(convertDpToPixels(STANDARD_LEFT_AND_RIGHT_MARGIN))
