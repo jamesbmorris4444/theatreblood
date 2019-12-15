@@ -33,6 +33,7 @@ class StandardModal (
          * Creates a standard modal for all modals throughout the app.
          * All current modals should be converted to use StandardModal, and then the current modals should be deleted.
          * See TransactionsDetailDialog for an example of creating LIST type modals
+         * @param activity is the activity that controls the display of the modal. This parameter is required.
          * @param modalType designates the type of the modal, and is optional; default value is STANDARD. See types below under ModalType.
          * @param iconType designates the type of icon to be displayed, and is optional; default value is NONE, so if no modalType parameter is supplied, no icon will appear.
          * @param titleText is optional, default value is NO title (there must be either a title or a body present, except for LIST type modals which normally do not have a title or body).
@@ -103,7 +104,7 @@ class StandardModal (
 
     enum class IconType {
         NONE,
-        CLOSE_ERROR
+        ERROR
     }
 
     enum class ModalListType {
@@ -239,8 +240,8 @@ class StandardModal (
     private fun setIcon() {
         iconVisibility.set(View.VISIBLE)
         when (iconType) {
-            IconType.CLOSE_ERROR -> {
-                icon.set(uiViewModel.modalCloseErrorIcon)
+            IconType.ERROR -> {
+                icon.set(uiViewModel.modalErrorIcon)
             }
             IconType.NONE -> {
                 iconVisibility.set(View.GONE)

@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
-import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.DaggerRepositoryDependencyInjector
@@ -31,10 +30,9 @@ class InputViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
 
     init {
         DaggerRepositoryDependencyInjector.builder()
-            .repositoryInjectorModule(RepositoryInjectorModule())
+            .repositoryInjectorModule(RepositoryInjectorModule(activity))
             .build()
             .inject(this)
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX   REPO 1   %s", repository))
     }
 
     // observable used for two-way data binding. Values set into this field will show in view.
@@ -53,8 +51,6 @@ class InputViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     }
 
     private fun loadData() {
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX   REPO 2   %s", repository))
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX   LOAD   %s", repository.bloodDatabase))
         donorSearchLiveData.postValue(repository.donorsFromFullName(editTextNameInput.get() ?: ""))
     }
 

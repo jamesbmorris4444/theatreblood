@@ -103,6 +103,10 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val donorItemTextSize: ObservableField<Float> = ObservableField(0f)
     val donorItemTextTypeface: ObservableField<String> = ObservableField("")
 
+    val largeErrorTextColor: ObservableField<String> = ObservableField("#ffffff")
+    val largeErrorTextSize: ObservableField<Float> = ObservableField(0f)
+    val largeErrorTextTypeface: ObservableField<String> = ObservableField("")
+
     var standardLeftAndRightMargin: ObservableField<Int> = ObservableField(0)
     var standardDialogInternalWidth: ObservableField<Int> = ObservableField(0)
     var standardWidth: ObservableField<Int> = ObservableField(0)
@@ -112,7 +116,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     var standardButtonHeight: ObservableField<Int> = ObservableField(0)
 
     private val context: Context = getApplication<Application>().applicationContext
-    val modalCloseErrorIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.mo_close_error)
+    val modalErrorIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.mo_close_error)
 
     @Inject
     lateinit var colorMapper: ColorMapper
@@ -265,6 +269,10 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             donorItemTextColor.set(colorMapper.map(theme, uiDataClass.donorItemTextColor))
             donorItemTextSize.set(textSizeMapper.map(theme, uiDataClass.donorItemTextSize))
             donorItemTextTypeface.set(typefaceMapper.map(theme, uiDataClass.donorItemTextSize))
+
+            largeErrorTextColor.set(colorMapper.map(theme, uiDataClass.largeErrorTextColor))
+            largeErrorTextSize.set(textSizeMapper.map(theme, uiDataClass.largeErrorTextSize))
+            largeErrorTextTypeface.set(typefaceMapper.map(theme, uiDataClass.largeErrorTextSize))
 
         }
     }

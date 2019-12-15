@@ -1,18 +1,16 @@
 package com.fullsekurity.theatreblood.donors
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
-import com.fullsekurity.theatreblood.repository.network.APIClient
-import com.fullsekurity.theatreblood.repository.network.APIInterface
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
-import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
@@ -28,8 +26,7 @@ class DonorsListViewModel(val activity: MainActivity) : RecyclerViewViewModel(ac
     private val TAG = DonorsListViewModel::class.java.simpleName
     override var adapter: DonorsAdapter = DonorsAdapter(activity)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
-    private val donorsService: APIInterface = APIClient.client
-    private var disposable: Disposable? = null
+    val listIsVisible: ObservableField<Boolean> = ObservableField(true)
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -55,6 +52,7 @@ class DonorsListViewModel(val activity: MainActivity) : RecyclerViewViewModel(ac
     }
 
     fun showDonors(donorList: List<Donor>) {
+        listIsVisible.set(donorList.isNotEmpty())
         adapter.addAll(donorList)
     }
 

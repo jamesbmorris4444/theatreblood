@@ -34,7 +34,7 @@
                 android:id="@+id/release_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{donorsItemViewModel.releaseDate}"
+                android:text="@{donorsItemViewModel.posterPath}"
                 app:text_font="@{uiViewModel.donorItemTextTypeface}"
                 app:text_color="@{uiViewModel.donorItemTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"

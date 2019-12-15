@@ -12,6 +12,7 @@
     <!-- standard modals -->
     <string name="std_modal_no_repository_title">Database cannot be created</string>
     <string name="std_modal_no_repository_body">App cannot continue</string>
+    <string name="std_modal_initialize_database_failure_title">Timeout while fetching remote database</string>
     <string name="std_modal_password_authentication_hint">Password</string>
     <string name="std_modal_submit">Submit</string>
     <string name="std_modal_cancel">Cancel</string>
@@ -34,5 +35,8 @@
     <string name="donor_today_date">Enter Date</string>
     <string name="dd_572_completed">DD-572 Completed?</string>
     <string name="ttd_samples_collected">TTD Samples Collected?</string>
+
+    <!-- miscellaneous -->
+    <string name="search_no_elements">No donors found in search</string>
 
 </resources>

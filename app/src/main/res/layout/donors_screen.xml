@@ -2,11 +2,17 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto" >
 
-<data>
-    <variable
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="uiViewModel"
+            type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+
+        <variable
             name="donorsListViewModel"
             type="com.fullsekurity.theatreblood.donors.DonorsListViewModel" />
-</data>
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -19,19 +25,36 @@
                 android:layout_height="1dp"
                 android:background="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/donorsRecyclerView"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/donorsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="@{safeUnbox(donorsListViewModel.listIsVisible ? View.VISIBLE : View.GONE)}"
                 android:paddingBottom="100dp"
                 android:clipToPadding="false"
                 app:recyclerViewViewModel="@{donorsListViewModel}"
                 app:layout_constraintTop_toBottomOf="@+id/top_divider"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />
+
+        <android.widget.TextView
+                android:id="@+id/search_no_elements_found"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_no_elements"
+                android:visibility="@{safeUnbox(donorsListViewModel.listIsVisible ? View.GONE : View.VISIBLE)}"
+                android:layout_marginTop="120dp"
+                app:text_font="@{uiViewModel.largeErrorTextTypeface}"
+                app:text_color="@{uiViewModel.largeErrorTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.largeErrorTextSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintTop_toBottomOf="@+id/top_divider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

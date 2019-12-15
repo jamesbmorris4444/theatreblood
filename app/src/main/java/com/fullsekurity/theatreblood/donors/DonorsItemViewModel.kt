@@ -1,7 +1,6 @@
 package com.fullsekurity.theatreblood.donors
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.databinding.ObservableField
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -11,34 +10,34 @@ class DonorsItemViewModel(val activity: MainActivity) : RecyclerViewItemViewMode
 
     private lateinit var donor: Donor
 
-    private val _voteCount = MutableLiveData<String>().apply { value = "" } ; val voteCount: LiveData<String> = _voteCount
-    private val _video = MutableLiveData<String>().apply { value = "" } ; val video: LiveData<String> = _video
-    private val _voteAverage = MutableLiveData<String>().apply { value = "" } ; val voteAverage: LiveData<String> = _voteAverage
-    private val _title = MutableLiveData<String>().apply { value = "" } ; val title: LiveData<String> = _title
-    private val _popularity = MutableLiveData<String>().apply { value = "" } ; val popularity: LiveData<String> = _popularity
-    private val _posterPath = MutableLiveData<String>().apply { value = "" } ; val posterPath: LiveData<String> = _posterPath
-    private val _originalLanguage = MutableLiveData<String>().apply { value = "" } ; val originalLanguage: LiveData<String> = _originalLanguage
-    private val _originalTitle = MutableLiveData<String>().apply { value = "" } ; val originalTitle: LiveData<String> = _originalTitle
-    private val _backdropPath = MutableLiveData<String>().apply { value = "" } ; val backdropPath: LiveData<String> = _backdropPath
-    private val _adult = MutableLiveData<String>().apply { value = "" } ; val adult: LiveData<String> = _adult
-    private val _overview = MutableLiveData<String>().apply { value = "" } ; val overview: LiveData<String> = _overview
-    private val _releaseDate = MutableLiveData<String>().apply { value = "" } ; val releaseDate: LiveData<String> = _releaseDate
+    val voteCount: ObservableField<String> = ObservableField("")
+    val video: ObservableField<String> = ObservableField("")
+    val voteAverage: ObservableField<String> = ObservableField("")
+    val title: ObservableField<String> = ObservableField("")
+    val popularity: ObservableField<String> = ObservableField("")
+    val posterPath: ObservableField<String> = ObservableField("")
+    val originalLanguage: ObservableField<String> = ObservableField("")
+    val originalTitle: ObservableField<String> = ObservableField("")
+    val backdropPath: ObservableField<String> = ObservableField("")
+    val adult: ObservableField<String> = ObservableField("")
+    val overview: ObservableField<String> = ObservableField("")
+    val releaseDate: ObservableField<String> = ObservableField("")
 
     override fun setItem(item: Donor) {
         donor = item
-        val ( id, voteCount, video, voteAverage, title, popularity, posterPath, originalLanguage, originalTitle, backdropPath, adult, overview, releaseDate) = item
-        _voteCount.value = voteCount.toString()
-        _video.value = if (video) "T" else "F"
-        _voteAverage.value = voteAverage.toString()
-        _title.value = title
-        _popularity.value = popularity.toString()
-        _posterPath.value = posterPath
-        _originalLanguage.value = originalLanguage
-        _originalTitle.value = originalTitle
-        _backdropPath.value = backdropPath
-        _adult.value = if (adult) "T" else "F"
-        _overview.value = overview
-        _releaseDate.value = releaseDate
+        val ( id, _voteCount, _video, _voteAverage, _title, _popularity, _posterPath, _originalLanguage, _originalTitle, _backdropPath, _adult, _overview, _releaseDate) = item
+        voteCount.set(_voteCount.toString())
+        video.set(if (_video) "T" else "F")
+        voteAverage.set(_voteAverage.toString())
+        title.set(_title)
+        popularity.set(_popularity.toString())
+        posterPath.set(_posterPath)
+        originalLanguage.set(_originalLanguage)
+        originalTitle.set(_originalTitle)
+        backdropPath.set(_backdropPath)
+        adult.set(if (_adult) "T" else "F")
+        overview.set(_overview)
+        releaseDate.set(_releaseDate)
     }
 
     fun onItemClicked() {

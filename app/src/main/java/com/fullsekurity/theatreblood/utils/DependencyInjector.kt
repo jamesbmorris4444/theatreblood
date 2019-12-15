@@ -7,7 +7,6 @@ import com.fullsekurity.theatreblood.donors.DonorsFragment
 import com.fullsekurity.theatreblood.donors.DonorsListViewModel
 import com.fullsekurity.theatreblood.input.InputFragment
 import com.fullsekurity.theatreblood.input.InputViewModel
-import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.ui.UIViewModel
@@ -20,7 +19,6 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [RepositoryInjectorModule::class])
 interface RepositoryDependencyInjector {
-    fun inject(activity: MainActivity)
     fun inject(inputViewModel: InputViewModel)
 }
 
@@ -66,12 +64,11 @@ class MapperInjectorModule {
 }
 
 @Module
-class RepositoryInjectorModule {
+class RepositoryInjectorModule(val activity: MainActivity) {
     @Provides
     @Singleton
     fun repositoryProvider() : Repository {
-        val a = Repository()
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX   REPOSITORY   %s", a))
+        val a = activity.repository
         return a
     }
 }
@@ -81,7 +78,6 @@ class ViewModelInjectorModule(val activity: MainActivity) {
     @Provides
     @Singleton
     fun uiViewModelProvider() : UIViewModel {
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX   VIEWMODEL"))
         return ViewModelProviders.of(activity, UIViewModelFactory(activity.application)).get(UIViewModel::class.java)
     }
 

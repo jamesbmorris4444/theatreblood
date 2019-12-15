@@ -31,14 +31,7 @@ class DonorsAdapter(val activity: MainActivity) : RecyclerViewFilterAdapter<Dono
         return DonorsViewHolder(donorsItemBinding.root, donorsItemViewModel, donorsItemBinding)
     }
 
-    inner class DonorsViewHolder internal constructor(
-        itemView: View,
-        viewModel: DonorsItemViewModel,
-        viewDataBinding: DonorsItemBinding
-    ) : ItemViewHolder<Donor, DonorsItemViewModel> (
-        itemView,
-        viewModel,
-        viewDataBinding
-    )
+    inner class DonorsViewHolder internal constructor(itemView: View, viewModel: DonorsItemViewModel, viewDataBinding: DonorsItemBinding) :
+        ItemViewHolder<Donor, DonorsItemViewModel> (itemView, viewModel, viewDataBinding)
 
 }

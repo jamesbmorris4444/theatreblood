@@ -68,7 +68,10 @@ class UIDataModel {
                         "subTitle",
 
                         "black",
-                        "largeText"
+                        "largeText",
+
+                        "error",
+                        "mainTitle"
                     )
                 }
                 lightViewUIDataClass
@@ -133,7 +136,10 @@ class UIDataModel {
                         "subTitle",
 
                         "black",
-                        "largeText"
+                        "largeText",
+
+                        "error",
+                        "mainTitle"
                     )
                 }
                 darkViewUIDataClass

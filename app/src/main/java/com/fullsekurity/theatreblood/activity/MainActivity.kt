@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.drawable.DrawableCompat
@@ -20,20 +19,11 @@ import com.fullsekurity.theatreblood.donors.DonorsFragment
 import com.fullsekurity.theatreblood.input.InputFragment
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.repository.Repository
-import com.fullsekurity.theatreblood.repository.network.APIClient
-import com.fullsekurity.theatreblood.repository.network.APIInterface
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.Constants
-import com.fullsekurity.theatreblood.utils.DaggerRepositoryDependencyInjector
-import com.fullsekurity.theatreblood.utils.RepositoryInjectorModule
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,11 +34,8 @@ class MainActivity : AppCompatActivity() {
     private val DONORS_FRAGMENT_TAG = "donors"
     private val DONOR_FRAGMENT_TAG = "donor"
     private lateinit var donorsFragment: DonorsFragment
-    private val donorsService: APIInterface = APIClient.client
-    private var disposable: Disposable? = null
 
-    @Inject
-    lateinit var repository: Repository
+    var repository: Repository = Repository()
 
     enum class UITheme {
         LIGHT, DARK, NOT_ASSIGNED,
@@ -69,6 +56,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         repository.closeDatabase()
+        repository.onCleared()
     }
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -87,14 +75,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        DaggerRepositoryDependencyInjector.builder()
-            .repositoryInjectorModule(RepositoryInjectorModule())
-            .build()
-            .inject(this)
         super.onCreate(savedInstanceState)
         Timber.plant(Timber.DebugTree())
         setContentView(R.layout.activity_main)
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX   REPO MAIN 1   %s", repository))
         setSupportActionBar(findViewById(R.id.toolbar))
         setupToolbar()
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
@@ -110,46 +93,11 @@ class MainActivity : AppCompatActivity() {
         repository.setBloodDatabase(this)
         val progressBar = main_progress_bar
         progressBar.visibility = View.VISIBLE
-        initializeDatabase(progressBar)
-//        if (bloodDatabase == null) {
-//            StandardModal(
-//                this,
-//                modalType = StandardModal.ModalType.STANDARD,
-//                titleText = getString(R.string.std_modal_no_repository_title),
-//                bodyText = getString(R.string.std_modal_no_repository_body),
-//                positiveText = getString(R.string.std_modal_ok),
-//                dialogFinishedListener = object : StandardModal.DialogFinishedListener {
-//                    override fun onPositive(password: String) {
-//                        finish()
-//                    }
-//                    override fun onNegative() { }
-//                    override fun onNeutral() { }
-//                    override fun onBackPressed() {
-//                        finish()
-//                    }
-//                }
-//            ).show(supportFragmentManager, "MODAL")
-//        } else {
-//            val progressBar = main_progress_bar
-//            progressBar.visibility = View.VISIBLE
-//            initializeDatabase(progressBar)
-//        }
-
+        repository.initializeDatabase(progressBar, this)
     }
 
-    private fun initializeDatabase(progressBar: ProgressBar) {
-        disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, 10)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .timeout(10L, TimeUnit.SECONDS)
-            .subscribe ({ donorResponse ->
-                progressBar.visibility = View.GONE
-                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX   REPO MAIN 2   %s", repository))
-                repository.initializeDataBase(donorResponse.results)
-            },
-            {
-                throwable -> LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Exception initializing Donor Database in MainActivity", throwable)
-            })
+    fun finishActivity() {
+        finish()
     }
 
     private fun loadInitialFragments() {

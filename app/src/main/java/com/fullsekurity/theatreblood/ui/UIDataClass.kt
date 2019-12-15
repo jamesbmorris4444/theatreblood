@@ -48,17 +48,20 @@ class UIDataClass(
     val editTextNameUpperHintColor: String,               // Name EditText upper hint text color
     val editTextNameBackground: Int,                      // Name EditText background drawable
 
-    val editTextDisplayModifyHintColor: String,             // ReleaseDate EditText hint text color
-    val editTextDisplayModifyColor: String,                 // ReleaseDate EditText text color
-    val editTextDisplayModifySize: String,                  // ReleaseDate EditText text size
-    val editTextDisplayModifyBackgroundColor: String,        // ReleaseDate EditText underline color
-    val editTextDisplayModifyUpperHintColor: String,        // ReleaseDate EditText upper hint text color
-    val editTextDisplayModifyBackground: Int,               // ReleaseDate EditText background drawable
+    val editTextDisplayModifyHintColor: String,           // ReleaseDate EditText hint text color
+    val editTextDisplayModifyColor: String,               // ReleaseDate EditText text color
+    val editTextDisplayModifySize: String,                // ReleaseDate EditText text size
+    val editTextDisplayModifyBackgroundColor: String,     // ReleaseDate EditText underline color
+    val editTextDisplayModifyUpperHintColor: String,      // ReleaseDate EditText upper hint text color
+    val editTextDisplayModifyBackground: Int,             // ReleaseDate EditText background drawable
 
     val buttonTextColor: String,                          // Button text color
     val buttonTextSize: String,                           // Button text size
 
     val donorItemTextColor: String,                       // Donor item text color
-    val donorItemTextSize: String                         // Donor item text size
+    val donorItemTextSize: String,                        // Donor item text size
+
+    val largeErrorTextColor: String,                      // Standard large error text color
+    val largeErrorTextSize: String                        // Standard large error text size
 
 )
