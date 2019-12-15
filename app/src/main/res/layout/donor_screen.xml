@@ -157,7 +157,7 @@
                     app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                     android:visibility="@{safeUnbox(donorViewModel.editTextDobVisibility)}"
                     app:layout_constraintTop_toBottomOf="@+id/edit_text_display_middle_name"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/radio_buttons_gender"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" >
 
@@ -197,6 +197,66 @@
                     app:layout_constraintEnd_toEndOf="@+id/edit_text_display_dob"/>
 
             <!-- End DOB -->
+
+            <!-- Start Gender Radio Buttons -->
+
+            <android.widget.TextView
+                    android:id="@+id/gender_buttons_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{donorViewModel.hintTextGender}"
+                    android:visibility="@{safeUnbox(donorViewModel.radioButtonsGenderVisibility)}"
+                    android:layout_marginTop="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
+                    app:text_font="@{uiViewModel.editTextDisplayModifyTypeface}"
+                    app:text_color="@{uiViewModel.editTextDisplayModifyColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.editTextDisplayModifySize)}"
+                    app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text_display_dob"
+                    app:layout_constraintBottom_toTopOf="@+id/radio_buttons_gender"
+                    app:layout_constraintLeft_toLeftOf="parent" />
+
+            <RadioGroup
+                    android:id="@+id/radio_buttons_gender"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
+                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardWidth)}"
+                    android:paddingTop="18dp"
+                    app:background="@{uiViewModel.editTextDisplayModifyBackground}"
+                    app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    android:visibility="@{safeUnbox(donorViewModel.radioButtonsGenderVisibility)}"
+                    android:onCheckedChanged="@{donorViewModel.onGenderChanged}"
+                    app:layout_constraintTop_toBottomOf="@+id/gender_buttons_label"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent" >
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radio_male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:text_font="@{uiViewModel.editTextDisplayModifyTypeface}"
+                        app:text_color="@{uiViewModel.editTextDisplayModifyColor}"
+                        app:text_size="@{safeUnbox(uiViewModel.editTextDisplayModifySize)}"
+                        app:radio_button_color="@{uiViewModel.radioButtonColor}"
+                        android:text="@string/radio_gender_male" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radio_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:text_font="@{uiViewModel.editTextDisplayModifyTypeface}"
+                        app:text_color="@{uiViewModel.editTextDisplayModifyColor}"
+                        app:text_size="@{safeUnbox(uiViewModel.editTextDisplayModifySize)}"
+                        app:radio_button_color="@{uiViewModel.radioButtonColor}"
+                        android:text="@string/radio_gender_female" />
+
+            </RadioGroup>
+
+            <!-- End Gender Radio Buttons -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

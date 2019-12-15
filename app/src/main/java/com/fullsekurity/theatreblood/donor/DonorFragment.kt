@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 class DonorFragment : Fragment() {
 
-    private lateinit var viewModel: DonorViewModel
+    private lateinit var donorViewModel: DonorViewModel
     private lateinit var donor: Donor
 
     companion object {
@@ -49,11 +49,12 @@ class DonorFragment : Fragment() {
             .inject(this)
         val binding: DonorScreenBinding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.donor_screen, container, false) as DonorScreenBinding
         binding.lifecycleOwner = this
-        viewModel = ViewModelProviders.of(this, DonorViewModelFactory(activity as MainActivity)).get(DonorViewModel::class.java)
-        binding.donorViewModel = viewModel
+        donorViewModel = ViewModelProviders.of(this, DonorViewModelFactory(activity as MainActivity)).get(DonorViewModel::class.java)
+        binding.donorViewModel = donorViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
-        viewModel.setDonor(donor)
+        donorViewModel.setRootView(binding.root)
+        donorViewModel.setDonor(donor)
         return binding.root
     }
 

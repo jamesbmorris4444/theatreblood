@@ -107,6 +107,8 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val largeErrorTextSize: ObservableField<Float> = ObservableField(0f)
     val largeErrorTextTypeface: ObservableField<String> = ObservableField("")
 
+    val radioButtonColor: ObservableField<String> = ObservableField("#ffffff")
+
     var standardLeftAndRightMargin: ObservableField<Int> = ObservableField(0)
     var standardDialogInternalWidth: ObservableField<Int> = ObservableField(0)
     var standardWidth: ObservableField<Int> = ObservableField(0)
@@ -142,6 +144,9 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     private var uiDataClass: UIDataClass? = null
     lateinit var recyclerViewAlternatingColor1: String
     lateinit var recyclerViewAlternatingColor2: String
+    lateinit var primaryColor: String
+    lateinit var secondaryColor: String
+    lateinit var toolbarTextColor: String
 
     init {
         DaggerMapperDependencyInjector.builder()
@@ -201,9 +206,11 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
 
         uiDataClass?.let { uiDataClass ->
 
-            recyclerViewAlternatingColor1 = colorMapper.map(theme, "veryLightGray")
-            recyclerViewAlternatingColor2 = colorMapper.map(theme, "lighterGray")
-
+            recyclerViewAlternatingColor1 = colorMapper.map(theme, uiDataClass.recyclerViewAlternatingColor1)
+            recyclerViewAlternatingColor2 = colorMapper.map(theme, uiDataClass.recyclerViewAlternatingColor2)
+            primaryColor = colorMapper.map(theme, uiDataClass.primaryColor)
+            secondaryColor = colorMapper.map(theme, uiDataClass.secondaryColor)
+            toolbarTextColor = colorMapper.map(theme, uiDataClass.toolbarTextColor)
             standardDialogBackground.set(ContextCompat.getDrawable(context, uiDataClass.standardDialogBackground))
             standardDialogDashedLine.set(ContextCompat.getDrawable(context, uiDataClass.standardDialogDashedLine))
             standardDialogWidth.set(convertDpToPixels(uiDataClass.standardDialogWidth))
@@ -279,6 +286,8 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             largeErrorTextColor.set(colorMapper.map(theme, uiDataClass.largeErrorTextColor))
             largeErrorTextSize.set(textSizeMapper.map(theme, uiDataClass.largeErrorTextSize))
             largeErrorTextTypeface.set(typefaceMapper.map(theme, uiDataClass.largeErrorTextSize))
+
+            radioButtonColor.set(colorMapper.map(theme, uiDataClass.radioButtonColor))
 
         }
     }

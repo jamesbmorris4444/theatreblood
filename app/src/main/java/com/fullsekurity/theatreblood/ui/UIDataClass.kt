@@ -41,6 +41,12 @@ class UIDataClass(
     val standardDialogListFooterTextColor: String,        // Standard dialog footer text color
     val standardDialogListFooterTextSize: String,         // Standard dialog footer text size
 
+    val recyclerViewAlternatingColor1: String,            // one of two alternating colors on all lists
+    val recyclerViewAlternatingColor2: String,            // the other of two alternating colors on all lists
+    val primaryColor: String,                             // primary color used throughout the app
+    val secondaryColor: String,                           // secondary color used throughout the app
+    val toolbarTextColor: String,                         // toolbar text color
+
     val editTextNameHintColor: String,                    // Name EditText hint text color
     val editTextNameColor: String,                        // Name EditText text color
     val editTextNameSize: String,                         // Name EditText text size
@@ -62,6 +68,8 @@ class UIDataClass(
     val donorItemTextSize: String,                        // Donor item text size
 
     val largeErrorTextColor: String,                      // Standard large error text color
-    val largeErrorTextSize: String                        // Standard large error text size
+    val largeErrorTextSize: String,                       // Standard large error text size
+
+    val radioButtonColor:String                           // radio button color
 
 )

@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
@@ -15,7 +16,6 @@ import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.squareup.picasso.Picasso
-
 
 @BindingAdapter("android:picasso_src")
 fun setImageUrl(view: ImageView, url: String?) {
@@ -195,6 +195,11 @@ fun includeFontPadding(view: TextView, include: Int) {
 @BindingAdapter("background_color")
 fun setBackgroundColor(view: LinearLayout, color: String) {
     view.setBackgroundColor(Color.parseColor(color))
+}
+
+@BindingAdapter("radio_button_color")
+fun radioButtonColor(view: AppCompatRadioButton, color: String) {
+    view.supportButtonTintList = ColorStateList.valueOf(Color.parseColor(color))
 }
 
 @BindingAdapter("text_size")

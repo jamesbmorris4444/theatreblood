@@ -3,9 +3,10 @@ package com.fullsekurity.theatreblood.donor
 import android.app.DatePickerDialog
 import android.view.View
 import android.widget.DatePicker
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.R
@@ -26,12 +27,14 @@ class DonorViewModelFactory(private val activity: MainActivity) : ViewModelProvi
 @Suppress("UNCHECKED_CAST")
 class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.application) {
 
-    private val donorUpdateLiveData: MutableLiveData<Donor> = MutableLiveData()
     private val calendar = Calendar.getInstance()
     private val year = calendar.get(Calendar.YEAR)
     private val month = calendar.get(Calendar.MONTH)
     private val day = calendar.get(Calendar.DAY_OF_MONTH)
     private var dateFormatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+    private lateinit var rootView: View
+    private lateinit var maleRadioButton: RadioButton
+    private lateinit var femaleRadioButton: RadioButton
 
     // observable used for two-way data binding. Values set into this field will show in view.
     // Text typed into EditText in view will be stored into this field after each character is typed.
@@ -57,6 +60,8 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     var hintTextDob: ObservableField<String> = ObservableField(activity.getString(R.string.donor_dob))
     var editTextDobVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
+    var hintTextGender: ObservableField<String> = ObservableField(activity.getString(R.string.donor_gender))
+    var radioButtonsGenderVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
 //    <string name="donor_search_string">Enter Search String</string>
 //    <string name="donor_last_name">Enter Last Name</string>
@@ -92,12 +97,32 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
         DatePickerDialog(activity, listener, year, month, day).show()
     }
 
+    fun onGenderChanged(radioGroup: RadioGroup?, id: Int) {
+        if (id == R.id.radio_male) {
+            maleRadioButton.isChecked = true
+        } else {
+            femaleRadioButton.isChecked = true
+        }
+    }
+
+    fun setRootView(view: View) {
+        rootView = view
+    }
 
     fun setDonor(donor: Donor) {
+
+
         editTextDisplayModifyLastName.set(donor.title)
-        editTextDisplayModifyFirstName.set(donor.posterPath)
+        editTextDisplayModifyFirstName.set(donor.posterPath.substring(0,donor.posterPath.length / 2))
         editTextDisplayModifyMiddleName.set(donor.releaseDate)
         editTextDisplayModifyDob.set(donor.releaseDate)
+        maleRadioButton = rootView.findViewById(R.id.radio_male)
+        femaleRadioButton = rootView.findViewById(R.id.radio_female)
+        if (donor.adult) {
+            maleRadioButton.isChecked = true
+        } else {
+            femaleRadioButton.isChecked = true
+        }
     }
 
 }

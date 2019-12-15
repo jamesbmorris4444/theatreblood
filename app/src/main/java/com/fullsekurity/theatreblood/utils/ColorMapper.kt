@@ -13,6 +13,8 @@ class ColorMapper @Inject constructor() {
     // colorMapper.map(theme, "primaryDark")
 
     enum class LightColors(var colorName: String, val colorValue: String) {
+        PRIMARY("primary", "#3a3aff"),
+        SECONDARY("secondary", "#e50239"),
         BLUE("blue", "#3a3aff"),
         RED("red", "#e50239"),
         SUCCESS("success", "#00ff00"),
@@ -28,7 +30,8 @@ class ColorMapper @Inject constructor() {
     }
 
     enum class DarkColors(var colorName: String, val colorValue: String) {
-
+        PRIMARY("primary", "#3a3aff"),
+        SECONDARY("secondary", "#e50239"),
         BLUE("blue", "#3a3aff"),
         RED("red", "#e50239"),
         SUCCESS("success", "00ff00"),

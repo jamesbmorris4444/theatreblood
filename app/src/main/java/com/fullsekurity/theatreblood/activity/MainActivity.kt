@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.FragmentManager
 import com.fullsekurity.theatreblood.R
@@ -21,18 +22,18 @@ import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.Constants
+import com.fullsekurity.theatreblood.utils.Constants.DONORS_FRAGMENT_TAG
+import com.fullsekurity.theatreblood.utils.Constants.DONOR_FRAGMENT_TAG
+import com.fullsekurity.theatreblood.utils.Constants.INPUT_FRAGMENT_TAG
+import com.fullsekurity.theatreblood.utils.Constants.ROOT_FRAGMENT_TAG
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    private val TAG = MainActivity::class.java.simpleName
-    private val ROOT_FRAGMENT_TAG = "ROOT FRAGMENT"
+    private val tag = MainActivity::class.java.simpleName
     private var rootFragmentCount: Int = 0
-    private val INPUT_FRAGMENT_TAG = "input"
-    private val DONORS_FRAGMENT_TAG = "donors"
-    private val DONOR_FRAGMENT_TAG = "donor"
     private lateinit var donorsFragment: DonorsFragment
 
     var repository: Repository = Repository()
@@ -78,7 +79,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Timber.plant(Timber.DebugTree())
         setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.toolbar))
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener { onBackPressed() }
         setupToolbar()
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
@@ -153,8 +156,9 @@ class MainActivity : AppCompatActivity() {
     private fun setupToolbar() {
         supportActionBar?.let { actionBar ->
             actionBar.setBackgroundDrawable(ColorDrawable(Color.parseColor(Constants.TOOLBAR_BACKGROUND_COLOR)))
-            val toolbar = findViewById<Toolbar>(R.id.toolbar)
             colorizeToolbarOverflowButton(toolbar, Color.parseColor(Constants.TOOLBAR_TEXT_COLOR))
+            val upArrow = ContextCompat.getDrawable(this, R.drawable.toolbar_back_arrow)
+            actionBar.setHomeAsUpIndicator(upArrow);
             toolbar.setTitleTextColor(Color.parseColor(Constants.TOOLBAR_TEXT_COLOR))
             toolbar.title = Constants.INITIAL_TOOLBAR_TITLE
         }
@@ -175,11 +179,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> {
-            LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("Settings Selected"))
+            LogUtils.D(tag, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("Settings Selected"))
             true
         }
         R.id.action_favorite -> {
-            LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("Favorites Selected"))
+            LogUtils.D(tag, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("Favorites Selected"))
             true
         }
         else -> {

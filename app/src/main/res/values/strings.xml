@@ -38,5 +38,7 @@
 
     <!-- miscellaneous -->
     <string name="search_no_elements">No donors found in search</string>
+    <string name="radio_gender_male">Male</string>
+    <string name="radio_gender_female">Female</string>
 
 </resources>

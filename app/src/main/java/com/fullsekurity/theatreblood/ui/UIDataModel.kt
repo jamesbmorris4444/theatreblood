@@ -50,6 +50,12 @@ class UIDataModel {
                         "darkGray",
                         "mediumText",
 
+                        "veryLightGray",
+                        "lighterGray",
+                        "primary",
+                        "secondary",
+                        "white",
+
                         "mediumGray",
                         "black",
                         "subTitle",
@@ -71,7 +77,9 @@ class UIDataModel {
                         "largeText",
 
                         "error",
-                        "mainTitle"
+                        "mainTitle",
+
+                        "primary"
                     )
                 }
                 lightViewUIDataClass
@@ -118,6 +126,12 @@ class UIDataModel {
                         "darkGray",
                         "mediumText",
 
+                        "veryLightGray",
+                        "lighterGray",
+                        "primary",
+                        "secondary",
+                        "white",
+
                         "mediumGray",
                         "black",
                         "subTitle",
@@ -139,7 +153,9 @@ class UIDataModel {
                         "largeText",
 
                         "error",
-                        "mainTitle"
+                        "mainTitle",
+
+                        "primary"
                     )
                 }
                 darkViewUIDataClass
