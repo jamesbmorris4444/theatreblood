@@ -140,6 +140,8 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
         }
     private val uiDataModel = UIDataModel()
     private var uiDataClass: UIDataClass? = null
+    lateinit var recyclerViewAlternatingColor1: String
+    lateinit var recyclerViewAlternatingColor2: String
 
     init {
         DaggerMapperDependencyInjector.builder()
@@ -198,6 +200,10 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     private fun liveDataUpdate(theme: MainActivity.UITheme) {
 
         uiDataClass?.let { uiDataClass ->
+
+            recyclerViewAlternatingColor1 = colorMapper.map(theme, "veryLightGray")
+            recyclerViewAlternatingColor2 = colorMapper.map(theme, "lighterGray")
+
             standardDialogBackground.set(ContextCompat.getDrawable(context, uiDataClass.standardDialogBackground))
             standardDialogDashedLine.set(ContextCompat.getDrawable(context, uiDataClass.standardDialogDashedLine))
             standardDialogWidth.set(convertDpToPixels(uiDataClass.standardDialogWidth))

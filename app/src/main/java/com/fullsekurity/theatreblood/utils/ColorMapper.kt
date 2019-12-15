@@ -21,6 +21,7 @@ class ColorMapper @Inject constructor() {
         WHITE("white", "#FFFFFF"),
         BLACK("black", "#000000"),
         VERY_LIGHT_GRAY("veryLightGray", "#08000000"),
+        LIGHTER_GRAY("lighterGray", "#16000000"),
         LIGHT_GRAY("lightGray", "#33000000"),
         MEDIUM_GRAY("mediumGray", "#86000000"),
         DARK_GRAY("darkGray", "#E6000000")
@@ -36,6 +37,7 @@ class ColorMapper @Inject constructor() {
         WHITE("white", "#FFFFFF"),
         BLACK("black", "#000000"),
         VERY_LIGHT_GRAY("veryLightGray", "#08FFFFFF"),
+        LIGHTER_GRAY("lighterGray", "#16FFFFFF"),
         LIGHT_GRAY("lightGray", "#33FFFFFF"),
         MEDIUM_GRAY("mediumGray", "#86FFFFFF"),
         DARK_GRAY("darkGray", "#E6FFFFFF")

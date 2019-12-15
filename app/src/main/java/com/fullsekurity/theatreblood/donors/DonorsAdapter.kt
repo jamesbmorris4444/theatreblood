@@ -1,5 +1,6 @@
 package com.fullsekurity.theatreblood.donors
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,5 +34,14 @@ class DonorsAdapter(val activity: MainActivity) : RecyclerViewFilterAdapter<Dono
 
     inner class DonorsViewHolder internal constructor(itemView: View, viewModel: DonorsItemViewModel, viewDataBinding: DonorsItemBinding) :
         ItemViewHolder<Donor, DonorsItemViewModel> (itemView, viewModel, viewDataBinding)
+
+    override fun onBindViewHolder(holder: ItemViewHolder<Donor, DonorsItemViewModel>, position: Int) {
+        super.onBindViewHolder(holder, position)
+        if (position % 2 == 1) {
+            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor1))
+        } else {
+            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor2))
+        }
+    }
 
 }
