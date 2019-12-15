@@ -12,9 +12,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.repository.storage.Donor
+import com.fullsekurity.theatreblood.ui.UIViewModel
+import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.Utils
+import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
+import com.google.android.material.textfield.TextInputLayout
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 
 @Suppress("UNCHECKED_CAST")
@@ -35,6 +40,16 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     private lateinit var rootView: View
     private lateinit var maleRadioButton: RadioButton
     private lateinit var femaleRadioButton: RadioButton
+
+    @Inject
+    lateinit var uiViewModel: UIViewModel
+
+    init {
+        DaggerViewModelDependencyInjector.builder()
+            .viewModelInjectorModule(ViewModelInjectorModule(activity))
+            .build()
+            .inject(this)
+    }
 
     // observable used for two-way data binding. Values set into this field will show in view.
     // Text typed into EditText in view will be stored into this field after each character is typed.
@@ -110,7 +125,10 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     }
 
     fun setDonor(donor: Donor) {
-
+        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_last_name).setHintTextAppearance(uiViewModel.hintStyle)
+        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_first_name).setHintTextAppearance(uiViewModel.hintStyle)
+        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_middle_name).setHintTextAppearance(uiViewModel.hintStyle)
+        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_dob).setHintTextAppearance(uiViewModel.hintStyle)
 
         editTextDisplayModifyLastName.set(donor.title)
         editTextDisplayModifyFirstName.set(donor.posterPath.substring(0,donor.posterPath.length / 2))

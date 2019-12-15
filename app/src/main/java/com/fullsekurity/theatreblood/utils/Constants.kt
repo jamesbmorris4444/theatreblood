@@ -27,7 +27,5 @@ object Constants {
     // toolbar
 
     const val INITIAL_TOOLBAR_TITLE = "Theatre Blood"
-    const val TOOLBAR_BACKGROUND_COLOR = "#3a3aff"
-    const val TOOLBAR_TEXT_COLOR = "#ffffff"
 
 }

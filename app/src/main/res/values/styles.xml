@@ -35,8 +35,17 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="TextInputLayout" parent="@android:style/TextAppearance">
-        <item name="android:textSize">18sp</item>
+    <!-- start styles used in theming, uiViewModel should select on of these two styles based on the theme -->
+    <!-- changes in size here should be synchronized with the value of uiViewModel.editTextDisplayModifyHintSize -->
+    <style name="TextInputLayoutForLight" parent="@android:style/TextAppearance">
+        <item name="android:textSize">16sp</item>
+        <item name="android:typeface">@font/avenir_regular</item>
     </style>
+
+    <style name="TextInputLayoutForDark" parent="@android:style/TextAppearance">
+        <item name="android:textSize">16sp</item>
+        <item name="android:typeface">@font/avenir_regular</item>
+    </style>
+    <!-- end styles used in theming, uiViewModel should select on of these two styles based on the theme -->
 
 </resources>

@@ -18,7 +18,7 @@
     <string name="std_modal_cancel">Cancel</string>
     <string name="std_modal_ok">OK</string>
 
-    <!-- button text -->
+    <!-- button_light text -->
     <string name="button_submit">Submit</string>
 
     <!-- donor strings -->

@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 class InputFragment : Fragment() {
 
-    private lateinit var viewModel: InputViewModel
+    private lateinit var inputViewModel: InputViewModel
 
     companion object {
         fun newInstance(): InputFragment { return InputFragment() }
@@ -41,13 +41,14 @@ class InputFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: TextInputFragmentBinding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.text_input_fragment, container, false) as TextInputFragmentBinding
         binding.lifecycleOwner = this
-        viewModel = ViewModelProviders.of(this, InputViewModelFactory(activity as MainActivity)).get(InputViewModel::class.java)
-        binding.inputViewModel = viewModel
+        inputViewModel = ViewModelProviders.of(this, InputViewModelFactory(activity as MainActivity)).get(InputViewModel::class.java)
+        binding.inputViewModel = inputViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
-        viewModel.donorSearchLiveData.observe(this, Observer {
+        inputViewModel.donorSearchLiveData.observe(this, Observer {
             (activity as MainActivity).showDonors(it)
         })
+        inputViewModel.setRootView(binding.root, uiViewModel)
         return binding.root
     }
 

@@ -3,6 +3,7 @@ package com.fullsekurity.theatreblood.utils
 import androidx.lifecycle.ViewModelProviders
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.donor.DonorFragment
+import com.fullsekurity.theatreblood.donor.DonorViewModel
 import com.fullsekurity.theatreblood.donors.DonorsFragment
 import com.fullsekurity.theatreblood.donors.DonorsListViewModel
 import com.fullsekurity.theatreblood.input.InputFragment
@@ -36,6 +37,8 @@ interface ViewModelDependencyInjector {
     fun inject(modal: StandardModal)
     fun inject(fragment: DonorFragment)
     fun inject(viewModel: DonorsListViewModel)
+    fun inject(viewModel: DonorViewModel)
+    fun inject(activity: MainActivity)
 }
 
 @Module

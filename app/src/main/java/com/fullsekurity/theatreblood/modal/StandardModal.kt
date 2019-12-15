@@ -40,12 +40,12 @@ class StandardModal (
          * @param bodyText is optional, default value is NO body (there must be either a title or a body present, except for LIST type modals which normally do not have a title or body).
          * @param bodyGravity is optional, default value is Gravity.CENTER, which will center the body. Use Gravity.LEFT to left justify the body.
          * @param hintText is optional, default value is NO hint (hintText is used only in modals like password modals, etc.).
-         * @param positiveText is required, and is the text that appears on the rightmost bottom button (1, 2, 3 buttons can be present).
-         * @param negativeText is optional, and is the text that appears on the bottom button to the left of the positiveText button (2 or 3 buttons can be present if a negativeText button appears).
-         * @param neutralText is optional, and is the text that appears on the bottom button to the left of the negativeText button (3 buttons must be present if a neutralText button appears).
+         * @param positiveText is required, and is the text that appears on the rightmost bottom button_light (1, 2, 3 buttons can be present).
+         * @param negativeText is optional, and is the text that appears on the bottom button_light to the left of the positiveText button_light (2 or 3 buttons can be present if a negativeText button_light appears).
+         * @param neutralText is optional, and is the text that appears on the bottom button_light to the left of the negativeText button_light (3 buttons must be present if a neutralText button_light appears).
          * @param transactionIcon is optional and is used in LIST type modals. See TransactionsDetailDialog for examples.
          * @param modalItemList is a list of ModalItems that will appear in the modal as a list. See TransactionsDetailDialog for examples.
-         * @param dialogFinishedListener is a required interface that provides methods for handling modal button clicks.
+         * @param dialogFinishedListener is a required interface that provides methods for handling modal button_light clicks.
          *
          * @returns a DialogFragment which can be shown using a statement like
          *      fragment.fragmentManager?.let { dialog.show(it, TAG) }, where dialog is the object created by the StandardModal constructor
@@ -274,16 +274,16 @@ class StandardModal (
 //    var textHint: ObservableField<String> = ObservableField("HINT") // Hint value initialized into EditText field (This is a hint, not initialized text that is initialized into the view field)
 //    private var dataStorageAreaOutsideOfObservableField: String = "HINT TEXT"
 //
-//    fun readTestEditFieldValue() { // click Locations button, observes current value of observable testEdit field that has been typed by the user
+//    fun readTestEditFieldValue() { // click Locations button_light, observes current value of observable testEdit field that has been typed by the user
 //        LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("getTestEdit=%s", editTextInput.get()))
 //    }
 //
-//    fun transferTestEditToLocalVariable() { // click Direct Deposit button
+//    fun transferTestEditToLocalVariable() { // click Direct Deposit button_light
 //        dataStorageAreaOutsideOfObservableField = editTextInput.get() ?: return
 //        LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("setTestEdit, dataStorageAreaOutsideOfObservableField=%s", dataStorageAreaOutsideOfObservableField))
 //    }
 //
-//    fun forceTestEditToASpecificValue() { // click MoneyBot button
+//    fun forceTestEditToASpecificValue() { // click MoneyBot button_light
 //        editTextInput.set("") // Store "" to clear the observable EditText field
 //    }
 

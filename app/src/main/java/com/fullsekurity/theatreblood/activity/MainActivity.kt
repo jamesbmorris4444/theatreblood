@@ -21,14 +21,18 @@ import com.fullsekurity.theatreblood.input.InputFragment
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
+import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.Constants.DONORS_FRAGMENT_TAG
 import com.fullsekurity.theatreblood.utils.Constants.DONOR_FRAGMENT_TAG
 import com.fullsekurity.theatreblood.utils.Constants.INPUT_FRAGMENT_TAG
 import com.fullsekurity.theatreblood.utils.Constants.ROOT_FRAGMENT_TAG
+import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
+import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,6 +41,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var donorsFragment: DonorsFragment
 
     var repository: Repository = Repository()
+    @Inject
+    lateinit var uiViewModel: UIViewModel
 
     enum class UITheme {
         LIGHT, DARK, NOT_ASSIGNED,
@@ -52,6 +58,7 @@ class MainActivity : AppCompatActivity() {
             currentTheme = UITheme.valueOf(name)
         }
         setupRepositoryDatabase()
+        setupToolbar()
     }
 
     override fun onStop() {
@@ -76,13 +83,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        DaggerViewModelDependencyInjector.builder()
+            .viewModelInjectorModule(ViewModelInjectorModule(this))
+            .build()
+            .inject(this)
         super.onCreate(savedInstanceState)
         Timber.plant(Timber.DebugTree())
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener { onBackPressed() }
-        setupToolbar()
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         if (savedInstanceState == null) {
@@ -155,11 +165,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         supportActionBar?.let { actionBar ->
-            actionBar.setBackgroundDrawable(ColorDrawable(Color.parseColor(Constants.TOOLBAR_BACKGROUND_COLOR)))
-            colorizeToolbarOverflowButton(toolbar, Color.parseColor(Constants.TOOLBAR_TEXT_COLOR))
+            actionBar.setBackgroundDrawable(ColorDrawable(Color.parseColor(uiViewModel.primaryColor)))
+            colorizeToolbarOverflowButton(toolbar, Color.parseColor(uiViewModel.toolbarTextColor))
             val upArrow = ContextCompat.getDrawable(this, R.drawable.toolbar_back_arrow)
             actionBar.setHomeAsUpIndicator(upArrow);
-            toolbar.setTitleTextColor(Color.parseColor(Constants.TOOLBAR_TEXT_COLOR))
+            toolbar.setTitleTextColor(Color.parseColor(uiViewModel.toolbarTextColor))
             toolbar.title = Constants.INITIAL_TOOLBAR_TITLE
         }
     }

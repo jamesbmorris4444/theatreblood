@@ -64,12 +64,14 @@ class UIDataModel {
                         R.drawable.lt_edit_text_background,
 
                         "mediumGray",
+                        "largeText",
                         "black",
                         "subTitle",
                         "veryLightGray",
                         "blue",
                         R.drawable.lt_edit_text_background,
 
+                        R.drawable.button_light,
                         "white",
                         "subTitle",
 
@@ -140,12 +142,14 @@ class UIDataModel {
                         R.drawable.lt_edit_text_background,
 
                         "mediumGray",
+                        "largeText",
                         "black",
                         "subTitle",
                         "veryLightGray",
                         "blue",
                         R.drawable.lt_edit_text_background,
 
+                        R.drawable.button_dark,
                         "white",
                         "subTitle",
 

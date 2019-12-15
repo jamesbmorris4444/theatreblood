@@ -5,7 +5,7 @@ class UIDataClass(
     val standardDialogBackground: Int,                    // Standard dialog background drawable resource
     val standardDialogDashedLine: Int,                    // Standard dialog circular header icon drawable resource
     val standardDialogWidth: Float,                       // Standard dialog total width
-    val standardDialogDividerColor: String,               // Standard dialog button divider line color
+    val standardDialogDividerColor: String,               // Standard dialog button_light divider line color
     val standardDialogPasswordHintColor: String,          // Standard dialog password hint text color
     val standardDialogTopSpacerHeight: Float,             // Standard dialog spacer height at the top of the modal
     val standardDialogSubTitleHeight: Float,              // Standard dialog spacer height below title text
@@ -17,9 +17,9 @@ class UIDataClass(
     val standardDialogSubBodyHeight: Float,               // Standard dialog spacer height below body text
     val standardDialogBodyTextColor: String,              // Standard dialog body text color
     val standardDialogBodyTextSize: String,               // Standard dialog body text size
-    val standardDialogButtonHeight: Float,                // Standard dialog button height
-    val standardDialogButtonTextColor: String,            // Standard dialog positive button text color
-    val standardDialogButtonTextSize: String,             // Standard dialog positive button text size
+    val standardDialogButtonHeight: Float,                // Standard dialog button_light height
+    val standardDialogButtonTextColor: String,            // Standard dialog positive button_light text color
+    val standardDialogButtonTextSize: String,             // Standard dialog positive button_light text size
     val standardDialogPasswordHeight: Float,              // Standard dialog password entry field height
     val standardDialogPasswordTextColor: String,          // Standard dialog password entry field text color
     val standardDialogPasswordTextSize: String,           // Standard dialog password entry field text size
@@ -47,20 +47,22 @@ class UIDataClass(
     val secondaryColor: String,                           // secondary color used throughout the app
     val toolbarTextColor: String,                         // toolbar text color
 
-    val editTextNameHintColor: String,                    // Name EditText hint text color
-    val editTextNameColor: String,                        // Name EditText text color
-    val editTextNameSize: String,                         // Name EditText text size
-    val editTextNameBackgroundColor: String,              // Name EditText background color
-    val editTextNameUpperHintColor: String,               // Name EditText upper hint text color
-    val editTextNameBackground: Int,                      // Name EditText background drawable
+    val editTextNameHintColor: String,                    // Input EditText hint text color
+    val editTextNameColor: String,                        // Input EditText text color
+    val editTextNameSize: String,                         // Input EditText text size
+    val editTextNameBackgroundColor: String,              // Input EditText background color
+    val editTextNameUpperHintColor: String,               // Input EditText upper hint text color
+    val editTextNameBackground: Int,                      // Input EditText background drawable
 
-    val editTextDisplayModifyHintColor: String,           // ReleaseDate EditText hint text color
-    val editTextDisplayModifyColor: String,               // ReleaseDate EditText text color
-    val editTextDisplayModifySize: String,                // ReleaseDate EditText text size
-    val editTextDisplayModifyBackgroundColor: String,     // ReleaseDate EditText underline color
-    val editTextDisplayModifyUpperHintColor: String,      // ReleaseDate EditText upper hint text color
-    val editTextDisplayModifyBackground: Int,             // ReleaseDate EditText background drawable
+    val editTextDisplayModifyHintColor: String,           // Display/Modify EditText hint text color
+    val editTextDisplayModifyHintSize: String,            // Display/Modify EditText hint text color (changes to this value should be synchronized with styles.TextInputLayoutForLight/Dark)
+    val editTextDisplayModifyColor: String,               // Display/Modify EditText text color
+    val editTextDisplayModifySize: String,                // Display/Modify EditText text size
+    val editTextDisplayModifyBackgroundColor: String,     // Display/Modify EditText underline color
+    val editTextDisplayModifyUpperHintColor: String,      // Display/Modify EditText upper hint text color
+    val editTextDisplayModifyBackground: Int,             // Display/Modify EditText background drawable
 
+    val buttonDrawable: Int,                              // Button drawable icon
     val buttonTextColor: String,                          // Button text color
     val buttonTextSize: String,                           // Button text size
 
@@ -70,6 +72,6 @@ class UIDataClass(
     val largeErrorTextColor: String,                      // Standard large error text color
     val largeErrorTextSize: String,                       // Standard large error text size
 
-    val radioButtonColor:String                           // radio button color
+    val radioButtonColor:String                           // radio button_light color
 
 )

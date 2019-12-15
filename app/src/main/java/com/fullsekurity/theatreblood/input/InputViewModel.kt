@@ -10,9 +10,11 @@ import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
+import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerRepositoryDependencyInjector
 import com.fullsekurity.theatreblood.utils.RepositoryInjectorModule
 import com.fullsekurity.theatreblood.utils.Utils
+import com.google.android.material.textfield.TextInputLayout
 import javax.inject.Inject
 
 class InputViewModelFactory(private val activity: MainActivity) : ViewModelProvider.Factory {
@@ -24,6 +26,7 @@ class InputViewModelFactory(private val activity: MainActivity) : ViewModelProvi
 class InputViewModel(val activity: MainActivity) : AndroidViewModel(activity.application) {
 
     val donorSearchLiveData: MutableLiveData<List<Donor>> = MutableLiveData()
+    private lateinit var rootView: View
 
     @Inject
     lateinit var repository: Repository
@@ -52,6 +55,11 @@ class InputViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
 
     private fun loadData() {
         donorSearchLiveData.postValue(repository.donorsFromFullName(editTextNameInput.get() ?: ""))
+    }
+
+    fun setRootView(view: View, uiViewModel: UIViewModel) {
+        rootView = view
+        rootView.findViewById<TextInputLayout>(R.id.edit_text_input_name).setHintTextAppearance(uiViewModel.hintStyle)
     }
 
 }

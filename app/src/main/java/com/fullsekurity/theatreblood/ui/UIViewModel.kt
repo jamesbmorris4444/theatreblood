@@ -88,6 +88,8 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val editTextNameBackground: ObservableField<Drawable> = ObservableField()
 
     val editTextDisplayModifyHintColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextDisplayModifyHintSize: ObservableField<Float> = ObservableField(0f)
+    val editTextDisplayModifyHintTypeface: ObservableField<String> = ObservableField("")
     val editTextDisplayModifyColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextDisplayModifySize: ObservableField<Float> = ObservableField(0f)
     val editTextDisplayModifyBackgroundColor: ObservableField<String> = ObservableField("#ffffff")
@@ -95,6 +97,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val editTextDisplayModifyUpperHintColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextDisplayModifyBackground: ObservableField<Drawable> = ObservableField()
 
+    val buttonDrawable: ObservableField<Drawable> = ObservableField()
     val buttonTextColor: ObservableField<String> = ObservableField("#ffffff")
     val buttonTextSize: ObservableField<Float> = ObservableField(0f)
     val buttonTextTypeface: ObservableField<String> = ObservableField("")
@@ -116,6 +119,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     var standardWidthWithButton: ObservableField<Int> = ObservableField(0)
     var standardButtonWidth: ObservableField<Int> = ObservableField(0)
     var standardButtonHeight: ObservableField<Int> = ObservableField(0)
+    var hintStyle = 0
 
     private val context: Context = getApplication<Application>().applicationContext
     val modalErrorIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.mo_close_error)
@@ -183,7 +187,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     }
 
     private fun computeStandardWidthWithButton(): Int {
-        // |<--standard margin-->|<--standard width with button-->|<--standard margin-->|<--standard button width-->|<--standard margin-->|
+        // |<--standard margin-->|<--standard width with button_light-->|<--standard margin-->|<--standard button_light width-->|<--standard margin-->|
         // |<----------------------------------------------------total width------------------------------------------------------------->|
 
         val screenWidth = context.resources.displayMetrics.widthPixels
@@ -193,7 +197,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     }
 
     private fun computeStandarButtonWidth(): Int {
-        // |<--standard margin-->|<--standard width with button-->|<--standard margin-->|<--standard button width-->|<--standard margin-->|
+        // |<--standard margin-->|<--standard width with button_light-->|<--standard margin-->|<--standard button_light width-->|<--standard margin-->|
         // |<----------------------------------------------------total width------------------------------------------------------------->|
 
         val screenWidth = context.resources.displayMetrics.widthPixels
@@ -203,9 +207,15 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     }
 
     private fun liveDataUpdate(theme: MainActivity.UITheme) {
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ======= LIVE UPD"))
 
         uiDataClass?.let { uiDataClass ->
 
+            if (theme == MainActivity.UITheme.LIGHT) {
+                hintStyle = R.style.TextInputLayoutForLight
+            } else {
+                hintStyle = R.style.TextInputLayoutForDark
+            }
             recyclerViewAlternatingColor1 = colorMapper.map(theme, uiDataClass.recyclerViewAlternatingColor1)
             recyclerViewAlternatingColor2 = colorMapper.map(theme, uiDataClass.recyclerViewAlternatingColor2)
             primaryColor = colorMapper.map(theme, uiDataClass.primaryColor)
@@ -268,6 +278,8 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             editTextNameBackground.set(ContextCompat.getDrawable(context, uiDataClass.editTextNameBackground))
 
             editTextDisplayModifyHintColor.set(colorMapper.map(theme, uiDataClass.editTextDisplayModifyHintColor))
+            editTextDisplayModifyHintSize.set(textSizeMapper.map(theme, uiDataClass.editTextDisplayModifyHintSize))
+            editTextDisplayModifyHintTypeface.set(typefaceMapper.map(theme, uiDataClass.editTextDisplayModifyHintSize))
             editTextDisplayModifyColor.set(colorMapper.map(theme, uiDataClass.editTextDisplayModifyColor))
             editTextDisplayModifySize.set(textSizeMapper.map(theme, uiDataClass.editTextDisplayModifySize))
             editTextDisplayModifyBackgroundColor.set(colorMapper.map(theme, uiDataClass.editTextDisplayModifyBackgroundColor))
@@ -275,6 +287,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             editTextDisplayModifyUpperHintColor.set(colorMapper.map(theme, uiDataClass.editTextDisplayModifyUpperHintColor))
             editTextDisplayModifyBackground.set(ContextCompat.getDrawable(context, uiDataClass.editTextDisplayModifyBackground))
 
+            buttonDrawable.set(ContextCompat.getDrawable(context, uiDataClass.buttonDrawable))
             buttonTextColor.set(colorMapper.map(theme, uiDataClass.buttonTextColor))
             buttonTextSize.set(textSizeMapper.map(theme, uiDataClass.buttonTextSize))
             buttonTextTypeface.set(typefaceMapper.map(theme, uiDataClass.buttonTextSize))
