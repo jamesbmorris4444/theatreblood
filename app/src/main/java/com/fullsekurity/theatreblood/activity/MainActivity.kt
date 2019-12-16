@@ -17,14 +17,10 @@ import androidx.fragment.app.FragmentManager
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.donors.DonateProductsFragment
-import com.fullsekurity.theatreblood.input.InputFragment
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
-import com.fullsekurity.theatreblood.utils.Constants.DONORS_FRAGMENT_TAG
-import com.fullsekurity.theatreblood.utils.Constants.DONOR_FRAGMENT_TAG
-import com.fullsekurity.theatreblood.utils.Constants.INPUT_FRAGMENT_TAG
 import com.fullsekurity.theatreblood.utils.Constants.ROOT_FRAGMENT_TAG
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
@@ -36,8 +32,6 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     private val tag = MainActivity::class.java.simpleName
-    private var rootFragmentCount: Int = 0
-    private lateinit var donateProductsFragment: DonateProductsFragment
 
     var repository: Repository = Repository()
     @Inject
@@ -95,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         if (savedInstanceState == null) {
-            loadInitialFragments()
+            loadInitialFragment()
         }
     }
 
@@ -112,40 +106,20 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun loadInitialFragments() {
-        supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-            .replace(R.id.home_container, InputFragment.newInstance(), INPUT_FRAGMENT_TAG)
-            .addToBackStack(ROOT_FRAGMENT_TAG)
-            .commitAllowingStateLoss()
-        donateProductsFragment = DonateProductsFragment.newInstance()
+    private fun loadInitialFragment() {
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
-            .replace(R.id.donors_container, donateProductsFragment, DONORS_FRAGMENT_TAG)
-            .addToBackStack(null)
+            .replace(R.id.main_activity_container, DonateProductsFragment.newInstance(), ROOT_FRAGMENT_TAG)
+            .addToBackStack(ROOT_FRAGMENT_TAG)
             .commitAllowingStateLoss()
-        rootFragmentCount = 2
     }
 
-    private inline fun <T: Any> multipleObjectLet(vararg elements: T?, closure: (List<T>) -> Unit) {
-        if (elements.all { it != null }) {
-            closure(elements.filterNotNull())
-        }
-    }
-
-    fun transitionToSingleDonorFragment(donor: Donor) {
-        val inputFragment = supportFragmentManager.findFragmentByTag(INPUT_FRAGMENT_TAG)
-        val donorsFragment = supportFragmentManager.findFragmentByTag(DONORS_FRAGMENT_TAG)
-        multipleObjectLet(inputFragment, donorsFragment) {
-            // will not execute if either inputFragment or donorsFragment is null
-            (inputFragment, donorsFragment) -> supportFragmentManager.beginTransaction()
+    fun loadDonorFragment(donor: Donor) {
+        supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-            .remove(inputFragment)
-            .remove(donorsFragment)
-            .replace(R.id.home_container, DonorFragment.newInstance(donor), DONOR_FRAGMENT_TAG)
+            .replace(R.id.main_activity_container, DonorFragment.newInstance(donor), ROOT_FRAGMENT_TAG)
             .addToBackStack(null)
             .commitAllowingStateLoss()
-        }
     }
 
     private fun setupToolbar() {
@@ -189,14 +163,8 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    fun showDonors(donorList: List<Donor>) {
-        donateProductsFragment.showDonors(donorList)
-    }
-
     override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount == rootFragmentCount) {
-            supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        }
+        supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         super.onBackPressed()
     }
 

@@ -41,7 +41,7 @@ class DonateProductsItemViewModel(val activity: MainActivity) : RecyclerViewItem
     }
 
     fun onItemClicked() {
-        activity.transitionToSingleDonorFragment(donor)
+        activity.loadDonorFragment(donor)
     }
 
 }

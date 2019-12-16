@@ -8,9 +8,6 @@ object Constants {
     val DONOR_LIST_CLASS_TYPE = (ArrayList<Donor>()).javaClass
     const val THEATRE_BLOOD_BASE_URL = "https://api.themoviedb.org/3/discover/"
     const val ROOT_FRAGMENT_TAG = "ROOT FRAGMENT"
-    const val INPUT_FRAGMENT_TAG = "input"
-    const val DONORS_FRAGMENT_TAG = "donors"
-    const val DONOR_FRAGMENT_TAG = "donor"
     const val IMAGE_URL_PREFIX = "https://image.tmdb.org/t/p/"
     const val SMALL_IMAGE_URL_PREFIX = IMAGE_URL_PREFIX + "w300"
     const val API_KEY_REQUEST_PARAM = "api_key"

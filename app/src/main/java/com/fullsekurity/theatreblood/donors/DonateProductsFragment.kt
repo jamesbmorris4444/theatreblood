@@ -11,8 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
-import com.fullsekurity.theatreblood.databinding.DonorsScreenBinding
-import com.fullsekurity.theatreblood.repository.storage.Donor
+import com.fullsekurity.theatreblood.databinding.DonateProductsScreenBinding
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
@@ -20,7 +19,7 @@ import javax.inject.Inject
 
 class DonateProductsFragment : Fragment() {
 
-    private lateinit var viewModel: DonorsListViewModel
+    private lateinit var donateProductsListViewModel: DonateProductsListViewModel
 
     companion object {
         fun newInstance(): DonateProductsFragment { return DonateProductsFragment() }
@@ -38,17 +37,14 @@ class DonateProductsFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding: DonorsScreenBinding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.donors_screen, container, false) as DonorsScreenBinding
+        val binding: DonateProductsScreenBinding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.donate_products_screen, container, false) as DonateProductsScreenBinding
         binding.lifecycleOwner = this
-        viewModel = ViewModelProviders.of(this, DonorsListViewModelFactory(activity as MainActivity)).get(DonorsListViewModel::class.java)
-        binding.donorsListViewModel = viewModel
+        donateProductsListViewModel = ViewModelProviders.of(this, DonateProductsListViewModelFactory(activity as MainActivity)).get(DonateProductsListViewModel::class.java)
+        binding.donateProductsListViewModel = donateProductsListViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
+        donateProductsListViewModel.setRootView(binding.root)
         return binding.root
-    }
-
-    fun showDonors(donorList: List<Donor>) {
-        viewModel.showDonors(donorList)
     }
 
 }
