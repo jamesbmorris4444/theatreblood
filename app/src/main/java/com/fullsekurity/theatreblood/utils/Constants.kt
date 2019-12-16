@@ -26,6 +26,10 @@ object Constants {
 
     // toolbar
 
-    const val INITIAL_TOOLBAR_TITLE = "Theatre Blood"
+    const val DONATE_PRODUCTS_TITLE = "Donate Products"
+    const val MANAGE_DONOR_TITLE = "Donate Products"
+    const val REASSOCIATE_DONATION_TITLE = "Donate Products"
+    const val UPDATE_TEST_RESULTS_TITLE = "Donate Products"
+    const val VIEW_DONOR_LIST_TITLE = "Donate Products"
 
 }

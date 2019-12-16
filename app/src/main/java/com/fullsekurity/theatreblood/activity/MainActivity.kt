@@ -18,7 +18,6 @@ import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.donors.DonorsFragment
 import com.fullsekurity.theatreblood.input.InputFragment
-import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
@@ -128,38 +127,24 @@ class MainActivity : AppCompatActivity() {
         rootFragmentCount = 2
     }
 
+    private inline fun <T: Any> multipleObjectLet(vararg elements: T?, closure: (List<T>) -> Unit) {
+        if (elements.all { it != null }) {
+            closure(elements.filterNotNull())
+        }
+    }
+
     fun transitionToSingleDonorFragment(donor: Donor) {
         val inputFragment = supportFragmentManager.findFragmentByTag(INPUT_FRAGMENT_TAG)
         val donorsFragment = supportFragmentManager.findFragmentByTag(DONORS_FRAGMENT_TAG)
-        if (inputFragment == null && donorsFragment == null) {
-            supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-                .replace(R.id.home_container, DonorFragment.newInstance(donor), DONOR_FRAGMENT_TAG)
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
-
-        } else if (inputFragment == null) {
-            supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-                .remove(donorsFragment!!)  // donorsFragment cannot be null
-                .replace(R.id.home_container, DonorFragment.newInstance(donor), DONOR_FRAGMENT_TAG)
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
-        } else if (donorsFragment == null) {
-            supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-                .remove(inputFragment)
-                .replace(R.id.home_container, DonorFragment.newInstance(donor), DONOR_FRAGMENT_TAG)
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
-        } else {
-            supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-                .remove(inputFragment)
-                .remove(donorsFragment)
-                .replace(R.id.home_container, DonorFragment.newInstance(donor), DONOR_FRAGMENT_TAG)
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
+        multipleObjectLet(inputFragment, donorsFragment) {
+            // will not execute if either inputFragment or donorsFragment is null
+            (inputFragment, donorsFragment) -> supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+            .remove(inputFragment)
+            .remove(donorsFragment)
+            .replace(R.id.home_container, DonorFragment.newInstance(donor), DONOR_FRAGMENT_TAG)
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
         }
     }
 
@@ -170,7 +155,7 @@ class MainActivity : AppCompatActivity() {
             val upArrow = ContextCompat.getDrawable(this, R.drawable.toolbar_back_arrow)
             actionBar.setHomeAsUpIndicator(upArrow);
             toolbar.setTitleTextColor(Color.parseColor(uiViewModel.toolbarTextColor))
-            toolbar.title = Constants.INITIAL_TOOLBAR_TITLE
+            toolbar.title = Constants.DONATE_PRODUCTS_TITLE
         }
     }
 
@@ -189,11 +174,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> {
-            LogUtils.D(tag, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("Settings Selected"))
             true
         }
         R.id.action_favorite -> {
-            LogUtils.D(tag, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("Favorites Selected"))
             true
         }
         else -> {

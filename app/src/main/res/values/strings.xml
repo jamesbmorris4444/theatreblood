@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">Theatre Blood</string>
-    <string name="title_home">Donations</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="posterImage">poster image</string>
 
-    <!-- toolbar menu actions -->
+    <!-- bottom navigation bar -->
+    <string name="title_donations">Donations</string>
+    <string name="title_inventory">Inventory</string>
+    <string name="title_transfusions">Transfusions</string>
+
+    <!-- toolbar overflow menu actions -->
     <string name="action_favorites">Favorites</string>
     <string name="action_settings">Settings</string>
 
@@ -18,7 +19,7 @@
     <string name="std_modal_cancel">Cancel</string>
     <string name="std_modal_ok">OK</string>
 
-    <!-- button_light text -->
+    <!-- donate products screen button text -->
     <string name="button_submit">Submit</string>
 
     <!-- donor strings -->
