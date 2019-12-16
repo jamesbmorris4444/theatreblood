@@ -12,7 +12,7 @@ import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFilterAdapter
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 
-class DonorsAdapter(val activity: MainActivity) : RecyclerViewFilterAdapter<Donor, DonorsItemViewModel>(activity.applicationContext) {
+class DonateProductsAdapter(val activity: MainActivity) : RecyclerViewFilterAdapter<Donor, DonateProductsItemViewModel>(activity.applicationContext) {
 
     private var itemsFilter: ItemsFilter? = null
     lateinit var uiViewModel: UIViewModel
@@ -26,16 +26,16 @@ class DonorsAdapter(val activity: MainActivity) : RecyclerViewFilterAdapter<Dono
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DonorsViewHolder {
         val donorsItemBinding: DonorsItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.donors_item, parent, false)
-        val donorsItemViewModel = DonorsItemViewModel(activity)
+        val donorsItemViewModel = DonateProductsItemViewModel(activity)
         donorsItemBinding.donorsItemViewModel = donorsItemViewModel
         donorsItemBinding.uiViewModel = uiViewModel
         return DonorsViewHolder(donorsItemBinding.root, donorsItemViewModel, donorsItemBinding)
     }
 
-    inner class DonorsViewHolder internal constructor(itemView: View, viewModel: DonorsItemViewModel, viewDataBinding: DonorsItemBinding) :
-        ItemViewHolder<Donor, DonorsItemViewModel> (itemView, viewModel, viewDataBinding)
+    inner class DonorsViewHolder internal constructor(itemView: View, viewModel: DonateProductsItemViewModel, viewDataBinding: DonorsItemBinding) :
+        ItemViewHolder<Donor, DonateProductsItemViewModel> (itemView, viewModel, viewDataBinding)
 
-    override fun onBindViewHolder(holder: ItemViewHolder<Donor, DonorsItemViewModel>, position: Int) {
+    override fun onBindViewHolder(holder: ItemViewHolder<Donor, DonateProductsItemViewModel>, position: Int) {
         super.onBindViewHolder(holder, position)
         if (position % 2 == 1) {
             holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor1))

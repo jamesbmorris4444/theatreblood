@@ -6,7 +6,7 @@ import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 import com.fullsekurity.theatreblood.repository.storage.Donor
 
 @Suppress("UNCHECKED_CAST")
-class DonorsItemViewModel(val activity: MainActivity) : RecyclerViewItemViewModel<Donor>() {
+class DonateProductsItemViewModel(val activity: MainActivity) : RecyclerViewItemViewModel<Donor>() {
 
     private lateinit var donor: Donor
 

@@ -18,12 +18,12 @@ import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import javax.inject.Inject
 
-class DonorsFragment : Fragment() {
+class DonateProductsFragment : Fragment() {
 
     private lateinit var viewModel: DonorsListViewModel
 
     companion object {
-        fun newInstance(): DonorsFragment { return DonorsFragment() }
+        fun newInstance(): DonateProductsFragment { return DonateProductsFragment() }
     }
 
     @Inject

@@ -16,7 +16,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.FragmentManager
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.donor.DonorFragment
-import com.fullsekurity.theatreblood.donors.DonorsFragment
+import com.fullsekurity.theatreblood.donors.DonateProductsFragment
 import com.fullsekurity.theatreblood.input.InputFragment
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private val tag = MainActivity::class.java.simpleName
     private var rootFragmentCount: Int = 0
-    private lateinit var donorsFragment: DonorsFragment
+    private lateinit var donateProductsFragment: DonateProductsFragment
 
     var repository: Repository = Repository()
     @Inject
@@ -118,10 +118,10 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.home_container, InputFragment.newInstance(), INPUT_FRAGMENT_TAG)
             .addToBackStack(ROOT_FRAGMENT_TAG)
             .commitAllowingStateLoss()
-        donorsFragment = DonorsFragment.newInstance()
+        donateProductsFragment = DonateProductsFragment.newInstance()
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
-            .replace(R.id.donors_container, donorsFragment, DONORS_FRAGMENT_TAG)
+            .replace(R.id.donors_container, donateProductsFragment, DONORS_FRAGMENT_TAG)
             .addToBackStack(null)
             .commitAllowingStateLoss()
         rootFragmentCount = 2
@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showDonors(donorList: List<Donor>) {
-        donorsFragment.showDonors(donorList)
+        donateProductsFragment.showDonors(donorList)
     }
 
     override fun onBackPressed() {

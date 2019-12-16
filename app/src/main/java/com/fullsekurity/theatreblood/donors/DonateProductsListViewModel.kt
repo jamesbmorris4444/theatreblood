@@ -24,7 +24,7 @@ class DonorsListViewModelFactory(private val activity: MainActivity) : ViewModel
 class DonorsListViewModel(val activity: MainActivity) : RecyclerViewViewModel(activity.application) {
 
     private val TAG = DonorsListViewModel::class.java.simpleName
-    override var adapter: DonorsAdapter = DonorsAdapter(activity)
+    override var adapter: DonateProductsAdapter = DonateProductsAdapter(activity)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     val listIsVisible: ObservableField<Boolean> = ObservableField(true)
 

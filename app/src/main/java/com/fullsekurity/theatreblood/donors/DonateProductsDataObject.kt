@@ -1,6 +1,6 @@
 package com.fullsekurity.theatreblood.donors
 
-data class DonorsDataObject (
+data class DonateProductsDataObject (
     val voteCount: Int,
     val video: Boolean,
     val voteAverage: Float,

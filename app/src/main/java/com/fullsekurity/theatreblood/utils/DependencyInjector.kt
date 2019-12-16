@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.donor.DonorViewModel
-import com.fullsekurity.theatreblood.donors.DonorsFragment
+import com.fullsekurity.theatreblood.donors.DonateProductsFragment
 import com.fullsekurity.theatreblood.donors.DonorsListViewModel
 import com.fullsekurity.theatreblood.input.InputFragment
 import com.fullsekurity.theatreblood.input.InputViewModel
@@ -33,7 +33,7 @@ interface MapperDependencyInjector {
 @Component(modules = [ViewModelInjectorModule::class])
 interface ViewModelDependencyInjector {
     fun inject(fragment: InputFragment)
-    fun inject(fragment: DonorsFragment)
+    fun inject(fragment: DonateProductsFragment)
     fun inject(modal: StandardModal)
     fun inject(fragment: DonorFragment)
     fun inject(viewModel: DonorsListViewModel)

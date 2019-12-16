@@ -8,7 +8,7 @@
                 type="com.fullsekurity.theatreblood.ui.UIViewModel" />
         <variable
                 name="donorsItemViewModel"
-                type="com.fullsekurity.theatreblood.donors.DonorsItemViewModel" />
+                type="com.fullsekurity.theatreblood.donors.DonateProductsItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
