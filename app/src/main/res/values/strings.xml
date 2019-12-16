@@ -41,4 +41,15 @@
     <string name="radio_gender_male">Male</string>
     <string name="radio_gender_female">Female</string>
 
+    <string-array name="abo_rh_array">
+        <item>O-Negative</item>
+        <item>O-Positive</item>
+        <item>A-Negative</item>
+        <item>A-Positive</item>
+        <item>B-Negative</item>
+        <item>B-Positive</item>
+        <item>AB-Negative</item>
+        <item>AB-Positive</item>
+    </string-array>
+
 </resources>

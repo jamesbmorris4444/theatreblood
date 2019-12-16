@@ -186,7 +186,6 @@
                     android:scaleType="fitXY"
                     android:onClick="@{(view) -> donorViewModel.onCalendarClicked(view)}"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginEnd="10dp"
                     app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_text_display_dob"
                     app:layout_constraintLeft_toLeftOf="@+id/edit_text_display_dob"
@@ -227,7 +226,7 @@
                     android:visibility="@{safeUnbox(donorViewModel.radioButtonsGenderVisibility)}"
                     android:onCheckedChanged="@{donorViewModel.onGenderChanged}"
                     app:layout_constraintTop_toBottomOf="@+id/gender_buttons_label"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/abo_rh_dropdown_label"
                     app:layout_constraintLeft_toLeftOf="parent" >
 
                 <androidx.appcompat.widget.AppCompatRadioButton
@@ -253,6 +252,53 @@
             </RadioGroup>
 
             <!-- End Gender Radio Buttons -->
+
+            <!-- Start ABO/Rh DropDown -->
+
+            <android.widget.TextView
+                    android:id="@+id/abo_rh_dropdown_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{donorViewModel.hintTextAboRh}"
+                    android:visibility="@{safeUnbox(donorViewModel.dropdownAboRhVisibility)}"
+                    android:layout_marginTop="7dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
+                    app:text_font="@{uiViewModel.editTextDisplayModifyHintTypeface}"
+                    app:text_color="@{uiViewModel.editTextDisplayModifyHintColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.editTextDisplayModifyHintSize)}"
+                    app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_constraintTop_toBottomOf="@+id/radio_buttons_gender"
+                    app:layout_constraintBottom_toTopOf="@+id/abo_rh_dropdown"
+                    app:layout_constraintLeft_toLeftOf="parent" />
+
+            <Spinner
+                    android:id="@+id/abo_rh_dropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:spinnerMode="dropdown"
+                    android:paddingTop="20dp"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
+                    app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_constraintTop_toBottomOf="@+id/abo_rh_dropdown_label"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"/>
+
+            <android.widget.ImageView
+                    android:id="@+id/dropdown_icon"
+                    android:layout_width="16dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/lt_drop_down_arrow"
+                    android:scaleType="fitXY"
+                    android:layout_marginBottom="16dp"
+                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_constraintBottom_toBottomOf="@+id/abo_rh_dropdown"
+                    app:layout_constraintLeft_toLeftOf="@+id/abo_rh_dropdown"
+                    app:layout_constraintEnd_toEndOf="@+id/abo_rh_dropdown"/>
+
+            <!-- End ABO/Rh DropDown -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

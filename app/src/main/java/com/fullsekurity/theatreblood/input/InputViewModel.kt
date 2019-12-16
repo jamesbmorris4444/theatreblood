@@ -59,7 +59,7 @@ class InputViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
 
     fun setRootView(view: View, uiViewModel: UIViewModel) {
         rootView = view
-        rootView.findViewById<TextInputLayout>(R.id.edit_text_input_name).setHintTextAppearance(uiViewModel.hintStyle)
+        rootView.findViewById<TextInputLayout>(R.id.edit_text_input_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
     }
 
 }

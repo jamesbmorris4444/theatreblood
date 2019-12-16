@@ -119,7 +119,8 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     var standardWidthWithButton: ObservableField<Int> = ObservableField(0)
     var standardButtonWidth: ObservableField<Int> = ObservableField(0)
     var standardButtonHeight: ObservableField<Int> = ObservableField(0)
-    var hintStyle = 0
+    var editTextDisplayModifyHintStyle = 0
+    var datePickerColorStyle = 0
 
     private val context: Context = getApplication<Application>().applicationContext
     val modalErrorIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.mo_close_error)
@@ -207,15 +208,17 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     }
 
     private fun liveDataUpdate(theme: MainActivity.UITheme) {
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ======= LIVE UPD"))
-
         uiDataClass?.let { uiDataClass ->
 
+            // change colors in these styles to match any changes to colors in UIDataModel
             if (theme == MainActivity.UITheme.LIGHT) {
-                hintStyle = R.style.TextInputLayoutForLight
+                editTextDisplayModifyHintStyle = R.style.TextInputLayoutForLight
+                datePickerColorStyle = R.style.DatePickerDialogThemeForLight
             } else {
-                hintStyle = R.style.TextInputLayoutForDark
+                editTextDisplayModifyHintStyle = R.style.TextInputLayoutForDark
+                datePickerColorStyle = R.style.DatePickerDialogThemeForDark
             }
+
             recyclerViewAlternatingColor1 = colorMapper.map(theme, uiDataClass.recyclerViewAlternatingColor1)
             recyclerViewAlternatingColor2 = colorMapper.map(theme, uiDataClass.recyclerViewAlternatingColor2)
             primaryColor = colorMapper.map(theme, uiDataClass.primaryColor)

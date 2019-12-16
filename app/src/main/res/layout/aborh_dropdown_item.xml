@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <data>
+        <variable
+                name="uiViewModel"
+                type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+    </data>
+
+    <android.widget.TextView
+            android:id="@+id/abo_rh_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:text_font="@{uiViewModel.editTextDisplayModifyTypeface}"
+            app:text_color="@{uiViewModel.editTextDisplayModifyColor}"
+            app:text_size="@{safeUnbox(uiViewModel.editTextDisplayModifySize)}"
+            android:paddingStart="10dp"
+            android:paddingEnd="0dp"/>
+
+</layout>

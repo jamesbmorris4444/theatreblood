@@ -1,16 +1,20 @@
 package com.fullsekurity.theatreblood.donor
 
 import android.app.DatePickerDialog
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.DatePicker
-import android.widget.RadioButton
-import android.widget.RadioGroup
+import android.view.ViewGroup
+import android.widget.*
+import android.widget.AdapterView.OnItemSelectedListener
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
+import com.fullsekurity.theatreblood.databinding.AborhDropdownItemBinding
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
@@ -40,6 +44,7 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     private lateinit var rootView: View
     private lateinit var maleRadioButton: RadioButton
     private lateinit var femaleRadioButton: RadioButton
+    private lateinit var aboRhDropdownView: Spinner
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -78,6 +83,10 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     var hintTextGender: ObservableField<String> = ObservableField(activity.getString(R.string.donor_gender))
     var radioButtonsGenderVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
+    var hintTextAboRh: ObservableField<String> = ObservableField(activity.getString(R.string.donor_abo_rh))
+    var dropdownAboRhVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+    var currentAboRhSelectedValue: String = "NO ABO/Rh"
+
 //    <string name="donor_search_string">Enter Search String</string>
 //    <string name="donor_last_name">Enter Last Name</string>
 //    <string name="donor_middle_name">Enter Middle Name</string>
@@ -109,7 +118,7 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
                 editTextDisplayModifyDob.set(dateFormatter.format(calendar.time))
             }
         }
-        DatePickerDialog(activity, listener, year, month, day).show()
+        DatePickerDialog(activity, uiViewModel.datePickerColorStyle, listener, year, month, day).show()
     }
 
     fun onGenderChanged(radioGroup: RadioGroup?, id: Int) {
@@ -125,10 +134,10 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     }
 
     fun setDonor(donor: Donor) {
-        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_last_name).setHintTextAppearance(uiViewModel.hintStyle)
-        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_first_name).setHintTextAppearance(uiViewModel.hintStyle)
-        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_middle_name).setHintTextAppearance(uiViewModel.hintStyle)
-        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_dob).setHintTextAppearance(uiViewModel.hintStyle)
+        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_last_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_first_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_middle_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_dob).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
 
         editTextDisplayModifyLastName.set(donor.title)
         editTextDisplayModifyFirstName.set(donor.posterPath.substring(0,donor.posterPath.length / 2))
@@ -141,6 +150,65 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
         } else {
             femaleRadioButton.isChecked = true
         }
+
+        aboRhDropdownView = rootView.findViewById(R.id.abo_rh_dropdown)
+        aboRhDropdownView.background = uiViewModel.editTextDisplayModifyBackground.get()
+        val dropdownArray = activity.resources.getStringArray(R.array.abo_rh_array)
+        val aboRhAdapter = CustomSpinnerAdapter(activity, uiViewModel, dropdownArray)
+        aboRhDropdownView.adapter = aboRhAdapter
+        aboRhDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                currentAboRhSelectedValue = parent.getItemAtPosition(position) as String
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
+        }
+    }
+
+    class CustomSpinnerAdapter(val context: Context, val uiViewModel: UIViewModel, private val aboRhList: Array<String>) : BaseAdapter(), SpinnerAdapter {
+
+        override fun getCount(): Int {
+            return aboRhList.size
+        }
+
+        override fun getItem(position: Int): String {
+            return aboRhList[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        data class ViewHolder (
+            val textView: TextView
+        )
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+            val viewHolder: ViewHolder
+            var convertViewShadow = convertView
+            if (convertView == null) {
+                val binding: AborhDropdownItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.aborh_dropdown_item, parent, false)
+                binding.uiViewModel = uiViewModel
+                convertViewShadow = binding.root
+                val textView = convertViewShadow.findViewById<View>(R.id.abo_rh_item) as TextView
+                viewHolder = ViewHolder(textView)
+                convertViewShadow.tag = viewHolder
+            } else {
+                viewHolder = convertView.tag as ViewHolder
+            }
+            viewHolder.textView.text = aboRhList[position]
+            return convertViewShadow
+        }
+
+        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val binding: AborhDropdownItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.aborh_dropdown_item, parent, false)
+            val view = binding.root
+            binding.uiViewModel = uiViewModel
+            val textView = view.findViewById(R.id.abo_rh_item) as TextView
+            textView.text = aboRhList[position]
+            return view
+        }
+
     }
 
 }
