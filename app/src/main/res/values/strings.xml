@@ -52,4 +52,13 @@
         <item>AB-Positive</item>
     </string-array>
 
+    <string-array name="military_branch_array">
+        <item>The Army</item>
+        <item>The Marines</item>
+        <item>The Navy</item>
+        <item>The Coast Guard</item>
+        <item>The Air Force</item>
+        <item>The JCS</item>
+    </string-array>
+
 </resources>

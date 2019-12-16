@@ -44,7 +44,6 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     private lateinit var rootView: View
     private lateinit var maleRadioButton: RadioButton
     private lateinit var femaleRadioButton: RadioButton
-    private lateinit var aboRhDropdownView: Spinner
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -86,6 +85,10 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     var hintTextAboRh: ObservableField<String> = ObservableField(activity.getString(R.string.donor_abo_rh))
     var dropdownAboRhVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
     var currentAboRhSelectedValue: String = "NO ABO/Rh"
+
+    var hintTextMilitaryBranch: ObservableField<String> = ObservableField(activity.getString(R.string.donor_branch))
+    var dropdownMilitaryBranchVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+    var currentMilitaryBranchSelectedValue: String = "NO Military Branch"
 
 //    <string name="donor_search_string">Enter Search String</string>
 //    <string name="donor_last_name">Enter Last Name</string>
@@ -143,6 +146,7 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
         editTextDisplayModifyFirstName.set(donor.posterPath.substring(0,donor.posterPath.length / 2))
         editTextDisplayModifyMiddleName.set(donor.releaseDate)
         editTextDisplayModifyDob.set(donor.releaseDate)
+        
         maleRadioButton = rootView.findViewById(R.id.radio_male)
         femaleRadioButton = rootView.findViewById(R.id.radio_female)
         if (donor.adult) {
@@ -151,16 +155,27 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
             femaleRadioButton.isChecked = true
         }
 
-        aboRhDropdownView = rootView.findViewById(R.id.abo_rh_dropdown)
+        val aboRhDropdownView: Spinner = rootView.findViewById(R.id.abo_rh_dropdown)
         aboRhDropdownView.background = uiViewModel.editTextDisplayModifyBackground.get()
-        val dropdownArray = activity.resources.getStringArray(R.array.abo_rh_array)
-        val aboRhAdapter = CustomSpinnerAdapter(activity, uiViewModel, dropdownArray)
+        val aboRhDropdownArray = activity.resources.getStringArray(R.array.abo_rh_array)
+        val aboRhAdapter = CustomSpinnerAdapter(activity, uiViewModel, aboRhDropdownArray)
         aboRhDropdownView.adapter = aboRhAdapter
         aboRhDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 currentAboRhSelectedValue = parent.getItemAtPosition(position) as String
             }
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
+        }
 
+        val militaryBranchDropdownView: Spinner = rootView.findViewById(R.id.military_branch_dropdown)
+        militaryBranchDropdownView.background = uiViewModel.editTextDisplayModifyBackground.get()
+        val militaryBranchDropdownArray = activity.resources.getStringArray(R.array.military_branch_array)
+        val militaryBranchAdapter = CustomSpinnerAdapter(activity, uiViewModel, militaryBranchDropdownArray)
+        militaryBranchDropdownView.adapter = militaryBranchAdapter
+        militaryBranchDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                currentMilitaryBranchSelectedValue = parent.getItemAtPosition(position) as String
+            }
             override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
     }
