@@ -32,7 +32,10 @@ class DonateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
     override var adapter: DonateProductsAdapter = DonateProductsAdapter(activity)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     val listIsVisible: ObservableField<Boolean> = ObservableField(true)
+    val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
+    val submitVisible: ObservableField<Int> = ObservableField(View.GONE)
     private lateinit var rootView: View
+    private var numberOfItemsDisplayed = -1
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -62,12 +65,30 @@ class DonateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
     private fun showDonors(donorList: List<Donor>) {
         listIsVisible.set(donorList.isNotEmpty())
         adapter.addAll(donorList)
+        numberOfItemsDisplayed = donorList.size
+        setNewDonorVisibility("NONEMPTY")
+    }
+
+    private fun setNewDonorVisibility(key: String) {
+        if (key.isNotEmpty() && numberOfItemsDisplayed == 0) {
+            newDonorVisible.set(View.VISIBLE)
+        } else {
+            newDonorVisible.set(View.GONE)
+        }
     }
 
     // observable used for two-way data binding. Values set into this field will show in view.
     // Text typed into EditText in view will be stored into this field after each character is typed.
     var editTextNameInput: ObservableField<String> = ObservableField("")
-    fun onTextNameChanged(string: CharSequence, start: Int, before: Int, count: Int) {
+    fun onTextNameChanged(key: CharSequence, start: Int, before: Int, count: Int) {
+        if (key.isEmpty()) {
+            newDonorVisible.set(View.GONE)
+            submitVisible.set(View.GONE)
+            numberOfItemsDisplayed = -1
+        } else {
+            setNewDonorVisibility(key.toString())
+            submitVisible.set(View.VISIBLE)
+        }
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
     var hintTextName: ObservableField<String> = ObservableField(activity.getString(R.string.donor_search_string))
@@ -76,6 +97,10 @@ class DonateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
     fun onSubmitClicked(view: View) {
         showDonors(repository.donorsFromFullName(editTextNameInput.get() ?: ""))
         Utils.hideKeyboard(view)
+    }
+
+    fun onNewDonorClicked(view: View) {
+        activity.loadDonorFragment(Donor())
     }
 
     fun setRootView(view: View) {

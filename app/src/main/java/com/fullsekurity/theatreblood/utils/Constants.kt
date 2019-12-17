@@ -7,7 +7,6 @@ object Constants {
     const val MOVIES_ARRAY_DATA_TAG = "results"
     val DONOR_LIST_CLASS_TYPE = (ArrayList<Donor>()).javaClass
     const val THEATRE_BLOOD_BASE_URL = "https://api.themoviedb.org/3/discover/"
-    const val ROOT_FRAGMENT_TAG = "ROOT FRAGMENT"
     const val IMAGE_URL_PREFIX = "https://image.tmdb.org/t/p/"
     const val SMALL_IMAGE_URL_PREFIX = IMAGE_URL_PREFIX + "w300"
     const val API_KEY_REQUEST_PARAM = "api_key"
@@ -24,9 +23,9 @@ object Constants {
     // toolbar
 
     const val DONATE_PRODUCTS_TITLE = "Donate Products"
-    const val MANAGE_DONOR_TITLE = "Donate Products"
-    const val REASSOCIATE_DONATION_TITLE = "Donate Products"
-    const val UPDATE_TEST_RESULTS_TITLE = "Donate Products"
-    const val VIEW_DONOR_LIST_TITLE = "Donate Products"
+    const val MANAGE_DONOR_TITLE = "Manage Donor"
+    const val REASSOCIATE_DONATION_TITLE = "Re-associate Donation"
+    const val UPDATE_TEST_RESULTS_TITLE = "Update Test Results"
+    const val VIEW_DONOR_LIST_TITLE = "View Donor List"
 
 }

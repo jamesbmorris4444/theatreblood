@@ -21,6 +21,7 @@
 
     <!-- donate products screen button text -->
     <string name="button_submit">Submit</string>
+    <string name="button_new_donor">New Donor</string>
 
     <!-- donor strings -->
     <string name="donor_search_string">Enter Search String</string>

@@ -57,18 +57,18 @@
 
         <!-- End Search Box -->
 
-        <!-- Start Button -->
+        <!-- Start Submit Button -->
 
         <android.widget.ImageView
                 android:id="@+id/submit_button_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@{uiViewModel.buttonDrawable}"
-                android:scaleType="fitXY"
                 android:onClick="@{(view) -> donateProductsListViewModel.onSubmitClicked(view)}"
                 app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardButtonWidth)}"
                 app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
                 app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                android:visibility="@{safeUnbox(donateProductsListViewModel.submitVisible)}"
                 app:layout_constraintBottom_toBottomOf="@+id/edit_text_input_name"
                 app:layout_constraintLeft_toRightOf="@+id/edit_text_input_name"
                 app:layout_constraintRight_toRightOf="parent"/>
@@ -77,17 +77,49 @@
                 android:id="@+id/submit_button_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:text="@string/button_submit"
                 app:text_font="@{uiViewModel.buttonTextTypeface}"
                 app:text_color="@{uiViewModel.buttonTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
+                android:visibility="@{safeUnbox(donateProductsListViewModel.submitVisible)}"
                 app:layout_constraintStart_toStartOf="@+id/submit_button_icon"
                 app:layout_constraintEnd_toEndOf="@+id/submit_button_icon"
                 app:layout_constraintTop_toTopOf="@+id/submit_button_icon"
                 app:layout_constraintBottom_toBottomOf="@+id/submit_button_icon" />
 
-        <!-- End Button -->
+        <!-- End Submit Button -->
+
+        <!-- Start New Donor Button -->
+
+        <android.widget.ImageView
+                android:id="@+id/new_donor_button_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@{uiViewModel.largeButtonDrawable}"
+                android:layout_marginTop="10dp"
+                android:onClick="@{(view) -> donateProductsListViewModel.onNewDonorClicked(view)}"
+                android:visibility="@{safeUnbox(donateProductsListViewModel.newDonorVisible)}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
+                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardLargeButtonWidth)}"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_input_name"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+                android:id="@+id/new_donor_button_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_new_donor"
+                android:visibility="@{safeUnbox(donateProductsListViewModel.newDonorVisible)}"
+                app:text_font="@{uiViewModel.buttonTextTypeface}"
+                app:text_color="@{uiViewModel.buttonTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
+                app:layout_constraintStart_toStartOf="@+id/new_donor_button_icon"
+                app:layout_constraintEnd_toEndOf="@+id/new_donor_button_icon"
+                app:layout_constraintTop_toTopOf="@+id/new_donor_button_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/new_donor_button_icon" />
+
+        <!-- End New Donor Button -->
 
         <!-- Start Donor List -->
 
@@ -97,8 +129,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/black"
-                android:layout_marginTop="20dp"
-                app:layout_constraintTop_toBottomOf="@+id/edit_text_input_name"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/new_donor_button_icon"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView

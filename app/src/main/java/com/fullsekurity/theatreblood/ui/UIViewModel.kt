@@ -98,6 +98,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val editTextDisplayModifyBackground: ObservableField<Drawable> = ObservableField()
 
     val buttonDrawable: ObservableField<Drawable> = ObservableField()
+    val largeButtonDrawable: ObservableField<Drawable> = ObservableField()
     val buttonTextColor: ObservableField<String> = ObservableField("#ffffff")
     val buttonTextSize: ObservableField<Float> = ObservableField(0f)
     val buttonTextTypeface: ObservableField<String> = ObservableField("")
@@ -119,6 +120,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     var standardWidthWithButton: ObservableField<Int> = ObservableField(0)
     var standardButtonWidth: ObservableField<Int> = ObservableField(0)
     var standardButtonHeight: ObservableField<Int> = ObservableField(0)
+    var standardLargeButtonWidth: ObservableField<Int> = ObservableField(0)
     var editTextDisplayModifyHintStyle = 0
     var datePickerColorStyle = 0
 
@@ -164,6 +166,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
         standardEditTextHeight.set(convertDpToPixels(STANDARD_EDIT_TEXT_HEIGHT))
         standardWidthWithButton.set(computeStandardWidthWithButton())
         standardButtonWidth.set(computeStandarButtonWidth())
+        standardLargeButtonWidth.set(computeStandarButtonWidth() * 2)
         standardButtonHeight.set(convertDpToPixels(STANDARD_BUTTON_HEIGHT))
     }
 
@@ -290,7 +293,8 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             editTextDisplayModifyUpperHintColor.set(colorMapper.map(theme, uiDataClass.editTextDisplayModifyUpperHintColor))
             editTextDisplayModifyBackground.set(ContextCompat.getDrawable(context, uiDataClass.editTextDisplayModifyBackground))
 
-            buttonDrawable.set(ContextCompat.getDrawable(context, uiDataClass.buttonDrawable))
+            buttonDrawable.set(ContextCompat.getDrawable(context, uiDataClass.buttonDrawable)?.mutate())
+            largeButtonDrawable.set(ContextCompat.getDrawable(context, uiDataClass.buttonDrawable)?.mutate())
             buttonTextColor.set(colorMapper.map(theme, uiDataClass.buttonTextColor))
             buttonTextSize.set(textSizeMapper.map(theme, uiDataClass.buttonTextSize))
             buttonTextTypeface.set(typefaceMapper.map(theme, uiDataClass.buttonTextSize))

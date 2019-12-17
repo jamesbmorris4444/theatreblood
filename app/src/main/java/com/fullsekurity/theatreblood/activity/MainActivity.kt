@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.fragment.app.FragmentManager
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.donors.DonateProductsFragment
@@ -21,7 +20,6 @@ import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
-import com.fullsekurity.theatreblood.utils.Constants.ROOT_FRAGMENT_TAG
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -89,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         if (savedInstanceState == null) {
-            loadInitialFragment()
+            loadDonateProductsFragment()
         }
     }
 
@@ -106,18 +104,17 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun loadInitialFragment() {
+    fun loadDonateProductsFragment() {
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
-            .replace(R.id.main_activity_container, DonateProductsFragment.newInstance(), ROOT_FRAGMENT_TAG)
-            .addToBackStack(ROOT_FRAGMENT_TAG)
+            .replace(R.id.main_activity_container, DonateProductsFragment.newInstance())
             .commitAllowingStateLoss()
     }
 
     fun loadDonorFragment(donor: Donor) {
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-            .replace(R.id.main_activity_container, DonorFragment.newInstance(donor), ROOT_FRAGMENT_TAG)
+            .replace(R.id.main_activity_container, DonorFragment.newInstance(donor))
             .addToBackStack(null)
             .commitAllowingStateLoss()
     }
@@ -161,11 +158,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true
-    }
-
-    override fun onBackPressed() {
-        supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        super.onBackPressed()
     }
 
 }
