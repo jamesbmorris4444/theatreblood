@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.donors.DonateProductsFragment
+import com.fullsekurity.theatreblood.products.CreateProductsFragment
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
@@ -120,6 +121,15 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
             .replace(R.id.main_activity_container, DonorFragment.newInstance(donor))
+            .addToBackStack(ROOT_FRAGMENT_TAG)
+            .commitAllowingStateLoss()
+    }
+
+    fun loadCreateProductsFragment(donor: Donor) {
+        supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+            .replace(R.id.main_activity_container, CreateProductsFragment.newInstance(donor))
             .addToBackStack(ROOT_FRAGMENT_TAG)
             .commitAllowingStateLoss()
     }

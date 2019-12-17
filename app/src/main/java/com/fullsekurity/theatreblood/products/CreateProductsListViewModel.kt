@@ -15,7 +15,6 @@ import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
-import com.google.android.material.textfield.TextInputLayout
 import javax.inject.Inject
 
 
@@ -105,6 +104,10 @@ class CreateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
     var hintTextName: ObservableField<String> = ObservableField(activity.getString(R.string.donor_search_string))
     var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
+    fun setDonor(donor: Donor) {
+
+    }
+
     fun onGridElement11Clicked(view: View) {
         activity.loadDonorFragment(Donor())
     }
@@ -123,7 +126,7 @@ class CreateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
 
     fun setRootView(view: View) {
         rootView = view
-        rootView.findViewById<TextInputLayout>(R.id.edit_text_input_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        //rootView.findViewById<TextInputLayout>(R.id.edit_text_input_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
     }
 
 }

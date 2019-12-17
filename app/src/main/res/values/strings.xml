@@ -19,8 +19,9 @@
     <string name="std_modal_cancel">Cancel</string>
     <string name="std_modal_ok">OK</string>
 
-    <!-- donate products screen button text -->
+    <!-- button name text -->
     <string name="button_submit">Submit</string>
+    <string name="button_update">Update</string>
     <string name="button_new_donor">New Donor</string>
 
     <!-- donor strings -->

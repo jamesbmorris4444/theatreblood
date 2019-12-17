@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.databinding.CreateProductsScreenBinding
+import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
@@ -20,9 +21,14 @@ import javax.inject.Inject
 class CreateProductsFragment : Fragment() {
 
     private lateinit var createProductsListViewModel: CreateProductsListViewModel
+    private lateinit var donor: Donor
 
     companion object {
-        fun newInstance(): CreateProductsFragment { return CreateProductsFragment() }
+        fun newInstance(donor: Donor): CreateProductsFragment {
+            val fragment = CreateProductsFragment()
+            fragment.donor = donor
+            return fragment
+        }
     }
 
     @Inject
@@ -44,6 +50,7 @@ class CreateProductsFragment : Fragment() {
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
         createProductsListViewModel.setRootView(binding.root)
+        createProductsListViewModel.setDonor(donor)
         return binding.root
     }
 

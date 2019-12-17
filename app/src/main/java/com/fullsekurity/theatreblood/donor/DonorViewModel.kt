@@ -44,6 +44,8 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     private lateinit var rootView: View
     private lateinit var maleRadioButton: RadioButton
     private lateinit var femaleRadioButton: RadioButton
+    val submitOrUpdateText: ObservableField<String> = ObservableField("")
+    private lateinit var donor: Donor
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -104,11 +106,6 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
 //    <string name="dd_572_completed">DD-572 Completed?</string>
 //    <string name="ttd_samples_collected">TTD Samples Collected?</string>
 
-    fun onSubmitClicked(view: View) {
-//        loadData()
-        Utils.hideKeyboard(view)
-    }
-
     fun onCalendarClicked(view: View) {
         Utils.hideKeyboard(view)
         dateDialog()
@@ -132,11 +129,17 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
         }
     }
 
+    fun onSubmitUpdateClicked(view: View) {
+        activity.loadCreateProductsFragment(donor)
+    }
+
     fun setRootView(view: View) {
         rootView = view
     }
 
     fun setDonor(donor: Donor) {
+        this.donor = donor
+        submitOrUpdateText.set(if (donor.title.isEmpty()) activity.getString(R.string.button_submit) else activity.getString(R.string.button_update))
         rootView.findViewById<TextInputLayout>(R.id.edit_text_display_last_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
         rootView.findViewById<TextInputLayout>(R.id.edit_text_display_first_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
         rootView.findViewById<TextInputLayout>(R.id.edit_text_display_middle_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)

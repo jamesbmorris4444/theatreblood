@@ -345,6 +345,36 @@
 
             <!-- End Military Branch DropDown -->
 
+            <!-- Start Submit/Update Button -->
+
+            <android.widget.ImageView
+                    android:id="@+id/submit_update_button_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@{uiViewModel.largeButtonDrawable}"
+                    android:layout_marginTop="20dp"
+                    android:onClick="@{(view) -> donorViewModel.onSubmitUpdateClicked(view)}"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
+                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardLargeButtonWidth)}"
+                    app:layout_constraintTop_toBottomOf="@+id/military_branch_dropdown"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                    android:id="@+id/submit_update_button_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{donorViewModel.submitOrUpdateText}"
+                    app:text_font="@{uiViewModel.buttonTextTypeface}"
+                    app:text_color="@{uiViewModel.buttonTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
+                    app:layout_constraintStart_toStartOf="@+id/submit_update_button_icon"
+                    app:layout_constraintEnd_toEndOf="@+id/submit_update_button_icon"
+                    app:layout_constraintTop_toTopOf="@+id/submit_update_button_icon"
+                    app:layout_constraintBottom_toBottomOf="@+id/submit_update_button_icon" />
+
+            <!-- End Submit/Update Button -->
+
             <!-- Start Spacer -->
 
             <View
