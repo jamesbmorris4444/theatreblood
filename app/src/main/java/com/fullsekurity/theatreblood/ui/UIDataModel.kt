@@ -81,7 +81,13 @@ class UIDataModel {
                         "error",
                         "mainTitle",
 
-                        "primary"
+                        "primary",
+
+                        "white",
+                        "mainTitle",
+
+                        "white",
+                        "mainTitle"
                     )
                 }
                 lightViewUIDataClass
@@ -159,7 +165,13 @@ class UIDataModel {
                         "error",
                         "mainTitle",
 
-                        "primary"
+                        "primary",
+
+                        "white",
+                        "mainTitle",
+
+                        "white",
+                        "mainTitle"
                     )
                 }
                 darkViewUIDataClass

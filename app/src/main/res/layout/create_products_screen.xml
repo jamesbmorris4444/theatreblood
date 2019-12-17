@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+                name="uiViewModel"
+                type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+
+        <variable
+                name="createProductsListViewModel"
+                type="com.fullsekurity.theatreblood.products.CreateProductsListViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+        <!-- Start Grid of Four Squares -->
+
+        <RelativeLayout
+                android:id="@+id/create_product_grid_element_11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/lt_blood_package_square"
+                android:onClick="@{(view) -> createProductsListViewModel.onGridElement11Clicked(view)}"
+                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/create_product_grid_element_12">
+
+            <TextView
+                    android:id="@+id/create_product_text_view_11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@{createProductsListViewModel.gridText11}"
+                    app:text_font="@{uiViewModel.productGridTextTypeface}"
+                    app:text_color="@{uiViewModel.productGridTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.productGridTextSize)}"
+                    android:visibility="@{safeUnbox(createProductsListViewModel.gridText11Visible)}" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:id="@+id/create_product_grid_element_12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/lt_blood_package_square"
+                android:onClick="@{(view) -> createProductsListViewModel.onGridElement12Clicked(view)}"
+                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/create_product_grid_element_11"
+                app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                    android:id="@+id/create_product_text_view_12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@{createProductsListViewModel.gridText12}"
+                    app:text_font="@{uiViewModel.productGridTextTypeface}"
+                    app:text_color="@{uiViewModel.productGridTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.productGridTextSize)}"
+                    android:visibility="@{safeUnbox(createProductsListViewModel.gridText12Visible)}" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:id="@+id/create_product_grid_element_21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/lt_blood_package_square"
+                android:onClick="@{(view) -> createProductsListViewModel.onGridElement21Clicked(view)}"
+                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_11"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/create_product_grid_element_22">
+
+            <TextView
+                    android:id="@+id/create_product_text_view_21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@{createProductsListViewModel.gridText21}"
+                    app:text_font="@{uiViewModel.productGridTextTypeface}"
+                    app:text_color="@{uiViewModel.productGridTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.productGridTextSize)}"
+                    android:visibility="@{safeUnbox(createProductsListViewModel.gridText21Visible)}" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:id="@+id/create_product_grid_element_22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/lt_blood_package_square"
+                android:onClick="@{(view) -> createProductsListViewModel.onGridElement22Clicked(view)}"
+                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_11"
+                app:layout_constraintLeft_toRightOf="@+id/create_product_grid_element_21"
+                app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                    android:id="@+id/create_product_text_view_22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@{createProductsListViewModel.gridText22}"
+                    app:text_font="@{uiViewModel.productGridTextTypeface}"
+                    app:text_color="@{uiViewModel.productGridTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.productGridTextSize)}"
+                    android:visibility="@{safeUnbox(createProductsListViewModel.gridText22Visible)}" />
+
+        </RelativeLayout>
+
+        <!-- End Grid of Four Squares -->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

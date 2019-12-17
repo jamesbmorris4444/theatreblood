@@ -72,6 +72,12 @@ class UIDataClass(
     val largeErrorTextColor: String,                      // Standard large error text color
     val largeErrorTextSize: String,                       // Standard large error text size
 
-    val radioButtonColor:String                           // radio button_light color
+    val radioButtonColor:String,                          // radio button_light color
+
+    val productItemTextColor: String,                     // Product item text color
+    val productItemTextSize: String,                      // Product item text size
+
+    val productGridTextColor: String,                     // Product grid item text color
+    val productGridTextSize: String                       // Product grid item text size
 
 )

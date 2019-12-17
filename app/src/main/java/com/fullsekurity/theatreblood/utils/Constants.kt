@@ -5,6 +5,7 @@ import com.fullsekurity.theatreblood.repository.storage.Donor
 object Constants {
 
     const val MOVIES_ARRAY_DATA_TAG = "results"
+    const val ROOT_FRAGMENT_TAG = "root fragment"
     val DONOR_LIST_CLASS_TYPE = (ArrayList<Donor>()).javaClass
     const val THEATRE_BLOOD_BASE_URL = "https://api.themoviedb.org/3/discover/"
     const val IMAGE_URL_PREFIX = "https://image.tmdb.org/t/p/"

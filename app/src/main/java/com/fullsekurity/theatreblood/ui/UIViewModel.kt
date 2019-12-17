@@ -113,9 +113,18 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
 
     val radioButtonColor: ObservableField<String> = ObservableField("#ffffff")
 
+    val productItemTextColor: ObservableField<String> = ObservableField("#ffffff")
+    val productItemTextSize: ObservableField<Float> = ObservableField(0f)
+    val productItemTextTypeface: ObservableField<String> = ObservableField("")
+
+    val productGridTextColor: ObservableField<String> = ObservableField("#ffffff")
+    val productGridTextSize: ObservableField<Float> = ObservableField(0f)
+    val productGridTextTypeface: ObservableField<String> = ObservableField("")
+
     var standardLeftAndRightMargin: ObservableField<Int> = ObservableField(0)
     var standardDialogInternalWidth: ObservableField<Int> = ObservableField(0)
     var standardWidth: ObservableField<Int> = ObservableField(0)
+    var standardHalfWidth: ObservableField<Int> = ObservableField(0)
     var standardEditTextHeight: ObservableField<Int> = ObservableField(0)
     var standardWidthWithButton: ObservableField<Int> = ObservableField(0)
     var standardButtonWidth: ObservableField<Int> = ObservableField(0)
@@ -163,6 +172,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
         standardLeftAndRightMargin.set(convertDpToPixels(STANDARD_LEFT_AND_RIGHT_MARGIN))
         standardDialogInternalWidth.set(computeStandardInternalWidth())
         standardWidth.set(computeStandardWidth())
+        standardHalfWidth.set(computeStandardWidth() / 2)
         standardEditTextHeight.set(convertDpToPixels(STANDARD_EDIT_TEXT_HEIGHT))
         standardWidthWithButton.set(computeStandardWidthWithButton())
         standardButtonWidth.set(computeStandarButtonWidth())
@@ -308,6 +318,14 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             largeErrorTextTypeface.set(typefaceMapper.map(theme, uiDataClass.largeErrorTextSize))
 
             radioButtonColor.set(colorMapper.map(theme, uiDataClass.radioButtonColor))
+
+            productItemTextColor.set(colorMapper.map(theme, uiDataClass.productItemTextColor))
+            productItemTextSize.set(textSizeMapper.map(theme, uiDataClass.productItemTextSize))
+            productItemTextTypeface.set(typefaceMapper.map(theme, uiDataClass.productItemTextSize))
+
+            productGridTextColor.set(colorMapper.map(theme, uiDataClass.productGridTextColor))
+            productGridTextSize.set(textSizeMapper.map(theme, uiDataClass.productGridTextSize))
+            productGridTextTypeface.set(typefaceMapper.map(theme, uiDataClass.productGridTextSize))
 
         }
     }

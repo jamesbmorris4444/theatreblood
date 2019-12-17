@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <data>
+        <variable
+                name="uiViewModel"
+                type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+        <variable
+                name="createProductsItemViewModel"
+                type="com.fullsekurity.theatreblood.products.CreateProductsItemViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> createProductsItemViewModel.onItemClicked()}">
+
+        <android.widget.TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{createProductsItemViewModel.title}"
+                app:text_font="@{uiViewModel.productItemTextTypeface}"
+                app:text_color="@{uiViewModel.productItemTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.productItemTextSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/release_date"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+        <android.widget.TextView
+                android:id="@+id/release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{createProductsItemViewModel.posterPath}"
+                app:text_font="@{uiViewModel.productItemTextTypeface}"
+                app:text_color="@{uiViewModel.productItemTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.productItemTextSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintBottom_toTopOf="@+id/divider"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+        <LinearLayout
+                android:id="@+id/divider"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/release_date"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

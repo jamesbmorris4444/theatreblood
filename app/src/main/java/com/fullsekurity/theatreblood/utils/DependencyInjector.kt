@@ -7,6 +7,8 @@ import com.fullsekurity.theatreblood.donor.DonorViewModel
 import com.fullsekurity.theatreblood.donors.DonateProductsFragment
 import com.fullsekurity.theatreblood.donors.DonateProductsListViewModel
 import com.fullsekurity.theatreblood.modal.StandardModal
+import com.fullsekurity.theatreblood.products.CreateProductsFragment
+import com.fullsekurity.theatreblood.products.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.ui.UIViewModelFactory
@@ -30,6 +32,8 @@ interface ViewModelDependencyInjector {
     fun inject(viewModel: DonateProductsListViewModel)
     fun inject(viewModel: DonorViewModel)
     fun inject(activity: MainActivity)
+    fun inject(viewModel: CreateProductsListViewModel)
+    fun inject(fragment: CreateProductsFragment)
 }
 
 @Module
