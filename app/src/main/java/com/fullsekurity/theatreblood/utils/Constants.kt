@@ -24,6 +24,7 @@ object Constants {
     // toolbar
 
     const val DONATE_PRODUCTS_TITLE = "Donate Products"
+    const val CREATE_PRODUCTS_TITLE = "Create Products"
     const val MANAGE_DONOR_TITLE = "Manage Donor"
     const val REASSOCIATE_DONATION_TITLE = "Re-associate Donation"
     const val UPDATE_TEST_RESULTS_TITLE = "Update Test Results"

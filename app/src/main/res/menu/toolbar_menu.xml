@@ -10,4 +10,10 @@
             android:title="@string/action_settings"
             app:showAsAction="never"/>
 
+    <item
+            android:id="@+id/network_status"
+            android:icon="@drawable/ic_network_status_wifi"
+            android:title="network"
+            app:showAsAction="ifRoom"/>
+
 </menu>

@@ -1,13 +1,12 @@
 package com.fullsekurity.theatreblood.repository.storage
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 
 @Dao
 interface DBDao {
+
+    // Donor
     @get:Query("SELECT * FROM donors")
     val donors: List<Donor>
 
@@ -17,6 +16,11 @@ interface DBDao {
     @Query("DELETE FROM donors")
     fun deleteAllDonors()
 
+    @Update
+    fun updateDonor(donor: Donor)
+
     @Query("SELECT * FROM donors WHERE title LIKE :searchLast AND poster_path LIKE :searchFirst")
     fun donorsFromFullName(searchLast: String, searchFirst :String) : List<Donor>
+
+    // Product
 }

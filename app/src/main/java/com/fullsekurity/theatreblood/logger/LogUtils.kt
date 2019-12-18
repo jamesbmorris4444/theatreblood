@@ -12,6 +12,7 @@ object LogUtils {
         val key: String) {
             ANX("ANX"),
             DAO("DAO"),
+            NET("NET"),
             WAR("WAR"),
             EXC("EXC"),
             APP("APP")

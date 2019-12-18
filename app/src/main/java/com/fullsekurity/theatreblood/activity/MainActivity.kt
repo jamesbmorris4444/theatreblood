@@ -30,13 +30,16 @@ import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 import javax.inject.Inject
 
+
 class MainActivity : AppCompatActivity() {
 
     private val tag = MainActivity::class.java.simpleName
 
-    var repository: Repository = Repository()
+    lateinit var repository: Repository
     @Inject
     lateinit var uiViewModel: UIViewModel
+
+    private var networkStatusMenuItem: MenuItem? = null
 
     enum class UITheme {
         LIGHT, DARK, NOT_ASSIGNED,
@@ -53,6 +56,7 @@ class MainActivity : AppCompatActivity() {
         }
         setupRepositoryDatabase()
         setupToolbar()
+        setToolbarNetworkStatus()
     }
 
     override fun onStop() {
@@ -79,12 +83,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Timber.plant(Timber.DebugTree())
+        repository = Repository(this)
         DaggerViewModelDependencyInjector.builder()
             .viewModelInjectorModule(ViewModelInjectorModule(this))
             .build()
             .inject(this)
         super.onCreate(savedInstanceState)
-        Timber.plant(Timber.DebugTree())
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -158,6 +163,15 @@ class MainActivity : AppCompatActivity() {
         return wrapDrawable
     }
 
+    fun setToolbarNetworkStatus() {
+        val resInt = repository.getNetworkStatusResInt()
+        networkStatusMenuItem?.let { networkStatusMenuItem ->
+            runOnUiThread {
+                networkStatusMenuItem.icon = ContextCompat.getDrawable(this, resInt)
+            }
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> {
             true
@@ -172,6 +186,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
+        networkStatusMenuItem = menu.findItem(R.id.network_status)
         return true
     }
 

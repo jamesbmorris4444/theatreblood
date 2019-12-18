@@ -1,6 +1,10 @@
 package com.fullsekurity.theatreblood.repository
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.view.View
 import android.widget.ProgressBar
 import androidx.room.Room
@@ -20,12 +24,121 @@ import io.reactivex.schedulers.Schedulers
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-class Repository {
+
+class Repository(val activity: MainActivity) {
 
     private val TAG = Repository::class.java.simpleName
     private lateinit var bloodDatabase: BloodDatabase
     private val donorsService: APIInterface = APIClient.client
     private var disposable: Disposable? = null
+    private var transportType = TransportType.NONE
+    private var isMetered: Boolean = false
+    private var cellularNetwork: Network? = null
+    private var wiFiNetwork: Network? = null
+
+    private enum class TransportType {
+        NONE,
+        CELLULAR,
+        WIFI,
+        BOTH
+    }
+
+    init {
+        val connectivityManager = activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val builder: NetworkRequest.Builder = NetworkRequest.Builder()
+        connectivityManager.registerNetworkCallback(
+            builder.build(),
+            object : ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(network: Network) {
+                    setConnectedTransportType(connectivityManager, network)
+                    isMetered = connectivityManager.isActiveNetworkMetered
+                    LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.NET), String.format("Network is connected, TYPE: %s (metered=%b)", transportType.name, isMetered))
+                }
+
+                override fun onLost(network: Network) {
+                    setDisconnectedTransportType()
+                    isMetered = false
+                    LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.NET), String.format("Network connectivity is lost, TYPE: %s (metered=%b)", transportType.name, isMetered))
+                }
+            }
+        )
+    }
+
+    private fun setConnectedTransportType(connectivityManager: ConnectivityManager, network: Network) {
+        when (transportType) {
+            TransportType.NONE -> {
+                connectivityManager.getNetworkCapabilities(network)?.let { networkCapabiities ->
+                    if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                        wiFiNetwork = network
+                        transportType = TransportType.WIFI
+                        activity.setToolbarNetworkStatus()
+                    } else if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                        cellularNetwork = network
+                        transportType = TransportType.CELLULAR
+                        activity.setToolbarNetworkStatus()
+                    }
+                }
+            }
+            TransportType.WIFI -> {
+                connectivityManager.getNetworkCapabilities(network)?.let { networkCapabiities ->
+                    if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                        cellularNetwork = network
+                        transportType = TransportType.BOTH
+                        activity.setToolbarNetworkStatus()
+                    }
+                }
+            }
+            TransportType.CELLULAR -> {
+                connectivityManager.getNetworkCapabilities(network)?.let { networkCapabiities ->
+                    if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                        wiFiNetwork = network
+                        transportType = TransportType.BOTH
+                        activity.setToolbarNetworkStatus()
+                    }
+                }
+
+            }
+            TransportType.BOTH -> { }
+        }
+    }
+
+    private fun setDisconnectedTransportType() {
+        when (transportType) {
+            TransportType.NONE -> { }
+            TransportType.WIFI, TransportType.CELLULAR -> {
+                transportType = TransportType.NONE
+                activity.setToolbarNetworkStatus()
+            }
+            TransportType.BOTH -> {
+                val connectivityManager = activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                connectivityManager.getNetworkCapabilities(wiFiNetwork)?.let { networkCapabiities ->
+                    if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                        transportType = TransportType.WIFI
+                        activity.setToolbarNetworkStatus()
+                    }
+                }
+                if (transportType == TransportType.BOTH) {
+                    transportType = TransportType.CELLULAR
+                    activity.setToolbarNetworkStatus()
+                }
+                activity.setToolbarNetworkStatus()
+            }
+        }
+    }
+
+    fun getNetworkStatusResInt(): Int {
+        when (transportType) {
+            TransportType.NONE -> {
+                return R.drawable.ic_network_status_none
+            }
+            TransportType.CELLULAR -> {
+                return R.drawable.ic_network_status_cellular
+            }
+            TransportType.BOTH, TransportType.WIFI -> {
+                return R.drawable.ic_network_status_wifi
+            }
+        }
+    }
 
     fun initializeDatabase(progressBar: ProgressBar, activity: MainActivity) {
         disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, 10)

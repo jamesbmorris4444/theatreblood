@@ -14,8 +14,10 @@ import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.databinding.CreateProductsScreenBinding
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
+import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class CreateProductsFragment : Fragment() {
@@ -51,6 +53,7 @@ class CreateProductsFragment : Fragment() {
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
         createProductsListViewModel.setRootView(binding.root)
         createProductsListViewModel.setDonor(donor)
+        (activity as MainActivity).toolbar.title = Constants.CREATE_PRODUCTS_TITLE
         return binding.root
     }
 
