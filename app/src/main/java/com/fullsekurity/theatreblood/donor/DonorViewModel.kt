@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.databinding.AborhDropdownItemBinding
+import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
@@ -49,6 +50,8 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
 
     @Inject
     lateinit var uiViewModel: UIViewModel
+    @Inject
+    lateinit var repository: Repository
 
     init {
         DaggerViewModelDependencyInjector.builder()
@@ -130,6 +133,11 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     }
 
     fun onSubmitUpdateClicked(view: View) {
+        if (submitOrUpdateText.get() == activity.getString(R.string.button_submit)) {
+            repository.insertIntoInsertedDatabase(donor)
+        } else {
+            repository.insertIntoModifiedDatabase(donor)
+        }
         activity.loadCreateProductsFragment(donor)
     }
 

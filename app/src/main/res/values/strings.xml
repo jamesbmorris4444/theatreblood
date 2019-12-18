@@ -14,6 +14,8 @@
     <string name="std_modal_no_repository_title">Database cannot be created</string>
     <string name="std_modal_no_repository_body">App cannot continue</string>
     <string name="std_modal_initialize_database_failure_title">Timeout while fetching remote database</string>
+    <string name="std_modal_refresh_success_title">Database successfully refreshed</string>
+    <string name="std_modal_refresh_success_body">Path Name "%s" exists and was backed up before refreshing</string>
     <string name="std_modal_password_authentication_hint">Password</string>
     <string name="std_modal_submit">Submit</string>
     <string name="std_modal_cancel">Cancel</string>

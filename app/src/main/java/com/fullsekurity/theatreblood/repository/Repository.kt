@@ -7,7 +7,6 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.view.View
 import android.widget.ProgressBar
-import androidx.room.Room
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.logger.LogUtils
@@ -18,6 +17,8 @@ import com.fullsekurity.theatreblood.repository.storage.BloodDatabase
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.Constants.DATA_BASE_NAME
+import com.fullsekurity.theatreblood.utils.Constants.INSERTED_DATA_BASE_NAME
+import com.fullsekurity.theatreblood.utils.Constants.MODIFIED_DATA_BASE_NAME
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -29,12 +30,30 @@ class Repository(val activity: MainActivity) {
 
     private val TAG = Repository::class.java.simpleName
     private lateinit var bloodDatabase: BloodDatabase
+    private lateinit var modifiedDatabase: BloodDatabase
+    private lateinit var insertedDatabase: BloodDatabase
     private val donorsService: APIInterface = APIClient.client
     private var disposable: Disposable? = null
     private var transportType = TransportType.NONE
     private var isMetered: Boolean = false
     private var cellularNetwork: Network? = null
     private var wiFiNetwork: Network? = null
+    var isOfflineMode = true
+
+    fun setBloodDatabase(context: Context) {
+        bloodDatabase = BloodDatabase.newInstance(context, DATA_BASE_NAME)
+        modifiedDatabase = BloodDatabase.newInstance(context, MODIFIED_DATA_BASE_NAME)
+        insertedDatabase = BloodDatabase.newInstance(context, INSERTED_DATA_BASE_NAME)
+    }
+
+    fun onCleared() {
+        disposable?.let {
+            it.dispose()
+            disposable = null
+        }
+    }
+
+    // The code below here manages the network status
 
     private enum class TransportType {
         NONE,
@@ -50,19 +69,30 @@ class Repository(val activity: MainActivity) {
             builder.build(),
             object : ConnectivityManager.NetworkCallback() {
                 override fun onAvailable(network: Network) {
-                    setConnectedTransportType(connectivityManager, network)
-                    isMetered = connectivityManager.isActiveNetworkMetered
-                    LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.NET), String.format("Network is connected, TYPE: %s (metered=%b)", transportType.name, isMetered))
+                    onAvailableHelper(connectivityManager, network)
                 }
 
                 override fun onLost(network: Network) {
-                    setDisconnectedTransportType()
-                    isMetered = false
-                    LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.NET), String.format("Network connectivity is lost, TYPE: %s (metered=%b)", transportType.name, isMetered))
+                    onLostHelper()
                 }
             }
         )
     }
+
+    private fun onAvailableHelper(connectivityManager: ConnectivityManager, network: Network) {
+        isOfflineMode = false
+        setConnectedTransportType(connectivityManager, network)
+        isMetered = connectivityManager.isActiveNetworkMetered
+        LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.NET), String.format("Network is connected, TYPE: %s (metered=%b)", transportType.name, isMetered))
+    }
+
+    private fun onLostHelper() {
+        isOfflineMode = false
+        setDisconnectedTransportType()
+        isMetered = false
+        LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.NET), String.format("Network connectivity is lost, TYPE: %s (metered=%b)", transportType.name, isMetered))
+    }
+
 
     private fun setConnectedTransportType(connectivityManager: ConnectivityManager, network: Network) {
         when (transportType) {
@@ -140,21 +170,25 @@ class Repository(val activity: MainActivity) {
         }
     }
 
-    fun initializeDatabase(progressBar: ProgressBar, activity: MainActivity) {
+    // The code below here refreshes the data base
+
+    fun refreshDatabase(progressBar: ProgressBar, activity: MainActivity) {
+        saveDatabase(activity)
+        deleteDatabase(activity)
         disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, 10)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .timeout(15L, TimeUnit.SECONDS)
             .subscribe ({ donorResponse ->
                 progressBar.visibility = View.GONE
-                initializeDataBase(donorResponse.results)
+                initializeDataBase(donorResponse.results, activity)
             },
             {
-                throwable -> iniitalizeDatabaseFailureModal(activity, throwable.message)
+                throwable -> initalizeDatabaseFailureModal(activity, throwable.message)
             })
     }
 
-    private fun iniitalizeDatabaseFailureModal(activity: MainActivity, errorMessage: String?) {
+    private fun initalizeDatabaseFailureModal(activity: MainActivity, errorMessage: String?) {
         var error = errorMessage
         if (error == null) {
             error = "App cannot continue"
@@ -179,33 +213,36 @@ class Repository(val activity: MainActivity) {
         ).show(activity.supportFragmentManager, "MODAL")
     }
 
-    fun onCleared() {
-        disposable?.let {
-            it.dispose()
-            disposable = null
-        }
-    }
-
-    fun initializeDataBase(donors: List<Donor>) {
+    private fun initializeDataBase(donors: List<Donor>, activity: MainActivity) {
         for (entry in donors.indices) {
             insertIntoDatabase(donors[entry])
         }
+        StandardModal(
+            activity,
+            modalType = StandardModal.ModalType.STANDARD,
+            titleText = activity.getString(R.string.std_modal_refresh_success_title),
+            bodyText = String.format(activity.getString(R.string.std_modal_refresh_success_body, activity.getDatabasePath(DATA_BASE_NAME))),
+            positiveText = activity.getString(R.string.std_modal_ok),
+            dialogFinishedListener = object : StandardModal.DialogFinishedListener {
+                override fun onPositive(password: String) { }
+                override fun onNegative() { }
+                override fun onNeutral() { }
+                override fun onBackPressed() { }
+            }
+        ).show(activity.supportFragmentManager, "MODAL")
     }
 
-    fun setBloodDatabase(context: Context) {
-        bloodDatabase = BloodDatabase.newInstance(context)
+    private fun deleteDatabase(context: Context) {
+        context.deleteDatabase(DATA_BASE_NAME)
     }
 
-    private fun insertIntoDatabase(donor: Donor) {
-        bloodDatabase.donorDao().insertDonor(donor)
-    }
-
-    fun getAllDonors(): List<Donor> {
-        return bloodDatabase.donorDao().donors
-    }
-
-    fun deleteAllDonors() {
-        bloodDatabase.donorDao().deleteAllDonors()
+    private fun saveDatabase(context: Context) {
+        val db = context.getDatabasePath(DATA_BASE_NAME)
+        val dbBackup = File(db.parent, DATA_BASE_NAME+"_backup")
+        if (db.exists()) {
+            db.copyTo(dbBackup, true)
+            LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("Path Name \"%s\" exists and was backed up", db.toString()))
+        }
     }
 
     fun closeDatabase() {
@@ -214,14 +251,33 @@ class Repository(val activity: MainActivity) {
                 bloodDatabase.close()
             }
         }
+        modifiedDatabase.let { bloodDatabase ->
+            if (bloodDatabase.isOpen) {
+                bloodDatabase.close()
+            }
+        }
+        insertedDatabase.let { bloodDatabase ->
+            if (bloodDatabase.isOpen) {
+                bloodDatabase.close()
+            }
+        }
     }
 
-    fun reopenDatabase(context: Context) {
-        Room.databaseBuilder(context.applicationContext, BloodDatabase::class.java, DATA_BASE_NAME)
+    // The code below here dues CRUD on the database
+
+    private fun insertIntoDatabase(donor: Donor) {
+        bloodDatabase.donorDao().insertDonor(donor)
+    }
+
+    fun insertIntoModifiedDatabase(donor: Donor) {
+        modifiedDatabase.donorDao().insertDonor(donor)
+    }
+
+    fun insertIntoInsertedDatabase(donor: Donor) {
+        insertedDatabase.donorDao().insertDonor(donor)
     }
 
     fun donorsFromFullName(search: String): List<Donor> {
-        val list = getAllDonors()
         var searchLast: String
         var searchFirst = "%"
         val index = search.indexOf(',')
@@ -238,19 +294,6 @@ class Repository(val activity: MainActivity) {
             retval = it
         }
         return retval
-    }
-
-    fun deleteDatabase(context: Context) {
-        context.deleteDatabase(DATA_BASE_NAME)
-    }
-
-    fun saveDatabase(context: Context) {
-        val db = context.getDatabasePath(DATA_BASE_NAME)
-        val dbBackup = File(db.parent, DATA_BASE_NAME+"_backup")
-        if (db.exists()) {
-            db.copyTo(dbBackup, true)
-            LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("Path Name \"%s\" exists and was backed up", db.toString()))
-        }
     }
 
 }

@@ -12,8 +12,8 @@
 
     <item
             android:id="@+id/network_status"
-            android:icon="@drawable/ic_network_status_wifi"
-            android:title="network"
+            android:icon="@drawable/ic_network_status_none"
+            android:title=""
             app:showAsAction="ifRoom"/>
 
 </menu>

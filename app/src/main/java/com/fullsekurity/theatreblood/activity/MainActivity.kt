@@ -103,19 +103,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRepositoryDatabase() {
-        repository.saveDatabase(this)
-        repository.deleteDatabase(this)
         repository.setBloodDatabase(this)
+    }
+
+    private fun refreshDatabase() {
         val progressBar = main_progress_bar
         progressBar.visibility = View.VISIBLE
-        repository.initializeDatabase(progressBar, this)
+        repository.refreshDatabase(progressBar, this)
     }
 
     fun finishActivity() {
         finish()
     }
 
-    fun loadDonateProductsFragment() {
+    private fun loadDonateProductsFragment() {
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
             .replace(R.id.main_activity_container, DonateProductsFragment.newInstance())
@@ -124,7 +125,7 @@ class MainActivity : AppCompatActivity() {
 
     fun loadDonorFragment(donor: Donor) {
         supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
             .replace(R.id.main_activity_container, DonorFragment.newInstance(donor))
             .addToBackStack(ROOT_FRAGMENT_TAG)
             .commitAllowingStateLoss()
@@ -133,7 +134,7 @@ class MainActivity : AppCompatActivity() {
     fun loadCreateProductsFragment(donor: Donor) {
         supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
             .replace(R.id.main_activity_container, CreateProductsFragment.newInstance(donor))
             .addToBackStack(ROOT_FRAGMENT_TAG)
             .commitAllowingStateLoss()
@@ -164,7 +165,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setToolbarNetworkStatus() {
-        val resInt = repository.getNetworkStatusResInt()
+        val resInt: Int
+        if (repository.isOfflineMode) {
+            resInt = R.drawable.ic_network_status_none
+        } else {
+            resInt = repository.getNetworkStatusResInt()
+        }
         networkStatusMenuItem?.let { networkStatusMenuItem ->
             runOnUiThread {
                 networkStatusMenuItem.icon = ContextCompat.getDrawable(this, resInt)
@@ -177,6 +183,10 @@ class MainActivity : AppCompatActivity() {
             true
         }
         R.id.action_favorite -> {
+            true
+        }
+        R.id.network_status -> {
+            refreshDatabase()
             true
         }
         else -> {
