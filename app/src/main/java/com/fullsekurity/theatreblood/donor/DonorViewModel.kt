@@ -134,9 +134,9 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
 
     fun onSubmitUpdateClicked(view: View) {
         if (submitOrUpdateText.get() == activity.getString(R.string.button_submit)) {
-            repository.insertIntoInsertedDatabase(donor)
+            repository.insertIntoDatabase(repository.insertedBloodDatabase, donor)
         } else {
-            repository.insertIntoModifiedDatabase(donor)
+            repository.insertIntoDatabase(repository.modifiedBloodDatabase, donor)
         }
         activity.loadCreateProductsFragment(donor)
     }
@@ -154,7 +154,7 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
         rootView.findViewById<TextInputLayout>(R.id.edit_text_display_dob).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
 
         editTextDisplayModifyLastName.set(donor.title)
-        editTextDisplayModifyFirstName.set(donor.posterPath.substring(0,donor.posterPath.length / 2))
+        editTextDisplayModifyFirstName.set(donor.posterPath)
         editTextDisplayModifyMiddleName.set(donor.releaseDate)
         editTextDisplayModifyDob.set(donor.releaseDate)
         

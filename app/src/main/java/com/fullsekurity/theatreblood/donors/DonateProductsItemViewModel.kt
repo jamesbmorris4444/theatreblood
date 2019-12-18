@@ -25,19 +25,18 @@ class DonateProductsItemViewModel(val activity: MainActivity) : RecyclerViewItem
 
     override fun setItem(item: Donor) {
         donor = item
-        val ( id, _voteCount, _video, _voteAverage, _title, _popularity, _posterPath, _originalLanguage, _originalTitle, _backdropPath, _adult, _overview, _releaseDate) = item
-        voteCount.set(_voteCount.toString())
-        video.set(if (_video) "T" else "F")
-        voteAverage.set(_voteAverage.toString())
-        title.set(_title)
-        popularity.set(_popularity.toString())
-        posterPath.set(_posterPath)
-        originalLanguage.set(_originalLanguage)
-        originalTitle.set(_originalTitle)
-        backdropPath.set(_backdropPath)
-        adult.set(if (_adult) "T" else "F")
-        overview.set(_overview)
-        releaseDate.set(_releaseDate)
+        voteCount.set(item.voteCount.toString())
+        video.set(if (item.video) "T" else "F")
+        voteAverage.set(item.voteAverage.toString())
+        title.set(item.title)
+        popularity.set(item.popularity.toString())
+        posterPath.set(item.posterPath)
+        originalLanguage.set(item.originalLanguage)
+        originalTitle.set(item.originalTitle)
+        backdropPath.set(item.backdropPath)
+        adult.set(if (item.adult) "T" else "F")
+        overview.set(item.overview)
+        releaseDate.set(item.releaseDate)
     }
 
     fun onItemClicked() {

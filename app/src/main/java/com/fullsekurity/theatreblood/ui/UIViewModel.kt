@@ -178,6 +178,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
         standardButtonWidth.set(computeStandarButtonWidth())
         standardLargeButtonWidth.set(computeStandarButtonWidth() * 2)
         standardButtonHeight.set(convertDpToPixels(STANDARD_BUTTON_HEIGHT))
+        standardDialogWidth.set(computeStandardWidth())
     }
 
     private fun convertDpToPixels(dp: Float): Int {
@@ -239,7 +240,6 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             toolbarTextColor = colorMapper.map(theme, uiDataClass.toolbarTextColor)
             standardDialogBackground.set(ContextCompat.getDrawable(context, uiDataClass.standardDialogBackground))
             standardDialogDashedLine.set(ContextCompat.getDrawable(context, uiDataClass.standardDialogDashedLine))
-            standardDialogWidth.set(convertDpToPixels(uiDataClass.standardDialogWidth))
             standardDialogDividerColor.set(colorMapper.map(theme, uiDataClass.standardDialogDividerColor))
             standardDialogPasswordHintColor.set(colorMapper.map(theme, uiDataClass.standardDialogPasswordHintColor))
             standardDialogTopSpacerHeight.set(convertDpToPixels(uiDataClass.standardDialogTopSpacerHeight))

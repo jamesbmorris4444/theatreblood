@@ -16,22 +16,23 @@ import com.fullsekurity.theatreblood.repository.network.APIInterface
 import com.fullsekurity.theatreblood.repository.storage.BloodDatabase
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.Constants
-import com.fullsekurity.theatreblood.utils.Constants.DATA_BASE_NAME
-import com.fullsekurity.theatreblood.utils.Constants.INSERTED_DATA_BASE_NAME
-import com.fullsekurity.theatreblood.utils.Constants.MODIFIED_DATA_BASE_NAME
+import com.fullsekurity.theatreblood.utils.Constants.INSERTED_DATABASE_NAME
+import com.fullsekurity.theatreblood.utils.Constants.MAIN_DATABASE_NAME
+import com.fullsekurity.theatreblood.utils.Constants.MODIFIED_DATABASE_NAME
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.io.File
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
 class Repository(val activity: MainActivity) {
 
     private val TAG = Repository::class.java.simpleName
-    private lateinit var bloodDatabase: BloodDatabase
-    private lateinit var modifiedDatabase: BloodDatabase
-    private lateinit var insertedDatabase: BloodDatabase
+    lateinit var mainBloodDatabase: BloodDatabase
+    lateinit var modifiedBloodDatabase: BloodDatabase
+    lateinit var insertedBloodDatabase: BloodDatabase
     private val donorsService: APIInterface = APIClient.client
     private var disposable: Disposable? = null
     private var transportType = TransportType.NONE
@@ -41,9 +42,9 @@ class Repository(val activity: MainActivity) {
     var isOfflineMode = true
 
     fun setBloodDatabase(context: Context) {
-        bloodDatabase = BloodDatabase.newInstance(context, DATA_BASE_NAME)
-        modifiedDatabase = BloodDatabase.newInstance(context, MODIFIED_DATA_BASE_NAME)
-        insertedDatabase = BloodDatabase.newInstance(context, INSERTED_DATA_BASE_NAME)
+        mainBloodDatabase = BloodDatabase.newInstance(context, MAIN_DATABASE_NAME)
+        modifiedBloodDatabase = BloodDatabase.newInstance(context, MODIFIED_DATABASE_NAME)
+        insertedBloodDatabase = BloodDatabase.newInstance(context, INSERTED_DATABASE_NAME)
     }
 
     fun onCleared() {
@@ -170,11 +171,11 @@ class Repository(val activity: MainActivity) {
         }
     }
 
-    // The code below here refreshes the data base
+    // The code below here refreshes the main data base
 
     fun refreshDatabase(progressBar: ProgressBar, activity: MainActivity) {
-        saveDatabase(activity)
-        deleteDatabase(activity)
+        saveDatabase(activity, MAIN_DATABASE_NAME)
+        deleteDatabase(activity, MAIN_DATABASE_NAME)
         disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, 10)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
@@ -215,13 +216,13 @@ class Repository(val activity: MainActivity) {
 
     private fun initializeDataBase(donors: List<Donor>, activity: MainActivity) {
         for (entry in donors.indices) {
-            insertIntoDatabase(donors[entry])
+            insertIntoDatabase(mainBloodDatabase, donors[entry])
         }
         StandardModal(
             activity,
             modalType = StandardModal.ModalType.STANDARD,
             titleText = activity.getString(R.string.std_modal_refresh_success_title),
-            bodyText = String.format(activity.getString(R.string.std_modal_refresh_success_body, activity.getDatabasePath(DATA_BASE_NAME))),
+            bodyText = String.format(activity.getString(R.string.std_modal_refresh_success_body, activity.getDatabasePath(MAIN_DATABASE_NAME))),
             positiveText = activity.getString(R.string.std_modal_ok),
             dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                 override fun onPositive(password: String) { }
@@ -232,13 +233,13 @@ class Repository(val activity: MainActivity) {
         ).show(activity.supportFragmentManager, "MODAL")
     }
 
-    private fun deleteDatabase(context: Context) {
-        context.deleteDatabase(DATA_BASE_NAME)
+    fun deleteDatabase(context: Context, databaseName: String) {
+        context.deleteDatabase(databaseName)
     }
 
-    private fun saveDatabase(context: Context) {
-        val db = context.getDatabasePath(DATA_BASE_NAME)
-        val dbBackup = File(db.parent, DATA_BASE_NAME+"_backup")
+    fun saveDatabase(context: Context, databaseName: String) {
+        val db = context.getDatabasePath(databaseName)
+        val dbBackup = File(db.parent, databaseName+"_backup")
         if (db.exists()) {
             db.copyTo(dbBackup, true)
             LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("Path Name \"%s\" exists and was backed up", db.toString()))
@@ -246,38 +247,30 @@ class Repository(val activity: MainActivity) {
     }
 
     fun closeDatabase() {
-        bloodDatabase.let { bloodDatabase ->
+        mainBloodDatabase.let { bloodDatabase ->
             if (bloodDatabase.isOpen) {
                 bloodDatabase.close()
             }
         }
-        modifiedDatabase.let { bloodDatabase ->
+        modifiedBloodDatabase.let { bloodDatabase ->
             if (bloodDatabase.isOpen) {
                 bloodDatabase.close()
             }
         }
-        insertedDatabase.let { bloodDatabase ->
+        insertedBloodDatabase.let { bloodDatabase ->
             if (bloodDatabase.isOpen) {
                 bloodDatabase.close()
             }
         }
     }
 
-    // The code below here dues CRUD on the database
+    // The code below here does CRUD on the database
 
-    private fun insertIntoDatabase(donor: Donor) {
-        bloodDatabase.donorDao().insertDonor(donor)
+    fun insertIntoDatabase(database: BloodDatabase, donor: Donor) {
+        database.donorDao().insertDonor(donor)
     }
 
-    fun insertIntoModifiedDatabase(donor: Donor) {
-        modifiedDatabase.donorDao().insertDonor(donor)
-    }
-
-    fun insertIntoInsertedDatabase(donor: Donor) {
-        insertedDatabase.donorDao().insertDonor(donor)
-    }
-
-    fun donorsFromFullName(search: String): List<Donor> {
+    fun donorsFromFullName(database: BloodDatabase, search: String): List<Donor> {
         var searchLast: String
         var searchFirst = "%"
         val index = search.indexOf(',')
@@ -290,8 +283,13 @@ class Repository(val activity: MainActivity) {
             searchLast = "%$last%"
         }
         var retval: List<Donor> = arrayListOf()
-        bloodDatabase.donorDao()?.donorsFromFullName(searchLast, searchFirst)?.let {
-            retval = it
+        database.donorDao()?.donorsFromFullName(searchLast, searchFirst)?.let { donorList ->
+            retval = donorList
+            for (donor in donorList) {
+                if (donor.posterPath.length > 10) {
+                    donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
+                }
+            }
         }
         return retval
     }

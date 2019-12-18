@@ -15,9 +15,9 @@ object Constants {
     const val PAGE_REQUEST_PARAM = "page"
     const val API_KEY = "17c5889b399d3c051099e4098ad83493"
     const val LANGUAGE = "en"
-    const val DATA_BASE_NAME = "TheatreBlood.db"
-    const val MODIFIED_DATA_BASE_NAME = "TheatreBloodModified.db"
-    const val INSERTED_DATA_BASE_NAME = "TheatreBloodInserted.db"
+    const val MAIN_DATABASE_NAME = "TheatreBlood.db"
+    const val MODIFIED_DATABASE_NAME = "TheatreBloodModified.db"
+    const val INSERTED_DATABASE_NAME = "TheatreBloodInserted.db"
     const val STANDARD_LEFT_AND_RIGHT_MARGIN = 20f
     const val STANDARD_EDIT_TEXT_HEIGHT = 60f
     const val STANDARD_BUTTON_HEIGHT = 50f

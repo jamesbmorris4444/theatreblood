@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
+import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -95,7 +96,15 @@ class DonateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
     var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     fun onSubmitClicked(view: View) {
-        showDonors(repository.donorsFromFullName(editTextNameInput.get() ?: ""))
+        val modifiedList = repository.donorsFromFullName(repository.modifiedBloodDatabase, editTextNameInput.get() ?: "")
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX mod=%s", modifiedList))
+        val insertedList = repository.donorsFromFullName(repository.insertedBloodDatabase, editTextNameInput.get() ?: "")
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ins=%s", insertedList))
+        val mainList = repository.donorsFromFullName(repository.mainBloodDatabase, editTextNameInput.get() ?: "")
+        val combinedList = modifiedList.union(insertedList).union(mainList).distinct()
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX com=%s", combinedList.toList()))
+        showDonors(combinedList.toList())
+
         Utils.hideKeyboard(view)
     }
 

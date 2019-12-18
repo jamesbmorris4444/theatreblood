@@ -197,6 +197,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         networkStatusMenuItem = menu.findItem(R.id.network_status)
+        setToolbarNetworkStatus()
         return true
     }
 

@@ -4,7 +4,6 @@ class UIDataClass(
 
     val standardDialogBackground: Int,                    // Standard dialog background drawable resource
     val standardDialogDashedLine: Int,                    // Standard dialog circular header icon drawable resource
-    val standardDialogWidth: Float,                       // Standard dialog total width
     val standardDialogDividerColor: String,               // Standard dialog button_light divider line color
     val standardDialogPasswordHintColor: String,          // Standard dialog password hint text color
     val standardDialogTopSpacerHeight: Float,             // Standard dialog spacer height at the top of the modal

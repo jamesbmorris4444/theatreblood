@@ -13,7 +13,6 @@ class UIDataModel {
                     lightViewUIDataClass = UIDataClass(
                         R.drawable.lt_standard_modal_background,
                         R.drawable.ic_dashed_line,
-                        320f,
                         "lightGray",
                         "lightGray",
                         48f,
@@ -97,7 +96,6 @@ class UIDataModel {
                     darkViewUIDataClass = UIDataClass(
                         R.drawable.dk_standard_modal_background,
                         R.drawable.ic_dashed_line,
-                        320f,
                         "lightGray",
                         "lightGray",
                         48f,
