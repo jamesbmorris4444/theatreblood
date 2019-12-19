@@ -11,6 +11,11 @@
             app:showAsAction="never"/>
 
     <item
+            android:id="@+id/action_staging_count"
+            android:title="@string/staging_database_count"
+            app:showAsAction="never"/>
+
+    <item
             android:id="@+id/network_status"
             android:icon="@drawable/ic_network_status_none"
             android:title=""

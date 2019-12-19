@@ -19,11 +19,12 @@ import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.Constants.INSERTED_DATABASE_NAME
 import com.fullsekurity.theatreblood.utils.Constants.MAIN_DATABASE_NAME
 import com.fullsekurity.theatreblood.utils.Constants.MODIFIED_DATABASE_NAME
+import io.reactivex.Completable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.io.File
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -267,10 +268,36 @@ class Repository(val activity: MainActivity) {
     // The code below here does CRUD on the database
 
     fun insertIntoDatabase(database: BloodDatabase, donor: Donor) {
-        database.donorDao().insertDonor(donor)
+        var disposable: Disposable? = null
+        disposable = Completable.fromAction { database.donorDao().insertDonor(donor) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                StandardModal(
+                    activity,
+                    modalType = StandardModal.ModalType.STANDARD,
+                    titleText = activity.getString(R.string.std_modal_insert_staging_title),
+                    bodyText = activity.getString(R.string.std_modal_insert_staging_body),
+                    positiveText = activity.getString(R.string.std_modal_ok),
+                    dialogFinishedListener = object : StandardModal.DialogFinishedListener {
+                        override fun onPositive(password: String) {
+                            disposable?.dispose()
+                            disposable = null
+                            activity.loadCreateProductsFragment(donor)
+                        }
+                        override fun onNegative() { }
+                        override fun onNeutral() { }
+                        override fun onBackPressed() {
+                            disposable?.dispose()
+                            disposable = null
+                            activity.loadCreateProductsFragment(donor)
+                        }
+                    }
+                ).show(activity.supportFragmentManager, "MODAL")
+            }
     }
 
-    fun donorsFromFullName(database: BloodDatabase, search: String): List<Donor> {
+    fun donorsFromFullName(database: BloodDatabase, search: String): Single<List<Donor>> {
         var searchLast: String
         var searchFirst = "%"
         val index = search.indexOf(',')
@@ -282,16 +309,11 @@ class Repository(val activity: MainActivity) {
             searchFirst = "%$first%"
             searchLast = "%$last%"
         }
-        var retval: List<Donor> = arrayListOf()
-        database.donorDao()?.donorsFromFullName(searchLast, searchFirst)?.let { donorList ->
-            retval = donorList
-            for (donor in donorList) {
-                if (donor.posterPath.length > 10) {
-                    donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
-                }
-            }
-        }
-        return retval
+        return database.donorDao()?.donorsFromFullName(searchLast, searchFirst)
+    }
+
+    fun databaseCount(database: BloodDatabase): Single<Int> {
+        return database.donorDao().getEntryCount()
     }
 
 }

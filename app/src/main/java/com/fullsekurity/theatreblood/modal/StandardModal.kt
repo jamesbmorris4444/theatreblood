@@ -38,7 +38,7 @@ class StandardModal (
          * @param iconType designates the type of icon to be displayed, and is optional; default value is NONE, so if no modalType parameter is supplied, no icon will appear.
          * @param titleText is optional, default value is NO title (there must be either a title or a body present, except for LIST type modals which normally do not have a title or body).
          * @param bodyText is optional, default value is NO body (there must be either a title or a body present, except for LIST type modals which normally do not have a title or body).
-         * @param bodyGravity is optional, default value is Gravity.CENTER, which will center the body. Use Gravity.LEFT to left justify the body.
+         * @param bodyGravity is optional, default value is Gravity.LEFT, which will left-justify the body. Use Gravity.CENTER to center the body.
          * @param hintText is optional, default value is NO hint (hintText is used only in modals like password modals, etc.).
          * @param positiveText is required, and is the text that appears on the rightmost bottom button_light (1, 2, 3 buttons can be present).
          * @param negativeText is optional, and is the text that appears on the bottom button_light to the left of the positiveText button_light (2 or 3 buttons can be present if a negativeText button_light appears).
@@ -85,7 +85,7 @@ class StandardModal (
         private var iconType: IconType = IconType.NONE,
         titleText: String = "",
         bodyText: String = "",
-        bodyGravity: Int = Gravity.CENTER,
+        bodyGravity: Int = Gravity.LEFT,
         hintText: String = "",
         positiveText: String = "",
         negativeText: String = "",

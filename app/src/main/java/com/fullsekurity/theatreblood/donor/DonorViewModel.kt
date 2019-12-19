@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.databinding.AborhDropdownItemBinding
+import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
@@ -47,6 +48,13 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     private lateinit var femaleRadioButton: RadioButton
     val submitOrUpdateText: ObservableField<String> = ObservableField("")
     private lateinit var donor: Donor
+    private var lastNameChanged = false        // last name field was changed (new entry in database)
+    private var firstNameChanged = false       // first name field was changed (new entry in database)
+    private var middleNameChanged = false       // middle name field was changed (new entry in database)
+
+    // At least one entry changed. If no entries ever change, do not add this donor to a staging database.
+    // When the view is loaded the first time, onTextLastNameChanged is called, so ignore this call as a true user change.
+    private var atLeastOneEntryChanged = false
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -60,40 +68,92 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
             .inject(this)
     }
 
+    // last name
     // observable used for two-way data binding. Values set into this field will show in view.
     // Text typed into EditText in view will be stored into this field after each character is typed.
     var editTextDisplayModifyLastName: ObservableField<String> = ObservableField("")
     fun onTextLastNameChanged(string: CharSequence, start: Int, before: Int, count: Int) {
+        if (lastNameChanged) {
+            submitOrUpdateText.set(activity.getString(R.string.button_insert))
+            atLeastOneEntryChanged = true
+        } else {
+            lastNameChanged = true
+        }
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
     var hintTextLastName: ObservableField<String> = ObservableField(activity.getString(R.string.donor_last_name))
     var editTextLastNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
+    // first name
     var editTextDisplayModifyFirstName: ObservableField<String> = ObservableField("")
-    fun onTextFirstNameChanged(string: CharSequence, start: Int, before: Int, count: Int) { }
+    fun onTextFirstNameChanged(string: CharSequence, start: Int, before: Int, count: Int) {
+        if (firstNameChanged) {
+            submitOrUpdateText.set(activity.getString(R.string.button_insert))
+            atLeastOneEntryChanged = true
+        } else {
+            firstNameChanged = true
+        }
+    }
     var hintTextFirstName: ObservableField<String> = ObservableField(activity.getString(R.string.donor_first_name))
     var editTextFirstNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
+    // middle name
     var editTextDisplayModifyMiddleName: ObservableField<String> = ObservableField("")
-    fun onTextMiddleNameChanged(string: CharSequence, start: Int, before: Int, count: Int) { }
+    fun onTextMiddleNameChanged(string: CharSequence, start: Int, before: Int, count: Int) {
+        if (middleNameChanged) {
+            atLeastOneEntryChanged = true
+        } else {
+            middleNameChanged = true
+        }
+    }
     var hintTextMiddleName: ObservableField<String> = ObservableField(activity.getString(R.string.donor_middle_name))
     var editTextMiddleNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
+    // date of birth
     var editTextDisplayModifyDob: ObservableField<String> = ObservableField("")
-    fun onTextDobChanged(string: CharSequence, start: Int, before: Int, count: Int) { }
     var hintTextDob: ObservableField<String> = ObservableField(activity.getString(R.string.donor_dob))
     var editTextDobVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
+    fun onCalendarClicked(view: View) {
+        Utils.hideKeyboard(view)
+        dateDialog()
+    }
+
+    private fun dateDialog() {
+        val listener = object : DatePickerDialog.OnDateSetListener {
+            override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int) {
+                calendar.set(year, monthOfYear, dayOfMonth)
+                atLeastOneEntryChanged = true
+                editTextDisplayModifyDob.set(dateFormatter.format(calendar.time))
+            }
+        }
+        DatePickerDialog(activity, uiViewModel.datePickerColorStyle, listener, year, month, day).show()
+    }
+
+    // gender
     var hintTextGender: ObservableField<String> = ObservableField(activity.getString(R.string.donor_gender))
     var radioButtonsGenderVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
+    fun onGenderChanged(radioGroup: RadioGroup?, id: Int) {
+        atLeastOneEntryChanged = !atLeastOneEntryChanged
+        if (id == R.id.radio_male) {
+            maleRadioButton.isChecked = true
+        } else {
+            femaleRadioButton.isChecked = true
+        }
+    }
+
+    // ABO/Rh
     var hintTextAboRh: ObservableField<String> = ObservableField(activity.getString(R.string.donor_abo_rh))
     var dropdownAboRhVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
     var currentAboRhSelectedValue: String = "NO ABO/Rh"
+    // atLeastOneEntryChanged = true
 
+    // Military Branch
     var hintTextMilitaryBranch: ObservableField<String> = ObservableField(activity.getString(R.string.donor_branch))
     var dropdownMilitaryBranchVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
     var currentMilitaryBranchSelectedValue: String = "NO Military Branch"
+    // atLeastOneEntryChanged = true
 
 //    <string name="donor_search_string">Enter Search String</string>
 //    <string name="donor_last_name">Enter Last Name</string>
@@ -109,35 +169,67 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
 //    <string name="dd_572_completed">DD-572 Completed?</string>
 //    <string name="ttd_samples_collected">TTD Samples Collected?</string>
 
-    fun onCalendarClicked(view: View) {
-        Utils.hideKeyboard(view)
-        dateDialog()
-    }
-
-    private fun dateDialog() {
-        val listener = object : DatePickerDialog.OnDateSetListener {
-            override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-                calendar.set(year, monthOfYear, dayOfMonth)
-                editTextDisplayModifyDob.set(dateFormatter.format(calendar.time))
-            }
-        }
-        DatePickerDialog(activity, uiViewModel.datePickerColorStyle, listener, year, month, day).show()
-    }
-
-    fun onGenderChanged(radioGroup: RadioGroup?, id: Int) {
-        if (id == R.id.radio_male) {
-            maleRadioButton.isChecked = true
-        } else {
-            femaleRadioButton.isChecked = true
-        }
-    }
-
     fun onSubmitUpdateClicked(view: View) {
-        if (submitOrUpdateText.get() == activity.getString(R.string.button_submit)) {
-            repository.insertIntoDatabase(repository.insertedBloodDatabase, donor)
-        } else {
-            repository.insertIntoDatabase(repository.modifiedBloodDatabase, donor)
+        // update new values into donor
+
+        // change last name
+        editTextDisplayModifyLastName.get()?.let { editTextDisplayModifyLastName ->
+            donor.title = editTextDisplayModifyLastName
         }
+
+        // change first name
+        editTextDisplayModifyFirstName.get()?.let { editTextDisplayModifyFirstName ->
+            donor.posterPath = editTextDisplayModifyFirstName
+        }
+
+        // change middle name
+        editTextDisplayModifyMiddleName.get()?.let { editTextDisplayModifyMiddleName ->
+            donor.voteCount = editTextDisplayModifyMiddleName.toInt()
+        }
+
+        // change doate of birth
+        editTextDisplayModifyDob.get()?.let { editTextDisplayModifyDob ->
+            donor.releaseDate = editTextDisplayModifyDob
+        }
+
+        // change gender
+        if (maleRadioButton.isChecked) {
+            donor.overview = activity.getString(R.string.donor_male)
+        } else {
+            donor.overview = activity.getString(R.string.donor_female)
+        }
+
+//        donor.???? = currentAboRhSelectedValue
+//        donor.???? = currentMilitaryBranchSelectedValue
+
+        if (atLeastOneEntryChanged) {
+            if (submitOrUpdateText.get() == activity.getString(R.string.button_insert)) {
+                repository.insertIntoDatabase(repository.insertedBloodDatabase, donor)
+            } else {
+                repository.insertIntoDatabase(repository.modifiedBloodDatabase, donor)
+            }
+        } else {
+            StandardModal(
+                activity,
+                modalType = StandardModal.ModalType.STANDARD,
+                titleText = activity.getString(R.string.std_modal_no_change_in_database_title),
+                positiveText = activity.getString(R.string.std_modal_ok),
+                dialogFinishedListener = object : StandardModal.DialogFinishedListener {
+                    override fun onPositive(password: String) {
+                        loadCreateProductsFragment()
+                    }
+                    override fun onNegative() { }
+                    override fun onNeutral() { }
+                    override fun onBackPressed() {
+                        loadCreateProductsFragment()
+                    }
+                }
+            ).show(activity.supportFragmentManager, "MODAL")
+        }
+
+    }
+
+    private fun loadCreateProductsFragment() {
         activity.loadCreateProductsFragment(donor)
     }
 
@@ -147,7 +239,7 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
 
     fun setDonor(donor: Donor) {
         this.donor = donor
-        submitOrUpdateText.set(if (donor.title.isEmpty()) activity.getString(R.string.button_submit) else activity.getString(R.string.button_update))
+        submitOrUpdateText.set(if (donor.title.isEmpty()) activity.getString(R.string.button_insert) else activity.getString(R.string.button_update))
         rootView.findViewById<TextInputLayout>(R.id.edit_text_display_last_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
         rootView.findViewById<TextInputLayout>(R.id.edit_text_display_first_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
         rootView.findViewById<TextInputLayout>(R.id.edit_text_display_middle_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
@@ -155,7 +247,7 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
 
         editTextDisplayModifyLastName.set(donor.title)
         editTextDisplayModifyFirstName.set(donor.posterPath)
-        editTextDisplayModifyMiddleName.set(donor.releaseDate)
+        editTextDisplayModifyMiddleName.set(donor.voteCount.toString())
         editTextDisplayModifyDob.set(donor.releaseDate)
         
         maleRadioButton = rootView.findViewById(R.id.radio_male)

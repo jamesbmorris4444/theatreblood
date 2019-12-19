@@ -17,7 +17,7 @@
             android:onClick="@{() -> createProductsItemViewModel.onItemClicked()}">
 
         <android.widget.TextView
-                android:id="@+id/title"
+                android:id="@+id/last_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{createProductsItemViewModel.title}"
@@ -27,11 +27,11 @@
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintVertical_chainStyle="packed"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/release_date"
+                app:layout_constraintBottom_toTopOf="@+id/first_name"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
         <android.widget.TextView
-                android:id="@+id/release_date"
+                android:id="@+id/first_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{createProductsItemViewModel.posterPath}"
@@ -39,7 +39,7 @@
                 app:text_color="@{uiViewModel.productItemTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.productItemTextSize)}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintTop_toBottomOf="@+id/last_name"
                 app:layout_constraintBottom_toTopOf="@+id/divider"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/black"
-                app:layout_constraintTop_toBottomOf="@+id/release_date"
+                app:layout_constraintTop_toBottomOf="@+id/first_name"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />
 

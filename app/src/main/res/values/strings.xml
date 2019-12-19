@@ -9,6 +9,7 @@
     <!-- toolbar overflow menu actions -->
     <string name="action_favorites">Favorites</string>
     <string name="action_settings">Settings</string>
+    <string name="staging_database_count">Staging Database</string>
 
     <!-- standard modals -->
     <string name="std_modal_no_repository_title">Database cannot be created</string>
@@ -16,12 +17,21 @@
     <string name="std_modal_initialize_database_failure_title">Timeout while fetching remote database</string>
     <string name="std_modal_refresh_success_title">Database successfully refreshed</string>
     <string name="std_modal_refresh_success_body">Path Name "%s" exists and was backed up before refreshing</string>
+    <string name="std_modal_insert_staging_title">Staging Entry for Insertion</string>
+    <string name="std_modal_insert_staging_body">An entry was made to the staging database for insertion of new donors into the remote database</string>
+    <string name="std_modal_modify_staging_title">Staging Entry for Modification</string>
+    <string name="std_modal_modify_staging_body">An entry was made to the staging database for modification of existing donors currently in the remote database</string>
+    <string name="std_modal_no_change_in_database_title">No entries made into any databases</string>
+    <string name="std_modal_staging_database_count_title">Show number of entries in each staging database</string>
+    <string name="std_modal_staging_database_count_body">Insertion database entry count: %d entries\nModification database entry count: %d entries</string>
+
     <string name="std_modal_password_authentication_hint">Password</string>
     <string name="std_modal_submit">Submit</string>
     <string name="std_modal_cancel">Cancel</string>
     <string name="std_modal_ok">OK</string>
 
     <!-- button name text -->
+    <string name="button_insert">Insert</string>
     <string name="button_submit">Submit</string>
     <string name="button_update">Update</string>
     <string name="button_new_donor">New Donor</string>
@@ -40,6 +50,8 @@
     <string name="donor_today_date">Enter Date</string>
     <string name="dd_572_completed">DD-572 Completed?</string>
     <string name="ttd_samples_collected">TTD Samples Collected?</string>
+    <string name="donor_male">Male</string>
+    <string name="donor_female">Female</string>
 
     <!-- miscellaneous -->
     <string name="search_no_elements">No donors found in search</string>

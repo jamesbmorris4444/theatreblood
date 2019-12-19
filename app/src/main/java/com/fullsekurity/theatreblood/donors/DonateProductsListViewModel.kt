@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
-import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -17,6 +16,11 @@ import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.Utils
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import com.google.android.material.textfield.TextInputLayout
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import java.util.*
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
@@ -96,16 +100,39 @@ class DonateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
     var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     fun onSubmitClicked(view: View) {
-        val modifiedList = repository.donorsFromFullName(repository.modifiedBloodDatabase, editTextNameInput.get() ?: "")
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX mod=%s", modifiedList))
-        val insertedList = repository.donorsFromFullName(repository.insertedBloodDatabase, editTextNameInput.get() ?: "")
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ins=%s", insertedList))
-        val mainList = repository.donorsFromFullName(repository.mainBloodDatabase, editTextNameInput.get() ?: "")
-        val combinedList = modifiedList.union(insertedList).union(mainList).distinct()
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX com=%s", combinedList.toList()))
-        showDonors(combinedList.toList())
-
-        Utils.hideKeyboard(view)
+        var disposable: Disposable? = null
+        val fullNameResponseList = listOf(
+            repository.donorsFromFullName(repository.modifiedBloodDatabase, editTextNameInput.get() ?: ""),
+            repository.donorsFromFullName(repository.insertedBloodDatabase, editTextNameInput.get() ?: ""),
+            repository.donorsFromFullName(repository.mainBloodDatabase, editTextNameInput.get() ?: "")
+        )
+        disposable = Single.zip(fullNameResponseList) { args -> listOf(args) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe({ responseList ->
+                val response = responseList[0]
+                for (donor in response[0] as List<Donor>) {
+                    if (donor.posterPath.length > 10) {
+                        donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
+                        donor.backdropPath = donor.backdropPath.substring(1,11).toUpperCase(Locale.getDefault())
+                    }
+                }
+                for (donor in response[1] as List<Donor>) {
+                    if (donor.posterPath.length > 10) {
+                        donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
+                        donor.backdropPath = donor.backdropPath.substring(1,11).toUpperCase(Locale.getDefault())
+                    }
+                }
+                for (donor in response[2] as List<Donor>) {
+                    if (donor.posterPath.length > 10) {
+                        donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
+                        donor.backdropPath = donor.backdropPath.substring(1,11).toUpperCase(Locale.getDefault())
+                    }
+                }
+                val combinedList = (response[0] as List<Donor>).union(response[1] as List<Donor>).union(response[2] as List<Donor>).distinctBy { it.title + it.posterPath }
+                showDonors(combinedList.toList())
+                Utils.hideKeyboard(view)
+            }, { response -> val c = response })
     }
 
     fun onNewDonorClicked(view: View) {

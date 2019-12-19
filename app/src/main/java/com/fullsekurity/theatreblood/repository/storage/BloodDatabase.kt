@@ -19,7 +19,6 @@ abstract class BloodDatabase : RoomDatabase() {
         fun newInstance(context: Context, databaseName: String): BloodDatabase {
             synchronized(sLock) {
                 instance = Room.databaseBuilder(context, BloodDatabase::class.java, databaseName)
-                    .allowMainThreadQueries()
                     .build()
                 return instance
             }

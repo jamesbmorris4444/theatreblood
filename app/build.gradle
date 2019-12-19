@@ -48,6 +48,7 @@ dependencies {
     // Room
     implementation 'androidx.room:room-runtime:2.2.2'
     kapt 'androidx.room:room-compiler:2.2.2'
+    implementation 'androidx.room:room-rxjava2:2.2.2'
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
@@ -59,7 +60,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // RxJava
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
     implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
 
     // Retrofit

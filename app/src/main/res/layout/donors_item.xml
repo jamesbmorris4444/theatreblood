@@ -17,7 +17,7 @@
             android:onClick="@{() -> donorsItemViewModel.onItemClicked()}">
 
         <android.widget.TextView
-                android:id="@+id/title"
+                android:id="@+id/last_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{donorsItemViewModel.title}"
@@ -27,11 +27,11 @@
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintVertical_chainStyle="packed"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/release_date"
+                app:layout_constraintBottom_toTopOf="@+id/first_name"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
         <android.widget.TextView
-                android:id="@+id/release_date"
+                android:id="@+id/first_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{donorsItemViewModel.posterPath}"
@@ -39,12 +39,12 @@
                 app:text_color="@{uiViewModel.donorItemTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                app:layout_constraintBottom_toTopOf="@+id/vote_count"
+                app:layout_constraintTop_toBottomOf="@+id/last_name"
+                app:layout_constraintBottom_toTopOf="@+id/middle_name"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
         <android.widget.TextView
-                android:id="@+id/vote_count"
+                android:id="@+id/middle_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{donorsItemViewModel.voteCount}"
@@ -52,38 +52,38 @@
                 app:text_color="@{uiViewModel.donorItemTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                app:layout_constraintTop_toBottomOf="@+id/release_date"
-                app:layout_constraintBottom_toTopOf="@+id/vote_average"
+                app:layout_constraintTop_toBottomOf="@+id/first_name"
+                app:layout_constraintBottom_toTopOf="@+id/date_of_birth"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
         <android.widget.TextView
-                android:id="@+id/vote_average"
+                android:id="@+id/date_of_birth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{donorsItemViewModel.voteAverage}"
+                android:text="@{donorsItemViewModel.releaseDate}"
                 app:text_font="@{uiViewModel.donorItemTextTypeface}"
                 app:text_color="@{uiViewModel.donorItemTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                app:layout_constraintTop_toBottomOf="@+id/vote_count"
-                app:layout_constraintBottom_toTopOf="@+id/popularity"
+                app:layout_constraintTop_toBottomOf="@+id/middle_name"
+                app:layout_constraintBottom_toTopOf="@+id/abo_rh"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
         <android.widget.TextView
-                android:id="@+id/popularity"
+                android:id="@+id/abo_rh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{donorsItemViewModel.popularity}"
+                android:text="@{donorsItemViewModel.backdropPath}"
                 app:text_font="@{uiViewModel.donorItemTextTypeface}"
                 app:text_color="@{uiViewModel.donorItemTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                app:layout_constraintTop_toBottomOf="@+id/vote_average"
-                app:layout_constraintBottom_toTopOf="@+id/original_title"
+                app:layout_constraintTop_toBottomOf="@+id/date_of_birth"
+                app:layout_constraintBottom_toTopOf="@+id/branch"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
         <android.widget.TextView
-                android:id="@+id/original_title"
+                android:id="@+id/branch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{donorsItemViewModel.originalTitle}"
@@ -91,7 +91,7 @@
                 app:text_color="@{uiViewModel.donorItemTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                app:layout_constraintTop_toBottomOf="@+id/popularity"
+                app:layout_constraintTop_toBottomOf="@+id/abo_rh"
                 app:layout_constraintBottom_toTopOf="@+id/divider"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -101,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/black"
-                app:layout_constraintTop_toBottomOf="@+id/original_title"
+                app:layout_constraintTop_toBottomOf="@+id/branch"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
