@@ -152,7 +152,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
                 editor.putString("THEME", value.name)
                 editor.apply()
                 uiDataClass = uiDataModel.loadData(value)
-                liveDataUpdate(value)
+                themeSwitcher(value)
             }
             field = value
         }
@@ -221,7 +221,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
         return totalButtonWidth / (Constants.EDIT_TEXT_TO_BUTTON_RATIO + 1)
     }
 
-    private fun liveDataUpdate(theme: MainActivity.UITheme) {
+    private fun themeSwitcher(theme: MainActivity.UITheme) {
         uiDataClass?.let { uiDataClass ->
 
             // change colors in these styles to match any changes to colors in UIDataModel
