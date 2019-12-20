@@ -14,6 +14,9 @@ interface DBDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertDonor(donor: Donor)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertLocalDonor(donor: Donor)
+
     @Query("DELETE FROM donors")
     fun deleteAllDonors()
 

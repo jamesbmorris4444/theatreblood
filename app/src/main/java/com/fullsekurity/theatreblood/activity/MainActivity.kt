@@ -1,6 +1,8 @@
 package com.fullsekurity.theatreblood.activity
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
@@ -15,10 +17,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.FragmentManager
 import com.fullsekurity.theatreblood.R
+import com.fullsekurity.theatreblood.barcode.BarCodeScannerActivity
 import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.donors.DonateProductsFragment
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.products.CreateProductsFragment
+import com.fullsekurity.theatreblood.products.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
@@ -227,6 +231,25 @@ class MainActivity : AppCompatActivity() {
         networkStatusMenuItem = menu.findItem(R.id.network_status)
         setToolbarNetworkStatus()
         return true
+    }
+
+    private lateinit var createProductsListViewModel: CreateProductsListViewModel
+
+    fun barcodeScanner(createProductsListViewModel: CreateProductsListViewModel) {
+        this.createProductsListViewModel = createProductsListViewModel
+        val intent = Intent(this, BarCodeScannerActivity::class.java)
+        startActivityForResult(intent, 100)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 100) {
+                val barcodeResult = data?.getStringExtra("rawResult")
+                createProductsListViewModel.gridText11.set(barcodeResult)
+                createProductsListViewModel.gridText11Visible.set(View.VISIBLE)
+            }
+        }
     }
 
 }

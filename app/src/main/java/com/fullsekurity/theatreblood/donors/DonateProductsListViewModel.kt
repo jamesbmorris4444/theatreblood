@@ -112,19 +112,19 @@ class DonateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
             .subscribe({ responseList ->
                 val response = responseList[0]
                 for (donor in response[0] as List<Donor>) {
-                    if (donor.posterPath.length > 10) {
+                    if (donor.posterPath.length > 11) {
                         donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
                         donor.backdropPath = donor.backdropPath.substring(1,11).toUpperCase(Locale.getDefault())
                     }
                 }
                 for (donor in response[1] as List<Donor>) {
-                    if (donor.posterPath.length > 10) {
+                    if (donor.posterPath.length > 11) {
                         donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
                         donor.backdropPath = donor.backdropPath.substring(1,11).toUpperCase(Locale.getDefault())
                     }
                 }
                 for (donor in response[2] as List<Donor>) {
-                    if (donor.posterPath.length > 10) {
+                    if (donor.posterPath.length > 11) {
                         donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
                         donor.backdropPath = donor.backdropPath.substring(1,11).toUpperCase(Locale.getDefault())
                     }

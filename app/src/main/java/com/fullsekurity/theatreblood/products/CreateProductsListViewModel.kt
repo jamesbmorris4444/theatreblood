@@ -37,7 +37,7 @@ class CreateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
     private lateinit var rootView: View
     private var numberOfItemsDisplayed = -1
 
-    val gridText11: ObservableField<String> = ObservableField("")
+    val gridText11: ObservableField<String> = ObservableField("HELLO")
     val gridText12: ObservableField<String> = ObservableField("")
     val gridText21: ObservableField<String> = ObservableField("")
     val gridText22: ObservableField<String> = ObservableField("")
@@ -127,6 +127,10 @@ class CreateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
     fun setRootView(view: View) {
         rootView = view
         //rootView.findViewById<TextInputLayout>(R.id.edit_text_input_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+    }
+
+    fun onScanClicked(view: View) {
+        activity.barcodeScanner(this)
     }
 
 }

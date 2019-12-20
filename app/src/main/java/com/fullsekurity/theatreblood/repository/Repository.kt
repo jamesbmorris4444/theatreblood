@@ -217,7 +217,7 @@ class Repository(val activity: MainActivity) {
 
     private fun initializeDataBase(donors: List<Donor>, activity: MainActivity) {
         for (entry in donors.indices) {
-            insertIntoDatabase(mainBloodDatabase, donors[entry])
+            insertIntoLocalDatabase(mainBloodDatabase, donors[entry])
         }
         StandardModal(
             activity,
@@ -234,11 +234,15 @@ class Repository(val activity: MainActivity) {
         ).show(activity.supportFragmentManager, "MODAL")
     }
 
-    fun deleteDatabase(context: Context, databaseName: String) {
+    private fun insertIntoLocalDatabase(database: BloodDatabase, donor: Donor) {
+        database.donorDao().insertLocalDonor(donor)
+    }
+
+    private fun deleteDatabase(context: Context, databaseName: String) {
         context.deleteDatabase(databaseName)
     }
 
-    fun saveDatabase(context: Context, databaseName: String) {
+    private fun saveDatabase(context: Context, databaseName: String) {
         val db = context.getDatabasePath(databaseName)
         val dbBackup = File(db.parent, databaseName+"_backup")
         if (db.exists()) {

@@ -59,6 +59,10 @@ dependencies {
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    // Zxing barcode reader
+    implementation 'me.dm7.barcodescanner:zxing:1.9'
+    implementation 'com.google.zxing:core:3.3.0'
+
     // RxJava
     implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
     implementation "io.reactivex.rxjava2:rxandroid:2.0.2"

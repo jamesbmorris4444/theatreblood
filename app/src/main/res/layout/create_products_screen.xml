@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/lt_blood_grid_11"
-                android:onClick="@{(view) -> createProductsListViewModel.onGridElement11Clicked(view)}"
+                android:onClick="@{(view) -> createProductsListViewModel.onScanClicked(view)}"
                 app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
                 app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"

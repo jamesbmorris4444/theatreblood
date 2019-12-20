@@ -22,6 +22,7 @@ object Constants {
     const val STANDARD_EDIT_TEXT_HEIGHT = 60f
     const val STANDARD_BUTTON_HEIGHT = 50f
     const val EDIT_TEXT_TO_BUTTON_RATIO = 3  // 3:1
+    const val REQUEST_CODE_ASK_PERMISSIONS = 123
 
     // toolbar
 
