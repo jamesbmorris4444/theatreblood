@@ -8,6 +8,7 @@ import android.net.NetworkRequest
 import android.view.View
 import android.widget.ProgressBar
 import com.fullsekurity.theatreblood.R
+import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.modal.StandardModal
@@ -28,7 +29,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 
-class Repository(val activity: MainActivity) {
+class Repository(private val activityCallbacks: ActivityCallbacks) {
 
     private val TAG = Repository::class.java.simpleName
     lateinit var mainBloodDatabase: BloodDatabase
@@ -65,7 +66,7 @@ class Repository(val activity: MainActivity) {
     }
 
     init {
-        val connectivityManager = activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager = activityCallbacks.fetchActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val builder: NetworkRequest.Builder = NetworkRequest.Builder()
         connectivityManager.registerNetworkCallback(
             builder.build(),
@@ -103,11 +104,11 @@ class Repository(val activity: MainActivity) {
                     if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                         wiFiNetwork = network
                         transportType = TransportType.WIFI
-                        activity.setToolbarNetworkStatus()
+                        activityCallbacks.fetchActivity().setToolbarNetworkStatus()
                     } else if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                         cellularNetwork = network
                         transportType = TransportType.CELLULAR
-                        activity.setToolbarNetworkStatus()
+                        activityCallbacks.fetchActivity().setToolbarNetworkStatus()
                     }
                 }
             }
@@ -116,7 +117,7 @@ class Repository(val activity: MainActivity) {
                     if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                         cellularNetwork = network
                         transportType = TransportType.BOTH
-                        activity.setToolbarNetworkStatus()
+                        activityCallbacks.fetchActivity().setToolbarNetworkStatus()
                     }
                 }
             }
@@ -125,7 +126,7 @@ class Repository(val activity: MainActivity) {
                     if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                         wiFiNetwork = network
                         transportType = TransportType.BOTH
-                        activity.setToolbarNetworkStatus()
+                        activityCallbacks.fetchActivity().setToolbarNetworkStatus()
                     }
                 }
 
@@ -139,21 +140,21 @@ class Repository(val activity: MainActivity) {
             TransportType.NONE -> { }
             TransportType.WIFI, TransportType.CELLULAR -> {
                 transportType = TransportType.NONE
-                activity.setToolbarNetworkStatus()
+                activityCallbacks.fetchActivity().setToolbarNetworkStatus()
             }
             TransportType.BOTH -> {
-                val connectivityManager = activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val connectivityManager = activityCallbacks.fetchActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
                 connectivityManager.getNetworkCapabilities(wiFiNetwork)?.let { networkCapabiities ->
                     if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                         transportType = TransportType.WIFI
-                        activity.setToolbarNetworkStatus()
+                        activityCallbacks.fetchActivity().setToolbarNetworkStatus()
                     }
                 }
                 if (transportType == TransportType.BOTH) {
                     transportType = TransportType.CELLULAR
-                    activity.setToolbarNetworkStatus()
+                    activityCallbacks.fetchActivity().setToolbarNetworkStatus()
                 }
-                activity.setToolbarNetworkStatus()
+                activityCallbacks.fetchActivity().setToolbarNetworkStatus()
             }
         }
     }
@@ -278,26 +279,26 @@ class Repository(val activity: MainActivity) {
             .subscribeOn(Schedulers.io())
             .subscribe {
                 StandardModal(
-                    activity,
+                    activityCallbacks,
                     modalType = StandardModal.ModalType.STANDARD,
-                    titleText = activity.getString(R.string.std_modal_insert_staging_title),
-                    bodyText = activity.getString(R.string.std_modal_insert_staging_body),
-                    positiveText = activity.getString(R.string.std_modal_ok),
+                    titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_staging_title),
+                    bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_staging_body),
+                    positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
                     dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                         override fun onPositive(password: String) {
                             disposable?.dispose()
                             disposable = null
-                            activity.loadCreateProductsFragment(donor)
+                            activityCallbacks.fetchActivity().loadCreateProductsFragment(donor)
                         }
                         override fun onNegative() { }
                         override fun onNeutral() { }
                         override fun onBackPressed() {
                             disposable?.dispose()
                             disposable = null
-                            activity.loadCreateProductsFragment(donor)
+                            activityCallbacks.fetchActivity().loadCreateProductsFragment(donor)
                         }
                     }
-                ).show(activity.supportFragmentManager, "MODAL")
+                ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
             }
     }
 

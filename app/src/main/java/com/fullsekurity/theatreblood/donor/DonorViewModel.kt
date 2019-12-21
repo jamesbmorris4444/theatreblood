@@ -1,5 +1,6 @@
 package com.fullsekurity.theatreblood.donor
 
+import android.app.Application
 import android.app.DatePickerDialog
 import android.content.Context
 import android.view.LayoutInflater
@@ -13,7 +14,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.R
-import com.fullsekurity.theatreblood.activity.MainActivity
+import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.databinding.AborhDropdownItemBinding
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.Repository
@@ -29,23 +30,20 @@ import javax.inject.Inject
 
 
 @Suppress("UNCHECKED_CAST")
-class DonorViewModelFactory(private val activity: MainActivity) : ViewModelProvider.Factory {
+class DonorViewModelFactory(private val activityCallbacks: ActivityCallbacks) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DonorViewModel(activity) as T
+        return DonorViewModel(activityCallbacks) as T
     }
 }
 
 @Suppress("UNCHECKED_CAST")
-class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.application) {
+class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : AndroidViewModel(activityCallbacks.fetchActivity().application) {
 
     private val calendar = Calendar.getInstance()
     private val year = calendar.get(Calendar.YEAR)
     private val month = calendar.get(Calendar.MONTH)
     private val day = calendar.get(Calendar.DAY_OF_MONTH)
     private var dateFormatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
-    private lateinit var rootView: View
-    private lateinit var maleRadioButton: RadioButton
-    private lateinit var femaleRadioButton: RadioButton
     val submitOrUpdateText: ObservableField<String> = ObservableField("")
     private lateinit var donor: Donor
     private var lastNameChanged = false        // last name field was changed (new entry in database)
@@ -63,7 +61,7 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
 
     init {
         DaggerViewModelDependencyInjector.builder()
-            .viewModelInjectorModule(ViewModelInjectorModule(activity))
+            .viewModelInjectorModule(ViewModelInjectorModule(activityCallbacks.fetchActivity()))
             .build()
             .inject(this)
     }
@@ -74,27 +72,27 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
     var editTextDisplayModifyLastName: ObservableField<String> = ObservableField("")
     fun onTextLastNameChanged(string: CharSequence, start: Int, before: Int, count: Int) {
         if (lastNameChanged) {
-            submitOrUpdateText.set(activity.getString(R.string.button_insert))
+            submitOrUpdateText.set(getApplication<Application>().applicationContext.getString(R.string.button_insert))
             atLeastOneEntryChanged = true
         } else {
             lastNameChanged = true
         }
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
-    var hintTextLastName: ObservableField<String> = ObservableField(activity.getString(R.string.donor_last_name))
+    var hintTextLastName: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_last_name))
     var editTextLastNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     // first name
     var editTextDisplayModifyFirstName: ObservableField<String> = ObservableField("")
     fun onTextFirstNameChanged(string: CharSequence, start: Int, before: Int, count: Int) {
         if (firstNameChanged) {
-            submitOrUpdateText.set(activity.getString(R.string.button_insert))
+            submitOrUpdateText.set(getApplication<Application>().applicationContext.getString(R.string.button_insert))
             atLeastOneEntryChanged = true
         } else {
             firstNameChanged = true
         }
     }
-    var hintTextFirstName: ObservableField<String> = ObservableField(activity.getString(R.string.donor_first_name))
+    var hintTextFirstName: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_first_name))
     var editTextFirstNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     // middle name
@@ -106,12 +104,12 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
             middleNameChanged = true
         }
     }
-    var hintTextMiddleName: ObservableField<String> = ObservableField(activity.getString(R.string.donor_middle_name))
+    var hintTextMiddleName: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_middle_name))
     var editTextMiddleNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     // date of birth
     var editTextDisplayModifyDob: ObservableField<String> = ObservableField("")
-    var hintTextDob: ObservableField<String> = ObservableField(activity.getString(R.string.donor_dob))
+    var hintTextDob: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_dob))
     var editTextDobVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     fun onCalendarClicked(view: View) {
@@ -127,30 +125,30 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
                 editTextDisplayModifyDob.set(dateFormatter.format(calendar.time))
             }
         }
-        DatePickerDialog(activity, uiViewModel.datePickerColorStyle, listener, year, month, day).show()
+        DatePickerDialog(activityCallbacks.fetchActivity(), uiViewModel.datePickerColorStyle, listener, year, month, day).show()
     }
 
     // gender
-    var hintTextGender: ObservableField<String> = ObservableField(activity.getString(R.string.donor_gender))
+    var hintTextGender: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_gender))
     var radioButtonsGenderVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     fun onGenderChanged(radioGroup: RadioGroup?, id: Int) {
         atLeastOneEntryChanged = !atLeastOneEntryChanged
         if (id == R.id.radio_male) {
-            maleRadioButton.isChecked = true
+            activityCallbacks.fetchRadioButton(R.id.radio_male)?.isChecked = true
         } else {
-            femaleRadioButton.isChecked = true
+            activityCallbacks.fetchRadioButton(R.id.radio_female)?.isChecked = true
         }
     }
 
     // ABO/Rh
-    var hintTextAboRh: ObservableField<String> = ObservableField(activity.getString(R.string.donor_abo_rh))
+    var hintTextAboRh: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_abo_rh))
     var dropdownAboRhVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
     var currentAboRhSelectedValue: String = "NO ABO/Rh"
     // atLeastOneEntryChanged = true
 
     // Military Branch
-    var hintTextMilitaryBranch: ObservableField<String> = ObservableField(activity.getString(R.string.donor_branch))
+    var hintTextMilitaryBranch: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_branch))
     var dropdownMilitaryBranchVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
     var currentMilitaryBranchSelectedValue: String = "NO Military Branch"
     // atLeastOneEntryChanged = true
@@ -193,27 +191,29 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
         }
 
         // change gender
-        if (maleRadioButton.isChecked) {
-            donor.overview = activity.getString(R.string.donor_male)
-        } else {
-            donor.overview = activity.getString(R.string.donor_female)
+        activityCallbacks.fetchRadioButton(R.id.radio_male)?.let {
+            if (it.isChecked) {
+                donor.overview = getApplication<Application>().applicationContext.getString(R.string.donor_male)
+            } else {
+                donor.overview = getApplication<Application>().applicationContext.getString(R.string.donor_female)
+            }
         }
 
 //        donor.???? = currentAboRhSelectedValue
 //        donor.???? = currentMilitaryBranchSelectedValue
 
         if (atLeastOneEntryChanged) {
-            if (submitOrUpdateText.get() == activity.getString(R.string.button_insert)) {
+            if (submitOrUpdateText.get() == getApplication<Application>().applicationContext.getString(R.string.button_insert)) {
                 repository.insertIntoDatabase(repository.insertedBloodDatabase, donor)
             } else {
                 repository.insertIntoDatabase(repository.modifiedBloodDatabase, donor)
             }
         } else {
             StandardModal(
-                activity,
+                activityCallbacks,
                 modalType = StandardModal.ModalType.STANDARD,
-                titleText = activity.getString(R.string.std_modal_no_change_in_database_title),
-                positiveText = activity.getString(R.string.std_modal_ok),
+                titleText = getApplication<Application>().applicationContext.getString(R.string.std_modal_no_change_in_database_title),
+                positiveText = getApplication<Application>().applicationContext.getString(R.string.std_modal_ok),
                 dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                     override fun onPositive(password: String) {
                         loadCreateProductsFragment()
@@ -224,44 +224,38 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
                         loadCreateProductsFragment()
                     }
                 }
-            ).show(activity.supportFragmentManager, "MODAL")
+            ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
         }
 
     }
 
     private fun loadCreateProductsFragment() {
-        activity.loadCreateProductsFragment(donor)
-    }
-
-    fun setRootView(view: View) {
-        rootView = view
+        activityCallbacks.fetchActivity().loadCreateProductsFragment(donor)
     }
 
     fun setDonor(donor: Donor) {
         this.donor = donor
-        submitOrUpdateText.set(if (donor.title.isEmpty()) activity.getString(R.string.button_insert) else activity.getString(R.string.button_update))
-        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_last_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
-        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_first_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
-        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_middle_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
-        rootView.findViewById<TextInputLayout>(R.id.edit_text_display_dob).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        submitOrUpdateText.set(if (donor.title.isEmpty()) getApplication<Application>().applicationContext.getString(R.string.button_insert) else getApplication<Application>().applicationContext.getString(R.string.button_update))
+        activityCallbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_last_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        activityCallbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_first_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        activityCallbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_middle_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        activityCallbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_dob).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
 
         editTextDisplayModifyLastName.set(donor.title)
         editTextDisplayModifyFirstName.set(donor.posterPath)
         editTextDisplayModifyMiddleName.set(donor.voteCount.toString())
         editTextDisplayModifyDob.set(donor.releaseDate)
-        
-        maleRadioButton = rootView.findViewById(R.id.radio_male)
-        femaleRadioButton = rootView.findViewById(R.id.radio_female)
+
         if (donor.adult) {
-            maleRadioButton.isChecked = true
+            activityCallbacks.fetchRadioButton(R.id.radio_male)?.isChecked = true
         } else {
-            femaleRadioButton.isChecked = true
+            activityCallbacks.fetchRadioButton(R.id.radio_male)?.isChecked = true
         }
 
-        val aboRhDropdownView: Spinner = rootView.findViewById(R.id.abo_rh_dropdown)
+        val aboRhDropdownView: Spinner = activityCallbacks.fetchRootView().findViewById(R.id.abo_rh_dropdown)
         aboRhDropdownView.background = uiViewModel.editTextDisplayModifyBackground.get()
-        val aboRhDropdownArray = activity.resources.getStringArray(R.array.abo_rh_array)
-        val aboRhAdapter = CustomSpinnerAdapter(activity, uiViewModel, aboRhDropdownArray)
+        val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array)
+        val aboRhAdapter = CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
         aboRhDropdownView.adapter = aboRhAdapter
         aboRhDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -270,10 +264,10 @@ class DonorViewModel(val activity: MainActivity) : AndroidViewModel(activity.app
             override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
 
-        val militaryBranchDropdownView: Spinner = rootView.findViewById(R.id.military_branch_dropdown)
+        val militaryBranchDropdownView: Spinner = activityCallbacks.fetchRootView().findViewById(R.id.military_branch_dropdown)
         militaryBranchDropdownView.background = uiViewModel.editTextDisplayModifyBackground.get()
-        val militaryBranchDropdownArray = activity.resources.getStringArray(R.array.military_branch_array)
-        val militaryBranchAdapter = CustomSpinnerAdapter(activity, uiViewModel, militaryBranchDropdownArray)
+        val militaryBranchDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.military_branch_array)
+        val militaryBranchAdapter = CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, militaryBranchDropdownArray)
         militaryBranchDropdownView.adapter = militaryBranchAdapter
         militaryBranchDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {

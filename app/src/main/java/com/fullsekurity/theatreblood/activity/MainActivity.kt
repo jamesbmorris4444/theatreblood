@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -42,7 +43,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ActivityCallbacks {
 
     private val tag = MainActivity::class.java.simpleName
 
@@ -53,6 +54,7 @@ class MainActivity : AppCompatActivity() {
     private var networkStatusMenuItem: MenuItem? = null
     private lateinit var navView: BottomNavigationView
     private lateinit var lottieBackgroundView: LottieAnimationView
+    private lateinit var activityMainBinding: ActivityMainBinding
 
     enum class UITheme {
         LIGHT, DARK, NOT_ASSIGNED,
@@ -104,7 +106,7 @@ class MainActivity : AppCompatActivity() {
             .build()
             .inject(this)
         super.onCreate(savedInstanceState)
-        val activityMainBinding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         activityMainBinding.uiViewModel = uiViewModel
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -270,6 +272,18 @@ class MainActivity : AppCompatActivity() {
                 createProductsListViewModel.gridText11Visible.set(View.VISIBLE)
             }
         }
+    }
+
+    override fun fetchActivity(): MainActivity {
+        return this
+    }
+
+    override fun fetchRootView(): View {
+        return activityMainBinding.root
+    }
+
+    override fun fetchRadioButton(resId:Int): RadioButton? {
+        return null
     }
 
 }

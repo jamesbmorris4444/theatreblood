@@ -17,7 +17,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
-import com.fullsekurity.theatreblood.activity.MainActivity
+import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.databinding.StandardModalBinding
 import com.fullsekurity.theatreblood.databinding.StandardModalFooterItemBinding
 import com.fullsekurity.theatreblood.databinding.StandardModalHeaderItemBinding
@@ -80,7 +80,7 @@ class StandardModal (
                 fragment.fragmentManager?.let { dialog.show(it, TAG) }
          */
 
-        private val activity: MainActivity,
+        private val activityCallbacks: ActivityCallbacks,
         private var modalType: ModalType = ModalType.STANDARD,
         private var iconType: IconType = IconType.NONE,
         titleText: String = "",
@@ -164,7 +164,7 @@ class StandardModal (
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         DaggerViewModelDependencyInjector.builder()
-                .viewModelInjectorModule(ViewModelInjectorModule(activity))
+                .viewModelInjectorModule(ViewModelInjectorModule(activityCallbacks.fetchActivity()))
                 .build()
                 .inject(this)
 
@@ -214,7 +214,7 @@ class StandardModal (
                 val resultLayoutManager = LinearLayoutManager(activity)
                 lateinit var adapter: ModalListAdapter
                 context?.let {
-                    adapter = ModalListAdapter(activity, this, it)
+                    adapter = ModalListAdapter(activityCallbacks, uiViewModel,this, it)
                 }
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = resultLayoutManager
@@ -255,7 +255,7 @@ class StandardModal (
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return object: Dialog(activity, theme) {
+        return object: Dialog(activityCallbacks.fetchActivity(), theme) {
             override fun onBackPressed() {
                 dismiss()
                 dialogFinishedListener?.onBackPressed()
@@ -297,46 +297,30 @@ class StandardModal (
                     val line1: String,
                     val line2: String)
 
-    class ModalListAdapter(val activity: MainActivity, val fragment: StandardModal, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    class ModalListAdapter(private val activityCallbacks: ActivityCallbacks, val uiViewModel: UIViewModel, val standardModal: StandardModal, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         private val TAG = ModalListAdapter::class.java.simpleName
-        lateinit var uiViewModel: UIViewModel
         private var itemList = arrayListOf<ModalItem>()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             when (viewType) {
-                StandardModal.ModalListType.HEADER_ITEM.ordinal -> {
+                ModalListType.HEADER_ITEM.ordinal -> {
                     val binding: StandardModalHeaderItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.standard_modal_header_item, parent, false)
-                    uiViewModel = fragment.uiViewModel
                     binding.uiViewModel = uiViewModel
-                    binding.standardModal = fragment
-                    // Observer for theme initialized
-//                    uiViewModel.liveUIDataClass.observe(fragment, Observer {
-//                        uiViewModel.liveDataUpdate()
-//                    })
-                    uiViewModel.currentTheme = activity.currentTheme
+                    binding.standardModal = standardModal
+                    uiViewModel.currentTheme = activityCallbacks.fetchActivity().currentTheme
                     return HeaderViewHolder(binding.root)
                 }
-                StandardModal.ModalListType.LIST_ITEM.ordinal -> {
+                ModalListType.LIST_ITEM.ordinal -> {
                     val binding: StandardModalListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.standard_modal_list_item, parent, false)
-                    uiViewModel = fragment.uiViewModel
                     binding.uiViewModel = uiViewModel
-                    // Observer for theme initialized
-//                    uiViewModel.liveUIDataClass.observe(fragment, Observer {
-//                        uiViewModel.liveDataUpdate()
-//                    })
-                    uiViewModel.currentTheme = activity.currentTheme
+                    uiViewModel.currentTheme = activityCallbacks.fetchActivity().currentTheme
                     return ListViewHolder(binding.root)
                 }
-                StandardModal.ModalListType.FOOTER_ITEM.ordinal -> {
+                ModalListType.FOOTER_ITEM.ordinal -> {
                     val binding: StandardModalFooterItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.standard_modal_footer_item, parent, false)
-                    uiViewModel = fragment.uiViewModel
                     binding.uiViewModel = uiViewModel
-                    // Observer for theme initialized
-//                    uiViewModel.liveUIDataClass.observe(fragment, Observer {
-//                        uiViewModel.liveDataUpdate()
-//                    })
-                    uiViewModel.currentTheme = activity.currentTheme
+                    uiViewModel.currentTheme = activityCallbacks.fetchActivity().currentTheme
                     return FooterViewHolder(binding.root)
                 }
                 else -> {
@@ -357,11 +341,11 @@ class StandardModal (
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val item = itemList[position]
             when (getItemViewType(position)) {
-                StandardModal.ModalListType.HEADER_ITEM.ordinal -> {
+                ModalListType.HEADER_ITEM.ordinal -> {
                     (holder as HeaderViewHolder).centerText?.text = item.title
                     holder.amountText?.text = item.amount
                 }
-                StandardModal.ModalListType.LIST_ITEM.ordinal -> {
+                ModalListType.LIST_ITEM.ordinal -> {
                     if (position == 1) {
                         (holder as ListViewHolder).titleText?.text = item.title
                         holder.titleText?.visibility = View.VISIBLE
@@ -371,7 +355,7 @@ class StandardModal (
                     holder.line1Text?.text = item.line1
                     holder.line2Text?.text = item.line2
                 }
-                StandardModal.ModalListType.FOOTER_ITEM.ordinal -> {
+                ModalListType.FOOTER_ITEM.ordinal -> {
                     (holder as FooterViewHolder).footerText?.text = item.line1
                 }
             }

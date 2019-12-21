@@ -1,12 +1,12 @@
 package com.fullsekurity.theatreblood.donors
 
 import androidx.databinding.ObservableField
-import com.fullsekurity.theatreblood.activity.MainActivity
+import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 import com.fullsekurity.theatreblood.repository.storage.Donor
 
 @Suppress("UNCHECKED_CAST")
-class DonateProductsItemViewModel(val activity: MainActivity) : RecyclerViewItemViewModel<Donor>() {
+class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewItemViewModel<Donor>() {
 
     private lateinit var donor: Donor
 
@@ -40,7 +40,7 @@ class DonateProductsItemViewModel(val activity: MainActivity) : RecyclerViewItem
     }
 
     fun onItemClicked() {
-        activity.loadDonorFragment(donor)
+        activityCallbacks.fetchActivity().loadDonorFragment(donor)
     }
 
 }

@@ -1,5 +1,6 @@
 package com.fullsekurity.theatreblood.donors
 
+import android.app.Application
 import android.view.View
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
@@ -7,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
-import com.fullsekurity.theatreblood.activity.MainActivity
+import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -15,7 +16,6 @@ import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.Utils
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
-import com.google.android.material.textfield.TextInputLayout
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -23,23 +23,20 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
 
-@Suppress("UNCHECKED_CAST")
-class DonateProductsListViewModelFactory(private val activity: MainActivity) : ViewModelProvider.Factory {
+class DonateProductsListViewModelFactory(private val activityCallbacks: ActivityCallbacks) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DonateProductsListViewModel(activity) as T
+        return DonateProductsListViewModel(activityCallbacks) as T
     }
 }
 
-@Suppress("UNCHECKED_CAST")
-class DonateProductsListViewModel(val activity: MainActivity) : RecyclerViewViewModel(activity.application) {
+class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewViewModel(activityCallbacks.fetchActivity().application) {
 
     private val tag = DonateProductsListViewModel::class.java.simpleName
-    override var adapter: DonateProductsAdapter = DonateProductsAdapter(activity)
+    override var adapter: DonateProductsAdapter = DonateProductsAdapter(activityCallbacks)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     val listIsVisible: ObservableField<Boolean> = ObservableField(true)
     val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
     val submitVisible: ObservableField<Int> = ObservableField(View.GONE)
-    private lateinit var rootView: View
     private var numberOfItemsDisplayed = -1
 
     @Inject
@@ -49,14 +46,14 @@ class DonateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
 
     init {
         DaggerViewModelDependencyInjector.builder()
-            .viewModelInjectorModule(ViewModelInjectorModule(activity))
+            .viewModelInjectorModule(ViewModelInjectorModule(activityCallbacks.fetchActivity()))
             .build()
             .inject(this)
         adapter.uiViewModel = uiViewModel
     }
 
     override fun setLayoutManager(): RecyclerView.LayoutManager {
-        return object : LinearLayoutManager(activity.applicationContext) {
+        return object : LinearLayoutManager(getApplication<Application>().applicationContext) {
             override fun canScrollHorizontally(): Boolean {
                 return false
             }
@@ -96,9 +93,10 @@ class DonateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
         }
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
-    var hintTextName: ObservableField<String> = ObservableField(activity.getString(R.string.donor_search_string))
+    var hintTextName: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_search_string))
     var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
+    @Suppress("UNCHECKED_CAST")
     fun onSubmitClicked(view: View) {
         var disposable: Disposable? = null
         val fullNameResponseList = listOf(
@@ -136,12 +134,7 @@ class DonateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
     }
 
     fun onNewDonorClicked(view: View) {
-        activity.loadDonorFragment(Donor())
-    }
-
-    fun setRootView(view: View) {
-        rootView = view
-        rootView.findViewById<TextInputLayout>(R.id.edit_text_input_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        activityCallbacks.fetchActivity().loadDonorFragment(Donor())
     }
 
 }
