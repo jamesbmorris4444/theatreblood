@@ -12,7 +12,7 @@ class UIDataModel {
                 if (lightViewUIDataClass == null) {
                     lightViewUIDataClass = UIDataClass(
                         R.drawable.lt_background,
-                        "", // background_full_screen_train.json
+                        "background_full_screen_train.json", // background_full_screen_train.json
                         R.drawable.lt_standard_modal_background,
                         R.drawable.lt_dashed_line,
                         "lightGray",
@@ -97,10 +97,10 @@ class UIDataModel {
                 if (darkViewUIDataClass == null) {
                     darkViewUIDataClass = UIDataClass(
                         R.drawable.dk_background,
-                        "", // background_full_screen_night.json
+                        "background_full_screen_night.json", // background_full_screen_night.json
                         R.drawable.dk_standard_modal_background,
                         R.drawable.lt_dashed_line,
-                        "lightGray",
+                        "white",
                         "lightGray",
                         48f,
                         24f,
@@ -136,8 +136,8 @@ class UIDataModel {
                         "darkGray",
                         "mediumText",
 
-                        "veryLightGray",
-                        "lighterGray",
+                        "darkGray",
+                        "mediumGray",
                         "primary",
                         "secondary",
                         "white",
@@ -146,7 +146,7 @@ class UIDataModel {
                         "black",
                         "subTitle",
                         "veryLightGray",
-                        "cyan",
+                        "primary",
                         R.drawable.edit_text_background,
 
                         "mediumGray",
@@ -158,10 +158,10 @@ class UIDataModel {
                         R.drawable.edit_text_background,
 
                         R.drawable.button_dark,
-                        "black",
+                        "white",
                         "subTitle",
 
-                        "black",
+                        "white",
                         "largeText",
 
                         "error",

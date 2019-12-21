@@ -100,7 +100,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/black"
+                app:background_color="@{uiViewModel.standardDialogDividerColor}"
                 app:layout_constraintTop_toBottomOf="@+id/branch"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />

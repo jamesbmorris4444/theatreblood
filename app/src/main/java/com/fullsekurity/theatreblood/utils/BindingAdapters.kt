@@ -5,10 +5,12 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.logger.LogUtils
@@ -76,53 +78,9 @@ fun setMarginRight(v: View, rightMargin: Int) {
     v.requestLayout()
 }
 
-@BindingAdapter("layout_center_relativelayout")
-fun setRelativeLayoutCenterHorizontal(v: View, gravity: Int) {
-    // TRUE == anything but 0, we use 1
-    // FALSE == 0
-    val layoutParams: RelativeLayout.LayoutParams = v.layoutParams as RelativeLayout.LayoutParams
-    layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, gravity)
-    v.layoutParams = layoutParams
-    v.requestLayout()
-}
-
 @BindingAdapter("textview_gravity")
 fun setTextViewGravity(v: TextView, gravity: Int) {
     v.gravity = gravity
-    v.requestLayout()
-}
-
-@BindingAdapter("layout_marginBoth_computed", "view_fullscreen")
-fun setMarginBothComputedFullScreen(v: View, leftandRightMargin: Int, viewFullscreen: Int) {
-    val layoutParams = v.layoutParams as ViewGroup.MarginLayoutParams
-    when {
-        viewFullscreen == 0 -> {
-            // compute left and right margins as equal values to center the image
-            layoutParams.leftMargin = leftandRightMargin
-            layoutParams.rightMargin = leftandRightMargin
-            layoutParams.width = v.context.resources.displayMetrics.widthPixels - 2 * leftandRightMargin
-        }
-        viewFullscreen == 1 -> {
-            // expand image to full screen
-            layoutParams.leftMargin = 0
-            layoutParams.rightMargin = 0
-            layoutParams.width = v.context.resources.displayMetrics.widthPixels
-        }
-        viewFullscreen == 2 -> // left justify image
-            layoutParams.leftMargin = 0
-        viewFullscreen < 0 -> {
-            // left justify image with right margin = -viewFullscreen
-            layoutParams.leftMargin = 0
-            layoutParams.width = v.context.resources.displayMetrics.widthPixels + viewFullscreen
-        }
-        else -> {
-            // use viewFullScreen for equal left and right margins, and center the image
-            layoutParams.leftMargin = viewFullscreen
-            layoutParams.rightMargin = viewFullscreen
-            layoutParams.width = v.context.resources.displayMetrics.widthPixels - 2 * viewFullscreen
-        }
-    }
-    v.layoutParams = layoutParams
     v.requestLayout()
 }
 
@@ -191,12 +149,6 @@ fun setPasswordToggleTint(view: TextInputLayout, color: String) {
     view.setPasswordVisibilityToggleTintList(colorStateList)
 }
 
-
-@BindingAdapter("include_font_padding")
-fun includeFontPadding(view: TextView, include: Int) {
-    view.includeFontPadding = include == 1
-}
-
 @BindingAdapter("background_color")
 fun setBackgroundColor(view: LinearLayout, color: String) {
     view.setBackgroundColor(Color.parseColor(color))
@@ -223,22 +175,6 @@ fun setCardColor(view: View, color: String) {
     // If color is ever needed as a drawable: Converters.convertColorToDrawable(0x00ff00)
 }
 
-@BindingAdapter("background_color")
-fun setViewBackgroundColor(view: View, color: String) {
-    if (view is ConstraintLayout) {
-        view.setBackgroundColor(Color.parseColor(color))
-    } else {
-        view.setBackgroundColor(Color.parseColor(color))
-    }
-    // If color is ever needed as a drawable: Converters.convertColorToDrawable(0x00ff00)
-}
-
-@BindingAdapter("background_color")
-fun setViewBackgroundColor(view: View, color: Int) {
-    view.setBackgroundColor(color)
-    // If color is ever needed as a drawable: Converters.convertColorToDrawable(0x00ff00)
-}
-
 @BindingAdapter("layout_width_dynamic")
 fun setLayoutWidth(v: View, width: Int) {
     v.layoutParams.width = width
@@ -251,19 +187,6 @@ fun setLayoutHeight(v: View, height: Int) {
     v.requestLayout()
 }
 
-@BindingAdapter("requestFocus")
-fun requestFocus(view: TextView, requestFocus: Boolean) {
-    if (requestFocus) {
-        view.isFocusableInTouchMode = true
-        view.requestFocus()
-    }
-}
-
-@BindingAdapter("rightIcon")
-fun setImageResource(editText: EditText, resource: Int) {
-    editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, resource, 0);
-}
-
 @BindingAdapter("text_hint_color")
 fun setTextHintColor(view: EditText, color: String) {
     view.setHintTextColor(Color.parseColor(color))
@@ -272,16 +195,6 @@ fun setTextHintColor(view: EditText, color: String) {
 @BindingAdapter("set_hint")
 fun setHint(view: TextView, hint: String) {
     view.hint = hint
-}
-
-@BindingAdapter("image_resource")
-fun setImageResource(imageView: ImageView, resId: Int) {
-    imageView.setImageResource(resId)
-}
-
-@BindingAdapter("background")
-fun setRecyclerviewBackground(recyclerView: RecyclerView, color: String) {
-    recyclerView.setBackgroundColor(Color.parseColor(color))
 }
 
 @BindingAdapter("recyclerViewViewModel")

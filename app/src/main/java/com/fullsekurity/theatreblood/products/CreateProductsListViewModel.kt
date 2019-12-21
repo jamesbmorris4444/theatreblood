@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
+import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
@@ -26,15 +27,14 @@ class CreateProductsListViewModelFactory(private val activity: MainActivity) : V
 }
 
 @Suppress("UNCHECKED_CAST")
-class CreateProductsListViewModel(val activity: MainActivity) : RecyclerViewViewModel(activity.application) {
+class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewViewModel(activityCallbacks.fetchActivity().application) {
 
     private val tag = CreateProductsListViewModel::class.java.simpleName
-    override var adapter: CreateProductsAdapter = CreateProductsAdapter(activity)
+    override var adapter: CreateProductsAdapter = CreateProductsAdapter(activityCallbacks)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     val listIsVisible: ObservableField<Boolean> = ObservableField(false)
     val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
     val submitVisible: ObservableField<Int> = ObservableField(View.GONE)
-    private lateinit var rootView: View
     private var numberOfItemsDisplayed = -1
 
     val gridText11: ObservableField<String> = ObservableField("HELLO")
@@ -54,14 +54,14 @@ class CreateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
 
     init {
         DaggerViewModelDependencyInjector.builder()
-            .viewModelInjectorModule(ViewModelInjectorModule(activity))
+            .viewModelInjectorModule(ViewModelInjectorModule(activityCallbacks.fetchActivity()))
             .build()
             .inject(this)
         adapter.uiViewModel = uiViewModel
     }
 
     override fun setLayoutManager(): RecyclerView.LayoutManager {
-        return object : LinearLayoutManager(activity.applicationContext) {
+        return object : LinearLayoutManager(activityCallbacks.fetchActivity().applicationContext) {
             override fun canScrollHorizontally(): Boolean {
                 return false
             }
@@ -101,7 +101,7 @@ class CreateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
         }
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
-    var hintTextName: ObservableField<String> = ObservableField(activity.getString(R.string.donor_search_string))
+    var hintTextName: ObservableField<String> = ObservableField(activityCallbacks.fetchActivity().getString(R.string.donor_search_string))
     var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     fun setDonor(donor: Donor) {
@@ -109,28 +109,23 @@ class CreateProductsListViewModel(val activity: MainActivity) : RecyclerViewView
     }
 
     fun onGridElement11Clicked(view: View) {
-        activity.loadDonorFragment(Donor())
+        activityCallbacks.fetchActivity().loadDonorFragment(Donor())
     }
 
     fun onGridElement12Clicked(view: View) {
-        activity.loadDonorFragment(Donor())
+        activityCallbacks.fetchActivity().loadDonorFragment(Donor())
     }
 
     fun onGridElement21Clicked(view: View) {
-        activity.loadDonorFragment(Donor())
+        activityCallbacks.fetchActivity().loadDonorFragment(Donor())
     }
 
     fun onGridElement22Clicked(view: View) {
-        activity.loadDonorFragment(Donor())
-    }
-
-    fun setRootView(view: View) {
-        rootView = view
-        //rootView.findViewById<TextInputLayout>(R.id.edit_text_input_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        activityCallbacks.fetchActivity().loadDonorFragment(Donor())
     }
 
     fun onScanClicked(view: View) {
-        activity.barcodeScanner(this)
+        activityCallbacks.fetchActivity().barcodeScanner(this)
     }
 
 }

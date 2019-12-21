@@ -1,12 +1,12 @@
 package com.fullsekurity.theatreblood.products
 
 import androidx.databinding.ObservableField
-import com.fullsekurity.theatreblood.activity.MainActivity
+import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 import com.fullsekurity.theatreblood.repository.storage.Product
 
 @Suppress("UNCHECKED_CAST")
-class CreateProductsItemViewModel(val activity: MainActivity) : RecyclerViewItemViewModel<Product>() {
+class CreateProductsItemViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewItemViewModel<Product>() {
 
     private lateinit var product: Product
 

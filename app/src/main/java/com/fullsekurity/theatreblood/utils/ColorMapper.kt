@@ -21,10 +21,11 @@ class ColorMapper @Inject constructor() {
         WHITE("white", "#FFFFFF"),
         BLACK("black", "#000000"),
         VERY_LIGHT_GRAY("veryLightGray", "#08000000"),
-        LIGHTER_GRAY("lighterGray", "#16000000"),
-        LIGHT_GRAY("lightGray", "#33000000"),
-        MEDIUM_GRAY("mediumGray", "#86000000"),
-        DARK_GRAY("darkGray", "#E6000000")
+        LIGHTER_GRAY("lighterGray", "#38000000"),
+        LIGHT_GRAY("lightGray", "#68000000"),
+        MEDIUM_GRAY("mediumGray", "#98000000"),
+        DARK_GRAY("darkGray", "#c8000000"),
+        DARKEST_GRAY("darkestGray", "#e8FFFFFF")
     }
 
     enum class DarkColors(var colorName: String, val colorValue: String) {
@@ -36,11 +37,12 @@ class ColorMapper @Inject constructor() {
         WHITE("white", "#FFFFFF"),
         BLACK("black", "#000000"),
         CYAN("cyan", "#00ffff"),
-        VERY_LIGHT_GRAY("darkGray", "#08FFFFFF"),
-        LIGHTER_GRAY("mediumGray", "#16FFFFFF"),
-        LIGHT_GRAY("lightGray", "#33FFFFFF"),
-        MEDIUM_GRAY("lighterGray", "#86FFFFFF"),
-        DARK_GRAY("veryLightGray", "#E6FFFFFF")
+        DARKEST_GRAY("darkestGray", "#08FFFFFF"),
+        VERY_LIGHT_GRAY("darkGray", "#38FFFFFF"),
+        LIGHTER_GRAY("mediumGray", "#68FFFFFF"),
+        LIGHT_GRAY("lightGray", "#98FFFFFF"),
+        MEDIUM_GRAY("lighterGray", "#c8FFFFFF"),
+        DARK_GRAY("veryLightGray", "#e8FFFFFF")
     }
 
     private val colorMap: MutableList<MutableMap<String,String>> = mutableListOf()
