@@ -1,56 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_activity_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.fullsekurity.theatreblood.activity.MainActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" >
 
-    <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+    <data>
+        <import type="android.view.View"/>
+        <variable
+                name="uiViewModel"
+                type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+    </data>
+
+    <RelativeLayout
+            android:id="@+id/main_activity_root"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:contentInsetStartWithNavigation="0dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+            android:layout_height="match_parent" >
 
-        <TextView
-                android:id="@+id/toolbar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+        <android.widget.ImageView
+                android:id="@+id/main_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:visibility="@{safeUnbox(uiViewModel.backgroundVisibleForLottie ? View.GONE : View.VISIBLE)}"
+                app:image_background="@{uiViewModel.standardBackground}"
+                android:layout_below="@+id/toolbar"
+                android:layout_above="@+id/bottom_nav_view" />
 
-    </androidx.appcompat.widget.Toolbar>
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/main_background_lottie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{safeUnbox(uiViewModel.backgroundVisibleForLottie ? View.VISIBLE : View.GONE)}"
+                android:scaleType="centerCrop"
+                android:fillViewport="true"
+                android:layout_below="@+id/toolbar"
+                android:layout_above="@+id/bottom_nav_view" />
 
-    <FrameLayout
-            android:id="@+id/main_activity_container"
-            android:layout_below="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:contentInsetStartWithNavigation="0dp"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_nav_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            app:itemBackground="@color/blue"
-            app:itemIconTint="@color/white"
-            app:itemTextColor="@color/white"
-            app:menu="@menu/bottom_nav_menu" />
+            <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-    <ProgressBar
-            android:id="@+id/main_progress_bar"
-            style="?android:attr/progressBarStyleLarge"
-            android:visibility="gone"
-            android:indeterminateTint="@color/red"
-            android:layout_centerInParent="true"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:max="100"
-            android:indeterminate="true"
-            android:progress="1" />
+        </androidx.appcompat.widget.Toolbar>
 
-</RelativeLayout>
+        <FrameLayout
+                android:id="@+id/main_activity_container"
+                android:layout_below="@+id/toolbar"
+                android:layout_above="@+id/bottom_nav_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_nav_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                app:itemBackground="@color/blue"
+                app:itemIconTint="@color/white"
+                app:itemTextColor="@color/white"
+                app:menu="@menu/bottom_nav_menu" />
+
+        <ProgressBar
+                android:id="@+id/main_progress_bar"
+                style="?android:attr/progressBarStyleLarge"
+                android:visibility="gone"
+                android:indeterminateTint="@color/red"
+                android:layout_centerInParent="true"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:max="100"
+                android:indeterminate="true"
+                android:progress="1" />
+
+    </RelativeLayout>
+
+</layout>

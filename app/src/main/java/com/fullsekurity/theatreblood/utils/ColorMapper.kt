@@ -15,8 +15,6 @@ class ColorMapper @Inject constructor() {
     enum class LightColors(var colorName: String, val colorValue: String) {
         PRIMARY("primary", "#3a3aff"),
         SECONDARY("secondary", "#e50239"),
-        BLUE("blue", "#3a3aff"),
-        RED("red", "#e50239"),
         SUCCESS("success", "#00ff00"),
         WARNING("warning", "#FF9900"),
         ERROR("error", "#E40449"),
@@ -30,20 +28,19 @@ class ColorMapper @Inject constructor() {
     }
 
     enum class DarkColors(var colorName: String, val colorValue: String) {
-        PRIMARY("primary", "#3a3aff"),
+        PRIMARY("primary", "#5B06F1"),
         SECONDARY("secondary", "#e50239"),
-        BLUE("blue", "#3a3aff"),
-        RED("red", "#e50239"),
         SUCCESS("success", "00ff00"),
         WARNING("warning", "#FF9900"),
         ERROR("error", "#E40449"),
         WHITE("white", "#FFFFFF"),
         BLACK("black", "#000000"),
-        VERY_LIGHT_GRAY("veryLightGray", "#08FFFFFF"),
-        LIGHTER_GRAY("lighterGray", "#16FFFFFF"),
+        CYAN("cyan", "#00ffff"),
+        VERY_LIGHT_GRAY("darkGray", "#08FFFFFF"),
+        LIGHTER_GRAY("mediumGray", "#16FFFFFF"),
         LIGHT_GRAY("lightGray", "#33FFFFFF"),
-        MEDIUM_GRAY("mediumGray", "#86FFFFFF"),
-        DARK_GRAY("darkGray", "#E6FFFFFF")
+        MEDIUM_GRAY("lighterGray", "#86FFFFFF"),
+        DARK_GRAY("veryLightGray", "#E6FFFFFF")
     }
 
     private val colorMap: MutableList<MutableMap<String,String>> = mutableListOf()

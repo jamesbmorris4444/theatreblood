@@ -15,9 +15,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieDrawable
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.barcode.BarCodeScannerActivity
+import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
 import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.donors.DonateProductsFragment
 import com.fullsekurity.theatreblood.modal.StandardModal
@@ -47,6 +51,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var uiViewModel: UIViewModel
 
     private var networkStatusMenuItem: MenuItem? = null
+    private lateinit var navView: BottomNavigationView
+    private lateinit var lottieBackgroundView: LottieAnimationView
 
     enum class UITheme {
         LIGHT, DARK, NOT_ASSIGNED,
@@ -64,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         setupRepositoryDatabase()
         setupToolbar()
         setToolbarNetworkStatus()
+        uiViewModel.lottieAnimation(lottieBackgroundView, uiViewModel.backgroundLottieJsonFileName, LottieDrawable.INFINITE)
     }
 
     override fun onStop() {
@@ -97,15 +104,16 @@ class MainActivity : AppCompatActivity() {
             .build()
             .inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        val activityMainBinding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        activityMainBinding.uiViewModel = uiViewModel
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener { onBackPressed() }
-        val navView: BottomNavigationView = findViewById(R.id.bottom_nav_view)
+        navView = findViewById(R.id.bottom_nav_view)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        lottieBackgroundView = activityMainBinding.root.findViewById(R.id.main_background_lottie)
         if (savedInstanceState == null) {
             navView.selectedItemId = R.id.navigation_donations
-
         }
     }
 
@@ -155,6 +163,7 @@ class MainActivity : AppCompatActivity() {
             actionBar.setHomeAsUpIndicator(upArrow);
             toolbar.setTitleTextColor(Color.parseColor(uiViewModel.toolbarTextColor))
             toolbar.title = Constants.DONATE_PRODUCTS_TITLE
+            navView.itemBackground = ColorDrawable(Color.parseColor(uiViewModel.primaryColor))
         }
     }
 
@@ -186,6 +195,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_toggle_theme -> {
+            if (currentTheme == UITheme.LIGHT) {
+                currentTheme = UITheme.DARK
+            } else {
+                currentTheme = UITheme.LIGHT
+            }
+            uiViewModel.currentTheme = currentTheme
+            uiViewModel.lottieAnimation(lottieBackgroundView, uiViewModel.backgroundLottieJsonFileName, LottieDrawable.INFINITE)
+            setupToolbar()
+            true
+        }
         R.id.action_settings -> {
             true
         }

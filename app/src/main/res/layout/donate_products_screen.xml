@@ -77,7 +77,7 @@
                 android:id="@+id/submit_button_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/button_submit"
+                android:text="@string/button_search"
                 app:text_font="@{uiViewModel.buttonTextTypeface}"
                 app:text_color="@{uiViewModel.buttonTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"

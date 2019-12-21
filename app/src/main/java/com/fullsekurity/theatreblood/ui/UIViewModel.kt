@@ -6,11 +6,13 @@ import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.airbnb.lottie.LottieAnimationView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.logger.LogUtils
@@ -31,6 +33,9 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
 
     private val TAG = UIViewModel::class.java.simpleName
 
+    val standardBackground: ObservableField<Drawable> = ObservableField()
+    var backgroundLottieJsonFileName = ""
+    val backgroundVisibleForLottie: ObservableField<Boolean> = ObservableField(false)
     val standardDialogWidth: ObservableField<Int> = ObservableField(0)
     val standardDialogDividerColor: ObservableField<String> = ObservableField("#ffffff")
     val standardDialogPasswordHintColor: ObservableField<String> = ObservableField("#ffffff")
@@ -181,6 +186,20 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
         standardDialogWidth.set(computeStandardWidth())
     }
 
+    fun lottieAnimation(view: LottieAnimationView, jsonFile: String, repeatCount: Int) {
+        val animationView: LottieAnimationView = view
+        if (jsonFile.isEmpty()) {
+            backgroundVisibleForLottie.set(false)
+        } else {
+            backgroundVisibleForLottie.set(true)
+            animationView.visibility = View.VISIBLE
+            animationView.setAnimation(jsonFile)
+            animationView.enableMergePathsForKitKatAndAbove(true)
+            animationView.playAnimation()
+            animationView.repeatCount = repeatCount
+        }
+    }
+
     private fun convertDpToPixels(dp: Float): Int {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
     }
@@ -238,6 +257,9 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             primaryColor = colorMapper.map(theme, uiDataClass.primaryColor)
             secondaryColor = colorMapper.map(theme, uiDataClass.secondaryColor)
             toolbarTextColor = colorMapper.map(theme, uiDataClass.toolbarTextColor)
+            standardBackground.set(ContextCompat.getDrawable(context, uiDataClass.standardBackground))
+            backgroundLottieJsonFileName = uiDataClass.backgroundLottieJsonFileName
+            backgroundVisibleForLottie.set(backgroundLottieJsonFileName.isNotEmpty())
             standardDialogBackground.set(ContextCompat.getDrawable(context, uiDataClass.standardDialogBackground))
             standardDialogDashedLine.set(ContextCompat.getDrawable(context, uiDataClass.standardDialogDashedLine))
             standardDialogDividerColor.set(colorMapper.map(theme, uiDataClass.standardDialogDividerColor))

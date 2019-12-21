@@ -38,6 +38,11 @@ fun setBackground(view: EditText, drawable: Drawable?) {
     view.requestLayout()
 }
 
+@BindingAdapter("image_background")
+fun setBackgroundImage(imageView: ImageView, resource: Drawable) {
+    imageView.setImageDrawable(resource)
+}
+
 @BindingAdapter("layout_marginTop")
 fun setMarginTop(v: View, topMargin: Int) {
     v.layoutParams ?: return

@@ -35,8 +35,10 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <!-- start styles used in theming, uiViewModel should select on of these two styles based on the theme -->
-    <!-- changes in size here should be synchronized with the value of uiViewModel.editTextDisplayModifyHintSize -->
+    <!-- Start styles used in theming, uiViewModel should select one of these two styles based on the theme. -->
+    <!-- Changes in size here should be synchronized with the value of uiViewModel.editTextDisplayModifyHintSize. -->
+
+    <!-- TextInputLayout styles are used in EditText forms for donors and products -->
     <style name="TextInputLayoutForLight" parent="@android:style/TextAppearance">
         <item name="android:textSize">16sp</item>
         <item name="android:typeface">@font/avenir_regular</item>
@@ -47,12 +49,13 @@
         <item name="android:typeface">@font/avenir_regular</item>
     </style>
 
+    <!-- DatePicker styles are used for the color areas in the calendar for a DatePicker -->
     <style name="DatePickerDialogThemeForLight" parent="android:Theme.Material.Light.Dialog">
-        <item name="android:colorAccent">@color/blue</item>
+        <item name="android:colorAccent">@color/lightPrimary</item>
     </style>
 
     <style name="DatePickerDialogThemeForDark" parent="android:Theme.Material.Light.Dialog">
-        <item name="android:colorAccent">@color/blue</item>
+        <item name="android:colorAccent">@color/darkPrimary</item>
     </style>
     <!-- end styles used in theming, uiViewModel should select on of these two styles based on the theme -->
 

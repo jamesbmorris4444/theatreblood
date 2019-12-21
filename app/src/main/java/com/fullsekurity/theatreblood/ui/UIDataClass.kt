@@ -2,6 +2,9 @@ package com.fullsekurity.theatreblood.ui
 
 class UIDataClass(
 
+    val standardBackground: Int,                          // Main background drawable resource for all fragments
+    val backgroundLottieJsonFileName: String,             // Main background lottie file name for all fragments
+
     val standardDialogBackground: Int,                    // Standard dialog background drawable resource
     val standardDialogDashedLine: Int,                    // Standard dialog circular header icon drawable resource
     val standardDialogDividerColor: String,               // Standard dialog button_light divider line color
