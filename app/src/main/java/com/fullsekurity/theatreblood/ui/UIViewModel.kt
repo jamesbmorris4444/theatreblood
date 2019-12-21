@@ -125,6 +125,11 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val productGridTextColor: ObservableField<String> = ObservableField("#ffffff")
     val productGridTextSize: ObservableField<Float> = ObservableField(0f)
     val productGridTextTypeface: ObservableField<String> = ObservableField("")
+    val productGridBackgroundDrawable11: ObservableField<Drawable> = ObservableField()
+    val productGridBackgroundDrawable12: ObservableField<Drawable> = ObservableField()
+    val productGridBackgroundDrawable21: ObservableField<Drawable> = ObservableField()
+    val productGridBackgroundDrawable22: ObservableField<Drawable> = ObservableField()
+
 
     var standardLeftAndRightMargin: ObservableField<Int> = ObservableField(0)
     var standardDialogInternalWidth: ObservableField<Int> = ObservableField(0)
@@ -348,6 +353,10 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             productGridTextColor.set(colorMapper.map(theme, uiDataClass.productGridTextColor))
             productGridTextSize.set(textSizeMapper.map(theme, uiDataClass.productGridTextSize))
             productGridTextTypeface.set(typefaceMapper.map(theme, uiDataClass.productGridTextSize))
+            productGridBackgroundDrawable11.set(ContextCompat.getDrawable(context, uiDataClass.productGridBackgroundDrawable11))
+            productGridBackgroundDrawable12.set(ContextCompat.getDrawable(context, uiDataClass.productGridBackgroundDrawable12))
+            productGridBackgroundDrawable21.set(ContextCompat.getDrawable(context, uiDataClass.productGridBackgroundDrawable21))
+            productGridBackgroundDrawable22.set(ContextCompat.getDrawable(context, uiDataClass.productGridBackgroundDrawable22))
 
         }
     }

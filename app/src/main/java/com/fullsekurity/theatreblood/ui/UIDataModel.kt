@@ -88,7 +88,11 @@ class UIDataModel {
                         "mainTitle",
 
                         "white",
-                        "mainTitle"
+                        "mainTitle",
+                        R.drawable.lt_blood_grid_11,
+                        R.drawable.lt_blood_grid_12,
+                        R.drawable.lt_blood_grid_21,
+                        R.drawable.lt_blood_grid_22
                     )
                 }
                 lightViewUIDataClass
@@ -173,7 +177,13 @@ class UIDataModel {
                         "mainTitle",
 
                         "white",
-                        "mainTitle"
+                        "mainTitle",
+                        R.drawable.lt_blood_grid_11,
+                        R.drawable.lt_blood_grid_12,
+                        R.drawable.lt_blood_grid_21,
+                        R.drawable.lt_blood_grid_22
+
+
                     )
                 }
                 darkViewUIDataClass

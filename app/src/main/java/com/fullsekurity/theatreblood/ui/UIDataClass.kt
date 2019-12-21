@@ -80,6 +80,10 @@ class UIDataClass(
     val productItemTextSize: String,                      // Product item text size
 
     val productGridTextColor: String,                     // Product grid item text color
-    val productGridTextSize: String                       // Product grid item text size
+    val productGridTextSize: String,                      // Product grid item text size
+    val productGridBackgroundDrawable11: Int,             // Product grid background drawable upper left
+    val productGridBackgroundDrawable12: Int,             // Product grid background drawable upper right
+    val productGridBackgroundDrawable21: Int,             // Product grid background drawable lower left
+    val productGridBackgroundDrawable22: Int              // Product grid background drawable lower right
 
 )
