@@ -257,19 +257,33 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks {
 
     private lateinit var createProductsListViewModel: CreateProductsListViewModel
 
-    fun barcodeScanner(createProductsListViewModel: CreateProductsListViewModel) {
+    fun barcodeScanner(gridNumber: Int, createProductsListViewModel: CreateProductsListViewModel) {
         this.createProductsListViewModel = createProductsListViewModel
         val intent = Intent(this, BarCodeScannerActivity::class.java)
-        startActivityForResult(intent, 100)
+        startActivityForResult(intent, 100 + gridNumber)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 100) {
-                val barcodeResult = data?.getStringExtra("rawResult")
-                createProductsListViewModel.gridText11.set(barcodeResult)
-                createProductsListViewModel.gridText11Visible.set(View.VISIBLE)
+            val barcodeResult = data?.getStringExtra("rawResult")
+            when (requestCode) {
+                111 -> {
+                    createProductsListViewModel.editTextProductDin.set(barcodeResult)
+                }
+                112 -> {
+                    createProductsListViewModel.gridText12.set(barcodeResult)
+                    createProductsListViewModel.gridText12Visible.set(View.VISIBLE)
+                }
+                121 -> {
+                    createProductsListViewModel.gridText21.set(barcodeResult)
+                    createProductsListViewModel.gridText21Visible.set(View.VISIBLE)
+                }
+                122 -> {
+                    createProductsListViewModel.gridText22.set(barcodeResult)
+                    createProductsListViewModel.gridText22Visible.set(View.VISIBLE)
+                }
+                else -> {}
             }
         }
     }

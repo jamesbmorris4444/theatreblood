@@ -27,7 +27,7 @@
         <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/main_background_lottie"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:visibility="@{safeUnbox(uiViewModel.backgroundVisibleForLottie ? View.VISIBLE : View.GONE)}"
                 android:scaleType="centerCrop"
                 android:fillViewport="true"

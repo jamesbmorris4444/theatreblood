@@ -55,6 +55,12 @@
     <string name="donor_male">Male</string>
     <string name="donor_female">Female</string>
 
+    <!-- product strings -->
+    <string name="product_din">DIN</string>
+    <string name="product_abo_rh">ABO/RH</string>
+    <string name="product_code">PRODUCT CODE</string>
+    <string name="product_expiration_date">EXPIRATION DATE</string>
+
     <!-- miscellaneous -->
     <string name="search_no_elements">No donors found in search</string>
     <string name="radio_gender_male">Male</string>

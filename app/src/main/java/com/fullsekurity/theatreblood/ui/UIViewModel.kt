@@ -19,6 +19,9 @@ import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.utils.*
 import com.fullsekurity.theatreblood.utils.Constants.STANDARD_BUTTON_HEIGHT
 import com.fullsekurity.theatreblood.utils.Constants.STANDARD_EDIT_TEXT_HEIGHT
+import com.fullsekurity.theatreblood.utils.Constants.STANDARD_EDIT_TEXT_SMALL_MARGIN
+import com.fullsekurity.theatreblood.utils.Constants.STANDARD_GRID_EDIT_TEXT_HEIGHT
+import com.fullsekurity.theatreblood.utils.Constants.STANDARD_GRID_HEIGHT
 import com.fullsekurity.theatreblood.utils.Constants.STANDARD_LEFT_AND_RIGHT_MARGIN
 import javax.inject.Inject
 
@@ -84,6 +87,8 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val standardDialogListFooterTextSize: ObservableField<Float> = ObservableField(0f)
     val standardDialogListFooterTextTypeface: ObservableField<String> = ObservableField("")
 
+    val editTextCursor: ObservableField<Int> = ObservableField(0)
+
     val editTextNameHintColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextNameColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextNameSize: ObservableField<Float> = ObservableField(0f)
@@ -130,12 +135,28 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val productGridBackgroundDrawable21: ObservableField<Drawable> = ObservableField()
     val productGridBackgroundDrawable22: ObservableField<Drawable> = ObservableField()
 
+    val editTextProductHintColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextProductColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextProductSize: ObservableField<Float> = ObservableField(0f)
+    val editTextProductTypeface: ObservableField<String> = ObservableField("")
+    val editTextProductUpperHintColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextProductBackground: ObservableField<Drawable> = ObservableField()                  // Product EditText background drawable resource
+
+    val productIdTextColor: ObservableField<String> = ObservableField("#ffffff")
+    val productIdTextSize: ObservableField<Float> = ObservableField(0f)
+    val productIdTextTypeface: ObservableField<String> = ObservableField("")
+
+    // computed values
 
     var standardLeftAndRightMargin: ObservableField<Int> = ObservableField(0)
+    var standardEditTextProductSmallMargin: ObservableField<Int> = ObservableField(0)
+    val standardEditTextProductInnerWidth: ObservableField<Int> = ObservableField(0)
     var standardDialogInternalWidth: ObservableField<Int> = ObservableField(0)
     var standardWidth: ObservableField<Int> = ObservableField(0)
     var standardHalfWidth: ObservableField<Int> = ObservableField(0)
+    var standardGridHeight: ObservableField<Int> = ObservableField(0)
     var standardEditTextHeight: ObservableField<Int> = ObservableField(0)
+    var standardGridEditTextHeight: ObservableField<Int> = ObservableField(0)
     var standardWidthWithButton: ObservableField<Int> = ObservableField(0)
     var standardButtonWidth: ObservableField<Int> = ObservableField(0)
     var standardButtonHeight: ObservableField<Int> = ObservableField(0)
@@ -180,10 +201,14 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
                 .build()
                 .inject(this)
         standardLeftAndRightMargin.set(convertDpToPixels(STANDARD_LEFT_AND_RIGHT_MARGIN))
+        standardEditTextProductSmallMargin.set(convertDpToPixels(STANDARD_EDIT_TEXT_SMALL_MARGIN))
+        standardEditTextProductInnerWidth.set(computeStandardEditTextInnerWidth())
         standardDialogInternalWidth.set(computeStandardInternalWidth())
         standardWidth.set(computeStandardWidth())
         standardHalfWidth.set(computeStandardWidth() / 2)
+        standardGridHeight.set(convertDpToPixels(STANDARD_GRID_HEIGHT))
         standardEditTextHeight.set(convertDpToPixels(STANDARD_EDIT_TEXT_HEIGHT))
+        standardGridEditTextHeight.set(convertDpToPixels(STANDARD_GRID_EDIT_TEXT_HEIGHT))
         standardWidthWithButton.set(computeStandardWidthWithButton())
         standardButtonWidth.set(computeStandarButtonWidth())
         standardLargeButtonWidth.set(computeStandarButtonWidth() * 2)
@@ -215,6 +240,15 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
 
         val screenWidth = context.resources.displayMetrics.widthPixels
         return screenWidth - 4 * convertDpToPixels(STANDARD_LEFT_AND_RIGHT_MARGIN)
+    }
+
+    private fun computeStandardEditTextInnerWidth(): Int {
+        // |<--edit text small margin-->|<--edit text small width-->|<--edit text small margin-->|
+        // |<--------------------------standard width / 2--------------------------------------->|
+
+        val screenWidth = context.resources.displayMetrics.widthPixels
+        val standardWidthDivideBy2 = (screenWidth - 2 * convertDpToPixels(STANDARD_LEFT_AND_RIGHT_MARGIN)) / 2
+        return standardWidthDivideBy2 - 2 * convertDpToPixels(STANDARD_EDIT_TEXT_SMALL_MARGIN)
     }
 
     private fun computeStandardWidth(): Int {
@@ -312,6 +346,8 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             standardDialogListFooterTextSize.set(textSizeMapper.map(theme, uiDataClass.standardDialogListFooterTextSize))
             standardDialogListFooterTextTypeface.set(typefaceMapper.map(theme, uiDataClass.standardDialogListFooterTextSize))
 
+            editTextCursor.set(uiDataClass.editTextCursor)
+
             editTextNameHintColor.set(colorMapper.map(theme, uiDataClass.editTextNameHintColor))
             editTextNameColor.set(colorMapper.map(theme, uiDataClass.editTextNameColor))
             editTextNameSize.set(textSizeMapper.map(theme, uiDataClass.editTextNameSize))
@@ -357,6 +393,17 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             productGridBackgroundDrawable12.set(ContextCompat.getDrawable(context, uiDataClass.productGridBackgroundDrawable12))
             productGridBackgroundDrawable21.set(ContextCompat.getDrawable(context, uiDataClass.productGridBackgroundDrawable21))
             productGridBackgroundDrawable22.set(ContextCompat.getDrawable(context, uiDataClass.productGridBackgroundDrawable22))
+
+            editTextProductHintColor.set(colorMapper.map(theme, uiDataClass.editTextProductHintColor))
+            editTextProductColor.set(colorMapper.map(theme, uiDataClass.editTextProductColor))
+            editTextProductSize.set(textSizeMapper.map(theme, uiDataClass.editTextProductSize))
+            editTextProductTypeface.set(typefaceMapper.map(theme, uiDataClass.editTextProductSize))
+            editTextProductUpperHintColor.set(colorMapper.map(theme, uiDataClass.editTextProductUpperHintColor))
+            editTextProductBackground.set(ContextCompat.getDrawable(context, uiDataClass.editTextProductBackground))
+
+            productIdTextColor.set(colorMapper.map(theme, uiDataClass.productIdTextColor))
+            productIdTextSize.set(textSizeMapper.map(theme, uiDataClass.productIdTextSize))
+            productIdTextTypeface.set(typefaceMapper.map(theme, uiDataClass.productIdTextSize))
 
         }
     }

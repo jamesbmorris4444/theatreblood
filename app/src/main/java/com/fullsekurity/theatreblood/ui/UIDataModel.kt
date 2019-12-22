@@ -56,10 +56,11 @@ class UIDataModel {
                         "primary",
                         "secondary",
                         "white",
+                        R.drawable.lt_edit_text_cursor,
 
                         "mediumGray",
                         "black",
-                        "subTitle",
+                        "mainTitle",
                         "veryLightGray",
                         "primary",
                         R.drawable.edit_text_background,
@@ -92,7 +93,16 @@ class UIDataModel {
                         R.drawable.lt_blood_grid_11,
                         R.drawable.lt_blood_grid_12,
                         R.drawable.lt_blood_grid_21,
-                        R.drawable.lt_blood_grid_22
+                        R.drawable.lt_blood_grid_22,
+
+                        "darkGray",
+                        "black",
+                        "mainTitle",
+                        "white",
+                        R.drawable.edit_text_background,
+
+                        "white",
+                        "largeText"
                     )
                 }
                 lightViewUIDataClass
@@ -145,10 +155,11 @@ class UIDataModel {
                         "primary",
                         "secondary",
                         "white",
+                        R.drawable.dk_edit_text_cursor,
 
                         "darkGray",
                         "black",
-                        "subTitle",
+                        "mainTitle",
                         "veryLightGray",
                         "primary",
                         R.drawable.edit_text_background,
@@ -181,8 +192,16 @@ class UIDataModel {
                         R.drawable.lt_blood_grid_11,
                         R.drawable.lt_blood_grid_12,
                         R.drawable.lt_blood_grid_21,
-                        R.drawable.lt_blood_grid_22
+                        R.drawable.lt_blood_grid_22,
 
+                        "darkGray",
+                        "black",
+                        "mainTitle",
+                        "white",
+                        R.drawable.edit_text_background,
+
+                        "white",
+                        "largeText"
 
                     )
                 }

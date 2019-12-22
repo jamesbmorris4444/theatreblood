@@ -35,21 +35,64 @@
                     android:layout_height="wrap_content"
                     android:scaleType="center"
                     android:background="@{uiViewModel.productGridBackgroundDrawable11}"
-                    android:onClick="@{(view) -> createProductsListViewModel.onScanClicked(view)}"
+                    android:onClick="@{(view) -> createProductsListViewModel.onGridElement11Clicked(view)}"
                     app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
-                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
                     android:layout_centerInParent="true" />
 
-            <TextView
-                    android:id="@+id/create_product_text_view_11"
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/create_product_edit_text_11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@{createProductsListViewModel.gridText11}"
-                    app:text_font="@{uiViewModel.productGridTextTypeface}"
-                    app:text_color="@{uiViewModel.productGridTextColor}"
-                    app:text_size="@{safeUnbox(uiViewModel.productGridTextSize)}"
-                    android:visibility="@{safeUnbox(createProductsListViewModel.gridText11Visible)}" />
+                    android:layout_marginTop="40dp"
+                    android:hint="@{createProductsListViewModel.hintTextDin}"
+                    app:upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/create_product_edit_text_display_din_11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardEditTextProductInnerWidth)}"
+                        app:layout_marginLeft="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                        app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                        app:background="@{uiViewModel.editTextProductBackground}"
+                        app:text_hint_color="@{uiViewModel.editTextProductHintColor}"
+                        app:edit_text_cursor="@{uiViewModel.editTextCursor}"
+                        android:text="@={createProductsListViewModel.editTextProductDin}"
+                        android:onTextChanged="@{createProductsListViewModel::onTextDinChanged}"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="20dp"
+                        android:inputType="textCapCharacters"
+                        app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
+                        app:edit_text_color="@{uiViewModel.editTextProductColor}"
+                        app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            <TextView-->
+<!--                    android:id="@+id/create_product_text_view_11"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_centerInParent="true"-->
+<!--                    android:text="@{createProductsListViewModel.gridText11}"-->
+<!--                    app:text_font="@{uiViewModel.productGridTextTypeface}"-->
+<!--                    app:text_color="@{uiViewModel.productGridTextColor}"-->
+<!--                    app:text_size="@{safeUnbox(uiViewModel.productGridTextSize)}"-->
+<!--                    android:visibility="@{safeUnbox(createProductsListViewModel.gridText11Visible)}" />-->
+
+            <TextView
+                    android:id="@+id/create_product_id_11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/product_din"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    app:text_font="@{uiViewModel.productIdTextTypeface}"
+                    app:text_color="@{uiViewModel.productIdTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
 
         </RelativeLayout>
 
@@ -57,14 +100,21 @@
                 android:id="@+id/create_product_grid_element_12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/lt_blood_grid_12"
-                android:onClick="@{(view) -> createProductsListViewModel.onGridElement12Clicked(view)}"
-                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
-                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
                 app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/create_product_grid_element_11"
                 app:layout_constraintRight_toRightOf="parent">
+
+            <android.widget.ImageView
+                    android:id="@+id/create_product_image_view_12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="center"
+                    android:background="@{uiViewModel.productGridBackgroundDrawable12}"
+                    android:onClick="@{(view) -> createProductsListViewModel.onGridElement12Clicked(view)}"
+                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
+                    android:layout_centerInParent="true" />
 
             <TextView
                     android:id="@+id/create_product_text_view_12"
@@ -77,20 +127,40 @@
                     app:text_size="@{safeUnbox(uiViewModel.productGridTextSize)}"
                     android:visibility="@{safeUnbox(createProductsListViewModel.gridText12Visible)}" />
 
+            <TextView
+                    android:id="@+id/create_product_id_12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/product_abo_rh"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    app:text_font="@{uiViewModel.productIdTextTypeface}"
+                    app:text_color="@{uiViewModel.productIdTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
+
         </RelativeLayout>
 
         <RelativeLayout
                 android:id="@+id/create_product_grid_element_21"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/lt_blood_grid_21"
-                android:onClick="@{(view) -> createProductsListViewModel.onGridElement21Clicked(view)}"
-                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
-                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_11"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/create_product_grid_element_22">
+
+            <android.widget.ImageView
+                    android:id="@+id/create_product_image_view_21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="center"
+                    android:background="@{uiViewModel.productGridBackgroundDrawable21}"
+                    android:onClick="@{(view) -> createProductsListViewModel.onGridElement21Clicked(view)}"
+                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
+                    android:layout_centerInParent="true" />
 
             <TextView
                     android:id="@+id/create_product_text_view_21"
@@ -103,20 +173,40 @@
                     app:text_size="@{safeUnbox(uiViewModel.productGridTextSize)}"
                     android:visibility="@{safeUnbox(createProductsListViewModel.gridText21Visible)}" />
 
+            <TextView
+                    android:id="@+id/create_product_id_21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/product_code"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    app:text_font="@{uiViewModel.productIdTextTypeface}"
+                    app:text_color="@{uiViewModel.productIdTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
+
         </RelativeLayout>
 
         <RelativeLayout
                 android:id="@+id/create_product_grid_element_22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/lt_blood_grid_22"
-                android:onClick="@{(view) -> createProductsListViewModel.onGridElement22Clicked(view)}"
-                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
-                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
                 app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_11"
                 app:layout_constraintLeft_toRightOf="@+id/create_product_grid_element_21"
                 app:layout_constraintRight_toRightOf="parent">
+
+            <android.widget.ImageView
+                    android:id="@+id/create_product_image_view_22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="center"
+                    android:background="@{uiViewModel.productGridBackgroundDrawable22}"
+                    android:onClick="@{(view) -> createProductsListViewModel.onGridElement22Clicked(view)}"
+                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
+                    android:layout_centerInParent="true" />
 
             <TextView
                     android:id="@+id/create_product_text_view_22"
@@ -128,6 +218,19 @@
                     app:text_color="@{uiViewModel.productGridTextColor}"
                     app:text_size="@{safeUnbox(uiViewModel.productGridTextSize)}"
                     android:visibility="@{safeUnbox(createProductsListViewModel.gridText22Visible)}" />
+
+            <TextView
+                    android:id="@+id/create_product_id_22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/product_expiration_date"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    app:text_font="@{uiViewModel.productIdTextTypeface}"
+                    app:text_color="@{uiViewModel.productIdTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
 
         </RelativeLayout>
 

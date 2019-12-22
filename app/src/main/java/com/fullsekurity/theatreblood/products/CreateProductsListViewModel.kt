@@ -32,9 +32,6 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     private val tag = CreateProductsListViewModel::class.java.simpleName
     override var adapter: CreateProductsAdapter = CreateProductsAdapter(activityCallbacks)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
-    val listIsVisible: ObservableField<Boolean> = ObservableField(false)
-    val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
-    val submitVisible: ObservableField<Int> = ObservableField(View.GONE)
     private var numberOfItemsDisplayed = -1
 
     val gridText11: ObservableField<String> = ObservableField("HELLO")
@@ -73,59 +70,54 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     }
 
     private fun showProducts(productList: List<Product>) {
-        listIsVisible.set(productList.isNotEmpty())
         adapter.addAll(productList)
         numberOfItemsDisplayed = productList.size
         setNewDonorVisibility("NONEMPTY")
     }
 
     private fun setNewDonorVisibility(key: String) {
-        if (key.isNotEmpty() && numberOfItemsDisplayed == 0) {
-            newDonorVisible.set(View.VISIBLE)
-        } else {
-            newDonorVisible.set(View.GONE)
-        }
+//        if (key.isNotEmpty() && numberOfItemsDisplayed == 0) {
+//            newDonorVisible.set(View.VISIBLE)
+//        } else {
+//            newDonorVisible.set(View.GONE)
+//        }
     }
 
     // observable used for two-way data binding. Values set into this field will show in view.
     // Text typed into EditText in view will be stored into this field after each character is typed.
-    var editTextNameInput: ObservableField<String> = ObservableField("")
-    fun onTextNameChanged(key: CharSequence, start: Int, before: Int, count: Int) {
-        if (key.isEmpty()) {
-            newDonorVisible.set(View.GONE)
-            submitVisible.set(View.GONE)
-            numberOfItemsDisplayed = -1
-        } else {
-            setNewDonorVisibility(key.toString())
-            submitVisible.set(View.VISIBLE)
-        }
+    var editTextProductDin: ObservableField<String> = ObservableField("")
+    fun onTextDinChanged(key: CharSequence, start: Int, before: Int, count: Int) {
+//        if (key.isEmpty()) {
+//            newDonorVisible.set(View.GONE)
+//            submitVisible.set(View.GONE)
+//            numberOfItemsDisplayed = -1
+//        } else {
+//            setNewDonorVisibility(key.toString())
+//            submitVisible.set(View.VISIBLE)
+//        }
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
-    var hintTextName: ObservableField<String> = ObservableField(activityCallbacks.fetchActivity().getString(R.string.donor_search_string))
-    var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+    var hintTextDin: ObservableField<String> = ObservableField(activityCallbacks.fetchActivity().getString(R.string.donor_search_string))
+    var editTextDinVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     fun setDonor(donor: Donor) {
 
     }
 
     fun onGridElement11Clicked(view: View) {
-        activityCallbacks.fetchActivity().loadDonorFragment(Donor())
+        activityCallbacks.fetchActivity().barcodeScanner(11, this)
     }
 
     fun onGridElement12Clicked(view: View) {
-        activityCallbacks.fetchActivity().loadDonorFragment(Donor())
+        activityCallbacks.fetchActivity().barcodeScanner(12, this)
     }
 
     fun onGridElement21Clicked(view: View) {
-        activityCallbacks.fetchActivity().loadDonorFragment(Donor())
+        activityCallbacks.fetchActivity().barcodeScanner(21, this)
     }
 
     fun onGridElement22Clicked(view: View) {
-        activityCallbacks.fetchActivity().loadDonorFragment(Donor())
-    }
-
-    fun onScanClicked(view: View) {
-        activityCallbacks.fetchActivity().barcodeScanner(this)
+        activityCallbacks.fetchActivity().barcodeScanner(22, this)
     }
 
 }

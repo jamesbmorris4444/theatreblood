@@ -18,6 +18,8 @@ import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.squareup.picasso.Picasso
+import java.lang.reflect.Field
+
 
 @BindingAdapter("android:picasso_src")
 fun setImageUrl(view: ImageView, url: String?) {
@@ -192,6 +194,13 @@ fun setTextHintColor(view: EditText, color: String) {
     view.setHintTextColor(Color.parseColor(color))
 }
 
+@BindingAdapter("edit_text_cursor")
+fun setEditTextCursor(view: EditText, resInt: Int) {
+    val f: Field = TextView::class.java.getDeclaredField("mCursorDrawableRes")
+    f.isAccessible = true
+    f.set(view, resInt)
+}
+
 @BindingAdapter("set_hint")
 fun setHint(view: TextView, hint: String) {
     view.hint = hint
@@ -199,9 +208,7 @@ fun setHint(view: TextView, hint: String) {
 
 @BindingAdapter("recyclerViewViewModel")
 fun setRecyclerViewViewModel(recyclerView: RecyclerView, viewModel: RecyclerViewViewModel?) {
-    if (viewModel != null) {
-        viewModel.setupRecyclerView(recyclerView)
-    }
+    viewModel?.setupRecyclerView(recyclerView)
 }
 
 @BindingAdapter("upper_text_hint_color")

@@ -49,6 +49,8 @@ class UIDataClass(
     val secondaryColor: String,                           // secondary color used throughout the app
     val toolbarTextColor: String,                         // toolbar text color
 
+    val editTextCursor: Int,                              // hammer cursor drawable for edit texts
+
     val editTextNameHintColor: String,                    // Input EditText hint text color
     val editTextNameColor: String,                        // Input EditText text color
     val editTextNameSize: String,                         // Input EditText text size
@@ -84,6 +86,16 @@ class UIDataClass(
     val productGridBackgroundDrawable11: Int,             // Product grid background drawable upper left
     val productGridBackgroundDrawable12: Int,             // Product grid background drawable upper right
     val productGridBackgroundDrawable21: Int,             // Product grid background drawable lower left
-    val productGridBackgroundDrawable22: Int              // Product grid background drawable lower right
+    val productGridBackgroundDrawable22: Int,             // Product grid background drawable lower right
+
+    val editTextProductHintColor: String,                 // Product EditText hint text color
+    val editTextProductColor: String,                     // Product EditText text color
+    val editTextProductSize: String,                      // Product EditText text size
+    val editTextProductUpperHintColor: String,            // Product EditText upper hint text color
+    val editTextProductBackground: Int,                   // Product EditText background drawable resource
+
+    val productIdTextColor: String,                       // Product grid id label text color
+    val productIdTextSize: String                         // Product grid id label text size
+
 
 )
