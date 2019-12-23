@@ -185,7 +185,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
             donor.voteCount = editTextDisplayModifyMiddleName.toInt()
         }
 
-        // change doate of birth
+        // change date of birth
         editTextDisplayModifyDob.get()?.let { editTextDisplayModifyDob ->
             donor.releaseDate = editTextDisplayModifyDob
         }
@@ -199,7 +199,9 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
             }
         }
 
-//        donor.???? = currentAboRhSelectedValue
+        // change ABO/Rh
+        donor.backdropPath = currentAboRhSelectedValue
+
 //        donor.???? = currentMilitaryBranchSelectedValue
 
         if (atLeastOneEntryChanged) {

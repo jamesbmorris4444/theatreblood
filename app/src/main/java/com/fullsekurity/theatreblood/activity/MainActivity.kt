@@ -271,13 +271,8 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks {
                 111 -> {
                     createProductsListViewModel.editTextProductDin.set(barcodeResult)
                 }
-                112 -> {
-                    createProductsListViewModel.gridText12.set(barcodeResult)
-                    createProductsListViewModel.gridText12Visible.set(View.VISIBLE)
-                }
                 121 -> {
-                    createProductsListViewModel.gridText21.set(barcodeResult)
-                    createProductsListViewModel.gridText21Visible.set(View.VISIBLE)
+                    createProductsListViewModel.editTextProductCode.set(barcodeResult)
                 }
                 122 -> {
                     createProductsListViewModel.gridText22.set(barcodeResult)

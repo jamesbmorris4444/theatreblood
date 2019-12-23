@@ -254,21 +254,21 @@
             <!-- Start ABO/Rh DropDown -->
 
             <android.widget.TextView
-                    android:id="@+id/abo_rh_dropdown_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{donorViewModel.hintTextAboRh}"
-                    android:visibility="@{safeUnbox(donorViewModel.dropdownAboRhVisibility)}"
-                    android:layout_marginTop="7dp"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="0dp"
-                    app:text_font="@{uiViewModel.editTextDisplayModifyHintTypeface}"
-                    app:text_color="@{uiViewModel.editTextDisplayModifyHintColor}"
-                    app:text_size="@{safeUnbox(uiViewModel.editTextDisplayModifyHintSize)}"
-                    app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                    app:layout_constraintTop_toBottomOf="@+id/radio_buttons_gender"
-                    app:layout_constraintBottom_toTopOf="@+id/abo_rh_dropdown"
-                    app:layout_constraintLeft_toLeftOf="parent" />
+                android:id="@+id/abo_rh_dropdown_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{donorViewModel.hintTextAboRh}"
+                android:visibility="@{safeUnbox(donorViewModel.dropdownAboRhVisibility)}"
+                android:layout_marginTop="7dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="0dp"
+                app:text_font="@{uiViewModel.editTextDisplayModifyHintTypeface}"
+                app:text_color="@{uiViewModel.editTextDisplayModifyHintColor}"
+                app:text_size="@{safeUnbox(uiViewModel.editTextDisplayModifyHintSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintTop_toBottomOf="@+id/radio_buttons_gender"
+                app:layout_constraintBottom_toTopOf="@+id/abo_rh_dropdown"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
             <Spinner
                     android:id="@+id/abo_rh_dropdown"

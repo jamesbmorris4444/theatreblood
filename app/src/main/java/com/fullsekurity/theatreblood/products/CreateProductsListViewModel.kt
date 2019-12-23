@@ -1,6 +1,8 @@
 package com.fullsekurity.theatreblood.products
 
+import android.app.DatePickerDialog
 import android.view.View
+import android.widget.DatePicker
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +17,10 @@ import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
+import com.fullsekurity.theatreblood.utils.Utils
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 
@@ -33,15 +38,17 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     override var adapter: CreateProductsAdapter = CreateProductsAdapter(activityCallbacks)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     private var numberOfItemsDisplayed = -1
+    private lateinit var donor: Donor
+    private val calendar = Calendar.getInstance()
+    private val year = calendar.get(Calendar.YEAR)
+    private val month = calendar.get(Calendar.MONTH)
+    private val day = calendar.get(Calendar.DAY_OF_MONTH)
+    private var dateFormatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
 
-    val gridText11: ObservableField<String> = ObservableField("HELLO")
-    val gridText12: ObservableField<String> = ObservableField("")
-    val gridText21: ObservableField<String> = ObservableField("")
+
     val gridText22: ObservableField<String> = ObservableField("")
 
-    val gridText11Visible: ObservableField<Int> = ObservableField(View.GONE)
-    val gridText12Visible: ObservableField<Int> = ObservableField(View.GONE)
-    val gridText21Visible: ObservableField<Int> = ObservableField(View.GONE)
+
     val gridText22Visible: ObservableField<Int> = ObservableField(View.GONE)
 
     @Inject
@@ -82,9 +89,7 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
 //            newDonorVisible.set(View.GONE)
 //        }
     }
-
-    // observable used for two-way data binding. Values set into this field will show in view.
-    // Text typed into EditText in view will be stored into this field after each character is typed.
+    
     var editTextProductDin: ObservableField<String> = ObservableField("")
     fun onTextDinChanged(key: CharSequence, start: Int, before: Int, count: Int) {
 //        if (key.isEmpty()) {
@@ -97,11 +102,59 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
 //        }
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
-    var hintTextDin: ObservableField<String> = ObservableField(activityCallbacks.fetchActivity().getString(R.string.donor_search_string))
+    var hintTextDin: ObservableField<String> = ObservableField(activityCallbacks.fetchActivity().getString(R.string.product_din_hint_string))
     var editTextDinVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
-    fun setDonor(donor: Donor) {
+    var editTextProductCode: ObservableField<String> = ObservableField("")
+    fun onTextCodeChanged(key: CharSequence, start: Int, before: Int, count: Int) {
+//        if (key.isEmpty()) {
+//            newDonorVisible.set(View.GONE)
+//            submitVisible.set(View.GONE)
+//            numberOfItemsDisplayed = -1
+//        } else {
+//            setNewDonorVisibility(key.toString())
+//            submitVisible.set(View.VISIBLE)
+//        }
+        // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
+    }
+    var hintTextCode: ObservableField<String> = ObservableField(activityCallbacks.fetchActivity().getString(R.string.product_code_hint_string))
+    var editTextCodeVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
+    var editTextProductExpDate: ObservableField<String> = ObservableField("")
+    fun onTextExpDateChanged(key: CharSequence, start: Int, before: Int, count: Int) {
+//        if (key.isEmpty()) {
+//            newDonorVisible.set(View.GONE)
+//            submitVisible.set(View.GONE)
+//            numberOfItemsDisplayed = -1
+//        } else {
+//            setNewDonorVisibility(key.toString())
+//            submitVisible.set(View.VISIBLE)
+//        }
+        // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
+    }
+    var hintTextExpDate: ObservableField<String> = ObservableField(activityCallbacks.fetchActivity().getString(R.string.product_expiration_date_hint_string))
+    var editTextExpDateVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+
+    fun onCalendarClicked(view: View) {
+        Utils.hideKeyboard(view)
+        dateDialog()
+    }
+
+    private fun dateDialog() {
+        val listener = object : DatePickerDialog.OnDateSetListener {
+            override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int) {
+                calendar.set(year, monthOfYear, dayOfMonth)
+                editTextProductExpDate.set(dateFormatter.format(calendar.time))
+            }
+        }
+        DatePickerDialog(activityCallbacks.fetchActivity(), uiViewModel.datePickerColorStyle, listener, year, month, day).show()
+    }
+
+    var donorBloodType: ObservableField<String> = ObservableField("")
+
+    fun setDonor(donor: Donor) {
+        this.donor = donor
+        donorBloodType.set(donor.backdropPath)
     }
 
     fun onGridElement11Clicked(view: View) {

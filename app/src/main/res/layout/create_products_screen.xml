@@ -20,6 +20,8 @@
 
         <!-- Start Grid of Four Squares -->
 
+        <!-- Start DIN -->
+
         <RelativeLayout
                 android:id="@+id/create_product_grid_element_11"
                 android:layout_width="wrap_content"
@@ -53,6 +55,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardEditTextProductInnerWidth)}"
+                        app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridEditTextHeight)}"
                         app:layout_marginLeft="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
                         app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
                         app:background="@{uiViewModel.editTextProductBackground}"
@@ -70,17 +73,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-<!--            <TextView-->
-<!--                    android:id="@+id/create_product_text_view_11"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_centerInParent="true"-->
-<!--                    android:text="@{createProductsListViewModel.gridText11}"-->
-<!--                    app:text_font="@{uiViewModel.productGridTextTypeface}"-->
-<!--                    app:text_color="@{uiViewModel.productGridTextColor}"-->
-<!--                    app:text_size="@{safeUnbox(uiViewModel.productGridTextSize)}"-->
-<!--                    android:visibility="@{safeUnbox(createProductsListViewModel.gridText11Visible)}" />-->
-
             <TextView
                     android:id="@+id/create_product_id_11"
                     android:layout_width="wrap_content"
@@ -95,6 +87,10 @@
                     app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
 
         </RelativeLayout>
+
+        <!-- End DIN -->
+
+        <!-- Start ABO/Rh -->
 
         <RelativeLayout
                 android:id="@+id/create_product_grid_element_12"
@@ -120,12 +116,13 @@
                     android:id="@+id/create_product_text_view_12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@{createProductsListViewModel.gridText12}"
-                    app:text_font="@{uiViewModel.productGridTextTypeface}"
-                    app:text_color="@{uiViewModel.productGridTextColor}"
-                    app:text_size="@{safeUnbox(uiViewModel.productGridTextSize)}"
-                    android:visibility="@{safeUnbox(createProductsListViewModel.gridText12Visible)}" />
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="70dp"
+                    android:text="@{createProductsListViewModel.donorBloodType}"
+                    app:text_font="@{uiViewModel.editTextProductTypeface}"
+                    app:text_color="@{uiViewModel.editTextProductColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
 
             <TextView
                     android:id="@+id/create_product_id_12"
@@ -141,6 +138,10 @@
                     app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
 
         </RelativeLayout>
+
+        <!-- End ABO/Rh -->
+
+        <!-- Start Product Code -->
 
         <RelativeLayout
                 android:id="@+id/create_product_grid_element_21"
@@ -162,16 +163,36 @@
                     app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
                     android:layout_centerInParent="true" />
 
-            <TextView
-                    android:id="@+id/create_product_text_view_21"
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/create_product_edit_text_21"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@{createProductsListViewModel.gridText21}"
-                    app:text_font="@{uiViewModel.productGridTextTypeface}"
-                    app:text_color="@{uiViewModel.productGridTextColor}"
-                    app:text_size="@{safeUnbox(uiViewModel.productGridTextSize)}"
-                    android:visibility="@{safeUnbox(createProductsListViewModel.gridText21Visible)}" />
+                    android:layout_marginTop="40dp"
+                    android:hint="@{createProductsListViewModel.hintTextCode}"
+                    app:upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/create_product_edit_text_display_din_21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridEditTextHeight)}"
+                        app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardEditTextProductInnerWidth)}"
+                        app:layout_marginLeft="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                        app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                        app:background="@{uiViewModel.editTextProductBackground}"
+                        app:text_hint_color="@{uiViewModel.editTextProductHintColor}"
+                        app:edit_text_cursor="@{uiViewModel.editTextCursor}"
+                        android:text="@={createProductsListViewModel.editTextProductCode}"
+                        android:onTextChanged="@{createProductsListViewModel::onTextCodeChanged}"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="20dp"
+                        android:inputType="textCapCharacters"
+                        app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
+                        app:edit_text_color="@{uiViewModel.editTextProductColor}"
+                        app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                     android:id="@+id/create_product_id_21"
@@ -187,6 +208,10 @@
                     app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
 
         </RelativeLayout>
+
+        <!-- End Product Code -->
+
+        <!-- Start Expiration Date -->
 
         <RelativeLayout
                 android:id="@+id/create_product_grid_element_22"
@@ -208,16 +233,46 @@
                     app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
                     android:layout_centerInParent="true" />
 
-            <TextView
-                    android:id="@+id/create_product_text_view_22"
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/create_product_edit_text_22"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@{createProductsListViewModel.gridText22}"
-                    app:text_font="@{uiViewModel.productGridTextTypeface}"
-                    app:text_color="@{uiViewModel.productGridTextColor}"
-                    app:text_size="@{safeUnbox(uiViewModel.productGridTextSize)}"
-                    android:visibility="@{safeUnbox(createProductsListViewModel.gridText22Visible)}" />
+                    android:layout_marginTop="40dp"
+                    android:hint="@{createProductsListViewModel.hintTextExpDate}"
+                    app:upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/create_product_edit_text_display_din_22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridEditTextHeight)}"
+                        app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardEditTextProductInnerWidth)}"
+                        app:layout_marginLeft="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                        app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                        app:background="@{uiViewModel.editTextProductBackground}"
+                        app:text_hint_color="@{uiViewModel.editTextProductHintColor}"
+                        app:edit_text_cursor="@{uiViewModel.editTextCursor}"
+                        android:text="@={createProductsListViewModel.editTextProductExpDate}"
+                        android:onTextChanged="@{createProductsListViewModel::onTextExpDateChanged}"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="20dp"
+                        android:inputType="textCapCharacters"
+                        app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
+                        app:edit_text_color="@{uiViewModel.editTextProductColor}"
+                        app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <android.widget.ImageView
+                    android:id="@+id/calendar_icon_22"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_calendar"
+                    android:scaleType="fitXY"
+                    android:onClick="@{(view) -> createProductsListViewModel.onCalendarClicked(view)}"
+                    android:layout_marginBottom="10dp"
+                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}" />
 
             <TextView
                     android:id="@+id/create_product_id_22"
@@ -233,6 +288,8 @@
                     app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
 
         </RelativeLayout>
+
+        <!-- End Expiration Date -->
 
         <!-- End Grid of Four Squares -->
 
