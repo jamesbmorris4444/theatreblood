@@ -37,6 +37,11 @@
     <string name="button_search">Search</string>
     <string name="button_update">Update</string>
     <string name="button_new_donor">New Donor</string>
+    <string name="button_clear">Clear</string>
+    <string name="button_confirm">Confirm</string>
+    <string name="button_edit">Edit</string>
+    <string name="button_done">Done</string>
+    <string name="button_complete">Complete</string>
 
     <!-- donor strings -->
     <string name="donor_search_string">Enter Search String</string>

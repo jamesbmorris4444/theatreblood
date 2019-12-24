@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks {
     private lateinit var navView: BottomNavigationView
     private lateinit var lottieBackgroundView: LottieAnimationView
     private lateinit var activityMainBinding: ActivityMainBinding
+    lateinit var createProductsListViewModel: CreateProductsListViewModel
 
     enum class UITheme {
         LIGHT, DARK, NOT_ASSIGNED,
@@ -255,10 +256,15 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks {
         return true
     }
 
-    private lateinit var createProductsListViewModel: CreateProductsListViewModel
+    fun onCreateProductsItemClicked(view: View) {
+        createProductsListViewModel.onCreateProductsItemClicked(view)
+    }
 
-    fun barcodeScanner(gridNumber: Int, createProductsListViewModel: CreateProductsListViewModel) {
-        this.createProductsListViewModel = createProductsListViewModel
+    fun onCreateProductsDeleteClicked(view: View) {
+        createProductsListViewModel.onCreateProductsDeleteClicked(view)
+    }
+
+    fun barcodeScanner(gridNumber: Int) {
         val intent = Intent(this, BarCodeScannerActivity::class.java)
         startActivityForResult(intent, 100 + gridNumber)
     }
@@ -275,8 +281,7 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks {
                     createProductsListViewModel.editTextProductCode.set(barcodeResult)
                 }
                 122 -> {
-                    createProductsListViewModel.gridText22.set(barcodeResult)
-                    createProductsListViewModel.gridText22Visible.set(View.VISIBLE)
+                    createProductsListViewModel.editTextProductExpDate.set(barcodeResult)
                 }
                 else -> {}
             }

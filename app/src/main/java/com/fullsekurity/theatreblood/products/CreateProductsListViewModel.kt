@@ -1,5 +1,6 @@
 package com.fullsekurity.theatreblood.products
 
+import android.app.Application
 import android.app.DatePickerDialog
 import android.view.View
 import android.widget.DatePicker
@@ -44,12 +45,13 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     private val month = calendar.get(Calendar.MONTH)
     private val day = calendar.get(Calendar.DAY_OF_MONTH)
     private var dateFormatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
-
-
-    val gridText22: ObservableField<String> = ObservableField("")
-
-
-    val gridText22Visible: ObservableField<Int> = ObservableField(View.GONE)
+    val donorName: ObservableField<String> = ObservableField("")
+    val editOrDoneText: ObservableField<String> = ObservableField("")
+    val clearButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+    val confirmButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+    val editOrDoneButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+    val completeButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+    private val productList: MutableList<Product> = mutableListOf()
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -62,6 +64,8 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
             .build()
             .inject(this)
         adapter.uiViewModel = uiViewModel
+        editOrDoneText.set(getApplication<Application>().applicationContext.getString(R.string.button_edit))
+        activityCallbacks.fetchActivity().createProductsListViewModel = this
     }
 
     override fun setLayoutManager(): RecyclerView.LayoutManager {
@@ -71,23 +75,9 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
             }
 
             override fun canScrollVertically(): Boolean {
-                return true
+                return false
             }
         }
-    }
-
-    private fun showProducts(productList: List<Product>) {
-        adapter.addAll(productList)
-        numberOfItemsDisplayed = productList.size
-        setNewDonorVisibility("NONEMPTY")
-    }
-
-    private fun setNewDonorVisibility(key: String) {
-//        if (key.isNotEmpty() && numberOfItemsDisplayed == 0) {
-//            newDonorVisible.set(View.VISIBLE)
-//        } else {
-//            newDonorVisible.set(View.GONE)
-//        }
     }
     
     var editTextProductDin: ObservableField<String> = ObservableField("")
@@ -154,23 +144,64 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
 
     fun setDonor(donor: Donor) {
         this.donor = donor
+        donorName.set("DONOR: " + donor.title + ", " + donor.posterPath)
         donorBloodType.set(donor.backdropPath)
     }
 
     fun onGridElement11Clicked(view: View) {
-        activityCallbacks.fetchActivity().barcodeScanner(11, this)
+        activityCallbacks.fetchActivity().barcodeScanner(11)
     }
 
     fun onGridElement12Clicked(view: View) {
-        activityCallbacks.fetchActivity().barcodeScanner(12, this)
+        activityCallbacks.fetchActivity().barcodeScanner(12)
     }
 
     fun onGridElement21Clicked(view: View) {
-        activityCallbacks.fetchActivity().barcodeScanner(21, this)
+        activityCallbacks.fetchActivity().barcodeScanner(21)
     }
 
     fun onGridElement22Clicked(view: View) {
-        activityCallbacks.fetchActivity().barcodeScanner(22, this)
+        activityCallbacks.fetchActivity().barcodeScanner(22)
+    }
+
+    fun onClearClicked(view: View) {
+
+    }
+
+    fun onConfirmClicked(view: View) {
+        var product = Product()
+        editTextProductDin.get()?.let {
+            product.title = it
+        }
+        donorBloodType.get()?.let {
+            product.posterPath = it
+        }
+        editTextProductCode.get()?.let {
+            product.originalLanguage = it
+        }
+        editTextProductExpDate.get()?.let {
+            product.releaseDate = it
+        }
+        productList.add(product)
+        adapter.addAll(productList)
+    }
+
+    fun onEditOrDoneClicked(view: View) {
+
+    }
+
+    fun onCompleteClicked(view: View) {
+
+    }
+
+    fun onCreateProductsItemClicked(view: View) {
+        val position = view.tag as Int
+    }
+
+    fun onCreateProductsDeleteClicked(view: View) {
+        val position = view.tag as Int
+        productList.removeAt(position)
+        adapter.addAll(productList)
     }
 
 }

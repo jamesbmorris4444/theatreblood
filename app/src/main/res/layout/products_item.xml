@@ -12,12 +12,37 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+            android:onClick="@{(view) -> createProductsItemViewModel.onItemClicked(view)}"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> createProductsItemViewModel.onItemClicked()}">
+            android:layout_height="wrap_content" >
+
+        <android.widget.ImageView
+                android:id="@+id/create_product_delete_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/delete_icon"
+                android:onClick="@{(view) -> createProductsItemViewModel.onDeleteClicked(view)}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/create_product_edit_button" />
+
+        <android.widget.ImageView
+                android:id="@+id/create_product_edit_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/edit_icon"
+                android:onClick="@{(view) -> createProductsItemViewModel.onEditClicked(view)}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/create_product_delete_button"
+                app:layout_constraintRight_toLeftOf="@+id/product_din" />
 
         <android.widget.TextView
-                android:id="@+id/last_name"
+                android:id="@+id/product_din"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{createProductsItemViewModel.title}"
@@ -27,11 +52,11 @@
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintVertical_chainStyle="packed"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/first_name"
-                app:layout_constraintLeft_toLeftOf="parent" />
+                app:layout_constraintBottom_toTopOf="@+id/product_abo_rh"
+                app:layout_constraintLeft_toRightOf="@+id/create_product_delete_button" />
 
         <android.widget.TextView
-                android:id="@+id/first_name"
+                android:id="@+id/product_abo_rh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{createProductsItemViewModel.posterPath}"
@@ -39,9 +64,36 @@
                 app:text_color="@{uiViewModel.productItemTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.productItemTextSize)}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                app:layout_constraintTop_toBottomOf="@+id/last_name"
+                app:layout_constraintTop_toBottomOf="@+id/product_din"
+                app:layout_constraintBottom_toTopOf="@+id/product_code"
+                app:layout_constraintLeft_toRightOf="@+id/create_product_delete_button" />
+
+        <android.widget.TextView
+                android:id="@+id/product_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{createProductsItemViewModel.originalLanguage}"
+                app:text_font="@{uiViewModel.productItemTextTypeface}"
+                app:text_color="@{uiViewModel.productItemTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.productItemTextSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_constraintTop_toBottomOf="@+id/product_abo_rh"
+                app:layout_constraintBottom_toTopOf="@+id/product_expiration_date"
+                app:layout_constraintLeft_toRightOf="@+id/create_product_delete_button" />
+
+        <android.widget.TextView
+                android:id="@+id/product_expiration_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{createProductsItemViewModel.releaseDate}"
+                app:text_font="@{uiViewModel.productItemTextTypeface}"
+                app:text_color="@{uiViewModel.productItemTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.productItemTextSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintTop_toBottomOf="@+id/product_code"
                 app:layout_constraintBottom_toTopOf="@+id/divider"
-                app:layout_constraintLeft_toLeftOf="parent" />
+                app:layout_constraintLeft_toRightOf="@+id/create_product_delete_button" />
 
         <LinearLayout
                 android:id="@+id/divider"
@@ -49,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/black"
-                app:layout_constraintTop_toBottomOf="@+id/first_name"
+                app:layout_constraintTop_toBottomOf="@+id/product_expiration_date"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />
 

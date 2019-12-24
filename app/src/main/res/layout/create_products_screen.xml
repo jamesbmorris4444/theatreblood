@@ -14,286 +14,463 @@
                 type="com.fullsekurity.theatreblood.products.CreateProductsListViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-        <!-- Start Grid of Four Squares -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-        <!-- Start DIN -->
+            <!-- Start Donor Name -->
 
-        <RelativeLayout
-                android:id="@+id/create_product_grid_element_11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/create_product_grid_element_12">
+            <TextView
+                    android:id="@+id/donor_name_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{createProductsListViewModel.donorName}"
+                    app:text_font="@{uiViewModel.productIdTextTypeface}"
+                    app:text_color="@{uiViewModel.productIdTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}"
+                    app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/create_product_grid_element_12" />
 
-            <android.widget.ImageView
-                    android:id="@+id/create_product_image_view_11"
+            <!-- End Donor Name -->
+
+            <!-- Start Grid of Four Squares -->
+
+            <!-- Start DIN -->
+
+            <RelativeLayout
+                    android:id="@+id/create_product_grid_element_11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scaleType="center"
-                    android:background="@{uiViewModel.productGridBackgroundDrawable11}"
-                    android:onClick="@{(view) -> createProductsListViewModel.onGridElement11Clicked(view)}"
-                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
-                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
-                    android:layout_centerInParent="true" />
+                    app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_constraintTop_toBottomOf="@+id/donor_name_text_view"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/create_product_grid_element_12">
 
-            <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/create_product_edit_text_11"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:hint="@{createProductsListViewModel.hintTextDin}"
-                    app:upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}" >
-
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/create_product_edit_text_display_din_11"
+                <android.widget.ImageView
+                        android:id="@+id/create_product_image_view_11"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardEditTextProductInnerWidth)}"
-                        app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridEditTextHeight)}"
-                        app:layout_marginLeft="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
-                        app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
-                        app:background="@{uiViewModel.editTextProductBackground}"
-                        app:text_hint_color="@{uiViewModel.editTextProductHintColor}"
-                        app:edit_text_cursor="@{uiViewModel.editTextCursor}"
-                        android:text="@={createProductsListViewModel.editTextProductDin}"
-                        android:onTextChanged="@{createProductsListViewModel::onTextDinChanged}"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingTop="20dp"
-                        android:inputType="textCapCharacters"
-                        app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
-                        app:edit_text_color="@{uiViewModel.editTextProductColor}"
-                        app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+                        android:scaleType="center"
+                        android:background="@{uiViewModel.productGridBackgroundDrawable11}"
+                        android:onClick="@{(view) -> createProductsListViewModel.onGridElement11Clicked(view)}"
+                        app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                        app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
+                        android:layout_centerInParent="true" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                    android:id="@+id/create_product_id_11"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:text="@string/product_din"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    app:text_font="@{uiViewModel.productIdTextTypeface}"
-                    app:text_color="@{uiViewModel.productIdTextColor}"
-                    app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
-
-        </RelativeLayout>
-
-        <!-- End DIN -->
-
-        <!-- Start ABO/Rh -->
-
-        <RelativeLayout
-                android:id="@+id/create_product_grid_element_12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/create_product_grid_element_11"
-                app:layout_constraintRight_toRightOf="parent">
-
-            <android.widget.ImageView
-                    android:id="@+id/create_product_image_view_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="center"
-                    android:background="@{uiViewModel.productGridBackgroundDrawable12}"
-                    android:onClick="@{(view) -> createProductsListViewModel.onGridElement12Clicked(view)}"
-                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
-                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
-                    android:layout_centerInParent="true" />
-
-            <TextView
-                    android:id="@+id/create_product_text_view_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="70dp"
-                    android:text="@{createProductsListViewModel.donorBloodType}"
-                    app:text_font="@{uiViewModel.editTextProductTypeface}"
-                    app:text_color="@{uiViewModel.editTextProductColor}"
-                    app:text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
-
-            <TextView
-                    android:id="@+id/create_product_id_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:text="@string/product_abo_rh"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    app:text_font="@{uiViewModel.productIdTextTypeface}"
-                    app:text_color="@{uiViewModel.productIdTextColor}"
-                    app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
-
-        </RelativeLayout>
-
-        <!-- End ABO/Rh -->
-
-        <!-- Start Product Code -->
-
-        <RelativeLayout
-                android:id="@+id/create_product_grid_element_21"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_11"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/create_product_grid_element_22">
-
-            <android.widget.ImageView
-                    android:id="@+id/create_product_image_view_21"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="center"
-                    android:background="@{uiViewModel.productGridBackgroundDrawable21}"
-                    android:onClick="@{(view) -> createProductsListViewModel.onGridElement21Clicked(view)}"
-                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
-                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
-                    android:layout_centerInParent="true" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/create_product_edit_text_21"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:hint="@{createProductsListViewModel.hintTextCode}"
-                    app:upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}" >
-
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/create_product_edit_text_display_din_21"
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/create_product_edit_text_11"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridEditTextHeight)}"
-                        app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardEditTextProductInnerWidth)}"
-                        app:layout_marginLeft="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
-                        app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
-                        app:background="@{uiViewModel.editTextProductBackground}"
-                        app:text_hint_color="@{uiViewModel.editTextProductHintColor}"
-                        app:edit_text_cursor="@{uiViewModel.editTextCursor}"
-                        android:text="@={createProductsListViewModel.editTextProductCode}"
-                        android:onTextChanged="@{createProductsListViewModel::onTextCodeChanged}"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingTop="20dp"
-                        android:inputType="textCapCharacters"
-                        app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
-                        app:edit_text_color="@{uiViewModel.editTextProductColor}"
-                        app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+                        android:layout_marginTop="40dp"
+                        android:hint="@{createProductsListViewModel.hintTextDin}"
+                        app:upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}" >
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/create_product_edit_text_display_din_11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardEditTextProductInnerWidth)}"
+                            app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridEditTextHeight)}"
+                            app:layout_marginLeft="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                            app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                            app:background="@{uiViewModel.editTextProductBackground}"
+                            app:text_hint_color="@{uiViewModel.editTextProductHintColor}"
+                            app:edit_text_cursor="@{uiViewModel.editTextCursor}"
+                            android:text="@={createProductsListViewModel.editTextProductDin}"
+                            android:onTextChanged="@{createProductsListViewModel::onTextDinChanged}"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:paddingTop="20dp"
+                            android:inputType="textCapCharacters"
+                            app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
+                            app:edit_text_color="@{uiViewModel.editTextProductColor}"
+                            app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
 
-            <TextView
-                    android:id="@+id/create_product_id_21"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:text="@string/product_code"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    app:text_font="@{uiViewModel.productIdTextTypeface}"
-                    app:text_color="@{uiViewModel.productIdTextColor}"
-                    app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        </RelativeLayout>
-
-        <!-- End Product Code -->
-
-        <!-- Start Expiration Date -->
-
-        <RelativeLayout
-                android:id="@+id/create_product_grid_element_22"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_11"
-                app:layout_constraintLeft_toRightOf="@+id/create_product_grid_element_21"
-                app:layout_constraintRight_toRightOf="parent">
-
-            <android.widget.ImageView
-                    android:id="@+id/create_product_image_view_22"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="center"
-                    android:background="@{uiViewModel.productGridBackgroundDrawable22}"
-                    android:onClick="@{(view) -> createProductsListViewModel.onGridElement22Clicked(view)}"
-                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
-                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
-                    android:layout_centerInParent="true" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/create_product_edit_text_22"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:hint="@{createProductsListViewModel.hintTextExpDate}"
-                    app:upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}" >
-
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/create_product_edit_text_display_din_22"
+                <TextView
+                        android:id="@+id/create_product_id_11"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridEditTextHeight)}"
-                        app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardEditTextProductInnerWidth)}"
-                        app:layout_marginLeft="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
-                        app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
-                        app:background="@{uiViewModel.editTextProductBackground}"
-                        app:text_hint_color="@{uiViewModel.editTextProductHintColor}"
-                        app:edit_text_cursor="@{uiViewModel.editTextCursor}"
-                        android:text="@={createProductsListViewModel.editTextProductExpDate}"
-                        android:onTextChanged="@{createProductsListViewModel::onTextExpDateChanged}"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingTop="20dp"
-                        android:inputType="textCapCharacters"
-                        app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
-                        app:edit_text_color="@{uiViewModel.editTextProductColor}"
-                        app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/product_din"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        app:text_font="@{uiViewModel.productIdTextTypeface}"
+                        app:text_color="@{uiViewModel.productIdTextColor}"
+                        app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </RelativeLayout>
 
-            <android.widget.ImageView
-                    android:id="@+id/calendar_icon_22"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_calendar"
-                    android:scaleType="fitXY"
-                    android:onClick="@{(view) -> createProductsListViewModel.onCalendarClicked(view)}"
-                    android:layout_marginBottom="10dp"
-                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}" />
+            <!-- End DIN -->
 
-            <TextView
-                    android:id="@+id/create_product_id_22"
+            <!-- Start ABO/Rh -->
+
+            <RelativeLayout
+                    android:id="@+id/create_product_grid_element_12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:text="@string/product_expiration_date"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    app:text_font="@{uiViewModel.productIdTextTypeface}"
-                    app:text_color="@{uiViewModel.productIdTextColor}"
-                    app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
+                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_constraintTop_toBottomOf="@+id/donor_name_text_view"
+                    app:layout_constraintLeft_toRightOf="@+id/create_product_grid_element_11"
+                    app:layout_constraintRight_toRightOf="parent">
 
-        </RelativeLayout>
+                <android.widget.ImageView
+                        android:id="@+id/create_product_image_view_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="center"
+                        android:background="@{uiViewModel.productGridBackgroundDrawable12}"
+                        android:onClick="@{(view) -> createProductsListViewModel.onGridElement12Clicked(view)}"
+                        app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                        app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
+                        android:layout_centerInParent="true" />
 
-        <!-- End Expiration Date -->
+                <TextView
+                        android:id="@+id/create_product_text_view_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="70dp"
+                        android:text="@{createProductsListViewModel.donorBloodType}"
+                        app:text_font="@{uiViewModel.editTextProductTypeface}"
+                        app:text_color="@{uiViewModel.editTextProductColor}"
+                        app:text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
 
-        <!-- End Grid of Four Squares -->
+                <TextView
+                        android:id="@+id/create_product_id_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/product_abo_rh"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        app:text_font="@{uiViewModel.productIdTextTypeface}"
+                        app:text_color="@{uiViewModel.productIdTextColor}"
+                        app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </RelativeLayout>
 
+            <!-- End ABO/Rh -->
+
+            <!-- Start Product Code -->
+
+            <RelativeLayout
+                    android:id="@+id/create_product_grid_element_21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_11"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/create_product_grid_element_22">
+
+                <android.widget.ImageView
+                        android:id="@+id/create_product_image_view_21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="center"
+                        android:background="@{uiViewModel.productGridBackgroundDrawable21}"
+                        android:onClick="@{(view) -> createProductsListViewModel.onGridElement21Clicked(view)}"
+                        app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                        app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
+                        android:layout_centerInParent="true" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/create_product_edit_text_21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:hint="@{createProductsListViewModel.hintTextCode}"
+                        app:upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}" >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/create_product_edit_text_display_din_21"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridEditTextHeight)}"
+                            app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardEditTextProductInnerWidth)}"
+                            app:layout_marginLeft="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                            app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                            app:background="@{uiViewModel.editTextProductBackground}"
+                            app:text_hint_color="@{uiViewModel.editTextProductHintColor}"
+                            app:edit_text_cursor="@{uiViewModel.editTextCursor}"
+                            android:text="@={createProductsListViewModel.editTextProductCode}"
+                            android:onTextChanged="@{createProductsListViewModel::onTextCodeChanged}"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:paddingTop="20dp"
+                            android:inputType="textCapCharacters"
+                            app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
+                            app:edit_text_color="@{uiViewModel.editTextProductColor}"
+                            app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                        android:id="@+id/create_product_id_21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/product_code"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        app:text_font="@{uiViewModel.productIdTextTypeface}"
+                        app:text_color="@{uiViewModel.productIdTextColor}"
+                        app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
+
+            </RelativeLayout>
+
+            <!-- End Product Code -->
+
+            <!-- Start Expiration Date -->
+
+            <RelativeLayout
+                    android:id="@+id/create_product_grid_element_22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_11"
+                    app:layout_constraintLeft_toRightOf="@+id/create_product_grid_element_21"
+                    app:layout_constraintRight_toRightOf="parent">
+
+                <android.widget.ImageView
+                        android:id="@+id/create_product_image_view_22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="center"
+                        android:background="@{uiViewModel.productGridBackgroundDrawable22}"
+                        android:onClick="@{(view) -> createProductsListViewModel.onGridElement22Clicked(view)}"
+                        app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
+                        app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
+                        android:layout_centerInParent="true" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/create_product_edit_text_22"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="40dp"
+                            android:hint="@{createProductsListViewModel.hintTextExpDate}"
+                            app:upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/create_product_edit_text_display_exp_date_22"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridEditTextHeight)}"
+                                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardEditTextProductInnerWidth)}"
+                                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                                app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                                app:background="@{uiViewModel.editTextProductBackground}"
+                                app:text_hint_color="@{uiViewModel.editTextProductHintColor}"
+                                app:edit_text_cursor="@{uiViewModel.editTextCursor}"
+                                android:text="@={createProductsListViewModel.editTextProductExpDate}"
+                                android:onTextChanged="@{createProductsListViewModel::onTextExpDateChanged}"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingTop="20dp"
+                                android:inputType="textCapCharacters"
+                                app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
+                                app:edit_text_color="@{uiViewModel.editTextProductColor}"
+                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <android.widget.ImageView
+                            android:id="@+id/calendar_icon_22"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="30dp"
+                            android:src="@drawable/ic_calendar"
+                            android:scaleType="fitXY"
+                            android:onClick="@{(view) -> createProductsListViewModel.onCalendarClicked(view)}"
+                            android:layout_marginBottom="10dp"
+                            app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                            app:layout_constraintTop_toTopOf="@+id/create_product_edit_text_22"
+                            app:layout_constraintRight_toRightOf="@+id/create_product_edit_text_22"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                        android:id="@+id/create_product_id_22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/product_expiration_date"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        app:text_font="@{uiViewModel.productIdTextTypeface}"
+                        app:text_color="@{uiViewModel.productIdTextColor}"
+                        app:text_size="@{safeUnbox(uiViewModel.productIdTextSize)}" />
+
+            </RelativeLayout>
+
+            <!-- End Expiration Date -->
+
+            <!-- End Grid of Four Squares -->
+
+            <!-- Start row of Buttons -->
+
+            <android.widget.ImageView
+                    android:id="@+id/create_product_button_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:src="@{uiViewModel.buttonDrawable}"
+                    android:onClick="@{(view) -> createProductsListViewModel.onClearClicked(view)}"
+                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardButtonWidth)}"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
+                    app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    android:visibility="@{safeUnbox(createProductsListViewModel.clearButtonVisibility)}"
+                    app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_22"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/create_product_button_confirm" />
+
+            <TextView
+                    android:id="@+id/create_product_button_clear_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_clear"
+                    app:text_font="@{uiViewModel.buttonTextTypeface}"
+                    app:text_color="@{uiViewModel.buttonTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
+                    android:visibility="@{safeUnbox(createProductsListViewModel.clearButtonVisibility)}"
+                    app:layout_constraintStart_toStartOf="@+id/create_product_button_clear"
+                    app:layout_constraintEnd_toEndOf="@+id/create_product_button_clear"
+                    app:layout_constraintTop_toTopOf="@+id/create_product_button_clear"
+                    app:layout_constraintBottom_toBottomOf="@+id/create_product_button_clear" />
+
+            <android.widget.ImageView
+                    android:id="@+id/create_product_button_confirm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:src="@{uiViewModel.buttonDrawable}"
+                    android:onClick="@{(view) -> createProductsListViewModel.onConfirmClicked(view)}"
+                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardButtonWidth)}"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
+                    android:visibility="@{safeUnbox(createProductsListViewModel.confirmButtonVisibility)}"
+                    app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_22"
+                    app:layout_constraintLeft_toRightOf="@+id/create_product_button_clear"
+                    app:layout_constraintRight_toLeftOf="@+id/create_product_button_edit" />
+
+            <TextView
+                    android:id="@+id/create_product_button_confirm_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_confirm"
+                    app:text_font="@{uiViewModel.buttonTextTypeface}"
+                    app:text_color="@{uiViewModel.buttonTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
+                    android:visibility="@{safeUnbox(createProductsListViewModel.confirmButtonVisibility)}"
+                    app:layout_constraintStart_toStartOf="@+id/create_product_button_confirm"
+                    app:layout_constraintEnd_toEndOf="@+id/create_product_button_confirm"
+                    app:layout_constraintTop_toTopOf="@+id/create_product_button_confirm"
+                    app:layout_constraintBottom_toBottomOf="@+id/create_product_button_confirm" />
+
+            <android.widget.ImageView
+                    android:id="@+id/create_product_button_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:src="@{uiViewModel.buttonDrawable}"
+                    android:onClick="@{(view) -> createProductsListViewModel.onEditOrDoneClicked(view)}"
+                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardButtonWidth)}"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
+                    android:visibility="@{safeUnbox(createProductsListViewModel.editOrDoneButtonVisibility)}"
+                    app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_22"
+                    app:layout_constraintLeft_toRightOf="@+id/create_product_button_confirm"
+                    app:layout_constraintRight_toLeftOf="@+id/create_product_button_complete" />
+
+            <TextView
+                    android:id="@+id/create_product_button_edit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{createProductsListViewModel.editOrDoneText}"
+                    app:text_font="@{uiViewModel.buttonTextTypeface}"
+                    app:text_color="@{uiViewModel.buttonTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
+                    android:visibility="@{safeUnbox(createProductsListViewModel.editOrDoneButtonVisibility)}"
+                    app:layout_constraintStart_toStartOf="@+id/create_product_button_edit"
+                    app:layout_constraintEnd_toEndOf="@+id/create_product_button_edit"
+                    app:layout_constraintTop_toTopOf="@+id/create_product_button_edit"
+                    app:layout_constraintBottom_toBottomOf="@+id/create_product_button_edit" />
+
+            <android.widget.ImageView
+                    android:id="@+id/create_product_button_complete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:src="@{uiViewModel.buttonDrawable}"
+                    android:onClick="@{(view) -> createProductsListViewModel.onCompleteClicked(view)}"
+                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardButtonWidth)}"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
+                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    android:visibility="@{safeUnbox(createProductsListViewModel.completeButtonVisibility)}"
+                    app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_22"
+                    app:layout_constraintLeft_toRightOf="@+id/create_product_button_edit"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                    android:id="@+id/create_product_button_complete_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_complete"
+                    app:text_font="@{uiViewModel.buttonTextTypeface}"
+                    app:text_color="@{uiViewModel.buttonTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
+                    android:visibility="@{safeUnbox(createProductsListViewModel.completeButtonVisibility)}"
+                    app:layout_constraintStart_toStartOf="@+id/create_product_button_complete"
+                    app:layout_constraintEnd_toEndOf="@+id/create_product_button_complete"
+                    app:layout_constraintTop_toTopOf="@+id/create_product_button_complete"
+                    app:layout_constraintBottom_toBottomOf="@+id/create_product_button_complete" />
+
+            <!-- End row of Buttons -->
+
+            <!-- Start Product List -->
+
+            <LinearLayout
+                    android:id="@+id/divider"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    app:background_color="@{uiViewModel.standardDialogDividerColor}"
+                    app:layout_constraintTop_toBottomOf="@+id/create_product_button_complete"
+                    app:layout_constraintBottom_toTopOf="@+id/productsRecyclerView"
+                    app:layout_constraintLeft_toLeftOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/productsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:paddingBottom="100dp"
+                    android:clipToPadding="false"
+                    app:recyclerViewViewModel="@{createProductsListViewModel}"
+                    app:layout_constraintTop_toBottomOf="@+id/divider"
+                    app:layout_constraintLeft_toLeftOf="parent" />
+
+            <!-- End Product List -->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </layout>

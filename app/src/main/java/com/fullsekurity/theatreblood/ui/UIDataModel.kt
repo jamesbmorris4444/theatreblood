@@ -75,7 +75,7 @@ class UIDataModel {
 
                         R.drawable.button_light,
                         "white",
-                        "subTitle",
+                        "largeText",
 
                         "black",
                         "largeText",
@@ -85,7 +85,7 @@ class UIDataModel {
 
                         "primary",
 
-                        "white",
+                        "black",
                         "mainTitle",
 
                         "white",
@@ -102,7 +102,7 @@ class UIDataModel {
                         R.drawable.edit_text_background,
 
                         "black",
-                        "largeText"
+                        "largeTextBold"
                     )
                 }
                 lightViewUIDataClass
@@ -174,7 +174,7 @@ class UIDataModel {
 
                         R.drawable.button_dark,
                         "white",
-                        "subTitle",
+                        "largeText",
 
                         "white",
                         "largeText",
@@ -201,7 +201,7 @@ class UIDataModel {
                         R.drawable.edit_text_background,
 
                         "white",
-                        "largeText"
+                        "largeTextBold"
 
                     )
                 }

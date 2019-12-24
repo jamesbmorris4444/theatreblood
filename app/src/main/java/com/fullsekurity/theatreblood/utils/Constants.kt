@@ -20,8 +20,8 @@ object Constants {
     const val INSERTED_DATABASE_NAME = "TheatreBloodInserted.db"
     const val STANDARD_LEFT_AND_RIGHT_MARGIN = 20f
     const val STANDARD_EDIT_TEXT_SMALL_MARGIN = 10f
-    const val STANDARD_EDIT_TEXT_HEIGHT = 80f
-    const val STANDARD_GRID_EDIT_TEXT_HEIGHT = 50f
+    const val STANDARD_EDIT_TEXT_HEIGHT = 60f
+    const val STANDARD_GRID_EDIT_TEXT_HEIGHT = 60f
     const val STANDARD_BUTTON_HEIGHT = 50f
     const val STANDARD_GRID_HEIGHT = 120f
     const val EDIT_TEXT_TO_BUTTON_RATIO = 3  // 3:1
