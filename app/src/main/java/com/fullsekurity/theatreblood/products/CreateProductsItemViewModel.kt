@@ -32,4 +32,8 @@ class CreateProductsItemViewModel(val activityCallbacks: ActivityCallbacks) : Re
         activityCallbacks.fetchActivity().onCreateProductsDeleteClicked(view)
     }
 
+    fun onEditClicked(view: View) {
+        activityCallbacks.fetchActivity().onCreateProductsEditClicked(view)
+    }
+
 }

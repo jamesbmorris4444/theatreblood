@@ -44,7 +44,7 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     private val year = calendar.get(Calendar.YEAR)
     private val month = calendar.get(Calendar.MONTH)
     private val day = calendar.get(Calendar.DAY_OF_MONTH)
-    private var dateFormatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+    private var dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
     val donorName: ObservableField<String> = ObservableField("")
     val editOrDoneText: ObservableField<String> = ObservableField("")
     val clearButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
@@ -165,7 +165,9 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     }
 
     fun onClearClicked(view: View) {
-
+        editTextProductDin.set("")
+        editTextProductCode.set("")
+        editTextProductExpDate.set("")
     }
 
     fun onConfirmClicked(view: View) {
@@ -186,10 +188,6 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
         adapter.addAll(productList)
     }
 
-    fun onEditOrDoneClicked(view: View) {
-
-    }
-
     fun onCompleteClicked(view: View) {
 
     }
@@ -200,6 +198,15 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
 
     fun onCreateProductsDeleteClicked(view: View) {
         val position = view.tag as Int
+        productList.removeAt(position)
+        adapter.addAll(productList)
+    }
+
+    fun onCreateProductsEditClicked(view: View) {
+        val position = view.tag as Int
+        editTextProductDin.set(productList[position].title)
+        editTextProductCode.set(productList[position].originalLanguage)
+        editTextProductExpDate.set(productList[position].releaseDate)
         productList.removeAt(position)
         adapter.addAll(productList)
     }

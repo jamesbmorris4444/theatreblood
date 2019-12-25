@@ -369,7 +369,7 @@
                     android:visibility="@{safeUnbox(createProductsListViewModel.confirmButtonVisibility)}"
                     app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_22"
                     app:layout_constraintLeft_toRightOf="@+id/create_product_button_clear"
-                    app:layout_constraintRight_toLeftOf="@+id/create_product_button_edit" />
+                    app:layout_constraintRight_toLeftOf="@+id/create_product_button_complete" />
 
             <TextView
                     android:id="@+id/create_product_button_confirm_text"
@@ -386,34 +386,6 @@
                     app:layout_constraintBottom_toBottomOf="@+id/create_product_button_confirm" />
 
             <android.widget.ImageView
-                    android:id="@+id/create_product_button_edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:src="@{uiViewModel.buttonDrawable}"
-                    android:onClick="@{(view) -> createProductsListViewModel.onEditOrDoneClicked(view)}"
-                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardButtonWidth)}"
-                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
-                    android:visibility="@{safeUnbox(createProductsListViewModel.editOrDoneButtonVisibility)}"
-                    app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_22"
-                    app:layout_constraintLeft_toRightOf="@+id/create_product_button_confirm"
-                    app:layout_constraintRight_toLeftOf="@+id/create_product_button_complete" />
-
-            <TextView
-                    android:id="@+id/create_product_button_edit_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{createProductsListViewModel.editOrDoneText}"
-                    app:text_font="@{uiViewModel.buttonTextTypeface}"
-                    app:text_color="@{uiViewModel.buttonTextColor}"
-                    app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
-                    android:visibility="@{safeUnbox(createProductsListViewModel.editOrDoneButtonVisibility)}"
-                    app:layout_constraintStart_toStartOf="@+id/create_product_button_edit"
-                    app:layout_constraintEnd_toEndOf="@+id/create_product_button_edit"
-                    app:layout_constraintTop_toTopOf="@+id/create_product_button_edit"
-                    app:layout_constraintBottom_toBottomOf="@+id/create_product_button_edit" />
-
-            <android.widget.ImageView
                     android:id="@+id/create_product_button_complete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -425,7 +397,7 @@
                     app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                     android:visibility="@{safeUnbox(createProductsListViewModel.completeButtonVisibility)}"
                     app:layout_constraintTop_toBottomOf="@+id/create_product_grid_element_22"
-                    app:layout_constraintLeft_toRightOf="@+id/create_product_button_edit"
+                    app:layout_constraintLeft_toRightOf="@+id/create_product_button_confirm"
                     app:layout_constraintRight_toRightOf="parent" />
 
             <TextView

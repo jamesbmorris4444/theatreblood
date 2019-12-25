@@ -43,7 +43,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     private val year = calendar.get(Calendar.YEAR)
     private val month = calendar.get(Calendar.MONTH)
     private val day = calendar.get(Calendar.DAY_OF_MONTH)
-    private var dateFormatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+    private var dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
     val submitOrUpdateText: ObservableField<String> = ObservableField("")
     private lateinit var donor: Donor
     private var lastNameChanged = false        // last name field was changed (new entry in database)

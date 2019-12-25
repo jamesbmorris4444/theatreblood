@@ -40,6 +40,7 @@ class CreateProductsAdapter(val activityCallbacks: ActivityCallbacks) : Recycler
         super.onBindViewHolder(holder, position)
         holder.itemView.tag = position // click anywhere in the item
         holder.itemView.findViewById<ImageView>(R.id.create_product_delete_button).tag = position // delete button
+        holder.itemView.findViewById<ImageView>(R.id.create_product_edit_button).tag = position // edit button
         if (position % 2 == 1) {
             holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor1))
         } else {

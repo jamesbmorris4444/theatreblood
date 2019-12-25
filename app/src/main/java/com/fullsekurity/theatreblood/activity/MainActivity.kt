@@ -264,6 +264,11 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks {
         createProductsListViewModel.onCreateProductsDeleteClicked(view)
     }
 
+    fun onCreateProductsEditClicked(view: View) {
+        createProductsListViewModel.onCreateProductsEditClicked(view)
+    }
+
+
     fun barcodeScanner(gridNumber: Int) {
         val intent = Intent(this, BarCodeScannerActivity::class.java)
         startActivityForResult(intent, 100 + gridNumber)

@@ -53,7 +53,7 @@
                 app:layout_constraintVertical_chainStyle="packed"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/product_abo_rh"
-                app:layout_constraintLeft_toRightOf="@+id/create_product_delete_button" />
+                app:layout_constraintLeft_toRightOf="@+id/create_product_edit_button" />
 
         <android.widget.TextView
                 android:id="@+id/product_abo_rh"
@@ -66,7 +66,7 @@
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintTop_toBottomOf="@+id/product_din"
                 app:layout_constraintBottom_toTopOf="@+id/product_code"
-                app:layout_constraintLeft_toRightOf="@+id/create_product_delete_button" />
+                app:layout_constraintLeft_toRightOf="@+id/create_product_edit_button" />
 
         <android.widget.TextView
                 android:id="@+id/product_code"
@@ -80,7 +80,7 @@
                 app:layout_constraintVertical_chainStyle="packed"
                 app:layout_constraintTop_toBottomOf="@+id/product_abo_rh"
                 app:layout_constraintBottom_toTopOf="@+id/product_expiration_date"
-                app:layout_constraintLeft_toRightOf="@+id/create_product_delete_button" />
+                app:layout_constraintLeft_toRightOf="@+id/create_product_edit_button" />
 
         <android.widget.TextView
                 android:id="@+id/product_expiration_date"
@@ -93,7 +93,7 @@
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintTop_toBottomOf="@+id/product_code"
                 app:layout_constraintBottom_toTopOf="@+id/divider"
-                app:layout_constraintLeft_toRightOf="@+id/create_product_delete_button" />
+                app:layout_constraintLeft_toRightOf="@+id/create_product_edit_button" />
 
         <LinearLayout
                 android:id="@+id/divider"
