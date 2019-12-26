@@ -1,11 +1,20 @@
-package com.fullsekurity.theatreblood.repository.storage
+package com.fullsekurity.theatreblood.products
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.fullsekurity.theatreblood.donors.Donor
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "products")
+@Entity(tableName = "products",
+    foreignKeys = [
+        ForeignKey(entity = Donor::class,
+            parentColumns = arrayOf("id"),
+            childColumns = arrayOf("id"),
+            onDelete = ForeignKey.CASCADE)
+    ])
+
 data class Product(
 
     @PrimaryKey(autoGenerate = true) var id: Int = 0,

@@ -10,12 +10,12 @@ import android.widget.ProgressBar
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
+import com.fullsekurity.theatreblood.donors.Donor
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.network.APIClient
 import com.fullsekurity.theatreblood.repository.network.APIInterface
 import com.fullsekurity.theatreblood.repository.storage.BloodDatabase
-import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.Constants.INSERTED_DATABASE_NAME
 import com.fullsekurity.theatreblood.utils.Constants.MAIN_DATABASE_NAME
@@ -281,8 +281,8 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                 StandardModal(
                     activityCallbacks,
                     modalType = StandardModal.ModalType.STANDARD,
-                    titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_staging_title),
-                    bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_staging_body),
+                    titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_donor_staging_title),
+                    bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_donor_staging_body),
                     positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
                     dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                         override fun onPositive(password: String) {
@@ -320,5 +320,32 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     fun databaseCount(database: BloodDatabase): Single<Int> {
         return database.donorDao().getEntryCount()
     }
+
+//    fun insertProductsIntoDatabase(database: BloodDatabase, products: List<Product>) {
+//        disposable = Completable.fromAction { database.donorDao().insertProducts(products) }
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribeOn(Schedulers.io())
+//            .subscribe {
+//                StandardModal(
+//                    activityCallbacks,
+//                    modalType = StandardModal.ModalType.STANDARD,
+//                    titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_title),
+//                    bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_body),
+//                    positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
+//                    dialogFinishedListener = object : StandardModal.DialogFinishedListener {
+//                        override fun onPositive(string: String) {
+//                            disposable?.dispose()
+//                            disposable = null
+//                        }
+//                        override fun onNegative() { }
+//                        override fun onNeutral() { }
+//                        override fun onBackPressed() {
+//                            disposable?.dispose()
+//                            disposable = null
+//                        }
+//                    }
+//                ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
+//            }
+//    }
 
 }

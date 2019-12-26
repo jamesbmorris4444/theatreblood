@@ -1,6 +1,7 @@
 package com.fullsekurity.theatreblood.repository.storage
 
 import androidx.room.*
+import com.fullsekurity.theatreblood.donors.Donor
 import io.reactivex.Single
 
 
@@ -30,4 +31,12 @@ interface DBDao {
     fun donorsFromFullName(searchLast: String, searchFirst :String) : Single<List<Donor>>
 
     // Product
+
+//    @Transaction
+//    @Query("SELECT * FROM donors WHERE title LIKE :searchLast AND poster_path LIKE :searchFirst")
+//    fun getDonorAndAllProducts(searchLast: String, searchFirst :String): Single<List<DonorAndAllProducts>>
+//
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    fun insertProducts(products: List<Product>)
+
 }

@@ -18,8 +18,10 @@
     <string name="std_modal_initialize_database_failure_title">Timeout while fetching remote database</string>
     <string name="std_modal_refresh_success_title">Database successfully refreshed</string>
     <string name="std_modal_refresh_success_body">Path Name "%s" exists and was backed up before refreshing</string>
-    <string name="std_modal_insert_staging_title">Staging Entry for Insertion</string>
-    <string name="std_modal_insert_staging_body">An entry was made to the staging database for insertion of new donors into the remote database</string>
+    <string name="std_modal_insert_donor_staging_title">Staging Entry for Donor Insertion</string>
+    <string name="std_modal_insert_donor_staging_body">An entry was made to the staging database for insertion of new donors into the remote database</string>
+    <string name="std_modal_insert_products_staging_title">Staging Entry for Product List Insertion</string>
+    <string name="std_modal_insert_products_staging_body">An entry was made to the staging database for insertion of a list of new products into the remote database</string>
     <string name="std_modal_modify_staging_title">Staging Entry for Modification</string>
     <string name="std_modal_modify_staging_body">An entry was made to the staging database for modification of existing donors currently in the remote database</string>
     <string name="std_modal_no_change_in_database_title">No entries made into any databases</string>

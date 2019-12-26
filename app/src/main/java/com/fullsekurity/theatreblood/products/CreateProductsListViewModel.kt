@@ -12,10 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
+import com.fullsekurity.theatreblood.donors.Donor
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
-import com.fullsekurity.theatreblood.repository.storage.Donor
-import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.Utils
@@ -189,7 +188,7 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     }
 
     fun onCompleteClicked(view: View) {
-
+        //repository.insertProductsIntoDatabase(repository.insertedBloodDatabase, productList)
     }
 
     fun onCreateProductsItemClicked(view: View) {

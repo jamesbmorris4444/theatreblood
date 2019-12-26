@@ -4,7 +4,6 @@ import android.view.View
 import androidx.databinding.ObservableField
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
-import com.fullsekurity.theatreblood.repository.storage.Product
 
 @Suppress("UNCHECKED_CAST")
 class CreateProductsItemViewModel(val activityCallbacks: ActivityCallbacks) : RecyclerViewItemViewModel<Product>() {

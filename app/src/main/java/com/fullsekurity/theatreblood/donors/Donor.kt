@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.repository.storage
+package com.fullsekurity.theatreblood.donors
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
