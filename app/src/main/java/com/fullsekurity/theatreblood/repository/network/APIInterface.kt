@@ -1,6 +1,7 @@
 package com.fullsekurity.theatreblood.repository.network
 
 import com.fullsekurity.theatreblood.donors.Donor
+import com.fullsekurity.theatreblood.donors.Product
 import com.fullsekurity.theatreblood.utils.Constants.API_KEY_REQUEST_PARAM
 import com.fullsekurity.theatreblood.utils.Constants.LANGUAGE_REQUEST_PARAM
 import com.fullsekurity.theatreblood.utils.Constants.PAGE_REQUEST_PARAM
@@ -21,5 +22,6 @@ data class DonorResponse (
     val page: Int,
     val totalResults: Int,
     val totalPages: Int,
-    val results: List<Donor>
+    val results: List<Donor>,
+    val products: List<Product>
 )

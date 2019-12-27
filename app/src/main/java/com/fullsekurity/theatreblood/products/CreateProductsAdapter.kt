@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.databinding.ProductsItemBinding
+import com.fullsekurity.theatreblood.donors.Product
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFilterAdapter
 import com.fullsekurity.theatreblood.ui.UIViewModel
 

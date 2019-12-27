@@ -3,6 +3,7 @@ package com.fullsekurity.theatreblood.products
 import android.view.View
 import androidx.databinding.ObservableField
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.donors.Product
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 
 @Suppress("UNCHECKED_CAST")
@@ -10,17 +11,17 @@ class CreateProductsItemViewModel(val activityCallbacks: ActivityCallbacks) : Re
 
     private lateinit var product: Product
 
-    val title: ObservableField<String> = ObservableField("")
-    val posterPath: ObservableField<String> = ObservableField("")
-    val originalLanguage: ObservableField<String> = ObservableField("")
-    val releaseDate: ObservableField<String> = ObservableField("")
+    val din: ObservableField<String> = ObservableField("")
+    val aboRh: ObservableField<String> = ObservableField("")
+    val productCode: ObservableField<String> = ObservableField("")
+    val expirationDate: ObservableField<String> = ObservableField("")
 
     override fun setItem(item: Product) {
         product = item
-        title.set(item.title)
-        posterPath.set(item.posterPath)
-        originalLanguage.set(item.originalLanguage)
-        releaseDate.set(item.releaseDate)
+        din.set(item.din)
+        aboRh.set(item.aboRh)
+        productCode.set(item.productCode)
+        expirationDate.set(item.expirationDate)
     }
 
     fun onItemClicked(view: View) {

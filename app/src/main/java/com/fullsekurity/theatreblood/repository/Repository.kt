@@ -11,6 +11,7 @@ import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.donors.Donor
+import com.fullsekurity.theatreblood.donors.Product
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.network.APIClient
@@ -178,20 +179,42 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     fun refreshDatabase(progressBar: ProgressBar, activity: MainActivity) {
         saveDatabase(activity, MAIN_DATABASE_NAME)
         deleteDatabase(activity, MAIN_DATABASE_NAME)
-        disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, 10)
+        disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, 13)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .timeout(15L, TimeUnit.SECONDS)
             .subscribe ({ donorResponse ->
                 progressBar.visibility = View.GONE
-                initializeDataBase(donorResponse.results, activity)
+                initializeDataBase(donorResponse.results, donorResponse.products, activity)
             },
             {
-                throwable -> initalizeDatabaseFailureModal(activity, throwable.message)
+                throwable -> initializeDatabaseFailureModal(activity, throwable.message)
             })
     }
 
-    private fun initalizeDatabaseFailureModal(activity: MainActivity, errorMessage: String?) {
+    private fun initializeDataBase(donors: List<Donor>, products: List<Product>, activity: MainActivity) {
+        LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX INSERT   INSERT"))
+        for (index in donors.indices) {
+            products[index].donor_id = donors[index].id
+            insertDonorIntoLocalDatabase(mainBloodDatabase, donors[index])
+            insertProductIntoLocalDatabase(mainBloodDatabase, products[index])
+        }
+        StandardModal(
+            activity,
+            modalType = StandardModal.ModalType.STANDARD,
+            titleText = activity.getString(R.string.std_modal_refresh_success_title),
+            bodyText = String.format(activity.getString(R.string.std_modal_refresh_success_body, activity.getDatabasePath(MAIN_DATABASE_NAME))),
+            positiveText = activity.getString(R.string.std_modal_ok),
+            dialogFinishedListener = object : StandardModal.DialogFinishedListener {
+                override fun onPositive(string: String) { }
+                override fun onNegative() { }
+                override fun onNeutral() { }
+                override fun onBackPressed() { }
+            }
+        ).show(activity.supportFragmentManager, "MODAL")
+    }
+
+    private fun initializeDatabaseFailureModal(activity: MainActivity, errorMessage: String?) {
         var error = errorMessage
         if (error == null) {
             error = "App cannot continue"
@@ -204,7 +227,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             bodyText = error,
             positiveText = activity.getString(R.string.std_modal_ok),
             dialogFinishedListener = object : StandardModal.DialogFinishedListener {
-                override fun onPositive(password: String) {
+                override fun onPositive(string: String) {
                     activity.finishActivity()
                 }
                 override fun onNegative() { }
@@ -216,27 +239,12 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         ).show(activity.supportFragmentManager, "MODAL")
     }
 
-    private fun initializeDataBase(donors: List<Donor>, activity: MainActivity) {
-        for (entry in donors.indices) {
-            insertIntoLocalDatabase(mainBloodDatabase, donors[entry])
-        }
-        StandardModal(
-            activity,
-            modalType = StandardModal.ModalType.STANDARD,
-            titleText = activity.getString(R.string.std_modal_refresh_success_title),
-            bodyText = String.format(activity.getString(R.string.std_modal_refresh_success_body, activity.getDatabasePath(MAIN_DATABASE_NAME))),
-            positiveText = activity.getString(R.string.std_modal_ok),
-            dialogFinishedListener = object : StandardModal.DialogFinishedListener {
-                override fun onPositive(password: String) { }
-                override fun onNegative() { }
-                override fun onNeutral() { }
-                override fun onBackPressed() { }
-            }
-        ).show(activity.supportFragmentManager, "MODAL")
+    private fun insertDonorIntoLocalDatabase(database: BloodDatabase, donor: Donor) {
+        database.donorDao().insertLocalDonor(donor)
     }
 
-    private fun insertIntoLocalDatabase(database: BloodDatabase, donor: Donor) {
-        database.donorDao().insertLocalDonor(donor)
+    private fun insertProductIntoLocalDatabase(database: BloodDatabase, product: Product) {
+        database.donorDao().insertLocalProduct(product)
     }
 
     private fun deleteDatabase(context: Context, databaseName: String) {
@@ -285,7 +293,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                     bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_donor_staging_body),
                     positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
                     dialogFinishedListener = object : StandardModal.DialogFinishedListener {
-                        override fun onPositive(password: String) {
+                        override fun onPositive(string: String) {
                             disposable?.dispose()
                             disposable = null
                             activityCallbacks.fetchActivity().loadCreateProductsFragment(donor)
@@ -314,14 +322,14 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             searchFirst = "%$first%"
             searchLast = "%$last%"
         }
-        return database.donorDao()?.donorsFromFullName(searchLast, searchFirst)
+        return database.donorDao().donorsFromFullName(searchLast, searchFirst)
     }
 
-    fun databaseCount(database: BloodDatabase): Single<Int> {
+    fun databaseCount(database: BloodDatabase):Int {
         return database.donorDao().getEntryCount()
     }
 
-//    fun insertProductsIntoDatabase(database: BloodDatabase, products: List<Product>) {
+    fun insertProducts(database: BloodDatabase, products: List<Product>) {
 //        disposable = Completable.fromAction { database.donorDao().insertProducts(products) }
 //            .observeOn(AndroidSchedulers.mainThread())
 //            .subscribeOn(Schedulers.io())
@@ -346,6 +354,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
 //                    }
 //                ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
 //            }
-//    }
+    }
 
 }

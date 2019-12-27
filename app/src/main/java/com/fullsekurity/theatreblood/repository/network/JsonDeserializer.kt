@@ -17,7 +17,7 @@ internal class DonorsJsonDeserializer : JsonDeserializer<Any> {
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Any? {
         // Jim Morris, 12/9/2019
         // This code does not appear to ever execute, although it did while I was using Retrofit and OkHttp callbacks
-        // It stopped executiing when I added the line
+        // It stopped executing when I added the line
         //     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         // to APIClient, which was added for the purpose of using RxJava calls for Retrofit and OkHttp, instead of callbacks
         var donors: ArrayList<Donor>? = null

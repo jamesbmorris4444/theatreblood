@@ -13,6 +13,7 @@ import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.donors.Donor
+import com.fullsekurity.theatreblood.donors.Product
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.ui.UIViewModel
@@ -172,16 +173,16 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     fun onConfirmClicked(view: View) {
         var product = Product()
         editTextProductDin.get()?.let {
-            product.title = it
+            product.din = it
         }
         donorBloodType.get()?.let {
-            product.posterPath = it
+            product.aboRh = it
         }
         editTextProductCode.get()?.let {
-            product.originalLanguage = it
+            product.productCode = it
         }
         editTextProductExpDate.get()?.let {
-            product.releaseDate = it
+            product.expirationDate = it
         }
         productList.add(product)
         adapter.addAll(productList)
@@ -203,9 +204,9 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
 
     fun onCreateProductsEditClicked(view: View) {
         val position = view.tag as Int
-        editTextProductDin.set(productList[position].title)
-        editTextProductCode.set(productList[position].originalLanguage)
-        editTextProductExpDate.set(productList[position].releaseDate)
+        editTextProductDin.set(productList[position].din)
+        editTextProductCode.set(productList[position].productCode)
+        editTextProductExpDate.set(productList[position].expirationDate)
         productList.removeAt(position)
         adapter.addAll(productList)
     }

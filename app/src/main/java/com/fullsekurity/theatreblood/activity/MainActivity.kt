@@ -25,19 +25,17 @@ import com.fullsekurity.theatreblood.barcode.BarCodeScannerActivity
 import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
 import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.donors.DonateProductsFragment
-import com.fullsekurity.theatreblood.modal.StandardModal
+import com.fullsekurity.theatreblood.donors.Donor
+import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.products.CreateProductsFragment
 import com.fullsekurity.theatreblood.products.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.repository.Repository
-import com.fullsekurity.theatreblood.donors.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.Constants.ROOT_FRAGMENT_TAG
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -216,28 +214,31 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks {
             true
         }
         R.id.action_staging_count -> {
-            val entryCountList = listOf(
-                repository.databaseCount(repository.insertedBloodDatabase),
-                repository.databaseCount(repository.modifiedBloodDatabase)
-            )
-            Single.zip(entryCountList) { args -> listOf(args) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ responseList ->
-                    val response = responseList[0]
-                    StandardModal(
-                        this,
-                        modalType = StandardModal.ModalType.STANDARD,
-                        titleText = getString(R.string.std_modal_staging_database_count_title),
-                        bodyText = String.format(getString(R.string.std_modal_staging_database_count_body), response[0] as Int, response[1] as Int),
-                        positiveText = getString(R.string.std_modal_ok),
-                        dialogFinishedListener = object : StandardModal.DialogFinishedListener {
-                            override fun onPositive(password: String) { }
-                            override fun onNegative() { }
-                            override fun onNeutral() { }
-                            override fun onBackPressed() { }
-                        }
-                    ).show(supportFragmentManager, "MODAL")
-                }, { response -> val c = response })
+            LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX INSERT 111111111111111111>>>>>>>>>>>>>   %d", repository.databaseCount(repository.mainBloodDatabase)))
+
+//            val entryCountList = listOf(
+//                repository.databaseCount(repository.insertedBloodDatabase),
+//                repository.databaseCount(repository.modifiedBloodDatabase)
+//            )
+//            Single.zip(entryCountList) { args -> listOf(args) }
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ responseList ->
+//                    val response = responseList[0]
+//                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX INSERT 22222222222222222222>>>>>>>>>>>>>"))
+//                    StandardModal(
+//                        this,
+//                        modalType = StandardModal.ModalType.STANDARD,
+//                        titleText = getString(R.string.std_modal_staging_database_count_title),
+//                        bodyText = String.format(getString(R.string.std_modal_staging_database_count_body), response[0] as Int, response[1] as Int),
+//                        positiveText = getString(R.string.std_modal_ok),
+//                        dialogFinishedListener = object : StandardModal.DialogFinishedListener {
+//                            override fun onPositive(password: String) { }
+//                            override fun onNegative() { }
+//                            override fun onNeutral() { }
+//                            override fun onBackPressed() { }
+//                        }
+//                    ).show(supportFragmentManager, "MODAL")
+//                }, { response -> val c = response })
             true
         }
         R.id.network_status -> {

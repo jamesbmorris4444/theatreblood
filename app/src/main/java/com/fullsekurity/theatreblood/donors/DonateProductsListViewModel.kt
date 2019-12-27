@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.ui.UIViewModel
@@ -111,19 +112,17 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
                 for (donor in response[0] as List<Donor>) {
                     if (donor.posterPath.length > 11) {
                         donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
-                        donor.backdropPath = donor.backdropPath.substring(1,11).toUpperCase(Locale.getDefault())
                     }
                 }
                 for (donor in response[1] as List<Donor>) {
                     if (donor.posterPath.length > 11) {
                         donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
-                        donor.backdropPath = donor.backdropPath.substring(1,11).toUpperCase(Locale.getDefault())
                     }
                 }
                 for (donor in response[2] as List<Donor>) {
+                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX INSERT >>>>>>>>>>>>>  %s", donor.backdropPath))
                     if (donor.posterPath.length > 11) {
                         donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
-                        donor.backdropPath = donor.backdropPath.substring(1,11).toUpperCase(Locale.getDefault())
                     }
                 }
                 val combinedList = (response[0] as List<Donor>).union(response[1] as List<Donor>).union(response[2] as List<Donor>).distinctBy { it.title + it.posterPath }
