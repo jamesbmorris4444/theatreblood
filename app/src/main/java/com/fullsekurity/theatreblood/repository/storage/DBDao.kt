@@ -24,7 +24,10 @@ interface DBDao {
     fun deleteAllDonors()
 
     @Query("SELECT COUNT(id) FROM donors")
-    fun getEntryCount(): Int
+    fun getDonorEntryCount(): Single<Int>
+
+    @Query("SELECT COUNT(id) FROM products")
+    fun getProductEntryCount(): Single<Int>
 
     @Update
     fun updateDonor(donor: Donor)

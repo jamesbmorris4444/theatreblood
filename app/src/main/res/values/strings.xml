@@ -26,7 +26,7 @@
     <string name="std_modal_modify_staging_body">An entry was made to the staging database for modification of existing donors currently in the remote database</string>
     <string name="std_modal_no_change_in_database_title">No entries made into any databases</string>
     <string name="std_modal_staging_database_count_title">Show number of entries in each staging database</string>
-    <string name="std_modal_staging_database_count_body">Insertion database entry count: %d entries\nModification database entry count: %d entries</string>
+    <string name="std_modal_staging_database_count_body">Insertion DB donors: %d entries\nModification DB donors: %d entries\nMain DB donors: %d entries\nInsertion DB products: %d entries\nModification DB products: %d entries\nMain DB products: %d entries</string>
 
     <string name="std_modal_password_authentication_hint">Password</string>
     <string name="std_modal_submit">Submit</string>

@@ -193,7 +193,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     }
 
     private fun initializeDataBase(donors: List<Donor>, products: List<Product>, activity: MainActivity) {
-        LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX INSERT   INSERT"))
         for (index in donors.indices) {
             products[index].donor_id = donors[index].id
             insertDonorIntoLocalDatabase(mainBloodDatabase, donors[index])
@@ -325,8 +324,12 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         return database.donorDao().donorsFromFullName(searchLast, searchFirst)
     }
 
-    fun databaseCount(database: BloodDatabase):Int {
-        return database.donorDao().getEntryCount()
+    fun databaseDonorCount(database: BloodDatabase): Single<Int> {
+        return database.donorDao().getDonorEntryCount()
+    }
+
+    fun databaseProductCount(database: BloodDatabase): Single<Int> {
+        return database.donorDao().getProductEntryCount()
     }
 
     fun insertProducts(database: BloodDatabase, products: List<Product>) {
