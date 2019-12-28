@@ -11,17 +11,17 @@ import io.reactivex.Single
 interface DBDao {
 
     // Donor
-    @get:Query("SELECT * FROM donors")
-    val donors: Single<List<Donor>>
+//    @get:Query("SELECT * FROM donors")
+//    val donors: Single<List<Donor>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertDonor(donor: Donor)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertLocalDonor(donor: Donor)
+    fun insertLocalDonors(donors: List<Donor>)
 
-    @Query("DELETE FROM donors")
-    fun deleteAllDonors()
+//    @Query("DELETE FROM donors")
+//    fun deleteAllDonors()
 
     @Query("SELECT COUNT(id) FROM donors")
     fun getDonorEntryCount(): Single<Int>
@@ -42,6 +42,6 @@ interface DBDao {
     fun getDonorAndAllProducts(searchLast: String, searchFirst: String): Single<List<DonorWithProducts>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertLocalProduct(product: Product)
+    fun insertLocalProducts(products: List<Product>)
 
 }

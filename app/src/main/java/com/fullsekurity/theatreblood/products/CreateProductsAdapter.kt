@@ -38,7 +38,6 @@ class CreateProductsAdapter(val activityCallbacks: ActivityCallbacks) : Recycler
 
     override fun onBindViewHolder(holder: ItemViewHolder<Product, CreateProductsItemViewModel>, position: Int) {
         super.onBindViewHolder(holder, position)
-        holder.itemView.tag = position // click anywhere in the item
         holder.itemView.findViewById<ImageView>(R.id.create_product_delete_button).tag = position // delete button
         holder.itemView.findViewById<ImageView>(R.id.create_product_edit_button).tag = position // edit button
         if (position % 2 == 1) {

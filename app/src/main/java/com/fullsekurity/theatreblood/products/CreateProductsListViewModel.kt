@@ -189,11 +189,7 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     }
 
     fun onCompleteClicked(view: View) {
-        //repository.insertProductsIntoDatabase(repository.insertedBloodDatabase, productList)
-    }
-
-    fun onCreateProductsItemClicked(view: View) {
-        val position = view.tag as Int
+        repository.insertProductList(repository.insertedBloodDatabase, productList)
     }
 
     fun onCreateProductsDeleteClicked(view: View) {

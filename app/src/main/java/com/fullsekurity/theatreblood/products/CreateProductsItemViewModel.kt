@@ -24,10 +24,6 @@ class CreateProductsItemViewModel(val activityCallbacks: ActivityCallbacks) : Re
         expirationDate.set(item.expirationDate)
     }
 
-    fun onItemClicked(view: View) {
-        activityCallbacks.fetchActivity().onCreateProductsItemClicked(view)
-    }
-
     fun onDeleteClicked(view: View) {
         activityCallbacks.fetchActivity().onCreateProductsDeleteClicked(view)
     }

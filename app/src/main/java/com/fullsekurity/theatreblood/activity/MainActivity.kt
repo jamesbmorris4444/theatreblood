@@ -273,10 +273,6 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks {
         return true
     }
 
-    fun onCreateProductsItemClicked(view: View) {
-        createProductsListViewModel.onCreateProductsItemClicked(view)
-    }
-
     fun onCreateProductsDeleteClicked(view: View) {
         createProductsListViewModel.onCreateProductsDeleteClicked(view)
     }

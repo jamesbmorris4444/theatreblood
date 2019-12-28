@@ -10,7 +10,7 @@ import com.fullsekurity.theatreblood.donors.Product
 @Database(entities = [Donor::class, Product::class], version = 1)
 abstract class BloodDatabase : RoomDatabase() {
 
-    abstract fun donorDao(): DBDao
+    abstract fun databaseDao(): DBDao
 
     companion object {
         private lateinit var instance: BloodDatabase

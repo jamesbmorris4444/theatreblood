@@ -195,9 +195,9 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     private fun initializeDataBase(donors: List<Donor>, products: List<Product>, activity: MainActivity) {
         for (index in donors.indices) {
             products[index].donor_id = donors[index].id
-            insertDonorIntoLocalDatabase(mainBloodDatabase, donors[index])
-            insertProductIntoLocalDatabase(mainBloodDatabase, products[index])
         }
+        insertDonorsIntoLocalDatabase(mainBloodDatabase, donors)
+        insertProductsIntoLocalDatabase(mainBloodDatabase, products)
         StandardModal(
             activity,
             modalType = StandardModal.ModalType.STANDARD,
@@ -211,6 +211,14 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                 override fun onBackPressed() { }
             }
         ).show(activity.supportFragmentManager, "MODAL")
+    }
+
+    private fun insertDonorsIntoLocalDatabase(database: BloodDatabase, donors: List<Donor>) {
+        database.databaseDao().insertLocalDonors(donors)
+    }
+
+    private fun insertProductsIntoLocalDatabase(database: BloodDatabase, products: List<Product>) {
+        database.databaseDao().insertLocalProducts(products)
     }
 
     private fun initializeDatabaseFailureModal(activity: MainActivity, errorMessage: String?) {
@@ -236,14 +244,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                 }
             }
         ).show(activity.supportFragmentManager, "MODAL")
-    }
-
-    private fun insertDonorIntoLocalDatabase(database: BloodDatabase, donor: Donor) {
-        database.donorDao().insertLocalDonor(donor)
-    }
-
-    private fun insertProductIntoLocalDatabase(database: BloodDatabase, product: Product) {
-        database.donorDao().insertLocalProduct(product)
     }
 
     private fun deleteDatabase(context: Context, databaseName: String) {
@@ -281,7 +281,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
 
     fun insertIntoDatabase(database: BloodDatabase, donor: Donor) {
         var disposable: Disposable? = null
-        disposable = Completable.fromAction { database.donorDao().insertDonor(donor) }
+        disposable = Completable.fromAction { database.databaseDao().insertDonor(donor) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe {
@@ -321,42 +321,42 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             searchFirst = "%$first%"
             searchLast = "%$last%"
         }
-        return database.donorDao().donorsFromFullName(searchLast, searchFirst)
+        return database.databaseDao().donorsFromFullName(searchLast, searchFirst)
     }
 
     fun databaseDonorCount(database: BloodDatabase): Single<Int> {
-        return database.donorDao().getDonorEntryCount()
+        return database.databaseDao().getDonorEntryCount()
     }
 
     fun databaseProductCount(database: BloodDatabase): Single<Int> {
-        return database.donorDao().getProductEntryCount()
+        return database.databaseDao().getProductEntryCount()
     }
 
-    fun insertProducts(database: BloodDatabase, products: List<Product>) {
-//        disposable = Completable.fromAction { database.donorDao().insertProducts(products) }
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribeOn(Schedulers.io())
-//            .subscribe {
-//                StandardModal(
-//                    activityCallbacks,
-//                    modalType = StandardModal.ModalType.STANDARD,
-//                    titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_title),
-//                    bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_body),
-//                    positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
-//                    dialogFinishedListener = object : StandardModal.DialogFinishedListener {
-//                        override fun onPositive(string: String) {
-//                            disposable?.dispose()
-//                            disposable = null
-//                        }
-//                        override fun onNegative() { }
-//                        override fun onNeutral() { }
-//                        override fun onBackPressed() {
-//                            disposable?.dispose()
-//                            disposable = null
-//                        }
-//                    }
-//                ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
-//            }
+    fun insertProductList(database: BloodDatabase, products: List<Product>) {
+        disposable = Completable.fromAction { database.databaseDao().insertLocalProducts(products) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                StandardModal(
+                    activityCallbacks,
+                    modalType = StandardModal.ModalType.STANDARD,
+                    titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_title),
+                    bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_body),
+                    positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
+                    dialogFinishedListener = object : StandardModal.DialogFinishedListener {
+                        override fun onPositive(string: String) {
+                            disposable?.dispose()
+                            disposable = null
+                        }
+                        override fun onNegative() { }
+                        override fun onNeutral() { }
+                        override fun onBackPressed() {
+                            disposable?.dispose()
+                            disposable = null
+                        }
+                    }
+                ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
+            }
     }
 
 }
