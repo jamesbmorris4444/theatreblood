@@ -97,11 +97,11 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     @Suppress("UNCHECKED_CAST")
-    fun onSubmitClicked(view: View) {
+    fun onSearchClicked(view: View) {
         var disposable: Disposable? = null
         val fullNameResponseList = listOf(
-            repository.donorsFromFullName(repository.stagingBloodDatabase, editTextNameInput.get() ?: ""),
-            repository.donorsFromFullName(repository.mainBloodDatabase, editTextNameInput.get() ?: "")
+            repository.donorsFromFullName(repository.mainBloodDatabase, editTextNameInput.get() ?: ""),
+            repository.donorsFromFullName(repository.stagingBloodDatabase, editTextNameInput.get() ?: "")
         )
         disposable = Single.zip(fullNameResponseList) { args -> listOf(args) }
             .observeOn(AndroidSchedulers.mainThread())
@@ -118,8 +118,13 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
                         donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
                     }
                 }
-                val combinedList = (response[0] as List<Donor>).union(response[1] as List<Donor>).distinctBy { it.title + it.posterPath }
-                showDonors(combinedList.toList())
+                val stagingDatabaseList = response[1] as List<Donor>
+                val mainDatabaseList = response[0] as List<Donor>
+                if (stagingDatabaseList.isEmpty()) {
+                    showDonors(mainDatabaseList)
+                } else {
+                    showDonors(stagingDatabaseList)
+                }
                 Utils.hideKeyboard(view)
             }, { response -> val c = response })
     }

@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@{uiViewModel.buttonDrawable}"
-                android:onClick="@{(view) -> donateProductsListViewModel.onSubmitClicked(view)}"
+                android:onClick="@{(view) -> donateProductsListViewModel.onSearchClicked(view)}"
                 app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardButtonWidth)}"
                 app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
                 app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"

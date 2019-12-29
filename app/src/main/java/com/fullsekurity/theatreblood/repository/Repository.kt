@@ -219,16 +219,8 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
 
     private fun insertProductsIntoLocalDatabase(database: BloodDatabase, products: List<List<Product>>) {
         for (index in products.indices) {
-            database.databaseDao().insertLocalProducts(products[index])
+            database.databaseDao().insertProducts(products[index])
         }
-    }
-
-    fun insertSingleProductListIntoLocalDatabase(database: BloodDatabase, products: List<Product>) {
-        database.databaseDao().insertLocalProducts(products)
-    }
-
-    fun insertDonorIntoLocalDatabase(database: BloodDatabase, donor: Donor) {
-        database.databaseDao().insertLocalDonor(donor)
     }
 
     private fun initializeDatabaseFailureModal(activity: MainActivity, errorMessage: String?) {
@@ -311,17 +303,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                         }
                     }
                 ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
-                val donorsWithProducts = database.databaseDao().donorsFromFullNameWithProducts("%Prada%", "%")
-                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ===================================="))
-                for (donorIndex in donorsWithProducts.indices) {
-                    donorsWithProducts[donorIndex].donor.overview = ""
-                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX donor=%s", donorsWithProducts[donorIndex].donor.toString()))
-                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ------------------------------------"))
-                    for (productIndex in donorsWithProducts[donorIndex].products.indices) {
-                        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX product=%s", donorsWithProducts[donorIndex].products[productIndex].toString()))
-                    }
-                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ===================================="))
-                }
             }
     }
 
@@ -339,7 +320,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
 
     private fun insertProductsIntoDatabase(database: BloodDatabase, donor: Donor, products: List<Product>) {
         var disposable: Disposable? = null
-        disposable = Completable.fromAction { database.databaseDao().insertLocalProducts(products) }
+        disposable = Completable.fromAction { database.databaseDao().insertProducts(products) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe {
@@ -355,31 +336,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                             disposable = null
                             activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                             activityCallbacks.fetchActivity().loadDonateProductsFragment()
-                            var donorsWithProducts = mainBloodDatabase.databaseDao().donorsFromFullNameWithProducts("%Prada%", "%")
-                            LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ===================================="))
-                            for (donorIndex in donorsWithProducts.indices) {
-                                donorsWithProducts[donorIndex].donor.overview = ""
-                                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX donor=%s", donorsWithProducts[donorIndex].donor.toString()))
-                                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ------------------------------------"))
-                                for (productIndex in donorsWithProducts[donorIndex].products.indices) {
-                                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX product=%s", donorsWithProducts[donorIndex].products[productIndex].toString()))
-                                }
-                                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ===================================="))
-                            }
-
-                            LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"))
-
-                            donorsWithProducts = stagingBloodDatabase.databaseDao().donorsFromFullNameWithProducts("%Prada%", "%")
-                            LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ===================================="))
-                            for (donorIndex in donorsWithProducts.indices) {
-                                donorsWithProducts[donorIndex].donor.overview = ""
-                                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX donor=%s", donorsWithProducts[donorIndex].donor.toString()))
-                                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ------------------------------------"))
-                                for (productIndex in donorsWithProducts[donorIndex].products.indices) {
-                                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX product=%s", donorsWithProducts[donorIndex].products[productIndex].toString()))
-                                }
-                                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ===================================="))
-                            }
                         }
                         override fun onNegative() { }
                         override fun onNeutral() { }
@@ -417,60 +373,35 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         return database.databaseDao().getProductEntryCount()
     }
 
-    fun insertProductList(database: BloodDatabase, products: List<Product>) {
-        disposable = Completable.fromAction { database.databaseDao().insertLocalProducts(products) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-                StandardModal(
-                    activityCallbacks,
-                    modalType = StandardModal.ModalType.STANDARD,
-                    titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_title),
-                    bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_body),
-                    positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
-                    dialogFinishedListener = object : StandardModal.DialogFinishedListener {
-                        override fun onPositive(string: String) {
-                            disposable?.dispose()
-                            disposable = null
-                            activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                            activityCallbacks.fetchActivity().loadDonateProductsFragment()
-                            var donorsWithProducts = mainBloodDatabase.databaseDao().donorsFromFullNameWithProducts("%Prada%", "%")
-                            LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ===================================="))
-                            for (donorIndex in donorsWithProducts.indices) {
-                                donorsWithProducts[donorIndex].donor.overview = ""
-                                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX donor=%s", donorsWithProducts[donorIndex].donor.toString()))
-                                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ------------------------------------"))
-                                for (productIndex in donorsWithProducts[donorIndex].products.indices) {
-                                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX product=%s", donorsWithProducts[donorIndex].products[productIndex].toString()))
-                                }
-                                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ===================================="))
-                            }
-
-                            LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"))
-
-                            donorsWithProducts = stagingBloodDatabase.databaseDao().donorsFromFullNameWithProducts("%Prada%", "%")
-                            LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ===================================="))
-                            for (donorIndex in donorsWithProducts.indices) {
-                                donorsWithProducts[donorIndex].donor.overview = ""
-                                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX donor=%s", donorsWithProducts[donorIndex].donor.toString()))
-                                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ------------------------------------"))
-                                for (productIndex in donorsWithProducts[donorIndex].products.indices) {
-                                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX product=%s", donorsWithProducts[donorIndex].products[productIndex].toString()))
-                                }
-                                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ===================================="))
-                            }
-                        }
-                        override fun onNegative() { }
-                        override fun onNeutral() { }
-                        override fun onBackPressed() {
-                            disposable?.dispose()
-                            disposable = null
-                            activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                            activityCallbacks.fetchActivity().loadDonateProductsFragment()
-                        }
-                    }
-                ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
-            }
-    }
+//    fun insertProductList(database: BloodDatabase, products: List<Product>) {
+//        disposable = Completable.fromAction { database.databaseDao().insertProducts(products) }
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribeOn(Schedulers.io())
+//            .subscribe {
+//                StandardModal(
+//                    activityCallbacks,
+//                    modalType = StandardModal.ModalType.STANDARD,
+//                    titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_title),
+//                    bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_body),
+//                    positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
+//                    dialogFinishedListener = object : StandardModal.DialogFinishedListener {
+//                        override fun onPositive(string: String) {
+//                            disposable?.dispose()
+//                            disposable = null
+//                            activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+//                            activityCallbacks.fetchActivity().loadDonateProductsFragment()
+//                        }
+//                        override fun onNegative() { }
+//                        override fun onNeutral() { }
+//                        override fun onBackPressed() {
+//                            disposable?.dispose()
+//                            disposable = null
+//                            activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+//                            activityCallbacks.fetchActivity().loadDonateProductsFragment()
+//                        }
+//                    }
+//                ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
+//            }
+//    }
 
 }

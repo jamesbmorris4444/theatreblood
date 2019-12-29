@@ -352,7 +352,7 @@
                     android:layout_height="wrap_content"
                     android:src="@{uiViewModel.largeButtonDrawable}"
                     android:layout_marginTop="20dp"
-                    android:onClick="@{(view) -> donorViewModel.onSubmitUpdateClicked(view)}"
+                    android:onClick="@{(view) -> donorViewModel.onUpdateClicked(view)}"
                     app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
                     app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardLargeButtonWidth)}"
                     app:layout_constraintTop_toBottomOf="@+id/military_branch_dropdown"
