@@ -1,7 +1,7 @@
 package com.fullsekurity.theatreblood.repository.network
 
-import com.fullsekurity.theatreblood.donors.Donor
-import com.fullsekurity.theatreblood.donors.Product
+import com.fullsekurity.theatreblood.repository.storage.Donor
+import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.utils.Constants.API_KEY_REQUEST_PARAM
 import com.fullsekurity.theatreblood.utils.Constants.LANGUAGE_REQUEST_PARAM
 import com.fullsekurity.theatreblood.utils.Constants.PAGE_REQUEST_PARAM

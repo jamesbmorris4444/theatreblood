@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.donors
+package com.fullsekurity.theatreblood.repository.storage
 
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
@@ -26,7 +26,7 @@ data class Donor(
 data class Product(
 
     @PrimaryKey(autoGenerate = true) var id: Long = 0,
-    @ColumnInfo(name = "donor_id") var donor_id: Long = 0,
+    @ColumnInfo(name = "donor_id") var donorId: Long = 0,
     @ColumnInfo(name = "din") @SerializedName(value = "din") var din: String = "",
     @ColumnInfo(name = "abo_rh") @SerializedName(value = "abo_rh") var aboRh: String = "",
     @ColumnInfo(name = "product_code") @SerializedName(value = "product_code") var productCode: String = "",

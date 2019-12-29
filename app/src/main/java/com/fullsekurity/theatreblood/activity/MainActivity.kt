@@ -16,7 +16,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
@@ -25,7 +27,7 @@ import com.fullsekurity.theatreblood.barcode.BarCodeScannerActivity
 import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
 import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.donors.DonateProductsFragment
-import com.fullsekurity.theatreblood.donors.Donor
+import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.products.CreateProductsFragment
 import com.fullsekurity.theatreblood.products.CreateProductsListViewModel
@@ -36,6 +38,7 @@ import com.fullsekurity.theatreblood.utils.Constants.ROOT_FRAGMENT_TAG
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -44,7 +47,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity(), ActivityCallbacks {
+class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNavigationItemSelectedListener {
 
     private val tag = MainActivity::class.java.simpleName
 
@@ -54,6 +57,8 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks {
 
     private var networkStatusMenuItem: MenuItem? = null
     private lateinit var navView: BottomNavigationView
+    private lateinit var navDrawerView: NavigationView
+    private lateinit var drawerLayout: DrawerLayout
     private lateinit var lottieBackgroundView: LottieAnimationView
     private lateinit var activityMainBinding: ActivityMainBinding
     lateinit var createProductsListViewModel: CreateProductsListViewModel
@@ -115,6 +120,9 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks {
         toolbar.setNavigationOnClickListener { onBackPressed() }
         navView = findViewById(R.id.bottom_nav_view)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        navDrawerView = findViewById(R.id.nav_drawer_view)
+        navDrawerView.setNavigationItemSelectedListener(this)
+        drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
         lottieBackgroundView = activityMainBinding.root.findViewById(R.id.main_background_lottie)
         if (savedInstanceState == null) {
             navView.selectedItemId = R.id.navigation_donations
@@ -135,7 +143,7 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks {
         finish()
     }
 
-    private fun loadDonateProductsFragment() {
+    fun loadDonateProductsFragment() {
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
             .replace(R.id.main_activity_container, DonateProductsFragment.newInstance())
@@ -237,6 +245,25 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks {
         else -> {
             super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.donate_products -> {
+                supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                loadDonateProductsFragment()
+            }
+            R.id.manage_donor -> {
+            }
+            R.id.reassociate_donation -> {
+            }
+            R.id.update_test_results -> {
+            }
+            R.id.view_donor_list -> {
+            }
+        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 
     private fun getProductEntryCount(insertedDonors: Int, modifiedDonors: Int, mainDonors: Int) {

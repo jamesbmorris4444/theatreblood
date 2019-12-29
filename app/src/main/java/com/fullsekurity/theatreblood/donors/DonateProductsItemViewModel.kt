@@ -3,6 +3,7 @@ package com.fullsekurity.theatreblood.donors
 import androidx.databinding.ObservableField
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
+import com.fullsekurity.theatreblood.repository.storage.Donor
 
 @Suppress("UNCHECKED_CAST")
 class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewItemViewModel<Donor>() {

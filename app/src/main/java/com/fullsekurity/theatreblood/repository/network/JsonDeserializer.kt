@@ -1,7 +1,7 @@
 package com.fullsekurity.theatreblood.repository.network
 
 import android.util.Log
-import com.fullsekurity.theatreblood.donors.Donor
+import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.Constants
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer

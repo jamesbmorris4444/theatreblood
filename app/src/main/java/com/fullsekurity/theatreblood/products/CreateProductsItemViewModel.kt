@@ -3,7 +3,7 @@ package com.fullsekurity.theatreblood.products
 import android.view.View
 import androidx.databinding.ObservableField
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
-import com.fullsekurity.theatreblood.donors.Product
+import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 
 @Suppress("UNCHECKED_CAST")

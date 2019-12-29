@@ -24,14 +24,17 @@
     <string name="std_modal_insert_products_staging_body">An entry was made to the staging database for insertion of a list of new products into the remote database</string>
     <string name="std_modal_modify_staging_title">Staging Entry for Modification</string>
     <string name="std_modal_modify_staging_body">An entry was made to the staging database for modification of existing donors currently in the remote database</string>
+    <string name="std_modal_noconfirm_title">Grid Entry Not Confirmed</string>
+    <string name="std_modal_noconfirm_body">Complete button was clicked without confirming current grid entry. Do you want to confirm?</string>
     <string name="std_modal_no_change_in_database_title">No entries made into any databases</string>
     <string name="std_modal_staging_database_count_title">Show number of entries in each staging database</string>
     <string name="std_modal_staging_database_count_body">Insertion DB donors: %d entries\nModification DB donors: %d entries\nMain DB donors: %d entries\nInsertion DB products: %d entries\nModification DB products: %d entries\nMain DB products: %d entries</string>
-
     <string name="std_modal_password_authentication_hint">Password</string>
     <string name="std_modal_submit">Submit</string>
     <string name="std_modal_cancel">Cancel</string>
     <string name="std_modal_ok">OK</string>
+    <string name="std_modal_yes">YES</string>
+    <string name="std_modal_no">NO</string>
 
     <!-- button name text -->
     <string name="button_insert">Insert</string>
@@ -70,6 +73,15 @@
     <string name="product_din_hint_string">DIN</string>
     <string name="product_code_hint_string">Product Code</string>
     <string name="product_expiration_date_hint_string">Expiration Date</string>
+
+    <!-- navigation drawer menu -->
+    <string name="nav_drawer_donate_products">Donate Products</string>
+    <string name="nav_drawer_manage_donor">Manage Donor</string>
+    <string name="nav_drawer_reassociate_donation">Reassociate Donation</string>
+    <string name="nav_drawer_update_test_results">Update Test Results</string>
+    <string name="nav_drawer_view_donor_list">View Donor List</string>
+    <string name="nav_drawer_title">Theatre Blood Android App</string>
+    <string name="nav_drawer_subtitle">JOMIS, Department of Defense</string>
 
     <!-- miscellaneous -->
     <string name="search_no_elements">No donors found in search</string>

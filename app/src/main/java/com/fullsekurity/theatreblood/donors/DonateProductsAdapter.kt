@@ -9,6 +9,7 @@ import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.databinding.DonorsItemBinding
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFilterAdapter
+import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 
 class DonateProductsAdapter(private val activityCallbacks: ActivityCallbacks) : RecyclerViewFilterAdapter<Donor, DonateProductsItemViewModel>(activityCallbacks.fetchActivity().applicationContext) {

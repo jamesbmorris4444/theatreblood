@@ -1,10 +1,10 @@
 package com.fullsekurity.theatreblood.products
 
-import android.app.Application
 import android.app.DatePickerDialog
 import android.view.View
 import android.widget.DatePicker
 import androidx.databinding.ObservableField
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
-import com.fullsekurity.theatreblood.donors.Donor
-import com.fullsekurity.theatreblood.donors.Product
+import com.fullsekurity.theatreblood.repository.storage.Donor
+import com.fullsekurity.theatreblood.repository.storage.Product
+import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.ui.UIViewModel
+import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.Utils
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
@@ -38,7 +40,6 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     private val tag = CreateProductsListViewModel::class.java.simpleName
     override var adapter: CreateProductsAdapter = CreateProductsAdapter(activityCallbacks)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
-    private var numberOfItemsDisplayed = -1
     private lateinit var donor: Donor
     private val calendar = Calendar.getInstance()
     private val year = calendar.get(Calendar.YEAR)
@@ -46,12 +47,12 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     private val day = calendar.get(Calendar.DAY_OF_MONTH)
     private var dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
     val donorName: ObservableField<String> = ObservableField("")
-    val editOrDoneText: ObservableField<String> = ObservableField("")
-    val clearButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
-    val confirmButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
-    val editOrDoneButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+    val clearButtonVisibility: ObservableField<Int> = ObservableField(View.GONE)
+    val confirmButtonVisibility: ObservableField<Int> = ObservableField(View.GONE)
     val completeButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+    private var confirmNeeded = false
     private val productList: MutableList<Product> = mutableListOf()
+    private val anyNonNullView = activityCallbacks.fetchRootView()
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -64,7 +65,6 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
             .build()
             .inject(this)
         adapter.uiViewModel = uiViewModel
-        editOrDoneText.set(getApplication<Application>().applicationContext.getString(R.string.button_edit))
         activityCallbacks.fetchActivity().createProductsListViewModel = this
     }
 
@@ -82,48 +82,34 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     
     var editTextProductDin: ObservableField<String> = ObservableField("")
     fun onTextDinChanged(key: CharSequence, start: Int, before: Int, count: Int) {
-//        if (key.isEmpty()) {
-//            newDonorVisible.set(View.GONE)
-//            submitVisible.set(View.GONE)
-//            numberOfItemsDisplayed = -1
-//        } else {
-//            setNewDonorVisibility(key.toString())
-//            submitVisible.set(View.VISIBLE)
-//        }
-        // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
+        onTextEntered(key.toString())
+        // within "key", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
     var hintTextDin: ObservableField<String> = ObservableField(activityCallbacks.fetchActivity().getString(R.string.product_din_hint_string))
     var editTextDinVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     var editTextProductCode: ObservableField<String> = ObservableField("")
     fun onTextCodeChanged(key: CharSequence, start: Int, before: Int, count: Int) {
-//        if (key.isEmpty()) {
-//            newDonorVisible.set(View.GONE)
-//            submitVisible.set(View.GONE)
-//            numberOfItemsDisplayed = -1
-//        } else {
-//            setNewDonorVisibility(key.toString())
-//            submitVisible.set(View.VISIBLE)
-//        }
-        // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
+        onTextEntered(key.toString())
     }
     var hintTextCode: ObservableField<String> = ObservableField(activityCallbacks.fetchActivity().getString(R.string.product_code_hint_string))
     var editTextCodeVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     var editTextProductExpDate: ObservableField<String> = ObservableField("")
     fun onTextExpDateChanged(key: CharSequence, start: Int, before: Int, count: Int) {
-//        if (key.isEmpty()) {
-//            newDonorVisible.set(View.GONE)
-//            submitVisible.set(View.GONE)
-//            numberOfItemsDisplayed = -1
-//        } else {
-//            setNewDonorVisibility(key.toString())
-//            submitVisible.set(View.VISIBLE)
-//        }
-        // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
+        onTextEntered(key.toString())
     }
     var hintTextExpDate: ObservableField<String> = ObservableField(activityCallbacks.fetchActivity().getString(R.string.product_expiration_date_hint_string))
     var editTextExpDateVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+
+    private fun onTextEntered(enteredText: String) {
+        if (enteredText.isEmpty()) {
+            return
+        }
+        clearButtonVisibility.set(View.VISIBLE)
+        confirmButtonVisibility.set(View.VISIBLE)
+        confirmNeeded = true
+    }
 
     fun onCalendarClicked(view: View) {
         Utils.hideKeyboard(view)
@@ -168,10 +154,21 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
         editTextProductDin.set("")
         editTextProductCode.set("")
         editTextProductExpDate.set("")
+        clearButtonVisibility.set(View.GONE)
+        confirmButtonVisibility.set(View.GONE)
+        confirmNeeded = false
     }
 
     fun onConfirmClicked(view: View) {
-        var product = Product()
+        processNewProduct()
+        adapter.addAll(productList)
+        clearButtonVisibility.set(View.VISIBLE)
+        confirmButtonVisibility.set(View.VISIBLE)
+        confirmNeeded = false
+    }
+
+    private fun processNewProduct() {
+        val product = Product()
         editTextProductDin.get()?.let {
             product.din = it
         }
@@ -184,12 +181,44 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
         editTextProductExpDate.get()?.let {
             product.expirationDate = it
         }
+        product.donorId = donor.id
         productList.add(product)
-        adapter.addAll(productList)
     }
 
     fun onCompleteClicked(view: View) {
-        repository.insertProductList(repository.insertedBloodDatabase, productList)
+        Utils.hideKeyboard(view)
+        if (confirmNeeded) {
+            StandardModal(
+                activityCallbacks,
+                modalType = StandardModal.ModalType.STANDARD,
+                titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_noconfirm_title),
+                bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_noconfirm_body),
+                positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_yes),
+                negativeText = activityCallbacks.fetchActivity().getString(R.string.std_modal_no),
+                dialogFinishedListener = object : StandardModal.DialogFinishedListener {
+                    override fun onPositive(string: String) {
+                        processNewProduct()
+                        repository.insertProductList(repository.insertedBloodDatabase, productList)
+                    }
+                    override fun onNegative() {
+
+                    }
+                    override fun onNeutral() { }
+                    override fun onBackPressed() {
+                        processNewProduct()
+                        repository.insertProductList(repository.insertedBloodDatabase, productList)
+                    }
+                }
+            ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
+        } else {
+            if (productList.size > 0) {
+                repository.insertProductList(repository.insertedBloodDatabase, productList)
+            } else {
+                activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                activityCallbacks.fetchActivity().loadDonateProductsFragment()
+            }
+        }
+        confirmNeeded = false
     }
 
     fun onCreateProductsDeleteClicked(view: View) {

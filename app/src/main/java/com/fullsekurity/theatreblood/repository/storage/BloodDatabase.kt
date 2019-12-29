@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.fullsekurity.theatreblood.donors.Donor
-import com.fullsekurity.theatreblood.donors.Product
 
 @Database(entities = [Donor::class, Product::class], version = 1)
 abstract class BloodDatabase : RoomDatabase() {

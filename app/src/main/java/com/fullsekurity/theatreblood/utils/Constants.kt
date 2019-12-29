@@ -1,6 +1,6 @@
 package com.fullsekurity.theatreblood.utils
 
-import com.fullsekurity.theatreblood.donors.Donor
+import com.fullsekurity.theatreblood.repository.storage.Donor
 
 object Constants {
 

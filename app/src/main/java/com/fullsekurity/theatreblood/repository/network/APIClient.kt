@@ -63,12 +63,23 @@ class TransformInterceptor : Interceptor {
         val random = Random()
         val jsonArray = JSONArray()
         for (index in 0 until donors) {
-            val productCount = 1 // random.nextInt(5)
+            val productCount = random.nextInt(3) + 1
+            val din = random.nextInt(1000).toString()
+            val aboRh: String  = when (random.nextInt(6)) {
+                0 -> { "O-Positive" }
+                1 -> { "O-Negative" }
+                2 -> { "A-Positive" }
+                3 -> { "A-Negative" }
+                4 -> { "B-Positive" }
+                5 -> { "B-Negative" }
+                else -> { "" }
+            }
+            val productCode = (random.nextInt(10000) + 9990000).toString()
             for (productIndex in 0 until productCount) {
                 val jsonObject = JSONObject()
-                jsonObject.put("din","T345")
-                jsonObject.put("abo_rh", "B-Positive")
-                jsonObject.put("product_code", "999994300")
+                jsonObject.put("din", din)
+                jsonObject.put("abo_rh", aboRh)
+                jsonObject.put("product_code", productCode)
                 jsonObject.put("expiration_date", "01 Jan 2020")
                 jsonArray.put(jsonObject)
             }

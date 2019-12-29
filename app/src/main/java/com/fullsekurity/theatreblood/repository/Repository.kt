@@ -7,16 +7,17 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.view.View
 import android.widget.ProgressBar
+import androidx.fragment.app.FragmentManager
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
-import com.fullsekurity.theatreblood.donors.Donor
-import com.fullsekurity.theatreblood.donors.Product
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.network.APIClient
 import com.fullsekurity.theatreblood.repository.network.APIInterface
 import com.fullsekurity.theatreblood.repository.storage.BloodDatabase
+import com.fullsekurity.theatreblood.repository.storage.Donor
+import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.Constants.INSERTED_DATABASE_NAME
 import com.fullsekurity.theatreblood.utils.Constants.MAIN_DATABASE_NAME
@@ -194,7 +195,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
 
     private fun initializeDataBase(donors: List<Donor>, products: List<Product>, activity: MainActivity) {
         for (index in donors.indices) {
-            products[index].donor_id = donors[index].id
+            products[index].donorId = donors[index].id
         }
         insertDonorsIntoLocalDatabase(mainBloodDatabase, donors)
         insertProductsIntoLocalDatabase(mainBloodDatabase, products)
@@ -332,11 +333,28 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         return database.databaseDao().getProductEntryCount()
     }
 
+    fun productList() {
+        //var list = modifiedBloodDatabase.databaseDao().getDonorAndAllProducts()
+        //LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX list1=%s", list.toString()))
+        //list = insertedBloodDatabase.databaseDao().getDonorAndAllProducts()
+//        var list = insertedBloodDatabase.databaseDao().getAllProducts()
+//        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX list1=%s", list.toString()))
+//        list = mainBloodDatabase.databaseDao().getAllProducts()
+//        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX list2=%s", list.toString()))
+        val listx = mainBloodDatabase.databaseDao().getDonorAndAllProducts()
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX list3=%s", listx.toString()))
+        val listy = mainBloodDatabase.databaseDao().getAllDonors()
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX list4=%s", listy.toString()))
+        val listz = mainBloodDatabase.databaseDao().loadDonorWithProducts()
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX list4=%s", listz.toString()))
+    }
+
     fun insertProductList(database: BloodDatabase, products: List<Product>) {
         disposable = Completable.fromAction { database.databaseDao().insertLocalProducts(products) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe {
+                activityCallbacks.fetchActivity().repository.productList() // JIMX
                 StandardModal(
                     activityCallbacks,
                     modalType = StandardModal.ModalType.STANDARD,
@@ -347,12 +365,16 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                         override fun onPositive(string: String) {
                             disposable?.dispose()
                             disposable = null
+                            activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                            activityCallbacks.fetchActivity().loadDonateProductsFragment()
                         }
                         override fun onNegative() { }
                         override fun onNeutral() { }
                         override fun onBackPressed() {
                             disposable?.dispose()
                             disposable = null
+                            activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                            activityCallbacks.fetchActivity().loadDonateProductsFragment()
                         }
                     }
                 ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
