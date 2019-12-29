@@ -206,9 +206,9 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
 
         if (atLeastOneEntryChanged) {
             if (submitOrUpdateText.get() == getApplication<Application>().applicationContext.getString(R.string.button_insert)) {
-                repository.insertIntoDatabase(repository.insertedBloodDatabase, donor)
+                repository.insertDonorIntoDatabase(repository.insertedBloodDatabase, donor)
             } else {
-                repository.insertIntoDatabase(repository.modifiedBloodDatabase, donor)
+                repository.insertDonorIntoDatabase(repository.modifiedBloodDatabase, donor)
             }
         } else {
             StandardModal(

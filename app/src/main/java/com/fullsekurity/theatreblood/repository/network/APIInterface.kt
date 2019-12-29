@@ -23,5 +23,5 @@ data class DonorResponse (
     val totalResults: Int,
     val totalPages: Int,
     val results: List<Donor>,
-    val products: List<Product>
+    val products: List<List<Product>>
 )

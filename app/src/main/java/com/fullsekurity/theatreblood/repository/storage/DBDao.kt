@@ -17,6 +17,9 @@ interface DBDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertLocalDonors(donors: List<Donor>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertLocalDonor(donor: Donor)
+
 //    @Query("DELETE FROM donors")
 //    fun deleteAllDonors()
 
@@ -47,13 +50,16 @@ interface DBDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertLocalProducts(products: List<Product>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertLocalProduct(products: List<Product>)
+
     // Donors and Products
 
-    @Query("SELECT donors.title AS donor, products.din AS din FROM donors, products WHERE donors.id = products.donor_id")
-    fun getDonorAndAllProducts(): List<DonorProduct>
+    @Query("SELECT * FROM donors WHERE title LIKE :searchLast AND poster_path LIKE :searchFirst")
+    fun donorsFromFullNameWithProducts(searchLast: String, searchFirst :String) : List<DonorWithProducts>
 
     @Query("SELECT * from donors")
-    fun loadDonorWithProducts(): List<DonorWithProducts?>?
+    fun loadAllDonorsWithProducts(): List<DonorWithProducts>
 
 
 }

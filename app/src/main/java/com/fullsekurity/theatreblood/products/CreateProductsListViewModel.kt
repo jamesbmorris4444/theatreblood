@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
-import com.fullsekurity.theatreblood.repository.storage.Donor
-import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
+import com.fullsekurity.theatreblood.repository.storage.Donor
+import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
@@ -198,7 +198,7 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
                 dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                     override fun onPositive(string: String) {
                         processNewProduct()
-                        repository.insertProductList(repository.insertedBloodDatabase, productList)
+                        addDonorWithProductsToInsertedDatabase()
                     }
                     override fun onNegative() {
 
@@ -206,19 +206,26 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
                     override fun onNeutral() { }
                     override fun onBackPressed() {
                         processNewProduct()
-                        repository.insertProductList(repository.insertedBloodDatabase, productList)
+                        addDonorWithProductsToInsertedDatabase()
                     }
                 }
             ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
         } else {
             if (productList.size > 0) {
-                repository.insertProductList(repository.insertedBloodDatabase, productList)
+                addDonorWithProductsToInsertedDatabase()
             } else {
                 activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 activityCallbacks.fetchActivity().loadDonateProductsFragment()
             }
         }
         confirmNeeded = false
+    }
+
+    private fun addDonorWithProductsToInsertedDatabase() {
+        for (productIndex in productList.indices) {
+            productList[productIndex].donorId = donor.id
+        }
+        repository.insertDonorIntoDatabaseChained(repository.insertedBloodDatabase, donor, productList)
     }
 
     fun onCreateProductsDeleteClicked(view: View) {
