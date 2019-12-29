@@ -100,8 +100,7 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     fun onSubmitClicked(view: View) {
         var disposable: Disposable? = null
         val fullNameResponseList = listOf(
-            repository.donorsFromFullName(repository.modifiedBloodDatabase, editTextNameInput.get() ?: ""),
-            repository.donorsFromFullName(repository.insertedBloodDatabase, editTextNameInput.get() ?: ""),
+            repository.donorsFromFullName(repository.stagingBloodDatabase, editTextNameInput.get() ?: ""),
             repository.donorsFromFullName(repository.mainBloodDatabase, editTextNameInput.get() ?: "")
         )
         disposable = Single.zip(fullNameResponseList) { args -> listOf(args) }
@@ -119,12 +118,7 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
                         donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
                     }
                 }
-                for (donor in response[2] as List<Donor>) {
-                    if (donor.posterPath.length > 11) {
-                        donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
-                    }
-                }
-                val combinedList = (response[0] as List<Donor>).union(response[1] as List<Donor>).union(response[2] as List<Donor>).distinctBy { it.title + it.posterPath }
+                val combinedList = (response[0] as List<Donor>).union(response[1] as List<Donor>).distinctBy { it.title + it.posterPath }
                 showDonors(combinedList.toList())
                 Utils.hideKeyboard(view)
             }, { response -> val c = response })

@@ -198,7 +198,7 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
                 dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                     override fun onPositive(string: String) {
                         processNewProduct()
-                        addDonorWithProductsToInsertedDatabase()
+                        addDonorWithProductsToModifiedDatabase()
                     }
                     override fun onNegative() {
 
@@ -206,13 +206,13 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
                     override fun onNeutral() { }
                     override fun onBackPressed() {
                         processNewProduct()
-                        addDonorWithProductsToInsertedDatabase()
+                        addDonorWithProductsToModifiedDatabase()
                     }
                 }
             ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
         } else {
             if (productList.size > 0) {
-                addDonorWithProductsToInsertedDatabase()
+                addDonorWithProductsToModifiedDatabase()
             } else {
                 activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 activityCallbacks.fetchActivity().loadDonateProductsFragment()
@@ -221,11 +221,11 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
         confirmNeeded = false
     }
 
-    private fun addDonorWithProductsToInsertedDatabase() {
+    private fun addDonorWithProductsToModifiedDatabase() {
         for (productIndex in productList.indices) {
             productList[productIndex].donorId = donor.id
         }
-        repository.insertDonorIntoDatabaseChained(repository.insertedBloodDatabase, donor, productList)
+        repository.insertDonorAndProductsIntoDatabaseChained(repository.stagingBloodDatabase, donor, productList)
     }
 
     fun onCreateProductsDeleteClicked(view: View) {

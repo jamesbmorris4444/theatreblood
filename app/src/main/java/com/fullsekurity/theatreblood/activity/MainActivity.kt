@@ -27,11 +27,11 @@ import com.fullsekurity.theatreblood.barcode.BarCodeScannerActivity
 import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
 import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.donors.DonateProductsFragment
-import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.products.CreateProductsFragment
 import com.fullsekurity.theatreblood.products.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.repository.Repository
+import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.Constants.ROOT_FRAGMENT_TAG
@@ -226,15 +226,14 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         }
         R.id.action_staging_count -> {
             val entryCountList = listOf(
-                repository.databaseDonorCount(repository.insertedBloodDatabase),
-                repository.databaseDonorCount(repository.modifiedBloodDatabase),
+                repository.databaseDonorCount(repository.stagingBloodDatabase),
                 repository.databaseDonorCount(repository.mainBloodDatabase)
             )
             Single.zip(entryCountList) { args -> listOf(args) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ responseList ->
                     val response = responseList[0]
-                    getProductEntryCount(response[0] as Int, response[1] as Int, response[2] as Int)
+                    getProductEntryCount(response[0] as Int, response[1] as Int)
                 }, { response -> val c = response })
             true
         }
@@ -266,11 +265,10 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         return true
     }
 
-    private fun getProductEntryCount(insertedDonors: Int, modifiedDonors: Int, mainDonors: Int) {
+    private fun getProductEntryCount(modifiedDonors: Int, mainDonors: Int) {
         var disposable: Disposable? = null
         val entryCountList = listOf(
-            repository.databaseProductCount(repository.insertedBloodDatabase),
-            repository.databaseProductCount(repository.modifiedBloodDatabase),
+            repository.databaseProductCount(repository.stagingBloodDatabase),
             repository.databaseProductCount(repository.mainBloodDatabase)
         )
         disposable = Single.zip(entryCountList) { args -> listOf(args) }
@@ -281,7 +279,7 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
                     this,
                     modalType = StandardModal.ModalType.STANDARD,
                     titleText = getString(R.string.std_modal_staging_database_count_title),
-                    bodyText = String.format(getString(R.string.std_modal_staging_database_count_body), insertedDonors, modifiedDonors, mainDonors, response[0] as Int, response[1] as Int, response[2] as Int),
+                    bodyText = String.format(getString(R.string.std_modal_staging_database_count_body), modifiedDonors, mainDonors, response[0] as Int, response[1] as Int),
                     positiveText = getString(R.string.std_modal_ok),
                     dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                         override fun onPositive(password: String) { }

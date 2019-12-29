@@ -17,7 +17,6 @@ object Constants {
     const val LANGUAGE = "en"
     const val MAIN_DATABASE_NAME = "TheatreBlood.db"
     const val MODIFIED_DATABASE_NAME = "TheatreBloodModified.db"
-    const val INSERTED_DATABASE_NAME = "TheatreBloodInserted.db"
     const val STANDARD_LEFT_AND_RIGHT_MARGIN = 20f
     const val STANDARD_EDIT_TEXT_SMALL_MARGIN = 10f
     const val STANDARD_EDIT_TEXT_HEIGHT = 60f

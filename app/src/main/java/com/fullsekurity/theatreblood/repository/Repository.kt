@@ -19,7 +19,6 @@ import com.fullsekurity.theatreblood.repository.storage.BloodDatabase
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.utils.Constants
-import com.fullsekurity.theatreblood.utils.Constants.INSERTED_DATABASE_NAME
 import com.fullsekurity.theatreblood.utils.Constants.MAIN_DATABASE_NAME
 import com.fullsekurity.theatreblood.utils.Constants.MODIFIED_DATABASE_NAME
 import io.reactivex.Completable
@@ -35,8 +34,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
 
     private val TAG = Repository::class.java.simpleName
     lateinit var mainBloodDatabase: BloodDatabase
-    lateinit var modifiedBloodDatabase: BloodDatabase
-    lateinit var insertedBloodDatabase: BloodDatabase
+    lateinit var stagingBloodDatabase: BloodDatabase
     private val donorsService: APIInterface = APIClient.client
     private var disposable: Disposable? = null
     private var transportType = TransportType.NONE
@@ -47,8 +45,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
 
     fun setBloodDatabase(context: Context) {
         mainBloodDatabase = BloodDatabase.newInstance(context, MAIN_DATABASE_NAME)
-        modifiedBloodDatabase = BloodDatabase.newInstance(context, MODIFIED_DATABASE_NAME)
-        insertedBloodDatabase = BloodDatabase.newInstance(context, INSERTED_DATABASE_NAME)
+        stagingBloodDatabase = BloodDatabase.newInstance(context, MODIFIED_DATABASE_NAME)
     }
 
     fun onCleared() {
@@ -278,12 +275,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                 bloodDatabase.close()
             }
         }
-        modifiedBloodDatabase.let { bloodDatabase ->
-            if (bloodDatabase.isOpen) {
-                bloodDatabase.close()
-            }
-        }
-        insertedBloodDatabase.let { bloodDatabase ->
+        stagingBloodDatabase.let { bloodDatabase ->
             if (bloodDatabase.isOpen) {
                 bloodDatabase.close()
             }
@@ -319,10 +311,21 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                         }
                     }
                 ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
+                val donorsWithProducts = database.databaseDao().donorsFromFullNameWithProducts("%Prada%", "%")
+                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ===================================="))
+                for (donorIndex in donorsWithProducts.indices) {
+                    donorsWithProducts[donorIndex].donor.overview = ""
+                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX donor=%s", donorsWithProducts[donorIndex].donor.toString()))
+                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ------------------------------------"))
+                    for (productIndex in donorsWithProducts[donorIndex].products.indices) {
+                        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX product=%s", donorsWithProducts[donorIndex].products[productIndex].toString()))
+                    }
+                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ===================================="))
+                }
             }
     }
 
-    fun insertDonorIntoDatabaseChained(database: BloodDatabase, donor: Donor, products: List<Product>) {
+    fun insertDonorAndProductsIntoDatabaseChained(database: BloodDatabase, donor: Donor, products: List<Product>) {
         var disposable: Disposable? = null
         disposable = Completable.fromAction { database.databaseDao().insertDonor(donor) }
             .observeOn(AndroidSchedulers.mainThread())
@@ -366,7 +369,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
 
                             LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"))
 
-                            donorsWithProducts = insertedBloodDatabase.databaseDao().donorsFromFullNameWithProducts("%Prada%", "%")
+                            donorsWithProducts = stagingBloodDatabase.databaseDao().donorsFromFullNameWithProducts("%Prada%", "%")
                             LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ===================================="))
                             for (donorIndex in donorsWithProducts.indices) {
                                 donorsWithProducts[donorIndex].donor.overview = ""
@@ -445,7 +448,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
 
                             LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"))
 
-                            donorsWithProducts = insertedBloodDatabase.databaseDao().donorsFromFullNameWithProducts("%Prada%", "%")
+                            donorsWithProducts = stagingBloodDatabase.databaseDao().donorsFromFullNameWithProducts("%Prada%", "%")
                             LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX ===================================="))
                             for (donorIndex in donorsWithProducts.indices) {
                                 donorsWithProducts[donorIndex].donor.overview = ""

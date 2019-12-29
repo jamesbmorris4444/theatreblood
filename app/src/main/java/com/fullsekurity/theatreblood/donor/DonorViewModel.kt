@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.databinding.AborhDropdownItemBinding
+import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -44,15 +45,14 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     private val month = calendar.get(Calendar.MONTH)
     private val day = calendar.get(Calendar.DAY_OF_MONTH)
     private var dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
-    val submitOrUpdateText: ObservableField<String> = ObservableField("")
     private lateinit var donor: Donor
-    private var lastNameChanged = false        // last name field was changed (new entry in database)
-    private var firstNameChanged = false       // first name field was changed (new entry in database)
-    private var middleNameChanged = false       // middle name field was changed (new entry in database)
 
-    // At least one entry changed. If no entries ever change, do not add this donor to a staging database.
-    // When the view is loaded the first time, onTextLastNameChanged is called, so ignore this call as a true user change.
+    // At least one entry changed. If no entries ever change, do not add this donor to the staging database.
+    // When the view is loaded the first time, onText...Changed is called, so ignore this call until isStable is true.
     private var atLeastOneEntryChanged = false
+    var isStable = false
+    private var aboRhDropdownInitialized = false
+    private var militaryBranchDropdownInitialized = false
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -64,6 +64,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
             .viewModelInjectorModule(ViewModelInjectorModule(activityCallbacks.fetchActivity()))
             .build()
             .inject(this)
+        isStable = false
     }
 
     // last name
@@ -71,12 +72,10 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     // Text typed into EditText in view will be stored into this field after each character is typed.
     var editTextDisplayModifyLastName: ObservableField<String> = ObservableField("")
     fun onTextLastNameChanged(string: CharSequence, start: Int, before: Int, count: Int) {
-        if (lastNameChanged) {
-            submitOrUpdateText.set(getApplication<Application>().applicationContext.getString(R.string.button_insert))
+        if (isStable) {
             atLeastOneEntryChanged = true
-        } else {
-            lastNameChanged = true
         }
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX last name  %b   %s", atLeastOneEntryChanged, editTextDisplayModifyLastName.get()))
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
     var hintTextLastName: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_last_name))
@@ -85,12 +84,10 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     // first name
     var editTextDisplayModifyFirstName: ObservableField<String> = ObservableField("")
     fun onTextFirstNameChanged(string: CharSequence, start: Int, before: Int, count: Int) {
-        if (firstNameChanged) {
-            submitOrUpdateText.set(getApplication<Application>().applicationContext.getString(R.string.button_insert))
+        if (isStable) {
             atLeastOneEntryChanged = true
-        } else {
-            firstNameChanged = true
         }
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX first name  %b   %s", atLeastOneEntryChanged, editTextDisplayModifyFirstName.get()))
     }
     var hintTextFirstName: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_first_name))
     var editTextFirstNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
@@ -98,11 +95,10 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     // middle name
     var editTextDisplayModifyMiddleName: ObservableField<String> = ObservableField("")
     fun onTextMiddleNameChanged(string: CharSequence, start: Int, before: Int, count: Int) {
-        if (middleNameChanged) {
+        if (isStable) {
             atLeastOneEntryChanged = true
-        } else {
-            middleNameChanged = true
         }
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX middle name  %b   %s", atLeastOneEntryChanged, editTextDisplayModifyMiddleName.get()))
     }
     var hintTextMiddleName: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_middle_name))
     var editTextMiddleNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
@@ -121,8 +117,11 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         val listener = object : DatePickerDialog.OnDateSetListener {
             override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int) {
                 calendar.set(year, monthOfYear, dayOfMonth)
-                atLeastOneEntryChanged = true
+                if (isStable) {
+                    atLeastOneEntryChanged = true
+                }
                 editTextDisplayModifyDob.set(dateFormatter.format(calendar.time))
+                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX date  %b   %s", atLeastOneEntryChanged, editTextDisplayModifyDob.get()))
             }
         }
         DatePickerDialog(activityCallbacks.fetchActivity(), uiViewModel.datePickerColorStyle, listener, year, month, day).show()
@@ -132,8 +131,10 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     var hintTextGender: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_gender))
     var radioButtonsGenderVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
-    fun onGenderChanged(radioGroup: RadioGroup?, id: Int) {
-        atLeastOneEntryChanged = !atLeastOneEntryChanged
+    fun onGenderChanged(radioGroup: RadioGroup, id: Int) {
+        if (isStable) {
+            atLeastOneEntryChanged = true
+        }
         if (id == R.id.radio_male) {
             activityCallbacks.fetchRadioButton(R.id.radio_male)?.isChecked = true
         } else {
@@ -145,13 +146,11 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     var hintTextAboRh: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_abo_rh))
     var dropdownAboRhVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
     var currentAboRhSelectedValue: String = "NO ABO/Rh"
-    // atLeastOneEntryChanged = true
 
     // Military Branch
     var hintTextMilitaryBranch: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_branch))
     var dropdownMilitaryBranchVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
     var currentMilitaryBranchSelectedValue: String = "NO Military Branch"
-    // atLeastOneEntryChanged = true
 
 //    <string name="donor_search_string">Enter Search String</string>
 //    <string name="donor_last_name">Enter Last Name</string>
@@ -173,21 +172,25 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         // change last name
         editTextDisplayModifyLastName.get()?.let { editTextDisplayModifyLastName ->
             donor.title = editTextDisplayModifyLastName
+            LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX SET last name  %b   %s", atLeastOneEntryChanged, donor.title))
         }
 
         // change first name
         editTextDisplayModifyFirstName.get()?.let { editTextDisplayModifyFirstName ->
             donor.posterPath = editTextDisplayModifyFirstName
+            LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX SET first name  %b   %s", atLeastOneEntryChanged, donor.posterPath))
         }
 
         // change middle name
         editTextDisplayModifyMiddleName.get()?.let { editTextDisplayModifyMiddleName ->
             donor.voteCount = editTextDisplayModifyMiddleName.toInt()
+            LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX SET middle name  %b   %s", atLeastOneEntryChanged, donor.voteCount))
         }
 
         // change date of birth
         editTextDisplayModifyDob.get()?.let { editTextDisplayModifyDob ->
             donor.releaseDate = editTextDisplayModifyDob
+            LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX SET date  %b   %s", atLeastOneEntryChanged, donor.releaseDate))
         }
 
         // change gender
@@ -198,18 +201,17 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
                 donor.overview = getApplication<Application>().applicationContext.getString(R.string.donor_female)
             }
         }
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX SET radio  %b   %s", atLeastOneEntryChanged, donor.overview))
 
         // change ABO/Rh
         donor.backdropPath = currentAboRhSelectedValue
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX SET abo rh  %b   %s", atLeastOneEntryChanged, donor.backdropPath))
 
-//        donor.???? = currentMilitaryBranchSelectedValue
+        donor.originalTitle = currentMilitaryBranchSelectedValue
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX SET branch  %b   %s", atLeastOneEntryChanged, donor.originalTitle))
 
         if (atLeastOneEntryChanged) {
-            if (submitOrUpdateText.get() == getApplication<Application>().applicationContext.getString(R.string.button_insert)) {
-                repository.insertDonorIntoDatabase(repository.insertedBloodDatabase, donor)
-            } else {
-                repository.insertDonorIntoDatabase(repository.modifiedBloodDatabase, donor)
-            }
+            repository.insertDonorIntoDatabase(repository.stagingBloodDatabase, donor)
         } else {
             StandardModal(
                 activityCallbacks,
@@ -236,8 +238,8 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     }
 
     fun setDonor(donor: Donor) {
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX stability=%b", isStable))
         this.donor = donor
-        submitOrUpdateText.set(if (donor.title.isEmpty()) getApplication<Application>().applicationContext.getString(R.string.button_insert) else getApplication<Application>().applicationContext.getString(R.string.button_update))
         activityCallbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_last_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
         activityCallbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_first_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
         activityCallbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_middle_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
@@ -251,7 +253,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         if (donor.adult) {
             activityCallbacks.fetchRadioButton(R.id.radio_male)?.isChecked = true
         } else {
-            activityCallbacks.fetchRadioButton(R.id.radio_male)?.isChecked = true
+            activityCallbacks.fetchRadioButton(R.id.radio_female)?.isChecked = true
         }
 
         val aboRhDropdownView: Spinner = activityCallbacks.fetchRootView().findViewById(R.id.abo_rh_dropdown)
@@ -259,9 +261,15 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array)
         val aboRhAdapter = CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
         aboRhDropdownView.adapter = aboRhAdapter
+        aboRhDropdownView.setSelection(2)
         aboRhDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 currentAboRhSelectedValue = parent.getItemAtPosition(position) as String
+                if (aboRhDropdownInitialized) {
+                    atLeastOneEntryChanged = true
+                }
+                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX branch    %d    init=%b    atleastone=%b  %s", position, aboRhDropdownInitialized, atLeastOneEntryChanged,currentAboRhSelectedValue))
+                aboRhDropdownInitialized = true
             }
             override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
@@ -271,12 +279,19 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         val militaryBranchDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.military_branch_array)
         val militaryBranchAdapter = CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, militaryBranchDropdownArray)
         militaryBranchDropdownView.adapter = militaryBranchAdapter
+        militaryBranchDropdownView.setSelection(3)
         militaryBranchDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 currentMilitaryBranchSelectedValue = parent.getItemAtPosition(position) as String
+                if (militaryBranchDropdownInitialized) {
+                    atLeastOneEntryChanged = true
+                }
+                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX branch    %d    init=%b    atleastone=%b  %s", position, militaryBranchDropdownInitialized, atLeastOneEntryChanged,currentMilitaryBranchSelectedValue))
+                militaryBranchDropdownInitialized = true
             }
             override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX stability exit=%b", isStable))
     }
 
     class CustomSpinnerAdapter(val context: Context, val uiViewModel: UIViewModel, private val aboRhList: Array<String>) : BaseAdapter(), SpinnerAdapter {
