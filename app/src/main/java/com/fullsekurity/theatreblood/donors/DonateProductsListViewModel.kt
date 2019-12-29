@@ -20,6 +20,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -112,10 +113,28 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
                     if (donor.posterPath.length > 11) {
                         donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
                     }
+                    if (donor.releaseDate[4] == '-') {
+                        val year: Int = donor.releaseDate.substring(0,4).toInt()
+                        val monthOfYear = donor.releaseDate.substring(5,7).toInt()
+                        val dayOfMonth = donor.releaseDate.substring(8,10).toInt()
+                        val calendar = Calendar.getInstance()
+                        calendar.set(year, monthOfYear, dayOfMonth)
+                        val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
+                        donor.releaseDate = dateFormatter.format(calendar.time)
+                    }
                 }
                 for (donor in response[1] as List<Donor>) {
                     if (donor.posterPath.length > 11) {
                         donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
+                    }
+                    if (donor.releaseDate[4] == '-') {
+                        val year: Int = donor.releaseDate.substring(0,4).toInt()
+                        val monthOfYear = donor.releaseDate.substring(5,7).toInt()
+                        val dayOfMonth = donor.releaseDate.substring(8,10).toInt()
+                        val calendar = Calendar.getInstance()
+                        calendar.set(year, monthOfYear, dayOfMonth)
+                        val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
+                        donor.releaseDate = dateFormatter.format(calendar.time)
                     }
                 }
                 val stagingDatabaseList = response[1] as List<Donor>
@@ -123,7 +142,26 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
                 if (stagingDatabaseList.isEmpty()) {
                     showDonors(mainDatabaseList)
                 } else {
-                    showDonors(stagingDatabaseList)
+                    val newList: MutableList<Donor> = mutableListOf()
+                    for (mainIndex in mainDatabaseList.indices) {
+                        var found = false
+                        for (stagingIndex in stagingDatabaseList.indices) {
+                            if (
+                                    stagingDatabaseList[stagingIndex].title == mainDatabaseList[mainIndex].title &&
+                                    stagingDatabaseList[stagingIndex].posterPath == mainDatabaseList[mainIndex].posterPath &&
+                                    stagingDatabaseList[stagingIndex].voteCount == mainDatabaseList[mainIndex].voteCount &&
+                                    stagingDatabaseList[stagingIndex].releaseDate == mainDatabaseList[mainIndex].releaseDate) {
+
+                                newList.add(stagingDatabaseList[stagingIndex])
+                                found = true
+                                break
+                            }
+                        }
+                        if (!found) {
+                            newList.add(mainDatabaseList[mainIndex])
+                        }
+                    }
+                    showDonors(newList)
                 }
                 Utils.hideKeyboard(view)
             }, { response -> val c = response })

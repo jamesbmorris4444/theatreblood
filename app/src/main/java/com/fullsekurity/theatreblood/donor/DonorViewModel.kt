@@ -186,11 +186,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
 
         // change gender
         activityCallbacks.fetchRadioButton(R.id.radio_male)?.let {
-            if (it.isChecked) {
-                donor.overview = getApplication<Application>().applicationContext.getString(R.string.donor_male)
-            } else {
-                donor.overview = getApplication<Application>().applicationContext.getString(R.string.donor_female)
-            }
+            donor.adult = it.isChecked
         }
 
         // change ABO/Rh
