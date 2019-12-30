@@ -11,7 +11,7 @@
 
         <variable
             name="donateProductsListViewModel"
-            type="com.fullsekurity.theatreblood.donors.DonateProductsListViewModel" />
+            type="com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

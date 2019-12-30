@@ -26,10 +26,10 @@ import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.barcode.BarCodeScannerActivity
 import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
 import com.fullsekurity.theatreblood.donor.DonorFragment
-import com.fullsekurity.theatreblood.donors.DonateProductsFragment
-import com.fullsekurity.theatreblood.products.CreateProductsFragment
-import com.fullsekurity.theatreblood.products.CreateProductsListViewModel
-import com.fullsekurity.theatreblood.reassociate.ReassociateProductsFragment
+import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
+import com.fullsekurity.theatreblood.createproducts.CreateProductsFragment
+import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
+import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsFragment
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel

@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.reassociate
+package com.fullsekurity.theatreblood.reassociateproducts
 
 import android.graphics.Color
 import android.view.LayoutInflater

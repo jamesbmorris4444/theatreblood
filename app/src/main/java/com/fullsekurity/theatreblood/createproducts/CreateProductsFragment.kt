@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.donors
+package com.fullsekurity.theatreblood.createproducts
 
 import android.content.Context
 import android.os.Bundle
@@ -10,27 +10,30 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.airbnb.lottie.LottieAnimationView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
-import com.fullsekurity.theatreblood.databinding.DonateProductsScreenBinding
+import com.fullsekurity.theatreblood.databinding.CreateProductsScreenBinding
+import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class DonateProductsFragment : Fragment(), ActivityCallbacks {
+class CreateProductsFragment : Fragment(), ActivityCallbacks {
 
-    private lateinit var donateProductsListViewModel: DonateProductsListViewModel
-    private lateinit var lottieBackgroundView: LottieAnimationView
-    private lateinit var binding: DonateProductsScreenBinding
+    private lateinit var createProductsListViewModel: CreateProductsListViewModel
+    private lateinit var donor: Donor
+    private lateinit var binding: CreateProductsScreenBinding
 
     companion object {
-        fun newInstance(): DonateProductsFragment { return DonateProductsFragment() }
+        fun newInstance(donor: Donor): CreateProductsFragment {
+            val fragment = CreateProductsFragment()
+            fragment.donor = donor
+            return fragment
+        }
     }
 
     @Inject
@@ -46,19 +49,17 @@ class DonateProductsFragment : Fragment(), ActivityCallbacks {
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity).toolbar.title = Constants.DONATE_PRODUCTS_TITLE
+        (activity as MainActivity).toolbar.title = Constants.CREATE_PRODUCTS_TITLE
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.donate_products_screen, container, false) as DonateProductsScreenBinding
+        binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.create_products_screen, container, false) as CreateProductsScreenBinding
         binding.lifecycleOwner = this
-        donateProductsListViewModel = ViewModelProviders.of(this, DonateProductsListViewModelFactory(this)).get(DonateProductsListViewModel::class.java)
-        binding.donateProductsListViewModel = donateProductsListViewModel
+        createProductsListViewModel = ViewModelProviders.of(this, CreateProductsListViewModelFactory(activity as MainActivity)).get(CreateProductsListViewModel::class.java)
+        binding.createProductsListViewModel = createProductsListViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
-        //lottieBackgroundView = binding.root.findViewById(R.id.background_lottie)
-        //uiViewModel.lottieAnimation(lottieBackgroundView, uiViewModel.backgroundLottieJsonFileName, LottieDrawable.INFINITE)
-        binding.root.findViewById<TextInputLayout>(R.id.edit_text_input_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        createProductsListViewModel.setDonor(donor)
         return binding.root
     }
 

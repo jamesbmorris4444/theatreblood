@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.reassociate
+package com.fullsekurity.theatreblood.donateproducts
 
 import androidx.databinding.ObservableField
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
@@ -6,7 +6,7 @@ import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 import com.fullsekurity.theatreblood.repository.storage.Donor
 
 @Suppress("UNCHECKED_CAST")
-class ReassociateProductsItemViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewItemViewModel<Donor>() {
+class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewItemViewModel<Donor>() {
 
     private lateinit var donor: Donor
 

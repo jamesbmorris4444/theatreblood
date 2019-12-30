@@ -11,7 +11,7 @@
 
         <variable
                 name="createProductsListViewModel"
-                type="com.fullsekurity.theatreblood.products.CreateProductsListViewModel" />
+                type="com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel" />
     </data>
 
     <ScrollView

@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.reassociate
+package com.fullsekurity.theatreblood.donateproducts
 
 import android.app.Application
 import android.view.View
@@ -17,16 +17,16 @@ import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import javax.inject.Inject
 
-class ReassociateProductsListViewModelFactory(private val activityCallbacks: ActivityCallbacks) : ViewModelProvider.Factory {
+class DonateProductsListViewModelFactory(private val activityCallbacks: ActivityCallbacks) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ReassociateProductsListViewModel(activityCallbacks) as T
+        return DonateProductsListViewModel(activityCallbacks) as T
     }
 }
 
-class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewViewModel(activityCallbacks.fetchActivity().application) {
+class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewViewModel(activityCallbacks.fetchActivity().application) {
 
-    private val tag = ReassociateProductsListViewModel::class.java.simpleName
-    override var adapter: ReassociateProductsAdapter = ReassociateProductsAdapter(activityCallbacks)
+    private val tag = DonateProductsListViewModel::class.java.simpleName
+    override var adapter: DonateProductsAdapter = DonateProductsAdapter(activityCallbacks)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     val listIsVisible: ObservableField<Boolean> = ObservableField(true)
     val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)

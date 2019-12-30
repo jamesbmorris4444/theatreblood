@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.donors
+package com.fullsekurity.theatreblood.donateproducts
 
 import android.graphics.Color
 import android.view.LayoutInflater

@@ -8,7 +8,7 @@
                 type="com.fullsekurity.theatreblood.ui.UIViewModel" />
         <variable
                 name="createProductsItemViewModel"
-                type="com.fullsekurity.theatreblood.products.CreateProductsItemViewModel" />
+                type="com.fullsekurity.theatreblood.createproducts.CreateProductsItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

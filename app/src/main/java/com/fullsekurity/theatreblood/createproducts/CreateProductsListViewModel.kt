@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.products
+package com.fullsekurity.theatreblood.createproducts
 
 import android.app.DatePickerDialog
 import android.view.View

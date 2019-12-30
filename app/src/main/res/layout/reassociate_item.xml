@@ -8,7 +8,7 @@
                 type="com.fullsekurity.theatreblood.ui.UIViewModel" />
         <variable
                 name="reassociateProductsItemViewModel"
-                type="com.fullsekurity.theatreblood.reassociate.ReassociateProductsItemViewModel" />
+                type="com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

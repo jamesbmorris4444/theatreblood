@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.products
+package com.fullsekurity.theatreblood.createproducts
 
 import android.graphics.Color
 import android.view.LayoutInflater

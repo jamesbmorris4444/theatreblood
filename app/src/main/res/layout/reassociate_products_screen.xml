@@ -11,7 +11,7 @@
 
         <variable
             name="reassociateProductsListViewModel"
-            type="com.fullsekurity.theatreblood.reassociate.ReassociateProductsListViewModel" />
+            type="com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
