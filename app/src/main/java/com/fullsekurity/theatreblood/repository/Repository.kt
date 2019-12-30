@@ -21,12 +21,15 @@ import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.Constants.MAIN_DATABASE_NAME
 import com.fullsekurity.theatreblood.utils.Constants.MODIFIED_DATABASE_NAME
+import com.fullsekurity.theatreblood.utils.Utils
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -364,13 +367,122 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         }
         return database.databaseDao().donorsFromFullName(searchLast, searchFirst)
     }
+    
+    fun databaseCounts() {
+        var disposable: Disposable? = null
+        val entryCountList = listOf(
+            databaseDonorCount(stagingBloodDatabase),
+            databaseDonorCount(mainBloodDatabase)
+        )
+        disposable = Single.zip(entryCountList) { args -> listOf(args) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ responseList ->
+                val response = responseList[0]
+                getProductEntryCount(response[0] as Int, response[1] as Int)
+            }, { response -> val c = response })
+    }
 
-    fun databaseDonorCount(database: BloodDatabase): Single<Int> {
+    private fun getProductEntryCount(modifiedDonors: Int, mainDonors: Int) {
+        var disposable: Disposable? = null
+        val entryCountList = listOf(
+            databaseProductCount(stagingBloodDatabase),
+            databaseProductCount(mainBloodDatabase)
+        )
+        disposable = Single.zip(entryCountList) { args -> listOf(args) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ responseList ->
+                val response = responseList[0]
+                StandardModal(
+                    activityCallbacks,
+                    modalType = StandardModal.ModalType.STANDARD,
+                    titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_staging_database_count_title),
+                    bodyText = String.format(activityCallbacks.fetchActivity().getString(R.string.std_modal_staging_database_count_body), modifiedDonors, mainDonors, response[0] as Int, response[1] as Int),
+                    positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
+                    dialogFinishedListener = object : StandardModal.DialogFinishedListener {
+                        override fun onPositive(password: String) { }
+                        override fun onNegative() { }
+                        override fun onNeutral() { }
+                        override fun onBackPressed() { }
+                    }
+                ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
+            }, { response -> val c = response })
+    }
+
+    private fun databaseDonorCount(database: BloodDatabase): Single<Int> {
         return database.databaseDao().getDonorEntryCount()
     }
 
-    fun databaseProductCount(database: BloodDatabase): Single<Int> {
+    private fun databaseProductCount(database: BloodDatabase): Single<Int> {
         return database.databaseDao().getProductEntryCount()
+    }
+    
+    fun handleSearchClick(view: View, searchKey: String, showDonors: (donorList: List<Donor>) -> Unit) {
+        var disposable: Disposable? = null
+        val fullNameResponseList = listOf(
+            donorsFromFullName(mainBloodDatabase, searchKey),
+            donorsFromFullName(stagingBloodDatabase, searchKey)
+        )
+        disposable = Single.zip(fullNameResponseList) { args -> listOf(args) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe({ responseList ->
+                val response = responseList[0]
+                for (donor in response[0] as List<Donor>) {
+                    if (donor.posterPath.length > 11) {
+                        donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
+                    }
+                    if (donor.releaseDate[4] == '-') {
+                        val year: Int = donor.releaseDate.substring(0,4).toInt()
+                        val monthOfYear = donor.releaseDate.substring(5,7).toInt()
+                        val dayOfMonth = donor.releaseDate.substring(8,10).toInt()
+                        val calendar = Calendar.getInstance()
+                        calendar.set(year, monthOfYear, dayOfMonth)
+                        val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
+                        donor.releaseDate = dateFormatter.format(calendar.time)
+                    }
+                }
+                for (donor in response[1] as List<Donor>) {
+                    if (donor.posterPath.length > 11) {
+                        donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
+                    }
+                    if (donor.releaseDate[4] == '-') {
+                        val year: Int = donor.releaseDate.substring(0,4).toInt()
+                        val monthOfYear = donor.releaseDate.substring(5,7).toInt()
+                        val dayOfMonth = donor.releaseDate.substring(8,10).toInt()
+                        val calendar = Calendar.getInstance()
+                        calendar.set(year, monthOfYear, dayOfMonth)
+                        val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
+                        donor.releaseDate = dateFormatter.format(calendar.time)
+                    }
+                }
+                val stagingDatabaseList = response[1] as List<Donor>
+                val mainDatabaseList = response[0] as List<Donor>
+                if (stagingDatabaseList.isEmpty()) {
+                    showDonors(mainDatabaseList)
+                } else {
+                    val newList: MutableList<Donor> = mutableListOf()
+                    for (mainIndex in mainDatabaseList.indices) {
+                        var found = false
+                        for (stagingIndex in stagingDatabaseList.indices) {
+                            if (
+                                stagingDatabaseList[stagingIndex].title == mainDatabaseList[mainIndex].title &&
+                                stagingDatabaseList[stagingIndex].posterPath == mainDatabaseList[mainIndex].posterPath &&
+                                stagingDatabaseList[stagingIndex].voteCount == mainDatabaseList[mainIndex].voteCount &&
+                                stagingDatabaseList[stagingIndex].releaseDate == mainDatabaseList[mainIndex].releaseDate) {
+
+                                newList.add(stagingDatabaseList[stagingIndex])
+                                found = true
+                                break
+                            }
+                        }
+                        if (!found) {
+                            newList.add(mainDatabaseList[mainIndex])
+                        }
+                    }
+                    showDonors(newList)
+                }
+                Utils.hideKeyboard(view)
+            }, { response -> val c = response })
     }
 
 //    fun insertProductList(database: BloodDatabase, products: List<Product>) {

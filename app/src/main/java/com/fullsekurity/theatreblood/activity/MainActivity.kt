@@ -27,7 +27,6 @@ import com.fullsekurity.theatreblood.barcode.BarCodeScannerActivity
 import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
 import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.donors.DonateProductsFragment
-import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.products.CreateProductsFragment
 import com.fullsekurity.theatreblood.products.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.repository.Repository
@@ -39,9 +38,6 @@ import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -225,16 +221,7 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             true
         }
         R.id.action_staging_count -> {
-            val entryCountList = listOf(
-                repository.databaseDonorCount(repository.stagingBloodDatabase),
-                repository.databaseDonorCount(repository.mainBloodDatabase)
-            )
-            Single.zip(entryCountList) { args -> listOf(args) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ responseList ->
-                    val response = responseList[0]
-                    getProductEntryCount(response[0] as Int, response[1] as Int)
-                }, { response -> val c = response })
+            repository.databaseCounts()
             true
         }
         R.id.network_status -> {
@@ -263,32 +250,6 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
-    }
-
-    private fun getProductEntryCount(modifiedDonors: Int, mainDonors: Int) {
-        var disposable: Disposable? = null
-        val entryCountList = listOf(
-            repository.databaseProductCount(repository.stagingBloodDatabase),
-            repository.databaseProductCount(repository.mainBloodDatabase)
-        )
-        disposable = Single.zip(entryCountList) { args -> listOf(args) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ responseList ->
-                val response = responseList[0]
-                StandardModal(
-                    this,
-                    modalType = StandardModal.ModalType.STANDARD,
-                    titleText = getString(R.string.std_modal_staging_database_count_title),
-                    bodyText = String.format(getString(R.string.std_modal_staging_database_count_body), modifiedDonors, mainDonors, response[0] as Int, response[1] as Int),
-                    positiveText = getString(R.string.std_modal_ok),
-                    dialogFinishedListener = object : StandardModal.DialogFinishedListener {
-                        override fun onPositive(password: String) { }
-                        override fun onNegative() { }
-                        override fun onNeutral() { }
-                        override fun onBackPressed() { }
-                    }
-                ).show(supportFragmentManager, "MODAL")
-            }, { response -> val c = response })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
