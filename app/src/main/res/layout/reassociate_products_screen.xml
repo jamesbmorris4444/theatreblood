@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="uiViewModel"
+            type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+
+        <variable
+            name="reassociateProductsListViewModel"
+            type="com.fullsekurity.theatreblood.reassociate.ReassociateProductsListViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+        <!-- Start Search Box -->
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edit_text_input_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:hint="@{reassociateProductsListViewModel.hintTextName}"
+                app:upper_text_hint_color="@{uiViewModel.editTextNameUpperHintColor}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                android:visibility="@{safeUnbox(reassociateProductsListViewModel.editTextNameVisibility)}"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/submit_button_icon"
+                app:layout_constraintTop_toTopOf="parent" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_input_name_editText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
+                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardWidthWithButton)}"
+                    app:text_hint_color="@{uiViewModel.editTextNameHintColor}"
+                    android:text="@={reassociateProductsListViewModel.editTextNameInput}"
+                    android:onTextChanged="@{reassociateProductsListViewModel::onTextNameChanged}"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
+                    android:paddingTop="20dp"
+                    android:inputType="textPersonName"
+                    app:edit_text_cursor="@{uiViewModel.editTextCursor}"
+                    app:background="@{uiViewModel.editTextNameBackground}"
+                    app:edit_text_font="@{uiViewModel.editTextNameTypeface}"
+                    app:edit_text_color="@{uiViewModel.editTextNameColor}"
+                    app:edit_text_size="@{safeUnbox(uiViewModel.editTextNameSize)}"
+                    app:edit_text_background_color="@{uiViewModel.editTextNameBackgroundColor}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- End Search Box -->
+
+        <!-- Start Submit Button -->
+
+        <android.widget.ImageView
+                android:id="@+id/submit_button_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@{uiViewModel.buttonDrawable}"
+                android:onClick="@{(view) -> reassociateProductsListViewModel.onSearchClicked(view)}"
+                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardButtonWidth)}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
+                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                android:visibility="@{safeUnbox(reassociateProductsListViewModel.submitVisible)}"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_text_input_name"
+                app:layout_constraintLeft_toRightOf="@+id/edit_text_input_name"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+                android:id="@+id/submit_button_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_search"
+                app:text_font="@{uiViewModel.buttonTextTypeface}"
+                app:text_color="@{uiViewModel.buttonTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
+                android:visibility="@{safeUnbox(reassociateProductsListViewModel.submitVisible)}"
+                app:layout_constraintStart_toStartOf="@+id/submit_button_icon"
+                app:layout_constraintEnd_toEndOf="@+id/submit_button_icon"
+                app:layout_constraintTop_toTopOf="@+id/submit_button_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/submit_button_icon" />
+
+        <!-- End Submit Button -->
+
+        <!-- Start New Donor Button -->
+
+        <android.widget.ImageView
+                android:id="@+id/new_donor_button_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@{uiViewModel.largeButtonDrawable}"
+                android:layout_marginTop="10dp"
+                android:onClick="@{(view) -> reassociateProductsListViewModel.onNewDonorClicked(view)}"
+                android:visibility="@{safeUnbox(reassociateProductsListViewModel.newDonorVisible)}"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
+                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardLargeButtonWidth)}"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_input_name"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+                android:id="@+id/new_donor_button_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_new_donor"
+                android:visibility="@{safeUnbox(reassociateProductsListViewModel.newDonorVisible)}"
+                app:text_font="@{uiViewModel.buttonTextTypeface}"
+                app:text_color="@{uiViewModel.buttonTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
+                app:layout_constraintStart_toStartOf="@+id/new_donor_button_icon"
+                app:layout_constraintEnd_toEndOf="@+id/new_donor_button_icon"
+                app:layout_constraintTop_toTopOf="@+id/new_donor_button_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/new_donor_button_icon" />
+
+        <!-- End New Donor Button -->
+
+        <!-- Start Donor List -->
+
+        <LinearLayout
+                android:id="@+id/top_divider"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:background_color="@{uiViewModel.standardDialogDividerColor}"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/new_donor_button_icon"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/donorsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{safeUnbox(reassociateProductsListViewModel.listIsVisible ? View.VISIBLE : View.GONE)}"
+                android:paddingBottom="200dp"
+                android:clipToPadding="false"
+                app:recyclerViewViewModel="@{reassociateProductsListViewModel}"
+                app:layout_constraintTop_toBottomOf="@+id/top_divider"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+        <android.widget.TextView
+                android:id="@+id/search_no_elements_found"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_no_elements"
+                android:visibility="@{safeUnbox(reassociateProductsListViewModel.listIsVisible ? View.GONE : View.VISIBLE)}"
+                android:layout_marginTop="120dp"
+                app:text_font="@{uiViewModel.largeErrorTextTypeface}"
+                app:text_color="@{uiViewModel.largeErrorTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.largeErrorTextSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintTop_toBottomOf="@+id/top_divider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+        <!-- End Donor List -->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

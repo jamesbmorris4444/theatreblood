@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.donors
+package com.fullsekurity.theatreblood.reassociate
 
 import android.content.Context
 import android.os.Bundle
@@ -14,7 +14,7 @@ import com.airbnb.lottie.LottieAnimationView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
-import com.fullsekurity.theatreblood.databinding.DonateProductsScreenBinding
+import com.fullsekurity.theatreblood.databinding.ReassociateProductsScreenBinding
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
@@ -23,14 +23,14 @@ import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class DonateProductsFragment : Fragment(), ActivityCallbacks {
+class ReassociateProductsFragment : Fragment(), ActivityCallbacks {
 
-    private lateinit var donateProductsListViewModel: DonateProductsListViewModel
+    private lateinit var donateProductsListViewModel: ReassociateProductsListViewModel
     private lateinit var lottieBackgroundView: LottieAnimationView
-    private lateinit var binding: DonateProductsScreenBinding
+    private lateinit var binding: ReassociateProductsScreenBinding
 
     companion object {
-        fun newInstance(): DonateProductsFragment { return DonateProductsFragment() }
+        fun newInstance(): ReassociateProductsFragment { return ReassociateProductsFragment() }
     }
 
     @Inject
@@ -46,14 +46,14 @@ class DonateProductsFragment : Fragment(), ActivityCallbacks {
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity).toolbar.title = Constants.DONATE_PRODUCTS_TITLE
+        (activity as MainActivity).toolbar.title = Constants.REASSOCIATE_DONATION_TITLE
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.donate_products_screen, container, false) as DonateProductsScreenBinding
+        binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.donate_products_screen, container, false) as ReassociateProductsScreenBinding
         binding.lifecycleOwner = this
-        donateProductsListViewModel = ViewModelProviders.of(this, DonateProductsListViewModelFactory(this)).get(DonateProductsListViewModel::class.java)
-        binding.donateProductsListViewModel = donateProductsListViewModel
+        donateProductsListViewModel = ViewModelProviders.of(this, ReassociateProductsListViewModelFactory(this)).get(ReassociateProductsListViewModel::class.java)
+        binding.reassociateProductsListViewModel = donateProductsListViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
         //lottieBackgroundView = binding.root.findViewById(R.id.background_lottie)

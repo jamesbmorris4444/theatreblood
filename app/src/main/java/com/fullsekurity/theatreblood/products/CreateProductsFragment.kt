@@ -47,6 +47,11 @@ class CreateProductsFragment : Fragment(), ActivityCallbacks {
         super.onAttach(context)
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).toolbar.title = Constants.CREATE_PRODUCTS_TITLE
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.create_products_screen, container, false) as CreateProductsScreenBinding
         binding.lifecycleOwner = this
@@ -55,7 +60,6 @@ class CreateProductsFragment : Fragment(), ActivityCallbacks {
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
         createProductsListViewModel.setDonor(donor)
-        (activity as MainActivity).toolbar.title = Constants.CREATE_PRODUCTS_TITLE
         return binding.root
     }
 

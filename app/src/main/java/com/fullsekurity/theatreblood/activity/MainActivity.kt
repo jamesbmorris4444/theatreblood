@@ -29,10 +29,10 @@ import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.donors.DonateProductsFragment
 import com.fullsekurity.theatreblood.products.CreateProductsFragment
 import com.fullsekurity.theatreblood.products.CreateProductsListViewModel
+import com.fullsekurity.theatreblood.reassociate.ReassociateProductsFragment
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
-import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.Constants.ROOT_FRAGMENT_TAG
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
@@ -146,6 +146,13 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             .commitAllowingStateLoss()
     }
 
+    fun loadReassociateProductsFragment() {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
+            .replace(R.id.main_activity_container, ReassociateProductsFragment.newInstance())
+            .commitAllowingStateLoss()
+    }
+
     fun loadDonorFragment(donor: Donor) {
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
@@ -170,7 +177,6 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             val upArrow = ContextCompat.getDrawable(this, R.drawable.toolbar_back_arrow)
             actionBar.setHomeAsUpIndicator(upArrow);
             toolbar.setTitleTextColor(Color.parseColor(uiViewModel.toolbarTextColor))
-            toolbar.title = Constants.DONATE_PRODUCTS_TITLE
             navView.itemBackground = ColorDrawable(Color.parseColor(uiViewModel.primaryColor))
         }
     }
@@ -242,6 +248,8 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             R.id.manage_donor -> {
             }
             R.id.reassociate_donation -> {
+                supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                loadReassociateProductsFragment()
             }
             R.id.update_test_results -> {
             }
