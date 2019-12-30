@@ -22,6 +22,7 @@ class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbac
     val adult: ObservableField<String> = ObservableField("")
     val overview: ObservableField<String> = ObservableField("")
     val releaseDate: ObservableField<String> = ObservableField("")
+    var inReassociate = false
 
     override fun setItem(item: Donor) {
         donor = item
@@ -37,10 +38,15 @@ class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbac
         adult.set(if (item.adult) "T" else "F")
         overview.set(item.overview)
         releaseDate.set(item.releaseDate)
+        this.inReassociate = item.inReassociate
     }
 
     fun onItemClicked() {
-        activityCallbacks.fetchActivity().loadDonorFragment(donor)
+        if (inReassociate) {
+            activityCallbacks.fetchActivity().reassociateIncorrectDonorClicked(donor)
+        } else {
+            activityCallbacks.fetchActivity().loadDonorFragment(donor)
+        }
     }
 
 }

@@ -269,6 +269,8 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         return true
     }
 
+    // CreateProducts handlers
+
     fun onCreateProductsDeleteClicked(view: View) {
         createProductsListViewModel.onCreateProductsDeleteClicked(view)
     }
@@ -277,6 +279,23 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         createProductsListViewModel.onCreateProductsEditClicked(view)
     }
 
+    // Reassociate Products handlers
+
+    fun reassociateOnTextNameChanged(key: String) {
+        reassociateProductsFragment.reassociateProductsListViewModel.onTextNameChanged(key, 0, 0, 0)
+    }
+
+    fun reassociateOnSearchClicked(view: View) {
+        reassociateProductsFragment.reassociateProductsListViewModel.handleReassociateSearchClick(view)
+    }
+
+    fun reassociateOnNewDonorClicked(view: View) {
+        reassociateProductsFragment.reassociateProductsListViewModel.handleReassociateNewDonorClick(view)
+    }
+
+    fun reassociateIncorrectDonorClicked(donor: Donor) {
+        reassociateProductsFragment.reassociateProductsListViewModel.handleReassociateIncorrectDonorClick(donor)
+    }
 
     fun barcodeScanner(gridNumber: Int) {
         val intent = Intent(this, BarCodeScannerActivity::class.java)

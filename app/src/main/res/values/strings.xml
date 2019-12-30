@@ -49,7 +49,9 @@
     <string name="button_complete">Complete</string>
 
     <!-- donor strings -->
-    <string name="donor_search_string">Enter Search String</string>
+    <string name="donor_search_string">Enter Donor Search String</string>
+    <string name="donor_incorrect_search_string">Enter Incorrect Donor Search String</string>
+    <string name="donor_correct_search_string">Enter Correct Donor Search String</string>
     <string name="donor_last_name">Enter Last Name</string>
     <string name="donor_middle_name">Enter Middle Name</string>
     <string name="donor_first_name">Enter First Name</string>

@@ -23,6 +23,7 @@ class ReassociateProductsAdapter(private val activityCallbacks: ActivityCallback
 
     private var itemsFilter: ItemsFilter? = null
     lateinit var uiViewModel: UIViewModel
+    private lateinit var searchRootView: View
 
     override fun getFilter(): ItemsFilter {
         itemsFilter?.let {
@@ -63,6 +64,7 @@ class ReassociateProductsAdapter(private val activityCallbacks: ActivityCallback
                 val reassociateProductsSearchItemViewModel = ReassociateProductsSearchItemViewModel(activityCallbacks)
                 reassociateSearchItemBinding.reassociateProductsSearchItemViewModel = reassociateProductsSearchItemViewModel
                 reassociateSearchItemBinding.uiViewModel = uiViewModel
+                searchRootView = reassociateSearchItemBinding.root
                 reassociateSearchItemBinding.root.findViewById<TextInputLayout>(R.id.edit_text_input_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
                 return ReassociateSearchViewHolder(reassociateSearchItemBinding.root, reassociateProductsSearchItemViewModel as RecyclerViewItemViewModel<Any>, reassociateSearchItemBinding)
 
@@ -106,6 +108,10 @@ class ReassociateProductsAdapter(private val activityCallbacks: ActivityCallback
         ItemViewHolder<Any, RecyclerViewItemViewModel<Any>> (itemView, viewModel, viewDataBinding)
 
     override fun onBindViewHolder(holder: ItemViewHolder<Any, RecyclerViewItemViewModel<Any>>, position: Int) {
+//        if (getItemViewType(position) == ViewTypes.SEARCH.ordinal) {
+//            holder.itemView.findViewById<ImageView>(R.id.create_product_delete_button).tag = position // delete button
+//            holder.itemView.findViewById<ImageView>(R.id.create_product_edit_button).tag = position // edit button
+//        }
         super.onBindViewHolder(holder, position)
 //        if (position % 2 == 1) {
 //            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor1))

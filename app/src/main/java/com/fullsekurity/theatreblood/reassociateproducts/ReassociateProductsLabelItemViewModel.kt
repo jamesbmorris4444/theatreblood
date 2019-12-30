@@ -15,8 +15,4 @@ class ReassociateProductsLabelItemViewModel(private val activityCallbacks: Activ
         incorrectDonorVisibility.set(item.incorrectDonorVisibility)
     }
 
-    fun onTextNameChanged(key: CharSequence, start: Int, before: Int, count: Int) {
-        // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
-    }
-
 }

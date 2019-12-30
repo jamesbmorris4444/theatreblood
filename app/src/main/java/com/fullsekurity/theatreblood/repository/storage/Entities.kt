@@ -1,5 +1,6 @@
 package com.fullsekurity.theatreblood.repository.storage
 
+import android.view.View
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
 
@@ -18,7 +19,8 @@ data class Donor(
     @ColumnInfo(name = "backdrop_path") @SerializedName(value = "backdrop_path") var backdropPath: String = "",
     @ColumnInfo(name = "adult") @SerializedName(value = "adult") var adult: Boolean = false,
     @ColumnInfo(name = "overview") @SerializedName(value = "overview") var overview: String = "",
-    @ColumnInfo(name = "release_date") @SerializedName(value = "release_date") var releaseDate: String = ""
+    @ColumnInfo(name = "release_date") @SerializedName(value = "release_date") var releaseDate: String = "",
+    var inReassociate: Boolean = false
 
 )
 
@@ -30,7 +32,8 @@ data class Product(
     @ColumnInfo(name = "din") @SerializedName(value = "din") var din: String = "",
     @ColumnInfo(name = "abo_rh") @SerializedName(value = "abo_rh") var aboRh: String = "",
     @ColumnInfo(name = "product_code") @SerializedName(value = "product_code") var productCode: String = "",
-    @ColumnInfo(name = "expiration_date") @SerializedName(value = "expiration_date") var expirationDate: String = ""
+    @ColumnInfo(name = "expiration_date") @SerializedName(value = "expiration_date") var expirationDate: String = "",
+    var editAndDeleteButtonVisibility: Int = View.VISIBLE
 
 )
 

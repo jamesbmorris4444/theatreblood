@@ -368,6 +368,21 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         }
         return database.databaseDao().donorsFromFullName(searchLast, searchFirst)
     }
+
+    private fun donorsFromFullNameWithProducts(database: BloodDatabase, search: String): Single<List<DonorWithProducts>> {
+        var searchLast: String
+        var searchFirst = "%"
+        val index = search.indexOf(',')
+        if (index < 0) {
+            searchLast = "%$search%"
+        } else {
+            val last = search.substring(0, index)
+            val first = search.substring(index + 1)
+            searchFirst = "%$first%"
+            searchLast = "%$last%"
+        }
+        return database.databaseDao().donorsFromFullNameWithProducts(searchLast, searchFirst)
+    }
     
     fun databaseCounts() {
         var disposable: Disposable? = null
@@ -484,6 +499,39 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                 }
                 Utils.hideKeyboard(view)
             }, { response -> val c = response })
+    }
+
+    fun handleReassociateNewDonorClick(view: View) {
+
+    }
+
+    fun handleReassociateSearchClick(view: View, searchKey: String, showDonorsAndProducts: (donorsAndProductsList: List<DonorWithProducts>) -> Unit) {
+        var disposable: Disposable? = null
+        disposable = donorsFromFullNameWithProducts(stagingBloodDatabase, searchKey)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe{ donorWithProducts ->
+                for (index in donorWithProducts.indices) {
+                    transformDonorData(donorWithProducts[index].donor)
+                }
+                showDonorsAndProducts(donorWithProducts)
+            }
+
+    }
+
+    fun transformDonorData(donorResponse: Donor) {
+        if (donorResponse.posterPath.length > 11) {
+            donorResponse.posterPath = donorResponse.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
+        }
+        if (donorResponse.releaseDate[4] == '-') {
+            val year: Int = donorResponse.releaseDate.substring(0,4).toInt()
+            val monthOfYear = donorResponse.releaseDate.substring(5,7).toInt()
+            val dayOfMonth = donorResponse.releaseDate.substring(8,10).toInt()
+            val calendar = Calendar.getInstance()
+            calendar.set(year, monthOfYear, dayOfMonth)
+            val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
+            donorResponse.releaseDate = dateFormatter.format(calendar.time)
+        }
     }
 
     fun getAllNewProductsForDonor(donor: Donor, showProducts: (productList: List<Product>) -> Unit) {

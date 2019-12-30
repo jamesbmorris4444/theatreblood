@@ -22,15 +22,15 @@ class ReassociateProductsSearchItemViewModel(private val activityCallbacks: Acti
     }
 
     fun onSearchClicked(view: View) {
-
+        activityCallbacks.fetchActivity().reassociateOnSearchClicked(view)
     }
 
     fun onNewDonorClicked(view: View) {
-
+        activityCallbacks.fetchActivity().reassociateOnNewDonorClicked(view)
     }
 
     fun onTextNameChanged(key: CharSequence, start: Int, before: Int, count: Int) {
-        // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
+        activityCallbacks.fetchActivity().reassociateOnTextNameChanged(key.toString())
     }
 
 }

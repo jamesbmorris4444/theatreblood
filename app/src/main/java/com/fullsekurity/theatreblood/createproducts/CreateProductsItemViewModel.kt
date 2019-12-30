@@ -3,8 +3,8 @@ package com.fullsekurity.theatreblood.createproducts
 import android.view.View
 import androidx.databinding.ObservableField
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
-import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
+import com.fullsekurity.theatreblood.repository.storage.Product
 
 @Suppress("UNCHECKED_CAST")
 class CreateProductsItemViewModel(val activityCallbacks: ActivityCallbacks) : RecyclerViewItemViewModel<Product>() {
@@ -15,6 +15,7 @@ class CreateProductsItemViewModel(val activityCallbacks: ActivityCallbacks) : Re
     val aboRh: ObservableField<String> = ObservableField("")
     val productCode: ObservableField<String> = ObservableField("")
     val expirationDate: ObservableField<String> = ObservableField("")
+    var editAndDeleteButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     override fun setItem(item: Product) {
         product = item
@@ -22,6 +23,7 @@ class CreateProductsItemViewModel(val activityCallbacks: ActivityCallbacks) : Re
         aboRh.set(item.aboRh)
         productCode.set(item.productCode)
         expirationDate.set(item.expirationDate)
+        editAndDeleteButtonVisibility.set(item.editAndDeleteButtonVisibility)
     }
 
     fun onDeleteClicked(view: View) {

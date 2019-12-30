@@ -12,7 +12,7 @@ import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
-import com.fullsekurity.theatreblood.repository.storage.Product
+import com.fullsekurity.theatreblood.repository.storage.DonorWithProducts
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
@@ -29,13 +29,16 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
     private val tag = ReassociateProductsListViewModel::class.java.simpleName
     override var adapter: ReassociateProductsAdapter = ReassociateProductsAdapter(activityCallbacks)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
-    val listIsVisible: ObservableField<Boolean> = ObservableField(true)
-    val productsListIsVisible: ObservableField<Boolean> = ObservableField(true)
-    val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
-    val submitVisible: ObservableField<Int> = ObservableField(View.GONE)
-    val incorrectDonorVisibility: ObservableField<Int> = ObservableField(View.GONE)
+    val errorVisibility: ObservableField<Int> = ObservableField(View.GONE)
+    private var productsListIsVisible = true
+    private var editTextNameVisibility = View.VISIBLE
+    private var newDonorVisibility = View.GONE
+    private var submitVisibility = View.VISIBLE
+    private var incorrectDonorVisibility = View.GONE
     private var numberOfItemsDisplayed = -1
     private var incorrectDonorIdentified = false
+    private var editTextNameInput = ""
+    private lateinit var donorAndProductsList: List<DonorWithProducts>
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -64,63 +67,97 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
 
     fun initializeView() {
         val list: MutableList<ReassociateProductsSearchData> = mutableListOf()
-        list.add(ReassociateProductsSearchData("HINT", View.VISIBLE, View.GONE, View.GONE, "TEXT"))
+        list.add(ReassociateProductsSearchData(
+            hintTextName = getApplication<Application>().applicationContext.getString(R.string.donor_incorrect_search_string),
+            editTextNameVisibility = editTextNameVisibility,
+            newDonorVisibility = newDonorVisibility,
+            submitVisibility = submitVisibility,
+            editTextNameInput = editTextNameInput)
+        )
         adapter.addAll(list)
     }
 
-    private fun showDonors(donorList: List<Donor>) {
-        listIsVisible.set(donorList.isNotEmpty())
-        adapter.addAll(donorList)
-        numberOfItemsDisplayed = donorList.size
+    private fun showDonorsAndProducts(donorsAndProductsList: List<DonorWithProducts>) {
+        if (donorsAndProductsList.isNotEmpty()) {
+            this.donorAndProductsList = donorsAndProductsList
+            val list: MutableList<Any> = mutableListOf()
+            list.add(ReassociateProductsSearchData(
+                hintTextName = getApplication<Application>().applicationContext.getString(R.string.donor_incorrect_search_string),
+                editTextNameVisibility = editTextNameVisibility,
+                newDonorVisibility = newDonorVisibility,
+                submitVisibility = submitVisibility,
+                editTextNameInput = editTextNameInput)
+            )
+            for (index in donorsAndProductsList.indices) {
+                val donor = donorsAndProductsList[index].donor
+                donor.inReassociate = true
+                list.add(donor)
+                for (product in donorsAndProductsList[index].products) {
+                    product.editAndDeleteButtonVisibility = View.GONE
+                    list.add(product)
+                }
+            }
+            adapter.addAll(list)
+        }
+        errorVisibility.set(if (donorsAndProductsList.isEmpty()) View.VISIBLE else View.GONE)
+        numberOfItemsDisplayed = donorsAndProductsList.size
         setNewDonorVisibility("NONEMPTY")
-    }
-
-    private fun showProducts(productList: List<Product>) {
-        productsListIsVisible.set(productList.isNotEmpty())
-        //productListAdapter.addAll(productList)
     }
 
     private fun setNewDonorVisibility(key: String) {
         if (key.isNotEmpty() && numberOfItemsDisplayed == 0 && incorrectDonorIdentified) {
-            newDonorVisible.set(View.VISIBLE)
+            newDonorVisibility = View.VISIBLE
         } else {
-            newDonorVisible.set(View.GONE)
+            newDonorVisibility = View.GONE
         }
     }
 
-    fun incorrectDonorIdentified(donor: Donor) {
+    fun handleReassociateIncorrectDonorClick(incorrectDonor: Donor) {
         incorrectDonorIdentified = true
-        //reassociateProductsDonorItemViewModel.setItem(donor)
-        incorrectDonorVisibility.set(View.VISIBLE)
         adapter.clearAll()
-        editTextNameInput.set("")
-        repository.getAllNewProductsForDonor(donor, this::showProducts)
+        val donorsWithProducts = findDonorInDonorsAndProductsList(incorrectDonor)
+        if (donorsWithProducts != null) {
+            val list: MutableList<Any> = mutableListOf()
+            list.add(incorrectDonor)
+            for (product in donorsWithProducts.products) {
+                product.editAndDeleteButtonVisibility = View.GONE
+                list.add(product)
+            }
+            list.add(ReassociateProductsSearchData(
+                hintTextName = getApplication<Application>().applicationContext.getString(R.string.donor_correct_search_string),
+                editTextNameVisibility = editTextNameVisibility,
+                newDonorVisibility = newDonorVisibility,
+                submitVisibility = submitVisibility,
+                editTextNameInput = editTextNameInput)
+            )
+            adapter.addAll(list)
+        }
+
     }
 
-    // observable used for two-way data binding. Values set into this field will show in view.
-    // Text typed into EditText in view will be stored into this field after each character is typed.
-    var editTextNameInput: ObservableField<String> = ObservableField("")
-    fun onTextNameChanged(key: CharSequence, start: Int, before: Int, count: Int) {
-        if (key.isEmpty()) {
-            newDonorVisible.set(View.GONE)
-            submitVisible.set(View.GONE)
-            numberOfItemsDisplayed = -1
-        } else {
-            setNewDonorVisibility(key.toString())
-            submitVisible.set(View.VISIBLE)
+    fun findDonorInDonorsAndProductsList(donor: Donor): DonorWithProducts? {
+        for (index in donorAndProductsList.indices) {
+            val donorInList = donorAndProductsList[index].donor
+            if (donor.title == donorInList.title && donor.posterPath == donorInList.posterPath && donor.voteCount == donorInList.voteCount && donor.releaseDate == donorInList.releaseDate) {
+                return donorAndProductsList[index]
+            }
         }
+        return null
+    }
+
+    fun onTextNameChanged(key: CharSequence, start: Int, before: Int, count: Int) {
+        editTextNameInput = key.toString()
+        setNewDonorVisibility(key.toString())
+        submitVisibility =View.VISIBLE
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
-    var hintTextName: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_search_string))
-    var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
-    @Suppress("UNCHECKED_CAST")
-    fun onSearchClicked(view: View) {
-        repository.handleSearchClick(view, editTextNameInput.get() ?: "", this::showDonors)
+    fun handleReassociateSearchClick(view: View) {
+        repository.handleReassociateSearchClick(view, editTextNameInput, this::showDonorsAndProducts)
     }
 
-    fun onNewDonorClicked(view: View) {
-        activityCallbacks.fetchActivity().loadDonorFragment(Donor())
+    fun handleReassociateNewDonorClick(view: View) {
+        repository.handleReassociateNewDonorClick(view)
     }
 
 }

@@ -56,7 +56,7 @@
 
         <!-- End Search Box -->
 
-        <!-- Start Submit Button -->
+        <!-- Start Search Button -->
 
         <android.widget.ImageView
                 android:id="@+id/submit_button_icon"
@@ -86,7 +86,7 @@
                 app:layout_constraintTop_toTopOf="@+id/submit_button_icon"
                 app:layout_constraintBottom_toBottomOf="@+id/submit_button_icon" />
 
-        <!-- End Submit Button -->
+        <!-- End Search Button -->
 
         <!-- Start New Donor Button -->
 
