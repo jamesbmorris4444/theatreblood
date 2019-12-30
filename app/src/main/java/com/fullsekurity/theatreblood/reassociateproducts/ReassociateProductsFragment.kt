@@ -25,7 +25,8 @@ import javax.inject.Inject
 
 class ReassociateProductsFragment : Fragment(), ActivityCallbacks {
 
-    private lateinit var reassociateProductsListViewModel: ReassociateProductsListViewModel
+    lateinit var reassociateProductsListViewModel: ReassociateProductsListViewModel
+    private lateinit var reassociateProductsItemViewModel: ReassociateProductsItemViewModel
     private lateinit var lottieBackgroundView: LottieAnimationView
     private lateinit var binding: ReassociateProductsScreenBinding
 
@@ -53,8 +54,11 @@ class ReassociateProductsFragment : Fragment(), ActivityCallbacks {
         binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.reassociate_products_screen, container, false) as ReassociateProductsScreenBinding
         binding.lifecycleOwner = this
         reassociateProductsListViewModel = ViewModelProviders.of(this, ReassociateProductsListViewModelFactory(this)).get(ReassociateProductsListViewModel::class.java)
+        reassociateProductsItemViewModel = ViewModelProviders.of(this, ReassociateProductsItemViewModelFactory(this)).get(ReassociateProductsItemViewModel::class.java)
         binding.reassociateProductsListViewModel = reassociateProductsListViewModel
         binding.uiViewModel = uiViewModel
+        binding.reassociateProductsItemViewModel = reassociateProductsItemViewModel
+        reassociateProductsListViewModel.reassociateProductsItemViewModel = reassociateProductsItemViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
         //lottieBackgroundView = binding.root.findViewById(R.id.background_lottie)
         //uiViewModel.lottieAnimation(lottieBackgroundView, uiViewModel.backgroundLottieJsonFileName, LottieDrawable.INFINITE)

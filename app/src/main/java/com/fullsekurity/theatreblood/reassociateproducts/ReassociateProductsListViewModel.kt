@@ -27,11 +27,14 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
 
     private val tag = ReassociateProductsListViewModel::class.java.simpleName
     override var adapter: ReassociateProductsAdapter = ReassociateProductsAdapter(activityCallbacks)
+    lateinit var reassociateProductsItemViewModel: ReassociateProductsItemViewModel
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     val listIsVisible: ObservableField<Boolean> = ObservableField(true)
     val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
     val submitVisible: ObservableField<Int> = ObservableField(View.GONE)
+    val incorrectDonorVisibility: ObservableField<Int> = ObservableField(View.GONE)
     private var numberOfItemsDisplayed = -1
+    private var incorrectDonorIdentified = false
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -66,11 +69,19 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
     }
 
     private fun setNewDonorVisibility(key: String) {
-        if (key.isNotEmpty() && numberOfItemsDisplayed == 0) {
+        if (key.isNotEmpty() && numberOfItemsDisplayed == 0 && incorrectDonorIdentified) {
             newDonorVisible.set(View.VISIBLE)
         } else {
             newDonorVisible.set(View.GONE)
         }
+    }
+
+    fun incorrectDonorIdentified(donor: Donor) {
+        incorrectDonorIdentified = true
+        reassociateProductsItemViewModel.setItem(donor)
+        incorrectDonorVisibility.set(View.VISIBLE)
+        adapter.clearAll()
+        editTextNameInput.set("")
     }
 
     // observable used for two-way data binding. Values set into this field will show in view.

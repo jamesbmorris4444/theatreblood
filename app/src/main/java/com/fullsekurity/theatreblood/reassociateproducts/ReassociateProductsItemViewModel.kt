@@ -1,11 +1,18 @@
 package com.fullsekurity.theatreblood.reassociateproducts
 
 import androidx.databinding.ObservableField
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 import com.fullsekurity.theatreblood.repository.storage.Donor
 
-@Suppress("UNCHECKED_CAST")
+class ReassociateProductsItemViewModelFactory(private val activityCallbacks: ActivityCallbacks) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return ReassociateProductsItemViewModel(activityCallbacks) as T
+    }
+}
+
 class ReassociateProductsItemViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewItemViewModel<Donor>() {
 
     private lateinit var donor: Donor
@@ -40,7 +47,7 @@ class ReassociateProductsItemViewModel(private val activityCallbacks: ActivityCa
     }
 
     fun onItemClicked() {
-        activityCallbacks.fetchActivity().loadDonorFragment(donor)
+        activityCallbacks.fetchActivity().reassociateProductsFragment.reassociateProductsListViewModel.incorrectDonorIdentified(donor)
     }
 
 }

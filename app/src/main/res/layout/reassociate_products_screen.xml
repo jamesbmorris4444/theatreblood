@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/apk/res-auto"
         xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <data>
@@ -12,11 +13,28 @@
         <variable
             name="reassociateProductsListViewModel"
             type="com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel" />
+
+        <variable
+            name="reassociateProductsItemViewModel"
+            type="com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
+
+        <!-- Start Incorrect Donor -->
+
+        <include
+                android:id="@+id/incorrect_donor"
+                layout="@layout/reassociate_item"
+                android:visibility="@{safeUnbox(reassociateProductsListViewModel.incorrectDonorVisibility)}"
+                bind:uiViewModel="@{uiViewModel}"
+                bind:reassociateProductsItemViewModel="@{reassociateProductsItemViewModel}"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <!-- End IncorrectDonor -->
 
         <!-- Start Search Box -->
 
@@ -32,7 +50,7 @@
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/submit_button_icon"
-                app:layout_constraintTop_toTopOf="parent" >
+                app:layout_constraintTop_toBottomOf="@+id/incorrect_donor" >
 
             <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_text_input_name_editText"

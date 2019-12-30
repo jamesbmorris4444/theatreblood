@@ -24,11 +24,11 @@ import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.barcode.BarCodeScannerActivity
-import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
-import com.fullsekurity.theatreblood.donor.DonorFragment
-import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
 import com.fullsekurity.theatreblood.createproducts.CreateProductsFragment
 import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
+import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
+import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
+import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsFragment
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
     private lateinit var lottieBackgroundView: LottieAnimationView
     private lateinit var activityMainBinding: ActivityMainBinding
     lateinit var createProductsListViewModel: CreateProductsListViewModel
+    lateinit var reassociateProductsFragment: ReassociateProductsFragment
 
     enum class UITheme {
         LIGHT, DARK, NOT_ASSIGNED,
@@ -147,9 +148,10 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
     }
 
     fun loadReassociateProductsFragment() {
+        reassociateProductsFragment = ReassociateProductsFragment.newInstance()
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
-            .replace(R.id.main_activity_container, ReassociateProductsFragment.newInstance())
+            .replace(R.id.main_activity_container, reassociateProductsFragment)
             .commitAllowingStateLoss()
     }
 
