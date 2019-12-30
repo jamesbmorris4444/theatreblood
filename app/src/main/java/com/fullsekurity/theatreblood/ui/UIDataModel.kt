@@ -102,7 +102,10 @@ class UIDataModel {
                         R.drawable.edit_text_background,
 
                         "black",
-                        "largeTextBold"
+                        "largeTextBold",
+
+                        "black",
+                        "mainTitleBold"
                     )
                 }
                 lightViewUIDataClass
@@ -201,7 +204,10 @@ class UIDataModel {
                         R.drawable.edit_text_background,
 
                         "white",
-                        "largeTextBold"
+                        "largeTextBold",
+
+                        "white",
+                        "mainTitleBold"
 
                     )
                 }

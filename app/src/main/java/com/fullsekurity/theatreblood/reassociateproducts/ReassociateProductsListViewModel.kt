@@ -12,6 +12,7 @@ import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
+import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
@@ -27,9 +28,9 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
 
     private val tag = ReassociateProductsListViewModel::class.java.simpleName
     override var adapter: ReassociateProductsAdapter = ReassociateProductsAdapter(activityCallbacks)
-    lateinit var reassociateProductsItemViewModel: ReassociateProductsItemViewModel
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     val listIsVisible: ObservableField<Boolean> = ObservableField(true)
+    val productsListIsVisible: ObservableField<Boolean> = ObservableField(true)
     val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
     val submitVisible: ObservableField<Int> = ObservableField(View.GONE)
     val incorrectDonorVisibility: ObservableField<Int> = ObservableField(View.GONE)
@@ -56,9 +57,15 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
             }
 
             override fun canScrollVertically(): Boolean {
-                return true
+                return false
             }
         }
+    }
+
+    fun initializeView() {
+        val list: MutableList<ReassociateProductsSearchData> = mutableListOf()
+        list.add(ReassociateProductsSearchData("HINT", View.VISIBLE, View.GONE, View.GONE, "TEXT"))
+        adapter.addAll(list)
     }
 
     private fun showDonors(donorList: List<Donor>) {
@@ -66,6 +73,11 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
         adapter.addAll(donorList)
         numberOfItemsDisplayed = donorList.size
         setNewDonorVisibility("NONEMPTY")
+    }
+
+    private fun showProducts(productList: List<Product>) {
+        productsListIsVisible.set(productList.isNotEmpty())
+        //productListAdapter.addAll(productList)
     }
 
     private fun setNewDonorVisibility(key: String) {
@@ -78,10 +90,11 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
 
     fun incorrectDonorIdentified(donor: Donor) {
         incorrectDonorIdentified = true
-        reassociateProductsItemViewModel.setItem(donor)
+        //reassociateProductsDonorItemViewModel.setItem(donor)
         incorrectDonorVisibility.set(View.VISIBLE)
         adapter.clearAll()
         editTextNameInput.set("")
+        repository.getAllNewProductsForDonor(donor, this::showProducts)
     }
 
     // observable used for two-way data binding. Values set into this field will show in view.

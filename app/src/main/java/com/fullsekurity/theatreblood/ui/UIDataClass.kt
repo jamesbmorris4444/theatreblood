@@ -95,7 +95,8 @@ class UIDataClass(
     val editTextProductBackground: Int,                   // Product EditText background drawable resource
 
     val productIdTextColor: String,                       // Product grid id label text color
-    val productIdTextSize: String                         // Product grid id label text size
+    val productIdTextSize: String,                        // Product grid id label text size
 
-
+    val incorrectDonorTextColor: String,                  // Reassociate donor label text color
+    val incorrectDonorTextSize: String                    // Reassociate donor label text size
 )

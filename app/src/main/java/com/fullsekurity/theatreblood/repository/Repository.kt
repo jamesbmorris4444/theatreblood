@@ -17,6 +17,7 @@ import com.fullsekurity.theatreblood.repository.network.APIClient
 import com.fullsekurity.theatreblood.repository.network.APIInterface
 import com.fullsekurity.theatreblood.repository.storage.BloodDatabase
 import com.fullsekurity.theatreblood.repository.storage.Donor
+import com.fullsekurity.theatreblood.repository.storage.DonorWithProducts
 import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.Constants.MAIN_DATABASE_NAME
@@ -353,7 +354,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             }
     }
 
-    fun donorsFromFullName(database: BloodDatabase, search: String): Single<List<Donor>> {
+    private fun donorsFromFullName(database: BloodDatabase, search: String): Single<List<Donor>> {
         var searchLast: String
         var searchFirst = "%"
         val index = search.indexOf(',')
@@ -483,6 +484,34 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                 }
                 Utils.hideKeyboard(view)
             }, { response -> val c = response })
+    }
+
+    fun getAllNewProductsForDonor(donor: Donor, showProducts: (productList: List<Product>) -> Unit) {
+        var disposable: Disposable? = null
+        disposable = donorsFromNameAndDateWithProducts(stagingBloodDatabase, donor)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe{ donorWithProducts ->
+                val donorResponse = donorWithProducts.donor
+                if (donorResponse.posterPath.length > 11) {
+                    donorResponse.posterPath = donorResponse.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
+                }
+                if (donorResponse.releaseDate[4] == '-') {
+                    val year: Int = donorResponse.releaseDate.substring(0,4).toInt()
+                    val monthOfYear = donorResponse.releaseDate.substring(5,7).toInt()
+                    val dayOfMonth = donorResponse.releaseDate.substring(8,10).toInt()
+                    val calendar = Calendar.getInstance()
+                    calendar.set(year, monthOfYear, dayOfMonth)
+                    val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
+                    donorResponse.releaseDate = dateFormatter.format(calendar.time)
+                }
+                showProducts(donorWithProducts.products)
+            }
+                
+    }
+
+    private fun donorsFromNameAndDateWithProducts(database: BloodDatabase, donor: Donor): Single<DonorWithProducts> {
+        return database.databaseDao().donorsFromNameAndDateWithProducts(donor.title, donor.posterPath, donor.voteCount.toString(), donor.releaseDate)
     }
 
 //    fun insertProductList(database: BloodDatabase, products: List<Product>) {

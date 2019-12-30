@@ -26,10 +26,10 @@ class DonateProductsAdapter(private val activityCallbacks: ActivityCallbacks) : 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DonorsViewHolder {
         val donorsItemBinding: DonorsItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.donors_item, parent, false)
-        val donorsItemViewModel = DonateProductsItemViewModel(activityCallbacks)
-        donorsItemBinding.donorsItemViewModel = donorsItemViewModel
+        val donateProductsItemViewModel = DonateProductsItemViewModel(activityCallbacks)
+        donorsItemBinding.donateProductsItemViewModel = donateProductsItemViewModel
         donorsItemBinding.uiViewModel = uiViewModel
-        return DonorsViewHolder(donorsItemBinding.root, donorsItemViewModel, donorsItemBinding)
+        return DonorsViewHolder(donorsItemBinding.root, donateProductsItemViewModel, donorsItemBinding)
     }
 
     inner class DonorsViewHolder internal constructor(itemView: View, viewModel: DonateProductsItemViewModel, viewDataBinding: DonorsItemBinding) :

@@ -7,20 +7,20 @@
                 name="uiViewModel"
                 type="com.fullsekurity.theatreblood.ui.UIViewModel" />
         <variable
-                name="donorsItemViewModel"
+                name="donateProductsItemViewModel"
                 type="com.fullsekurity.theatreblood.donateproducts.DonateProductsItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> donorsItemViewModel.onItemClicked()}">
+            android:onClick="@{() -> donateProductsItemViewModel.onItemClicked()}">
 
         <android.widget.TextView
                 android:id="@+id/last_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{donorsItemViewModel.title}"
+                android:text="@{donateProductsItemViewModel.title}"
                 app:text_font="@{uiViewModel.donorItemTextTypeface}"
                 app:text_color="@{uiViewModel.donorItemTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
@@ -34,7 +34,7 @@
                 android:id="@+id/first_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{donorsItemViewModel.posterPath}"
+                android:text="@{donateProductsItemViewModel.posterPath}"
                 app:text_font="@{uiViewModel.donorItemTextTypeface}"
                 app:text_color="@{uiViewModel.donorItemTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
@@ -47,7 +47,7 @@
                 android:id="@+id/middle_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{donorsItemViewModel.voteCount}"
+                android:text="@{donateProductsItemViewModel.voteCount}"
                 app:text_font="@{uiViewModel.donorItemTextTypeface}"
                 app:text_color="@{uiViewModel.donorItemTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
@@ -60,7 +60,7 @@
                 android:id="@+id/date_of_birth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{donorsItemViewModel.releaseDate}"
+                android:text="@{donateProductsItemViewModel.releaseDate}"
                 app:text_font="@{uiViewModel.donorItemTextTypeface}"
                 app:text_color="@{uiViewModel.donorItemTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
@@ -73,7 +73,7 @@
                 android:id="@+id/abo_rh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{donorsItemViewModel.backdropPath}"
+                android:text="@{donateProductsItemViewModel.backdropPath}"
                 app:text_font="@{uiViewModel.donorItemTextTypeface}"
                 app:text_color="@{uiViewModel.donorItemTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"
@@ -86,7 +86,7 @@
                 android:id="@+id/branch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{donorsItemViewModel.originalTitle}"
+                android:text="@{donateProductsItemViewModel.originalTitle}"
                 app:text_font="@{uiViewModel.donorItemTextTypeface}"
                 app:text_color="@{uiViewModel.donorItemTextColor}"
                 app:text_size="@{safeUnbox(uiViewModel.donorItemTextSize)}"

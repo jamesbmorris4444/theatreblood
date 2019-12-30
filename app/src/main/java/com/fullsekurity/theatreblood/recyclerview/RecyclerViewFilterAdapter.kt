@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class RecyclerViewFilterAdapter<T, VM : RecyclerViewItemViewModel<T>>(var context: Context) :  RecyclerView.Adapter<RecyclerViewFilterAdapter.ItemViewHolder<T, VM>>(), Filterable {
     protected var recyclerView: RecyclerView? = null
     private var itemsFilter: ItemsFilter? = null
-    private val itemList: MutableList<T>
+    val itemList: MutableList<T>
     private val masterList: MutableList<T>
 
     private val filter: ItemsFilter
@@ -59,10 +59,6 @@ abstract class RecyclerViewFilterAdapter<T, VM : RecyclerViewItemViewModel<T>>(v
 
     fun contains(item: T, position: Int): Boolean {
         return getItem(position) == item
-    }
-
-    fun getItemList(): List<T> {
-        return itemList
     }
 
     fun getItem(position: Int): T {

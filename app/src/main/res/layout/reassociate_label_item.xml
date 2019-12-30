@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <data>
+        <variable
+                name="uiViewModel"
+                type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+
+        <variable
+                name="reassociateProductsLabelItemViewModel"
+                type="com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsLabelItemViewModel" />
+    </data>
+
+    <TextView
+            android:id="@+id/incorrect_donor_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{reassociateProductsLabelItemViewModel.title}"
+            app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+            app:text_font="@{uiViewModel.incorrectDonorTextTypeface}"
+            app:text_color="@{uiViewModel.incorrectDonorTextColor}"
+            app:text_size="@{safeUnbox(uiViewModel.incorrectDonorTextSize)}"
+            android:visibility="@{safeUnbox(reassociateProductsLabelItemViewModel.incorrectDonorVisibility)}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+</layout>

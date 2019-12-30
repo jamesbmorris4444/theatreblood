@@ -64,6 +64,7 @@
     <string name="ttd_samples_collected">TTD Samples Collected?</string>
     <string name="donor_male">Male</string>
     <string name="donor_female">Female</string>
+    <string name="donor_incorrect_donor">Incorrect Donor</string>
 
     <!-- product strings -->
     <string name="product_din">DIN</string>
