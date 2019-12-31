@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
-import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -136,7 +135,6 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
                 donor.inReassociate = true
                 list.add(donor)
                 for (product in donorsWithProductsList[index].products) {
-                    product.editButtonVisibility = View.GONE
                     product.inReassociate = true
                     list.add(product)
                 }
@@ -182,7 +180,6 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
         list.add(ReassociateProductsLabelData(title = "Incorrect Donor", incorrectDonorVisibility = View.VISIBLE))
         list.add(incorrectDonor)
         for (product in donorWithProducts.products) {
-            product.editButtonVisibility = View.GONE
             list.add(product)
         }
         list.add(ReassociateProductsSearchData(
@@ -208,8 +205,6 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
                 if (!donorEquals(donor, incorrectDonor)) {
                     list.add(donor)
                     for (product in donorsAndProductsList[index].products) {
-                        product.editButtonVisibility = View.GONE
-                        product.deleteButtonVisibility = View.GONE
                         product.inReassociate = true
                         list.add(product)
                     }
@@ -226,7 +221,6 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
         } else {
             newDonorVisibility = View.GONE
             for (product in donorWithProducts.products) {
-                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX  %b   %s", product.removedForReassociation, product.din))
                 if (!product.removedForReassociation) {
                     product.donorId = correctDonor.id
                 }

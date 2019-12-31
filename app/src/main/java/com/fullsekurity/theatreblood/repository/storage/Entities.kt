@@ -1,6 +1,5 @@
 package com.fullsekurity.theatreblood.repository.storage
 
-import android.view.View
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
 
@@ -33,8 +32,6 @@ data class Product(
     @ColumnInfo(name = "abo_rh") @SerializedName(value = "abo_rh") var aboRh: String = "",
     @ColumnInfo(name = "product_code") @SerializedName(value = "product_code") var productCode: String = "",
     @ColumnInfo(name = "expiration_date") @SerializedName(value = "expiration_date") var expirationDate: String = "",
-    @Ignore var editButtonVisibility: Int = View.VISIBLE,
-    @Ignore var deleteButtonVisibility: Int = View.VISIBLE,
     @Ignore var removedForReassociation: Boolean = false,
     @Ignore var inReassociate: Boolean = false
 

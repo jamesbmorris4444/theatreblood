@@ -184,8 +184,6 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
             product.expirationDate = it
         }
         product.donorId = donor.id
-        product.editButtonVisibility = editButtonVisibility
-        product.deleteButtonVisibility = deleteButtonVisibility
         productList.add(product)
     }
 
