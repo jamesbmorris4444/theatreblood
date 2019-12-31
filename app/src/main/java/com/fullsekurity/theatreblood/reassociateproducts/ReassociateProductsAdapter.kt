@@ -108,11 +108,11 @@ class ReassociateProductsAdapter(private val activityCallbacks: ActivityCallback
         ItemViewHolder<Any, RecyclerViewItemViewModel<Any>> (itemView, viewModel, viewDataBinding)
 
     override fun onBindViewHolder(holder: ItemViewHolder<Any, RecyclerViewItemViewModel<Any>>, position: Int) {
+        super.onBindViewHolder(holder, position)
 //        if (getItemViewType(position) == ViewTypes.SEARCH.ordinal) {
 //            holder.itemView.findViewById<ImageView>(R.id.create_product_delete_button).tag = position // delete button
 //            holder.itemView.findViewById<ImageView>(R.id.create_product_edit_button).tag = position // edit button
 //        }
-        super.onBindViewHolder(holder, position)
 //        if (position % 2 == 1) {
 //            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor1))
 //        } else {

@@ -15,6 +15,7 @@ import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.repository.storage.DonorWithProducts
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
+import com.fullsekurity.theatreblood.utils.Utils
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import javax.inject.Inject
 
@@ -30,15 +31,15 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
     override var adapter: ReassociateProductsAdapter = ReassociateProductsAdapter(activityCallbacks)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     val errorVisibility: ObservableField<Int> = ObservableField(View.GONE)
-    private var productsListIsVisible = true
+    val errorMessage: ObservableField<String> = ObservableField("")
+    private var editTextNameInput = ""
     private var editTextNameVisibility = View.VISIBLE
     private var newDonorVisibility = View.GONE
     private var submitVisibility = View.VISIBLE
-    private var incorrectDonorVisibility = View.GONE
-    private var numberOfItemsDisplayed = -1
     private var incorrectDonorIdentified = false
-    private var editTextNameInput = ""
-    private lateinit var donorAndProductsList: List<DonorWithProducts>
+    private lateinit var incorrectDonor: Donor
+    private lateinit var incorrectDonorWithProducts: DonorWithProducts
+    private lateinit var donorWithProductsList: List<DonorWithProducts>
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -65,7 +66,26 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
         }
     }
 
+    // The flow through the reassociated donations is as follows
+    //
+    //   1.  user enters reassociated donations fragment
+    //   2.  initializeView()
+    //   3.  user enters text and clicks on search button
+    //   4.  handleReassociateSearchClick(view), incorrectIdentifierIdentified = false at entry
+    //   5.  display all donors in the staging database and their new products that have been entered recently (showDonorsAndProducts)
+    //   6.  user clicks on a donor item to select the incorrect donor
+    //   7.  handleReassociateIncorrectDonorClick(incorrectDonor), incorrectIdentifierIdentified = false at entry (showIncorrectDonorAndProductsWithSearchBox)
+    //   8.  show incorrect donor selected and products for this donor, and show search box for selecting correct donor at the bottom of the screen
+    //   9.  user enters text and clicks on search button to find correct donor
+    //   10. handleReassociateSearchClick(view), incorrectIdentifierIdentified = true at entry
+    //   11. display potential correct donors and associated products (showCorrectDonorsAndProducts)
+    //   12. user clicks on correct donor item, and products from incorrect donor are moved to correct donor (moveProductsToCorrectDonor)
+
     fun initializeView() {
+        // show
+        //    search box
+        incorrectDonorIdentified = false
+        errorMessage.set(getApplication<Application>().applicationContext.getString(R.string.search_no_elements))
         val list: MutableList<ReassociateProductsSearchData> = mutableListOf()
         list.add(ReassociateProductsSearchData(
             hintTextName = getApplication<Application>().applicationContext.getString(R.string.donor_incorrect_search_string),
@@ -77,9 +97,31 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
         adapter.addAll(list)
     }
 
-    private fun showDonorsAndProducts(donorsAndProductsList: List<DonorWithProducts>) {
-        if (donorsAndProductsList.isNotEmpty()) {
-            this.donorAndProductsList = donorsAndProductsList
+    fun handleReassociateSearchClick(view: View) {
+        if (incorrectDonorIdentified) {
+            // click on correct donor search box
+            repository.handleReassociateSearchClick(view, editTextNameInput, this::showCorrectDonorsAndProducts)
+        } else {
+            // click on incorrect donor search box
+            repository.handleReassociateSearchClick(view, editTextNameInput, this::showDonorsAndProducts)
+        }
+        Utils.hideKeyboard(view)
+    }
+
+    private fun showDonorsAndProducts(donorsWithProductsList: List<DonorWithProducts>) {
+        // show
+        //    search box
+        //    donor
+        //    donor products
+        //       ...
+        //    donor
+        //    donor products
+        if (donorsWithProductsList.isEmpty()) {
+            errorVisibility.set(View.VISIBLE)
+            errorMessage.set(getApplication<Application>().applicationContext.getString(R.string.search_no_elements))
+        } else {
+            errorVisibility.set(View.GONE)
+            this.donorWithProductsList = donorsWithProductsList
             val list: MutableList<Any> = mutableListOf()
             list.add(ReassociateProductsSearchData(
                 hintTextName = getApplication<Application>().applicationContext.getString(R.string.donor_incorrect_search_string),
@@ -88,58 +130,114 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
                 submitVisibility = submitVisibility,
                 editTextNameInput = editTextNameInput)
             )
-            for (index in donorsAndProductsList.indices) {
-                val donor = donorsAndProductsList[index].donor
+            for (index in donorsWithProductsList.indices) {
+                val donor = donorsWithProductsList[index].donor
                 donor.inReassociate = true
                 list.add(donor)
-                for (product in donorsAndProductsList[index].products) {
+                for (product in donorsWithProductsList[index].products) {
                     product.editAndDeleteButtonVisibility = View.GONE
                     list.add(product)
                 }
             }
             adapter.addAll(list)
         }
-        errorVisibility.set(if (donorsAndProductsList.isEmpty()) View.VISIBLE else View.GONE)
-        numberOfItemsDisplayed = donorsAndProductsList.size
-        setNewDonorVisibility("NONEMPTY")
     }
 
-    private fun setNewDonorVisibility(key: String) {
-        if (key.isNotEmpty() && numberOfItemsDisplayed == 0 && incorrectDonorIdentified) {
+    fun handleReassociateIncorrectDonorClick(donor: Donor) {
+        if (incorrectDonorIdentified) {
+            // click on correct donor
+            // move products to correct donor
+            // show initial view search box
+            moveProductsToCorrectDonor(incorrectDonor, donor)
+        } else {
+            // click on incorrect donor
+            // show
+            //   incorrect donor label
+            //   incorrect donor
+            //   incorrect donor products
+            //   search box
+            incorrectDonorIdentified = true
+            incorrectDonor = donor
+            showIncorrectDonorAndProductsWithSearchBox(incorrectDonor)
+        }
+    }
+
+    private fun showIncorrectDonorAndProductsWithSearchBox(incorrectDonor: Donor) {
+        val incorrectDonorWithProducts: DonorWithProducts? = findDonorInDonorsAndProductsList(incorrectDonor)
+        if (incorrectDonorWithProducts == null) {
+            errorVisibility.set(View.VISIBLE)
+            errorMessage.set(getApplication<Application>().applicationContext.getString(R.string.search_no_incorrect_donors))
+        } else {
+            errorVisibility.set(View.GONE)
+            this.incorrectDonorWithProducts = incorrectDonorWithProducts
+            val list: MutableList<Any> = mutableListOf()
+            addHeaderToList(list, incorrectDonorWithProducts)
+            adapter.addAll(list)
+        }
+    }
+
+    private fun addHeaderToList(list: MutableList<Any>, donorWithProducts: DonorWithProducts) {
+        list.add(ReassociateProductsLabelData(title = "Incorrect Donor", incorrectDonorVisibility = View.VISIBLE))
+        list.add(incorrectDonor)
+        for (product in donorWithProducts.products) {
+            product.editAndDeleteButtonVisibility = View.GONE
+            list.add(product)
+        }
+        list.add(ReassociateProductsSearchData(
+            hintTextName = getApplication<Application>().applicationContext.getString(R.string.donor_correct_search_string),
+            editTextNameVisibility = editTextNameVisibility,
+            newDonorVisibility = newDonorVisibility,
+            submitVisibility = submitVisibility,
+            editTextNameInput = editTextNameInput)
+        )
+    }
+
+    private fun showCorrectDonorsAndProducts(donorsAndProductsList: List<DonorWithProducts>) {
+        this.donorWithProductsList = donorsAndProductsList
+        val list: MutableList<Any> = mutableListOf()
+        if (donorsAndProductsList.isEmpty()) {
+            newDonorVisibility = View.VISIBLE
+            addHeaderToList(list, incorrectDonorWithProducts)
+        } else {
+            newDonorVisibility = View.GONE
+            addHeaderToList(list, incorrectDonorWithProducts)
+            for (index in donorsAndProductsList.indices) {
+                val donor = donorsAndProductsList[index].donor
+                donor.inReassociate = true
+                if (!donorEquals(donor, incorrectDonor)) {
+                    list.add(donor)
+                    for (product in donorsAndProductsList[index].products) {
+                        product.editAndDeleteButtonVisibility = View.GONE
+                        list.add(product)
+                    }
+                }
+            }
+        }
+        adapter.addAll(list)
+    }
+
+    private fun moveProductsToCorrectDonor(incorrectDonor: Donor, correctDonor: Donor) {
+        val donorWithProducts = findDonorInDonorsAndProductsList(incorrectDonor)
+        if (donorWithProducts == null) {
             newDonorVisibility = View.VISIBLE
         } else {
             newDonorVisibility = View.GONE
-        }
-    }
-
-    fun handleReassociateIncorrectDonorClick(incorrectDonor: Donor) {
-        incorrectDonorIdentified = true
-        adapter.clearAll()
-        val donorsWithProducts = findDonorInDonorsAndProductsList(incorrectDonor)
-        if (donorsWithProducts != null) {
-            val list: MutableList<Any> = mutableListOf()
-            list.add(incorrectDonor)
-            for (product in donorsWithProducts.products) {
-                product.editAndDeleteButtonVisibility = View.GONE
-                list.add(product)
+            for (product in donorWithProducts.products) {
+                product.donorId = correctDonor.id
             }
-            list.add(ReassociateProductsSearchData(
-                hintTextName = getApplication<Application>().applicationContext.getString(R.string.donor_correct_search_string),
-                editTextNameVisibility = editTextNameVisibility,
-                newDonorVisibility = newDonorVisibility,
-                submitVisibility = submitVisibility,
-                editTextNameInput = editTextNameInput)
-            )
-            adapter.addAll(list)
+            repository.insertReassociatedProductsIntoDatabase(repository.stagingBloodDatabase, donorWithProducts.products, this::initializeView)
         }
-
     }
 
-    fun findDonorInDonorsAndProductsList(donor: Donor): DonorWithProducts? {
-        for (index in donorAndProductsList.indices) {
-            val donorInList = donorAndProductsList[index].donor
-            if (donor.title == donorInList.title && donor.posterPath == donorInList.posterPath && donor.voteCount == donorInList.voteCount && donor.releaseDate == donorInList.releaseDate) {
-                return donorAndProductsList[index]
+    private fun donorEquals(donor: Donor, incorrectDonor: Donor): Boolean {
+        return donor.title == incorrectDonor.title && donor.posterPath == incorrectDonor.posterPath && donor.voteCount == incorrectDonor.voteCount && donor.releaseDate == incorrectDonor.releaseDate
+    }
+
+    private fun findDonorInDonorsAndProductsList(donor: Donor): DonorWithProducts? {
+        for (index in donorWithProductsList.indices) {
+            val donorInList = donorWithProductsList[index].donor
+            if (donorEquals(donor, donorInList)) {
+                return donorWithProductsList[index]
             }
         }
         return null
@@ -147,13 +245,8 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
 
     fun onTextNameChanged(key: CharSequence, start: Int, before: Int, count: Int) {
         editTextNameInput = key.toString()
-        setNewDonorVisibility(key.toString())
-        submitVisibility =View.VISIBLE
+        submitVisibility = View.VISIBLE
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
-    }
-
-    fun handleReassociateSearchClick(view: View) {
-        repository.handleReassociateSearchClick(view, editTextNameInput, this::showDonorsAndProducts)
     }
 
     fun handleReassociateNewDonorClick(view: View) {
