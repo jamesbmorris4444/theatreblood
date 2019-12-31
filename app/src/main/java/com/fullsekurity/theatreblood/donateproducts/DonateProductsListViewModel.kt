@@ -32,6 +32,7 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
     val submitVisible: ObservableField<Int> = ObservableField(View.GONE)
     private var numberOfItemsDisplayed = -1
+    var transitionToCreateDonation = true
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -90,13 +91,12 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     var hintTextName: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_search_string))
     var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
-    @Suppress("UNCHECKED_CAST")
     fun onSearchClicked(view: View) {
         repository.handleSearchClick(view, editTextNameInput.get() ?: "", this::showDonors)
     }
 
     fun onNewDonorClicked(view: View) {
-        activityCallbacks.fetchActivity().loadDonorFragment(Donor())
+        activityCallbacks.fetchActivity().loadDonorFragment(null, transitionToCreateDonation)
     }
 
 }

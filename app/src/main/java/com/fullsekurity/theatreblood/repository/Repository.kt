@@ -280,7 +280,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
 
     // The code below here does CRUD on the database
 
-    fun insertDonorIntoDatabase(database: BloodDatabase, donor: Donor) {
+    fun insertDonorIntoDatabase(database: BloodDatabase, donor: Donor, transitionToCreateDonation: Boolean) {
         var disposable: Disposable? = null
         disposable = Completable.fromAction { database.databaseDao().insertDonor(donor) }
             .observeOn(AndroidSchedulers.mainThread())
@@ -296,14 +296,18 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                         override fun onPositive(string: String) {
                             disposable?.dispose()
                             disposable = null
-                            activityCallbacks.fetchActivity().loadCreateProductsFragment(donor)
+                            if (transitionToCreateDonation) {
+                                activityCallbacks.fetchActivity().loadCreateProductsFragment(donor)
+                            } else {
+                                activityCallbacks.fetchActivity().onBackPressed()
+                            }
                         }
                         override fun onNegative() { }
                         override fun onNeutral() { }
                         override fun onBackPressed() {
                             disposable?.dispose()
                             disposable = null
-                            activityCallbacks.fetchActivity().loadCreateProductsFragment(donor)
+                            activityCallbacks.fetchActivity().onBackPressed()
                         }
                     }
                 ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
@@ -339,7 +343,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                             disposable?.dispose()
                             disposable = null
                             activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                            activityCallbacks.fetchActivity().loadDonateProductsFragment()
+                            activityCallbacks.fetchActivity().loadDonateProductsFragment(true)
                         }
                         override fun onNegative() { }
                         override fun onNeutral() { }
@@ -347,7 +351,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                             disposable?.dispose()
                             disposable = null
                             activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                            activityCallbacks.fetchActivity().loadDonateProductsFragment()
+                            activityCallbacks.fetchActivity().loadDonateProductsFragment(true)
                         }
                     }
                 ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
@@ -470,10 +474,13 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .subscribe({ responseList ->
                 val response = responseList[0]
                 for (donor in response[0] as List<Donor>) {
+                    LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX  mainm"))
                     if (donor.posterPath.length > 11) {
                         donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
                     }
-                    if (donor.releaseDate[4] == '-') {
+                    if (donor.releaseDate.isEmpty()) {
+                        donor.releaseDate = "04 Jul 2019"
+                    } else if (donor.releaseDate[4] == '-') {
                         val year: Int = donor.releaseDate.substring(0,4).toInt()
                         val monthOfYear = donor.releaseDate.substring(5,7).toInt()
                         val dayOfMonth = donor.releaseDate.substring(8,10).toInt()
@@ -484,10 +491,13 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                     }
                 }
                 for (donor in response[1] as List<Donor>) {
+                    LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX  staging"))
                     if (donor.posterPath.length > 11) {
                         donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
                     }
-                    if (donor.releaseDate[4] == '-') {
+                    if (donor.releaseDate.isEmpty()) {
+                        donor.releaseDate = "04 Jul 2019"
+                    } else if (donor.releaseDate[4] == '-') {
                         val year: Int = donor.releaseDate.substring(0,4).toInt()
                         val monthOfYear = donor.releaseDate.substring(5,7).toInt()
                         val dayOfMonth = donor.releaseDate.substring(8,10).toInt()
@@ -499,30 +509,8 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                 }
                 val stagingDatabaseList = response[1] as List<Donor>
                 val mainDatabaseList = response[0] as List<Donor>
-                if (stagingDatabaseList.isEmpty()) {
-                    showDonors(mainDatabaseList)
-                } else {
-                    val newList: MutableList<Donor> = mutableListOf()
-                    for (mainIndex in mainDatabaseList.indices) {
-                        var found = false
-                        for (stagingIndex in stagingDatabaseList.indices) {
-                            if (
-                                stagingDatabaseList[stagingIndex].title == mainDatabaseList[mainIndex].title &&
-                                stagingDatabaseList[stagingIndex].posterPath == mainDatabaseList[mainIndex].posterPath &&
-                                stagingDatabaseList[stagingIndex].voteCount == mainDatabaseList[mainIndex].voteCount &&
-                                stagingDatabaseList[stagingIndex].releaseDate == mainDatabaseList[mainIndex].releaseDate) {
-
-                                newList.add(stagingDatabaseList[stagingIndex])
-                                found = true
-                                break
-                            }
-                        }
-                        if (!found) {
-                            newList.add(mainDatabaseList[mainIndex])
-                        }
-                    }
-                    showDonors(newList)
-                }
+                val newList = stagingDatabaseList.union(mainDatabaseList).distinctBy { it.title + "," + it.posterPath + "," + it.voteCount.toString() + "," + it.releaseDate  }
+                showDonors(newList)
                 Utils.hideKeyboard(view)
             }, { response -> val c = response })
     }
@@ -549,7 +537,9 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         if (donorResponse.posterPath.length > 11) {
             donorResponse.posterPath = donorResponse.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
         }
-        if (donorResponse.releaseDate[4] == '-') {
+        if (donorResponse.releaseDate.isEmpty()) {
+            donorResponse.releaseDate = "04 Jul 2019"
+        } else if (donorResponse.releaseDate[4] == '-') {
             val year: Int = donorResponse.releaseDate.substring(0,4).toInt()
             val monthOfYear = donorResponse.releaseDate.substring(5,7).toInt()
             val dayOfMonth = donorResponse.releaseDate.substring(8,10).toInt()
@@ -570,7 +560,9 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                 if (donorResponse.posterPath.length > 11) {
                     donorResponse.posterPath = donorResponse.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
                 }
-                if (donorResponse.releaseDate[4] == '-') {
+                if (donorResponse.releaseDate.isEmpty()) {
+                    donorResponse.releaseDate = "04 Jul 2019"
+                } else if (donorResponse.releaseDate[4] == '-') {
                     val year: Int = donorResponse.releaseDate.substring(0,4).toInt()
                     val monthOfYear = donorResponse.releaseDate.substring(5,7).toInt()
                     val dayOfMonth = donorResponse.releaseDate.substring(8,10).toInt()

@@ -17,8 +17,10 @@ import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.databinding.DonorScreenBinding
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
+import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class DonorFragment : Fragment(), ActivityCallbacks {
@@ -27,11 +29,13 @@ class DonorFragment : Fragment(), ActivityCallbacks {
     private lateinit var donor: Donor
     private lateinit var binding: DonorScreenBinding
     private lateinit var mainActivity: MainActivity
+    private var transitionToCreateDonation = true
 
     companion object {
-        fun newInstance(donor: Donor): DonorFragment {
+        fun newInstance(donor: Donor, transitionToCreateDonation: Boolean): DonorFragment {
             val fragment = DonorFragment()
             fragment.donor = donor
+            fragment.transitionToCreateDonation = transitionToCreateDonation
             return fragment
         }
     }
@@ -45,6 +49,11 @@ class DonorFragment : Fragment(), ActivityCallbacks {
             .build()
             .inject(this)
         super.onAttach(context)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).toolbar.title = Constants.MANAGE_DONOR_TITLE
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -65,6 +74,7 @@ class DonorFragment : Fragment(), ActivityCallbacks {
             }
         })
         donorViewModel.setDonor(donor)
+        donorViewModel.transitionToCreateDonation = transitionToCreateDonation
         return binding.root
     }
 

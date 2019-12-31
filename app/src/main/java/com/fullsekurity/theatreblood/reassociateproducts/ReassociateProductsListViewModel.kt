@@ -202,7 +202,7 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
             for (index in donorsAndProductsList.indices) {
                 val donor = donorsAndProductsList[index].donor
                 donor.inReassociate = true
-                if (!donorEquals(donor, incorrectDonor)) {
+                if (!Utils.donorEquals(donor, incorrectDonor)) {
                     list.add(donor)
                     for (product in donorsAndProductsList[index].products) {
                         product.inReassociate = true
@@ -229,14 +229,10 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
         }
     }
 
-    private fun donorEquals(donor: Donor, incorrectDonor: Donor): Boolean {
-        return donor.title == incorrectDonor.title && donor.posterPath == incorrectDonor.posterPath && donor.voteCount == incorrectDonor.voteCount && donor.releaseDate == incorrectDonor.releaseDate
-    }
-
     private fun findDonorInDonorsAndProductsList(donor: Donor): DonorWithProducts? {
         for (index in donorWithProductsList.indices) {
             val donorInList = donorWithProductsList[index].donor
-            if (donorEquals(donor, donorInList)) {
+            if (Utils.donorEquals(donor, donorInList)) {
                 return donorWithProductsList[index]
             }
         }

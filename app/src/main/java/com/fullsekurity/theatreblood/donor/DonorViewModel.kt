@@ -36,7 +36,6 @@ class DonorViewModelFactory(private val activityCallbacks: ActivityCallbacks) : 
     }
 }
 
-@Suppress("UNCHECKED_CAST")
 class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : AndroidViewModel(activityCallbacks.fetchActivity().application) {
 
     private val calendar = Calendar.getInstance()
@@ -45,6 +44,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     private val day = calendar.get(Calendar.DAY_OF_MONTH)
     private var dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
     private lateinit var donor: Donor
+    var transitionToCreateDonation = true
 
     // At least one entry changed. If no entries ever change, do not add this donor to the staging database.
     // When the view is loaded the first time, onText...Changed is called, so ignore this call until isStable is true.
@@ -195,7 +195,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         donor.originalTitle = currentMilitaryBranchSelectedValue
 
         if (atLeastOneEntryChanged) {
-            repository.insertDonorIntoDatabase(repository.stagingBloodDatabase, donor)
+            repository.insertDonorIntoDatabase(repository.stagingBloodDatabase, donor, transitionToCreateDonation)
         } else {
             StandardModal(
                 activityCallbacks,
@@ -204,12 +204,16 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
                 positiveText = getApplication<Application>().applicationContext.getString(R.string.std_modal_ok),
                 dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                     override fun onPositive(password: String) {
-                        loadCreateProductsFragment()
+                        if (transitionToCreateDonation) {
+                            loadCreateProductsFragment()
+                        } else {
+                            activityCallbacks.fetchActivity().onBackPressed()
+                        }
                     }
                     override fun onNegative() { }
                     override fun onNeutral() { }
                     override fun onBackPressed() {
-                        loadCreateProductsFragment()
+                        activityCallbacks.fetchActivity().onBackPressed()
                     }
                 }
             ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")

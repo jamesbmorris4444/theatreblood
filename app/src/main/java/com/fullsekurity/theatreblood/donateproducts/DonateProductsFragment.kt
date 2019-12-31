@@ -29,9 +29,14 @@ class DonateProductsFragment : Fragment(), ActivityCallbacks {
     private lateinit var lottieBackgroundView: LottieAnimationView
     private lateinit var binding: DonateProductsScreenBinding
     private lateinit var mainActivity: MainActivity
+    private var transitionToCreateDonation = true
 
     companion object {
-        fun newInstance(): DonateProductsFragment { return DonateProductsFragment() }
+        fun newInstance(transitionToCreateDonation: Boolean): DonateProductsFragment {
+            val fragment = DonateProductsFragment()
+            fragment.transitionToCreateDonation = transitionToCreateDonation
+            return fragment
+        }
     }
 
     @Inject
@@ -56,6 +61,7 @@ class DonateProductsFragment : Fragment(), ActivityCallbacks {
         donateProductsListViewModel = ViewModelProviders.of(this, DonateProductsListViewModelFactory(this)).get(DonateProductsListViewModel::class.java)
         binding.donateProductsListViewModel = donateProductsListViewModel
         binding.uiViewModel = uiViewModel
+        donateProductsListViewModel.transitionToCreateDonation = transitionToCreateDonation
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
         //lottieBackgroundView = binding.root.findViewById(R.id.background_lottie)
         //uiViewModel.lottieAnimation(lottieBackgroundView, uiViewModel.backgroundLottieJsonFileName, LottieDrawable.INFINITE)

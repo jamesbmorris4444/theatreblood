@@ -45,7 +45,7 @@ class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbac
         if (inReassociate) {
             activityCallbacks.fetchActivity().reassociateIncorrectDonorClicked(donor)
         } else {
-            activityCallbacks.fetchActivity().loadDonorFragment(donor)
+            activityCallbacks.fetchActivity().loadDonorFragment(donor, activityCallbacks.fetchActivity().transitionToCreateDonation)
         }
     }
 

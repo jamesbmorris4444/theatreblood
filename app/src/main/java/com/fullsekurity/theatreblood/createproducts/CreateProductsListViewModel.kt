@@ -202,9 +202,7 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
                         processNewProduct()
                         addDonorWithProductsToModifiedDatabase()
                     }
-                    override fun onNegative() {
-
-                    }
+                    override fun onNegative() { }
                     override fun onNeutral() { }
                     override fun onBackPressed() {
                         processNewProduct()
@@ -217,7 +215,7 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
                 addDonorWithProductsToModifiedDatabase()
             } else {
                 activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                activityCallbacks.fetchActivity().loadDonateProductsFragment()
+                activityCallbacks.fetchActivity().loadDonateProductsFragment(true)
             }
         }
         confirmNeeded = false

@@ -58,7 +58,8 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
     private lateinit var lottieBackgroundView: LottieAnimationView
     private lateinit var activityMainBinding: ActivityMainBinding
     lateinit var createProductsListViewModel: CreateProductsListViewModel
-    lateinit var reassociateProductsFragment: ReassociateProductsFragment
+    private lateinit var reassociateProductsFragment: ReassociateProductsFragment
+    var transitionToCreateDonation = true
 
     enum class UITheme {
         LIGHT, DARK, NOT_ASSIGNED,
@@ -89,7 +90,8 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         when (item.itemId) {
             R.id.navigation_donations -> {
                 supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                loadDonateProductsFragment()
+                transitionToCreateDonation = true
+                loadDonateProductsFragment(transitionToCreateDonation)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_inventory -> {
@@ -140,10 +142,10 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         finish()
     }
 
-    fun loadDonateProductsFragment() {
+    fun loadDonateProductsFragment(transitionToCreateDonation: Boolean) {
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
-            .replace(R.id.main_activity_container, DonateProductsFragment.newInstance())
+            .replace(R.id.main_activity_container, DonateProductsFragment.newInstance(transitionToCreateDonation))
             .commitAllowingStateLoss()
     }
 
@@ -155,12 +157,20 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             .commitAllowingStateLoss()
     }
 
-    fun loadDonorFragment(donor: Donor) {
-        supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-            .replace(R.id.main_activity_container, DonorFragment.newInstance(donor))
-            .addToBackStack(ROOT_FRAGMENT_TAG)
-            .commitAllowingStateLoss()
+    fun loadDonorFragment(donor: Donor?, transitionToCreateDonation: Boolean) {
+        if (donor == null) {
+            supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                .replace(R.id.main_activity_container, DonorFragment.newInstance(Donor(), transitionToCreateDonation))
+                .addToBackStack(ROOT_FRAGMENT_TAG)
+                .commitAllowingStateLoss()
+        } else {
+            supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                .replace(R.id.main_activity_container, DonorFragment.newInstance(donor, transitionToCreateDonation))
+                .addToBackStack(ROOT_FRAGMENT_TAG)
+                .commitAllowingStateLoss()
+        }
     }
 
     fun loadCreateProductsFragment(donor: Donor) {
@@ -245,9 +255,13 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         when (item.itemId) {
             R.id.donate_products -> {
                 supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                loadDonateProductsFragment()
+                transitionToCreateDonation = true
+                loadDonateProductsFragment(transitionToCreateDonation)
             }
             R.id.manage_donor -> {
+                supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                transitionToCreateDonation = false
+                loadDonateProductsFragment(transitionToCreateDonation)
             }
             R.id.reassociate_donation -> {
                 supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
