@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -103,12 +104,12 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
             repository.handleReassociateSearchClick(view, editTextNameInput, this::showCorrectDonorsAndProducts)
         } else {
             // click on incorrect donor search box
-            repository.handleReassociateSearchClick(view, editTextNameInput, this::showDonorsAndProducts)
+            repository.handleReassociateSearchClick(view, editTextNameInput, this::showAllDonorsAndProducts)
         }
         Utils.hideKeyboard(view)
     }
 
-    private fun showDonorsAndProducts(donorsWithProductsList: List<DonorWithProducts>) {
+    private fun showAllDonorsAndProducts(donorsWithProductsList: List<DonorWithProducts>) {
         // show
         //    search box
         //    donor
@@ -194,7 +195,6 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
     }
 
     private fun showCorrectDonorsAndProducts(donorsAndProductsList: List<DonorWithProducts>) {
-        this.donorWithProductsList = donorsAndProductsList
         val list: MutableList<Any> = mutableListOf()
         if (donorsAndProductsList.isEmpty()) {
             newDonorVisibility = View.VISIBLE
@@ -226,6 +226,7 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
         } else {
             newDonorVisibility = View.GONE
             for (product in donorWithProducts.products) {
+                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX  %b   %s", product.removedForReassociation, product.din))
                 if (!product.removedForReassociation) {
                     product.donorId = correctDonor.id
                 }

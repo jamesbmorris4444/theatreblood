@@ -3,6 +3,7 @@ package com.fullsekurity.theatreblood.createproducts
 import android.view.View
 import androidx.databinding.ObservableField
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 import com.fullsekurity.theatreblood.repository.storage.Product
 
@@ -17,8 +18,6 @@ class CreateProductsItemViewModel(val activityCallbacks: ActivityCallbacks) : Re
     val expirationDate: ObservableField<String> = ObservableField("")
     var editButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
     var deleteButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
-    var inReassociate = false
-    var removedForReassociation = false
 
     override fun setItem(item: Product) {
         product = item
@@ -27,14 +26,17 @@ class CreateProductsItemViewModel(val activityCallbacks: ActivityCallbacks) : Re
         productCode.set(item.productCode)
         expirationDate.set(item.expirationDate)
         editButtonVisibility.set(item.editButtonVisibility)
-        deleteButtonVisibility.set(item.deleteButtonVisibility)
-        this.inReassociate = item.inReassociate
-        this.removedForReassociation = item.removedForReassociation
+        if (product.removedForReassociation) {
+            deleteButtonVisibility.set(View.GONE)
+        } else {
+            deleteButtonVisibility.set(item.deleteButtonVisibility)
+        }
     }
 
     fun onDeleteClicked(view: View) {
-        if (inReassociate) {
-            removedForReassociation = true
+        if (product.inReassociate) {
+            product.removedForReassociation = true
+            LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX  %b   %s", product.removedForReassociation, din))
             deleteButtonVisibility.set(View.GONE)
         } else {
             activityCallbacks.fetchActivity().onCreateProductsDeleteClicked(view)
