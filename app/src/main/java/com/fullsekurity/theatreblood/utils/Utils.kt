@@ -18,6 +18,10 @@ class Utils {
             return donor.title == otherDonor.title && donor.posterPath == otherDonor.posterPath && donor.voteCount == otherDonor.voteCount && donor.releaseDate == otherDonor.releaseDate
         }
 
+        fun donorUnionStringForDistinctBy(donor: Donor): String {
+            return donor.title + "," + donor.posterPath + "," + donor.voteCount.toString() + "," + donor.releaseDate
+        }
+
     }
 
 }

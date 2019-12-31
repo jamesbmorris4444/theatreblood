@@ -53,7 +53,7 @@ class DonorFragment : Fragment(), ActivityCallbacks {
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity).toolbar.title = Constants.MANAGE_DONOR_TITLE
+        (activity as MainActivity).toolbar.title = if (transitionToCreateDonation) Constants.CREATE_PRODUCTS_TITLE else Constants.MANAGE_DONOR_TITLE
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

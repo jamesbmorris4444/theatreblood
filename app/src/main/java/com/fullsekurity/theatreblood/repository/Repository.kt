@@ -461,7 +461,8 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     private fun databaseProductCount(database: BloodDatabase): Single<Int> {
         return database.databaseDao().getProductEntryCount()
     }
-    
+
+    @Suppress("UNCHECKED_CAST")
     fun handleSearchClick(view: View, searchKey: String, showDonors: (donorList: List<Donor>) -> Unit) {
         var disposable: Disposable? = null
         val fullNameResponseList = listOf(
@@ -508,7 +509,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                 }
                 val stagingDatabaseList = response[1] as List<Donor>
                 val mainDatabaseList = response[0] as List<Donor>
-                val newList = stagingDatabaseList.union(mainDatabaseList).distinctBy { it.title + "," + it.posterPath + "," + it.voteCount.toString() + "," + it.releaseDate  }
+                val newList = stagingDatabaseList.union(mainDatabaseList).distinctBy { donor -> Utils.donorUnionStringForDistinctBy(donor) }
                 showDonors(newList)
                 Utils.hideKeyboard(view)
             }, { response -> val c = response })
