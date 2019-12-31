@@ -304,7 +304,7 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
     }
 
     fun reassociateOnNewDonorClicked(view: View) {
-        reassociateProductsFragment.reassociateProductsListViewModel.handleReassociateNewDonorClick(view)
+        loadDonorFragment(null, transitionToCreateDonation)
     }
 
     fun reassociateIncorrectDonorClicked(donor: Donor) {

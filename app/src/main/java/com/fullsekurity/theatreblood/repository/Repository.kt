@@ -491,7 +491,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                     }
                 }
                 for (donor in response[1] as List<Donor>) {
-                    LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX  staging"))
                     if (donor.posterPath.length > 11) {
                         donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
                     }
