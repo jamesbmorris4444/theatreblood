@@ -15,7 +15,10 @@ class CreateProductsItemViewModel(val activityCallbacks: ActivityCallbacks) : Re
     val aboRh: ObservableField<String> = ObservableField("")
     val productCode: ObservableField<String> = ObservableField("")
     val expirationDate: ObservableField<String> = ObservableField("")
-    var editAndDeleteButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+    var editButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+    var deleteButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+    var inReassociate = false
+    var removedForReassociation = false
 
     override fun setItem(item: Product) {
         product = item
@@ -23,11 +26,19 @@ class CreateProductsItemViewModel(val activityCallbacks: ActivityCallbacks) : Re
         aboRh.set(item.aboRh)
         productCode.set(item.productCode)
         expirationDate.set(item.expirationDate)
-        editAndDeleteButtonVisibility.set(item.editAndDeleteButtonVisibility)
+        editButtonVisibility.set(item.editButtonVisibility)
+        deleteButtonVisibility.set(item.deleteButtonVisibility)
+        this.inReassociate = item.inReassociate
+        this.removedForReassociation = item.removedForReassociation
     }
 
     fun onDeleteClicked(view: View) {
-        activityCallbacks.fetchActivity().onCreateProductsDeleteClicked(view)
+        if (inReassociate) {
+            removedForReassociation = true
+            deleteButtonVisibility.set(View.GONE)
+        } else {
+            activityCallbacks.fetchActivity().onCreateProductsDeleteClicked(view)
+        }
     }
 
     fun onEditClicked(view: View) {

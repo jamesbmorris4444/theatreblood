@@ -27,6 +27,7 @@ class CreateProductsFragment : Fragment(), ActivityCallbacks {
     private lateinit var createProductsListViewModel: CreateProductsListViewModel
     private lateinit var donor: Donor
     private lateinit var binding: CreateProductsScreenBinding
+    private lateinit var mainActivity: MainActivity
 
     companion object {
         fun newInstance(donor: Donor): CreateProductsFragment {
@@ -63,8 +64,22 @@ class CreateProductsFragment : Fragment(), ActivityCallbacks {
         return binding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mainActivity = activity as MainActivity
+    }
+
     override fun fetchActivity(): MainActivity {
-        return activity as MainActivity
+        return if (::mainActivity.isInitialized) {
+            mainActivity
+        } else {
+            activity as MainActivity
+        }
     }
 
     override fun fetchRootView(): View {

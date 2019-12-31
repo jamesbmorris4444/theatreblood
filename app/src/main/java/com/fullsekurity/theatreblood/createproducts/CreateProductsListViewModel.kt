@@ -50,7 +50,8 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     val clearButtonVisibility: ObservableField<Int> = ObservableField(View.GONE)
     val confirmButtonVisibility: ObservableField<Int> = ObservableField(View.GONE)
     val completeButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
-    private val editAndDeleteButtonVisibility = View.VISIBLE
+    private val editButtonVisibility = View.VISIBLE
+    private val deleteButtonVisibility = View.VISIBLE
     private var confirmNeeded = false
     private val productList: MutableList<Product> = mutableListOf()
     private val anyNonNullView = activityCallbacks.fetchRootView()
@@ -183,7 +184,8 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
             product.expirationDate = it
         }
         product.donorId = donor.id
-        product.editAndDeleteButtonVisibility = editAndDeleteButtonVisibility
+        product.editButtonVisibility = editButtonVisibility
+        product.deleteButtonVisibility = deleteButtonVisibility
         productList.add(product)
     }
 

@@ -28,6 +28,7 @@ class DonateProductsFragment : Fragment(), ActivityCallbacks {
     private lateinit var donateProductsListViewModel: DonateProductsListViewModel
     private lateinit var lottieBackgroundView: LottieAnimationView
     private lateinit var binding: DonateProductsScreenBinding
+    private lateinit var mainActivity: MainActivity
 
     companion object {
         fun newInstance(): DonateProductsFragment { return DonateProductsFragment() }
@@ -62,8 +63,22 @@ class DonateProductsFragment : Fragment(), ActivityCallbacks {
         return binding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mainActivity = activity as MainActivity
+    }
+
     override fun fetchActivity(): MainActivity {
-        return activity as MainActivity
+        return if (::mainActivity.isInitialized) {
+            mainActivity
+        } else {
+            activity as MainActivity
+        }
     }
 
     override fun fetchRootView(): View {

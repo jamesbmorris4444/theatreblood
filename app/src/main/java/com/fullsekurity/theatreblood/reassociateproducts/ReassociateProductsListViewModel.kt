@@ -135,7 +135,8 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
                 donor.inReassociate = true
                 list.add(donor)
                 for (product in donorsWithProductsList[index].products) {
-                    product.editAndDeleteButtonVisibility = View.GONE
+                    product.editButtonVisibility = View.GONE
+                    product.inReassociate = true
                     list.add(product)
                 }
             }
@@ -180,7 +181,7 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
         list.add(ReassociateProductsLabelData(title = "Incorrect Donor", incorrectDonorVisibility = View.VISIBLE))
         list.add(incorrectDonor)
         for (product in donorWithProducts.products) {
-            product.editAndDeleteButtonVisibility = View.GONE
+            product.editButtonVisibility = View.GONE
             list.add(product)
         }
         list.add(ReassociateProductsSearchData(
@@ -207,7 +208,9 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
                 if (!donorEquals(donor, incorrectDonor)) {
                     list.add(donor)
                     for (product in donorsAndProductsList[index].products) {
-                        product.editAndDeleteButtonVisibility = View.GONE
+                        product.editButtonVisibility = View.GONE
+                        product.deleteButtonVisibility = View.GONE
+                        product.inReassociate = true
                         list.add(product)
                     }
                 }
@@ -223,7 +226,9 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
         } else {
             newDonorVisibility = View.GONE
             for (product in donorWithProducts.products) {
-                product.donorId = correctDonor.id
+                if (!product.removedForReassociation) {
+                    product.donorId = correctDonor.id
+                }
             }
             repository.insertReassociatedProductsIntoDatabase(repository.stagingBloodDatabase, donorWithProducts.products, this::initializeView)
         }
