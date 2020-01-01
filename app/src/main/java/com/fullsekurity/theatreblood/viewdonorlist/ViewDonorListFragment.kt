@@ -9,6 +9,7 @@ import android.widget.RadioButton
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.lottie.LottieAnimationView
 import com.fullsekurity.theatreblood.R
@@ -50,6 +51,7 @@ class ViewDonorListFragment : Fragment(), ActivityCallbacks {
     override fun onResume() {
         super.onResume()
         (activity as MainActivity).toolbar.title = Constants.VIEW_DONOR_LIST_TITLE
+        viewDonorListListViewModel.showAllDonors(binding.root)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,7 +64,9 @@ class ViewDonorListFragment : Fragment(), ActivityCallbacks {
         //lottieBackgroundView = binding.root.findViewById(R.id.background_lottie)
         //uiViewModel.lottieAnimation(lottieBackgroundView, uiViewModel.backgroundLottieJsonFileName, LottieDrawable.INFINITE)
         binding.root.findViewById<TextInputLayout>(R.id.edit_text_input_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
-        viewDonorListListViewModel.showAllDonors(binding.root)
+        viewDonorListListViewModel.repository.liveViewDonorList.observe(this, Observer { donorList ->
+            viewDonorListListViewModel.showDonors(donorList)
+        })
         return binding.root
     }
 

@@ -22,7 +22,7 @@ object APIClient {
                     LogUtils.D(APIClient::class.java.simpleName, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("okHttp logging interceptor=%s", message))
                 }
             })
-            interceptor.level = HttpLoggingInterceptor.Level.BODY  // or BODY
+            interceptor.level = HttpLoggingInterceptor.Level.BASIC  // or BODY
             val client = OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .addInterceptor(TransformInterceptor())

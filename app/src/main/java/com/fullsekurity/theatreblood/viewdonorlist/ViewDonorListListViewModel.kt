@@ -64,7 +64,7 @@ class ViewDonorListListViewModel(private val activityCallbacks: ActivityCallback
         repository.handleSearchClick(view, "", this::showDonors)
     }
 
-    private fun showDonors(donorList: List<Donor>) {
+    fun showDonors(donorList: List<Donor>) {
         listIsVisible.set(donorList.isNotEmpty())
         adapter.addAll(donorList)
         numberOfItemsDisplayed = donorList.size

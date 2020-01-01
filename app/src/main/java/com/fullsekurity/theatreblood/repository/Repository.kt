@@ -8,6 +8,7 @@ import android.net.NetworkRequest
 import android.view.View
 import android.widget.ProgressBar
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.MutableLiveData
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
@@ -46,6 +47,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     private var cellularNetwork: Network? = null
     private var wiFiNetwork: Network? = null
     var isOfflineMode = true
+    val liveViewDonorList: MutableLiveData<List<Donor>> = MutableLiveData()
 
     fun setBloodDatabase(context: Context) {
         mainBloodDatabase = BloodDatabase.newInstance(context, MAIN_DATABASE_NAME)
@@ -202,6 +204,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         }
         insertDonorsIntoLocalDatabase(mainBloodDatabase, donors)
         insertProductsIntoLocalDatabase(mainBloodDatabase, products)
+        liveViewDonorList.postValue(donors)
         StandardModal(
             activity,
             modalType = StandardModal.ModalType.STANDARD,
@@ -475,7 +478,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .subscribe({ responseList ->
                 val response = responseList[0]
                 for (donor in response[0] as List<Donor>) {
-                    LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX  mainm"))
                     if (donor.posterPath.length > 11) {
                         donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
                     }
