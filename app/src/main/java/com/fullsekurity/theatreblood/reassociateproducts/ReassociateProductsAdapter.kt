@@ -1,5 +1,6 @@
 package com.fullsekurity.theatreblood.reassociateproducts
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,15 +22,15 @@ import com.google.android.material.textfield.TextInputLayout
 
 class ReassociateProductsAdapter(private val activityCallbacks: ActivityCallbacks) : RecyclerViewFilterAdapter<Any, RecyclerViewItemViewModel<Any>>(activityCallbacks.fetchActivity().applicationContext) {
 
-    private var itemsFilter: ItemsFilter? = null
+    private var adapterFilter: AdapterFilter? = null
     lateinit var uiViewModel: UIViewModel
     private lateinit var searchRootView: View
 
-    override fun getFilter(): ItemsFilter {
-        itemsFilter?.let {
+    override fun getFilter(): AdapterFilter {
+        adapterFilter?.let {
             return it
         }
-        return ItemsFilter()
+        return AdapterFilter()
     }
 
     enum class ViewTypes {
@@ -109,15 +110,15 @@ class ReassociateProductsAdapter(private val activityCallbacks: ActivityCallback
 
     override fun onBindViewHolder(holder: ItemViewHolder<Any, RecyclerViewItemViewModel<Any>>, position: Int) {
         super.onBindViewHolder(holder, position)
-//        if (getItemViewType(position) == ViewTypes.SEARCH.ordinal) {
-//            holder.itemView.findViewById<ImageView>(R.id.create_product_delete_button).tag = position // delete button
-//            holder.itemView.findViewById<ImageView>(R.id.create_product_edit_button).tag = position // edit button
-//        }
-//        if (position % 2 == 1) {
-//            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor1))
-//        } else {
-//            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor2))
-//        }
+        if (position % 2 == 1) {
+            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor1))
+        } else {
+            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor2))
+        }
+    }
+
+    override fun itemFilterable(item: Any, constraint: String): Boolean {
+        return true
     }
 
 }

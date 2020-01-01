@@ -31,7 +31,7 @@
                 android:visibility="@{safeUnbox(viewDonorListListViewModel.editTextNameVisibility)}"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/submit_button_icon"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -58,69 +58,51 @@
 
         <!-- End Search Box -->
 
-        <!-- Start Submit Button -->
+        <!-- Start ABO/Rh DropDown -->
 
-        <android.widget.ImageView
-                android:id="@+id/submit_button_icon"
+        <android.widget.TextView
+                android:id="@+id/abo_rh_dropdown_pattern"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@{uiViewModel.buttonDrawable}"
-                android:onClick="@{(view) -> viewDonorListListViewModel.onSearchClicked(view)}"
-                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardButtonWidth)}"
-                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
-                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                android:visibility="@{safeUnbox(viewDonorListListViewModel.submitVisible)}"
-                app:layout_constraintBottom_toBottomOf="@+id/edit_text_input_name"
-                app:layout_constraintLeft_toRightOf="@+id/edit_text_input_name"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-        <TextView
-                android:id="@+id/submit_button_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/button_search"
-                app:text_font="@{uiViewModel.buttonTextTypeface}"
-                app:text_color="@{uiViewModel.buttonTextColor}"
-                app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
-                android:visibility="@{safeUnbox(viewDonorListListViewModel.submitVisible)}"
-                app:layout_constraintStart_toStartOf="@+id/submit_button_icon"
-                app:layout_constraintEnd_toEndOf="@+id/submit_button_icon"
-                app:layout_constraintTop_toTopOf="@+id/submit_button_icon"
-                app:layout_constraintBottom_toBottomOf="@+id/submit_button_icon" />
-
-        <!-- End Submit Button -->
-
-        <!-- Start New Donor Button -->
-
-        <android.widget.ImageView
-                android:id="@+id/new_donor_button_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@{uiViewModel.largeButtonDrawable}"
-                android:layout_marginTop="10dp"
-                android:onClick="@{(view) -> viewDonorListListViewModel.onNewDonorClicked(view)}"
-                android:visibility="@{safeUnbox(viewDonorListListViewModel.newDonorVisible)}"
-                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
-                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardLargeButtonWidth)}"
+                android:text="@{viewDonorListListViewModel.hintTextAboRh}"
+                android:visibility="@{safeUnbox(viewDonorListListViewModel.dropdownAboRhVisibility)}"
+                android:layout_marginTop="7dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="0dp"
+                app:text_font="@{uiViewModel.editTextDisplayModifyHintTypeface}"
+                app:text_color="@{uiViewModel.editTextDisplayModifyHintColor}"
+                app:text_size="@{safeUnbox(uiViewModel.editTextDisplayModifyHintSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintTop_toBottomOf="@+id/edit_text_input_name"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintBottom_toTopOf="@+id/abo_rh_dropdown"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
-        <TextView
-                android:id="@+id/new_donor_button_text"
-                android:layout_width="wrap_content"
+        <Spinner
+                android:id="@+id/abo_rh_dropdown"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/button_new_donor"
-                android:visibility="@{safeUnbox(viewDonorListListViewModel.newDonorVisible)}"
-                app:text_font="@{uiViewModel.buttonTextTypeface}"
-                app:text_color="@{uiViewModel.buttonTextColor}"
-                app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
-                app:layout_constraintStart_toStartOf="@+id/new_donor_button_icon"
-                app:layout_constraintEnd_toEndOf="@+id/new_donor_button_icon"
-                app:layout_constraintTop_toTopOf="@+id/new_donor_button_icon"
-                app:layout_constraintBottom_toBottomOf="@+id/new_donor_button_icon" />
+                android:spinnerMode="dropdown"
+                android:paddingTop="10dp"
+                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintTop_toBottomOf="@+id/abo_rh_dropdown_pattern"
+                app:layout_constraintBottom_toTopOf="@+id/top_divider"
+                app:layout_constraintLeft_toLeftOf="parent"/>
 
-        <!-- End New Donor Button -->
+        <android.widget.ImageView
+                android:id="@+id/abo_rh_dropdown_icon"
+                android:layout_width="16dp"
+                android:layout_height="12dp"
+                android:src="@drawable/lt_drop_down_arrow"
+                android:scaleType="fitXY"
+                android:layout_marginBottom="16dp"
+                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintBottom_toBottomOf="@+id/abo_rh_dropdown"
+                app:layout_constraintLeft_toLeftOf="@+id/abo_rh_dropdown"
+                app:layout_constraintEnd_toEndOf="@+id/abo_rh_dropdown"/>
+
+        <!-- End ABO/Rh DropDown -->
 
         <!-- Start Donor List -->
 
@@ -131,7 +113,7 @@
                 android:layout_height="1dp"
                 app:background_color="@{uiViewModel.standardDialogDividerColor}"
                 android:layout_marginTop="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/new_donor_button_icon"
+                app:layout_constraintTop_toBottomOf="@+id/abo_rh_dropdown"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView

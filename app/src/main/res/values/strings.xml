@@ -93,6 +93,7 @@
     <string name="radio_gender_female">Female</string>
 
     <string-array name="abo_rh_array">
+        <item>[NO VALUE]</item>
         <item>O-Negative</item>
         <item>O-Positive</item>
         <item>A-Negative</item>
@@ -104,6 +105,7 @@
     </string-array>
 
     <string-array name="military_branch_array">
+        <item> </item>
         <item>The Army</item>
         <item>The Marines</item>
         <item>The Navy</item>

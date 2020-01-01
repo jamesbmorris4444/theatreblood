@@ -6,20 +6,24 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 abstract class RecyclerViewFilterAdapter<T, VM : RecyclerViewItemViewModel<T>>(var context: Context) :  RecyclerView.Adapter<RecyclerViewFilterAdapter.ItemViewHolder<T, VM>>(), Filterable {
 
-    var recyclerView: RecyclerView? = null
-    private var itemsFilter: ItemsFilter? = null
-    val itemList: MutableList<T> = mutableListOf()
-    private val unfilteredList: MutableList<T> = mutableListOf()
+    private var recyclerView: RecyclerView? = null
+    private var adapterFilter: AdapterFilter? = null
 
-    private val filter: ItemsFilter
+    val itemList: MutableList<T> = mutableListOf()
+    private var itemListFiltered: MutableList<T> = mutableListOf()
+
+    private val filter: AdapterFilter
         get() {
-            if (itemsFilter == null) {
-                itemsFilter = ItemsFilter()
+            if (adapterFilter == null) {
+                adapterFilter = AdapterFilter()
             }
-            return itemsFilter ?: ItemsFilter()
+            return adapterFilter ?: AdapterFilter()
         }
 
     override fun onBindViewHolder(holder: ItemViewHolder<T, VM>, position: Int) {
@@ -32,13 +36,13 @@ abstract class RecyclerViewFilterAdapter<T, VM : RecyclerViewItemViewModel<T>>(v
 
     fun addAll(toAddList: List<T>) {
         clearAll()
-        unfilteredList.addAll(toAddList)
-        if (filtering()) {
-            itemsFilter!!.filter()
+        itemListFiltered.addAll(toAddList)
+        if (isFiltering()) {
+            adapterFilter?.filter()
         } else {
             itemList.addAll(toAddList)
             if (recyclerView != null) {
-                recyclerView!!.recycledViewPool.clear()
+                recyclerView?.recycledViewPool?.clear()
             }
             notifyDataSetChanged()
         }
@@ -47,45 +51,18 @@ abstract class RecyclerViewFilterAdapter<T, VM : RecyclerViewItemViewModel<T>>(v
     fun remove(position: Int) {
         if (itemCount > position) {
             itemList.removeAt(position)
-            unfilteredList.removeAt(position)
+            itemListFiltered.removeAt(position)
             notifyItemRemoved(position)
         }
     }
 
     fun contains(item: T, position: Int): Boolean {
-        return getItem(position) == item
+        return itemList[position] == item
     }
 
-    fun getItem(position: Int): T {
-        return itemList[position]
-    }
-
-    fun clearAll() {
+    private fun clearAll() {
         itemList.clear()
-        unfilteredList.clear()
-    }
-
-    fun itemFilterable(item: T, constraint: String): Boolean {
-        return item.toString().toLowerCase().contains(constraint)
-    }
-
-    fun getFilteredResults(constraint: String): List<T> {
-        val results = ArrayList<T>()
-        for (item in unfilteredList) {
-            if (itemFilterable(item, constraint)) {
-                results.add(item)
-            }
-        }
-        return results
-    }
-
-    fun filter(constraint: String, listener: Filter.FilterListener) {
-        filter.filter(constraint, listener)
-    }
-
-    private fun filtering(): Boolean {
-        val constraint = filter.getConstraint()
-        return constraint != null && constraint.length != 0
+        itemListFiltered.clear()
     }
 
     open class ItemViewHolder<T, VM : RecyclerViewItemViewModel<T>>(
@@ -100,7 +77,26 @@ abstract class RecyclerViewFilterAdapter<T, VM : RecyclerViewItemViewModel<T>>(v
         }
     }
 
-    inner class ItemsFilter : Filter() {
+    // filter
+
+    fun getFilteredResults(constraint: String): List<T> {
+        val results = ArrayList<T>()
+        for (item in itemListFiltered) {
+            if (itemFilterable(item, constraint)) {
+                results.add(item)
+            }
+        }
+        return results
+    }
+
+    abstract fun itemFilterable(item: T, constraint: String): Boolean
+
+    private fun isFiltering(): Boolean {
+        val constraint = filter.getConstraint()
+        return constraint != null && constraint.isNotEmpty()
+    }
+
+    inner class AdapterFilter : Filter() {
 
         private var constraint: String? = null
         private var listener: FilterListener? = null
@@ -118,29 +114,18 @@ abstract class RecyclerViewFilterAdapter<T, VM : RecyclerViewItemViewModel<T>>(v
             super.filter(constraint)
         }
 
-        fun filter(constraint: String?, listener: FilterListener) {
-            this.listener = listener
-            this.constraint = constraint
-            super.filter(constraint, listener)
-        }
-
+        @Suppress("UNCHECKED_CAST")
         override fun publishResults(constraint: CharSequence, results: FilterResults) {
-
             val resultList = if (results.values is List<*>) results.values else ArrayList<FilterResults>()
             itemList.clear()
             itemList.addAll(resultList as Collection<T>)
-            if (recyclerView != null) {
-                recyclerView!!.recycledViewPool.clear()
-            }
-            this@RecyclerViewFilterAdapter.notifyDataSetChanged()
+            notifyDataSetChanged()
         }
 
         override fun performFiltering(constraint: CharSequence): FilterResults {
-
             this.constraint = constraint.toString()
             val results = FilterResults()
-            results.values =
-                if (constraint.length == 0) ArrayList(unfilteredList) else getFilteredResults(constraint.toString().toLowerCase())
+            results.values = if (constraint.isEmpty()) ArrayList(itemListFiltered) else getFilteredResults(constraint.toString().toLowerCase(Locale.getDefault()))
             return results
         }
 

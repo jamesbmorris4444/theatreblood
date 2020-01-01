@@ -2,6 +2,8 @@ package com.fullsekurity.theatreblood.viewdonorlist
 
 import android.app.Application
 import android.view.View
+import android.widget.AdapterView
+import android.widget.Spinner
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -10,11 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsAdapter
+import com.fullsekurity.theatreblood.donor.DonorViewModel
+import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
+import com.fullsekurity.theatreblood.utils.Utils
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import javax.inject.Inject
 
@@ -33,6 +38,7 @@ class ViewDonorListListViewModel(private val activityCallbacks: ActivityCallback
     val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
     val submitVisible: ObservableField<Int> = ObservableField(View.GONE)
     private var numberOfItemsDisplayed = -1
+    private var patternOfSubpatterns: String = "<>|<>"
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -82,19 +88,39 @@ class ViewDonorListListViewModel(private val activityCallbacks: ActivityCallback
     // observable used for two-way data binding. Values set into this field will show in view.
     // Text typed into EditText in view will be stored into this field after each character is typed.
     var editTextNameInput: ObservableField<String> = ObservableField("")
-    fun onTextNameChanged(filter: CharSequence, start: Int, before: Int, count: Int) {
+    fun onTextNameChanged(newText: CharSequence, start: Int, before: Int, count: Int) {
+        patternOfSubpatterns = Utils.newPatternOfSubpatterns(patternOfSubpatterns, 0, newText.toString())
+        adapter.filter.filter(patternOfSubpatterns)
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
     var hintTextName: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(
         R.string.donor_search_string))
     var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
-    fun onSearchClicked(view: View) {
-        repository.handleSearchClick(view, editTextNameInput.get() ?: "", this::showDonors)
+    // ABO/Rh
+    var hintTextAboRh: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_abo_rh))
+    var dropdownAboRhVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
+    var currentAboRhSelectedValue: String = ""
+
+    fun setDropdowns() {
+        val aboRhDropdownView: Spinner = activityCallbacks.fetchRootView().findViewById(R.id.abo_rh_dropdown)
+        aboRhDropdownView.background = uiViewModel.editTextDisplayModifyBackground.get()
+        val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array)
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX    |%d|", aboRhDropdownArray.size))
+        val aboRhAdapter = DonorViewModel.CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
+        aboRhDropdownView.adapter = aboRhAdapter
+        aboRhDropdownView.setSelection(0)
+        aboRhDropdownView.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val temp = if (position > 0) parent.getItemAtPosition(position) as String else ""
+                currentAboRhSelectedValue = if (temp.isEmpty()) "<>" else temp
+                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX    |%s|", currentAboRhSelectedValue))
+                patternOfSubpatterns = Utils.newPatternOfSubpatterns(patternOfSubpatterns, 1, currentAboRhSelectedValue)
+                adapter.filter.filter(patternOfSubpatterns)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
+        }
     }
 
-    fun onNewDonorClicked(view: View) {
-        activityCallbacks.fetchActivity().loadDonorFragment(null, false)
-    }
 
 }

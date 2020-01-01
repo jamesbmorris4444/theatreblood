@@ -67,6 +67,7 @@ class ViewDonorListFragment : Fragment(), ActivityCallbacks {
         viewDonorListListViewModel.repository.liveViewDonorList.observe(this, Observer { donorList ->
             viewDonorListListViewModel.showDonors(donorList)
         })
+        viewDonorListListViewModel.setDropdowns()
         return binding.root
     }
 

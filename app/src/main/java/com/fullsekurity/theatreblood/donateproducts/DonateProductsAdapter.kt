@@ -11,17 +11,18 @@ import com.fullsekurity.theatreblood.databinding.DonorsItemBinding
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFilterAdapter
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
+import com.fullsekurity.theatreblood.utils.Utils
 
 class DonateProductsAdapter(private val activityCallbacks: ActivityCallbacks) : RecyclerViewFilterAdapter<Donor, DonateProductsItemViewModel>(activityCallbacks.fetchActivity().applicationContext) {
 
-    private var itemsFilter: ItemsFilter? = null
+    private var adapterFilter: AdapterFilter? = null
     lateinit var uiViewModel: UIViewModel
 
-    override fun getFilter(): ItemsFilter {
-        itemsFilter?.let {
+    override fun getFilter(): AdapterFilter {
+        adapterFilter?.let {
             return it
         }
-        return ItemsFilter()
+        return AdapterFilter()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DonorsViewHolder {
@@ -42,6 +43,33 @@ class DonateProductsAdapter(private val activityCallbacks: ActivityCallbacks) : 
         } else {
             holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor2))
         }
+    }
+
+    override fun itemFilterable(donor: Donor, patternOfSubpatterns: String): Boolean {
+        var returnValue = true
+        var constraint = Utils.getPatternOfSubpatterns(patternOfSubpatterns, 0)
+        if (constraint != "<>") {
+            val regexPattern: String
+            val index = constraint.indexOf(',')
+            if (index < 0) {
+                regexPattern = "^$constraint.*"
+            } else {
+                val last = constraint.substring(0, index)
+                val first = constraint.substring(index + 1)
+                regexPattern = "^$last.*,$first.*"
+            }
+            val regex = Regex(regexPattern, setOf(RegexOption.IGNORE_CASE))
+            val target = donor.title + "," + donor.posterPath
+            returnValue = returnValue && regex.matches(target)  // must match entire target string
+        }
+        if (!returnValue) {
+            return false
+        }
+        constraint = Utils.getPatternOfSubpatterns(patternOfSubpatterns, 1)
+        if (constraint != "<>") {
+            returnValue = returnValue && constraint == donor.backdropPath
+        }
+        return returnValue
     }
 
 }

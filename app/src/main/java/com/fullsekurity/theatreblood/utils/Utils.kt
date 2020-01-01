@@ -22,6 +22,28 @@ class Utils {
             return donor.title + "," + donor.posterPath + "," + donor.voteCount.toString() + "," + donor.releaseDate
         }
 
+        fun newPatternOfSubpatterns(patternOfSubpatterns: String, index: Int, newPattern: String): String {
+            // patternOfSubpatterns = P|P|P|...|P|
+            // if there are N subpatterns then index = 0 to N-1
+            val split: MutableList<String> = patternOfSubpatterns.split('|').toMutableList()
+            val stringBuilder = StringBuilder()
+            split[index] = newPattern
+            for (newIndex in split.indices) {
+                stringBuilder.append(split[newIndex])
+                if (newIndex < split.size - 1) {
+                    stringBuilder.append('|')
+                }
+            }
+            return stringBuilder.toString()
+        }
+
+        fun getPatternOfSubpatterns(patternOfSubpatterns: String, index: Int): String {
+            // patternOfSubpatterns = P|P|P|...|P|
+            // if there are N subpatterns then index = 0 to N-1
+            val split: MutableList<String> = patternOfSubpatterns.split('|').toMutableList()
+            return split[index]
+        }
+
     }
 
 }

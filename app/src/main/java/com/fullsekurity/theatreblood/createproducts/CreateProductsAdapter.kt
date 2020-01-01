@@ -9,20 +9,20 @@ import androidx.databinding.DataBindingUtil
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.databinding.ProductsItemBinding
-import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFilterAdapter
+import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
 
 class CreateProductsAdapter(val activityCallbacks: ActivityCallbacks) : RecyclerViewFilterAdapter<Product, CreateProductsItemViewModel>(activityCallbacks.fetchActivity().applicationContext) {
 
-    private var itemsFilter: ItemsFilter? = null
+    private var adapterFilter: AdapterFilter? = null
     lateinit var uiViewModel: UIViewModel
 
-    override fun getFilter(): ItemsFilter {
-        itemsFilter?.let {
+    override fun getFilter(): AdapterFilter {
+        adapterFilter?.let {
             return it
         }
-        return ItemsFilter()
+        return AdapterFilter()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductsViewHolder {
@@ -45,6 +45,10 @@ class CreateProductsAdapter(val activityCallbacks: ActivityCallbacks) : Recycler
         } else {
             holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor2))
         }
+    }
+
+    override fun itemFilterable(item: Product, constraint: String): Boolean {
+        return true
     }
 
 }

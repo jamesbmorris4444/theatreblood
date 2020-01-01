@@ -388,7 +388,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     }
 
     private fun donorsFromFullName(database: BloodDatabase, search: String): Single<List<Donor>> {
-        var searchLast: String
+        val searchLast: String
         var searchFirst = "%"
         val index = search.indexOf(',')
         if (index < 0) {
