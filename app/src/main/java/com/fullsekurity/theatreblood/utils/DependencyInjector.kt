@@ -2,18 +2,20 @@ package com.fullsekurity.theatreblood.utils
 
 import androidx.lifecycle.ViewModelProviders
 import com.fullsekurity.theatreblood.activity.MainActivity
-import com.fullsekurity.theatreblood.donor.DonorFragment
-import com.fullsekurity.theatreblood.donor.DonorViewModel
-import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
-import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
-import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.createproducts.CreateProductsFragment
 import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
+import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
+import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
+import com.fullsekurity.theatreblood.donor.DonorFragment
+import com.fullsekurity.theatreblood.donor.DonorViewModel
+import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsFragment
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.ui.UIViewModelFactory
+import com.fullsekurity.theatreblood.viewdonorlist.ViewDonorListFragment
+import com.fullsekurity.theatreblood.viewdonorlist.ViewDonorListListViewModel
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -38,6 +40,8 @@ interface ViewModelDependencyInjector {
     fun inject(fragment: CreateProductsFragment)
     fun inject(viewModel: ReassociateProductsListViewModel)
     fun inject(fragment: ReassociateProductsFragment)
+    fun inject(fragment: ViewDonorListFragment)
+    fun inject(viewModel: ViewDonorListListViewModel)
 }
 
 @Module

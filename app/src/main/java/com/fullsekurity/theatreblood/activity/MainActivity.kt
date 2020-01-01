@@ -36,6 +36,7 @@ import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants.ROOT_FRAGMENT_TAG
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
+import com.fullsekurity.theatreblood.viewdonorlist.ViewDonorListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -149,11 +150,18 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             .commitAllowingStateLoss()
     }
 
-    fun loadReassociateProductsFragment() {
+    private fun loadReassociateProductsFragment() {
         reassociateProductsFragment = ReassociateProductsFragment.newInstance()
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
             .replace(R.id.main_activity_container, reassociateProductsFragment)
+            .commitAllowingStateLoss()
+    }
+
+    private fun loadViewDonorListFragment() {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
+            .replace(R.id.main_activity_container, ViewDonorListFragment.newInstance())
             .commitAllowingStateLoss()
     }
 
@@ -270,6 +278,8 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             R.id.update_test_results -> {
             }
             R.id.view_donor_list -> {
+                supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                loadViewDonorListFragment()
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
