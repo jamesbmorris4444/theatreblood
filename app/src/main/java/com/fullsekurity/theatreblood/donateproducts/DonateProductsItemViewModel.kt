@@ -29,7 +29,7 @@ class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbac
         voteCount.set(item.voteCount.toString())
         video.set(if (item.video) "T" else "F")
         voteAverage.set(item.voteAverage.toString())
-        title.set(item.title)
+        title.set(item.lastName)
         popularity.set(item.popularity.toString())
         posterPath.set(item.posterPath)
         originalLanguage.set(item.originalLanguage)

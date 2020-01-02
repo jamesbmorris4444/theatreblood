@@ -10,7 +10,7 @@ data class Donor(
     @ColumnInfo(name = "vote_count") @SerializedName(value = "vote_count") var voteCount: Int = 0,
     @ColumnInfo(name = "video") @SerializedName(value = "video") var video: Boolean = false,
     @ColumnInfo(name = "vote_average") @SerializedName(value = "vote_average") var voteAverage: Float = 0f,
-    @ColumnInfo(name = "title") @SerializedName(value = "title") var title: String = "",
+    @ColumnInfo(name = "title") @SerializedName(value = "title") var lastName: String = "",
     @ColumnInfo(name = "popularity") @SerializedName(value = "popularity") var popularity: Float = 0f,
     @ColumnInfo(name = "poster_path") @SerializedName(value = "poster_path") var posterPath: String = "",
     @ColumnInfo(name = "original_language") @SerializedName(value = "original_language") var originalLanguage: String = "",

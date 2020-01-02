@@ -59,7 +59,7 @@ class DonateProductsAdapter(private val activityCallbacks: ActivityCallbacks) : 
                 regexPattern = "^$last.*,$first.*"
             }
             val regex = Regex(regexPattern, setOf(RegexOption.IGNORE_CASE))
-            val target = donor.title + "," + donor.posterPath
+            val target = donor.lastName + "," + donor.posterPath
             returnValue = returnValue && regex.matches(target)  // must match entire target string
         }
         if (!returnValue) {

@@ -167,7 +167,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
 
         // change last name
         editTextDisplayModifyLastName.get()?.let { editTextDisplayModifyLastName ->
-            donor.title = editTextDisplayModifyLastName
+            donor.lastName = editTextDisplayModifyLastName
         }
 
         // change first name
@@ -233,7 +233,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         activityCallbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_middle_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
         activityCallbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_dob).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
 
-        editTextDisplayModifyLastName.set(donor.title)
+        editTextDisplayModifyLastName.set(donor.lastName)
         editTextDisplayModifyFirstName.set(donor.posterPath)
         editTextDisplayModifyMiddleName.set(donor.voteCount.toString())
         editTextDisplayModifyDob.set(donor.releaseDate)

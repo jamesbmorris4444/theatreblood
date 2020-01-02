@@ -15,11 +15,11 @@ class Utils {
         }
 
         fun donorEquals(donor: Donor, otherDonor: Donor): Boolean {
-            return donor.title == otherDonor.title && donor.posterPath == otherDonor.posterPath && donor.voteCount == otherDonor.voteCount && donor.releaseDate == otherDonor.releaseDate
+            return donor.lastName == otherDonor.lastName && donor.posterPath == otherDonor.posterPath && donor.voteCount == otherDonor.voteCount && donor.releaseDate == otherDonor.releaseDate
         }
 
         fun donorUnionStringForDistinctBy(donor: Donor): String {
-            return donor.title + "," + donor.posterPath + "," + donor.voteCount.toString() + "," + donor.releaseDate
+            return donor.lastName + "," + donor.posterPath + "," + donor.voteCount.toString() + "," + donor.releaseDate
         }
 
         fun newPatternOfSubpatterns(patternOfSubpatterns: String, index: Int, newPattern: String): String {
