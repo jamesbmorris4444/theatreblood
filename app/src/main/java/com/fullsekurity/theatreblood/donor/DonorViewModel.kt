@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.databinding.AborhDropdownItemBinding
-import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -247,15 +246,12 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         val aboRhDropdownView: Spinner = activityCallbacks.fetchRootView().findViewById(R.id.abo_rh_dropdown)
         aboRhDropdownView.background = uiViewModel.editTextDisplayModifyBackground.get()
         val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array)
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX   size = %d", aboRhDropdownArray.size))
         val aboRhAdapter = CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
         aboRhDropdownView.adapter = aboRhAdapter
         aboRhDropdownView.setSelection(getDropdownSelection(donor.backdropPath, aboRhDropdownArray))
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX   sel =   %s %d", donor.backdropPath, getDropdownSelection(donor.backdropPath, aboRhDropdownArray)))
         aboRhDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 currentAboRhSelectedValue = if (position > 0) parent.getItemAtPosition(position) as String else ""
-                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX   selsss = %s", currentAboRhSelectedValue))
                 if (aboRhDropdownInitialized) {
                     atLeastOneEntryChanged = true
                 }

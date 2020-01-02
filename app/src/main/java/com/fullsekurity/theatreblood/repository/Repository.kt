@@ -50,8 +50,12 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     val liveViewDonorList: MutableLiveData<List<Donor>> = MutableLiveData()
 
     fun setBloodDatabase(context: Context) {
-        mainBloodDatabase = BloodDatabase.newInstance(context, MAIN_DATABASE_NAME)
-        stagingBloodDatabase = BloodDatabase.newInstance(context, MODIFIED_DATABASE_NAME)
+        BloodDatabase.newInstance(context, MAIN_DATABASE_NAME)?.let {
+            mainBloodDatabase = it
+        }
+        BloodDatabase.newInstance(context, MODIFIED_DATABASE_NAME)?.let {
+            stagingBloodDatabase = it
+        }
     }
 
     fun onCleared() {

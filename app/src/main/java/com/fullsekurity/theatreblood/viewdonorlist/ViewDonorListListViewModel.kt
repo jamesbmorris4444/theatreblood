@@ -13,7 +13,6 @@ import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsAdapter
 import com.fullsekurity.theatreblood.donor.DonorViewModel
-import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -89,7 +88,7 @@ class ViewDonorListListViewModel(private val activityCallbacks: ActivityCallback
     // Text typed into EditText in view will be stored into this field after each character is typed.
     var editTextNameInput: ObservableField<String> = ObservableField("")
     fun onTextNameChanged(newText: CharSequence, start: Int, before: Int, count: Int) {
-        patternOfSubpatterns = Utils.newPatternOfSubpatterns(patternOfSubpatterns, 0, newText.toString())
+        patternOfSubpatterns = Utils.newPatternOfSubpatterns(patternOfSubpatterns, 0, if (newText.toString().isEmpty()) "<>" else newText.toString())
         adapter.filter.filter(patternOfSubpatterns)
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
@@ -106,7 +105,6 @@ class ViewDonorListListViewModel(private val activityCallbacks: ActivityCallback
         val aboRhDropdownView: Spinner = activityCallbacks.fetchRootView().findViewById(R.id.abo_rh_dropdown)
         aboRhDropdownView.background = uiViewModel.editTextDisplayModifyBackground.get()
         val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array)
-        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX    |%d|", aboRhDropdownArray.size))
         val aboRhAdapter = DonorViewModel.CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
         aboRhDropdownView.adapter = aboRhAdapter
         aboRhDropdownView.setSelection(0)
@@ -114,7 +112,6 @@ class ViewDonorListListViewModel(private val activityCallbacks: ActivityCallback
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val temp = if (position > 0) parent.getItemAtPosition(position) as String else ""
                 currentAboRhSelectedValue = if (temp.isEmpty()) "<>" else temp
-                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX    |%s|", currentAboRhSelectedValue))
                 patternOfSubpatterns = Utils.newPatternOfSubpatterns(patternOfSubpatterns, 1, currentAboRhSelectedValue)
                 adapter.filter.filter(patternOfSubpatterns)
             }

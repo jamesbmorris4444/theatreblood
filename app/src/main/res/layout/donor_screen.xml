@@ -277,6 +277,7 @@
                     android:layout_height="wrap_content"
                     android:spinnerMode="dropdown"
                     android:paddingTop="10dp"
+                    android:popupTheme="@style/App_SpinnerStyle"
                     app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
                     app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                     app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
