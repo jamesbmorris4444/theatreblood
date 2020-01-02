@@ -10,34 +10,34 @@ class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbac
 
     private lateinit var donor: Donor
 
-    val middleName: ObservableField<String> = ObservableField("")
+    val voteCount: ObservableField<String> = ObservableField("")
     val video: ObservableField<String> = ObservableField("")
     val voteAverage: ObservableField<String> = ObservableField("")
     val lastName: ObservableField<String> = ObservableField("")
     val popularity: ObservableField<String> = ObservableField("")
     val firstName: ObservableField<String> = ObservableField("")
-    val originalLanguage: ObservableField<String> = ObservableField("")
-    val originalTitle: ObservableField<String> = ObservableField("")
-    val backdropPath: ObservableField<String> = ObservableField("")
+    val middleName: ObservableField<String> = ObservableField("")
+    val branch: ObservableField<String> = ObservableField("")
+    val aboRh: ObservableField<String> = ObservableField("")
     val adult: ObservableField<String> = ObservableField("")
     val overview: ObservableField<String> = ObservableField("")
-    val releaseDate: ObservableField<String> = ObservableField("")
+    val dob: ObservableField<String> = ObservableField("")
     var inReassociate = false
 
     override fun setItem(item: Donor) {
         donor = item
-        middleName.set(item.middleName.toString())
+        voteCount.set(item.voteCount.toString())
         video.set(if (item.video) "T" else "F")
         voteAverage.set(item.voteAverage.toString())
         lastName.set(item.lastName)
         popularity.set(item.popularity.toString())
         firstName.set(item.firstName)
-        originalLanguage.set(item.originalLanguage)
-        originalTitle.set(item.originalTitle)
-        backdropPath.set(item.backdropPath)
+        middleName.set(item.middleName)
+        branch.set(item.branch)
+        aboRh.set(item.aboRh)
         adult.set(if (item.adult) "T" else "F")
         overview.set(item.overview)
-        releaseDate.set(item.releaseDate)
+        dob.set(item.dob)
         this.inReassociate = item.inReassociate
     }
 

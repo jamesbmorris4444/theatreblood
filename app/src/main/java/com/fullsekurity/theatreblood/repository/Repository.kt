@@ -514,7 +514,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     }
 
     private fun donorsFromNameAndDateWithProducts(database: BloodDatabase, donor: Donor): Single<DonorWithProducts> {
-        return database.databaseDao().donorsFromNameAndDateWithProducts(donor.lastName, donor.firstName, donor.middleName.toString(), donor.releaseDate)
+        return database.databaseDao().donorsFromNameAndDateWithProducts(donor.lastName, donor.firstName, donor.middleName, donor.dob)
     }
 
 //    fun insertProductList(database: BloodDatabase, products: List<Product>) {

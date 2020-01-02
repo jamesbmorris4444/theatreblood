@@ -154,7 +154,29 @@ class TransformInterceptor : Interceptor {
                 19 -> { "FirstWynn02" }
                 else -> { "" }
             }
-            val middleName: Int  = (index + 1) * 1000
+            val middleName: String  = when (index) {
+                0 -> { "MiddleMorris01" }
+                1 -> { "MiddleSmith01" }
+                2 -> { "MiddleTaylor01" }
+                3 -> { "MiddleLewis01" }
+                4 -> { "MiddleSnowdon01" }
+                5 -> { "MiddleMiller01" }
+                6 -> { "MiddleJones01" }
+                7 -> { "MiddleJohnson01" }
+                8 -> { "MiddleEarly01" }
+                9 -> { "MiddleWynn01" }
+                10 -> { "MiddleMorris02" }
+                11 -> { "MiddleSmith02" }
+                12 -> { "MiddleTaylor02" }
+                13 -> { "MiddleLewis02" }
+                14 -> { "MiddleSnowdon02" }
+                15 -> { "MiddleMiller02" }
+                16 -> { "MiddleJones02" }
+                17 -> { "MiddleJohnson02" }
+                18 -> { "MiddleEarly02" }
+                19 -> { "MiddleWynn02" }
+                else -> { "" }
+            }
             val aboRh: String  = when (index) {
                 0 -> { "O-Positive" }
                 1 -> { "O-Negative" }
@@ -225,14 +247,14 @@ class TransformInterceptor : Interceptor {
                 else -> { "" }
             }
             val jsonObject = JSONObject()
-            jsonObject.put("vote_count", middleName)
+            jsonObject.put("vote_count", 5)
             jsonObject.put("video", false)
             jsonObject.put("vote_average", 10f)
             jsonObject.put("title", lastName)
 
             jsonObject.put("popularity", 20f)
             jsonObject.put("poster_path", firstName)
-            jsonObject.put("original_language", "NOT USED")
+            jsonObject.put("original_language", middleName)
             jsonObject.put("original_title", branch)
 
             jsonObject.put("backdrop_path", aboRh)

@@ -133,7 +133,7 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     fun setDonor(donor: Donor) {
         this.donor = donor
         donorName.set("DONOR: " + donor.lastName + ", " + donor.firstName)
-        donorBloodType.set(donor.backdropPath)
+        donorBloodType.set(donor.aboRh)
     }
 
     fun onGridElement11Clicked(view: View) {

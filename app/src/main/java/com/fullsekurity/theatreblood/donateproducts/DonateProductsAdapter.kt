@@ -67,7 +67,7 @@ class DonateProductsAdapter(private val activityCallbacks: ActivityCallbacks) : 
         }
         constraint = Utils.getPatternOfSubpatterns(patternOfSubpatterns, 1)
         if (constraint != "<>") {
-            returnValue = returnValue && constraint.equals(donor.backdropPath, ignoreCase = true)
+            returnValue = returnValue && constraint.equals(donor.aboRh, ignoreCase = true)
         }
         return returnValue
     }

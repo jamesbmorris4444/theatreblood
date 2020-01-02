@@ -176,12 +176,12 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
 
         // change middle name
         editTextDisplayModifyMiddleName.get()?.let { editTextDisplayModifyMiddleName ->
-            donor.middleName = editTextDisplayModifyMiddleName.toInt()
+            donor.middleName = editTextDisplayModifyMiddleName
         }
 
         // change date of birth
         editTextDisplayModifyDob.get()?.let { editTextDisplayModifyDob ->
-            donor.releaseDate = editTextDisplayModifyDob
+            donor.dob = editTextDisplayModifyDob
         }
 
         // change gender
@@ -190,9 +190,9 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         }
 
         // change ABO/Rh
-        donor.backdropPath = currentAboRhSelectedValue
+        donor.aboRh = currentAboRhSelectedValue
 
-        donor.originalTitle = currentMilitaryBranchSelectedValue
+        donor.branch = currentMilitaryBranchSelectedValue
 
         if (atLeastOneEntryChanged) {
             repository.insertDonorIntoDatabase(repository.stagingBloodDatabase, donor, transitionToCreateDonation)
@@ -234,8 +234,8 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
 
         editTextDisplayModifyLastName.set(donor.lastName)
         editTextDisplayModifyFirstName.set(donor.firstName)
-        editTextDisplayModifyMiddleName.set(donor.middleName.toString())
-        editTextDisplayModifyDob.set(donor.releaseDate)
+        editTextDisplayModifyMiddleName.set(donor.middleName)
+        editTextDisplayModifyDob.set(donor.dob)
 
         if (donor.adult) {
             activityCallbacks.fetchRadioButton(R.id.radio_male)?.isChecked = true
@@ -248,7 +248,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array)
         val aboRhAdapter = CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
         aboRhDropdownView.adapter = aboRhAdapter
-        aboRhDropdownView.setSelection(getDropdownSelection(donor.backdropPath, aboRhDropdownArray))
+        aboRhDropdownView.setSelection(getDropdownSelection(donor.aboRh, aboRhDropdownArray))
         aboRhDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 currentAboRhSelectedValue = if (position > 0) parent.getItemAtPosition(position) as String else ""
@@ -265,7 +265,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         val militaryBranchDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.military_branch_array)
         val militaryBranchAdapter = CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, militaryBranchDropdownArray)
         militaryBranchDropdownView.adapter = militaryBranchAdapter
-        militaryBranchDropdownView.setSelection(getDropdownSelection(donor.originalTitle, militaryBranchDropdownArray))
+        militaryBranchDropdownView.setSelection(getDropdownSelection(donor.branch, militaryBranchDropdownArray))
         militaryBranchDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 currentMilitaryBranchSelectedValue = parent.getItemAtPosition(position) as String
