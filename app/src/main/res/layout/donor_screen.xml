@@ -129,7 +129,7 @@
                         android:paddingStart="10dp"
                         android:paddingEnd="0dp"
                         android:paddingTop="20dp"
-                        android:inputType="number"
+                        android:inputType="textPersonName"
                         app:background="@{uiViewModel.editTextDisplayModifyBackground}"
                         app:edit_text_font="@{uiViewModel.editTextDisplayModifyTypeface}"
                         app:edit_text_color="@{uiViewModel.editTextDisplayModifyColor}"

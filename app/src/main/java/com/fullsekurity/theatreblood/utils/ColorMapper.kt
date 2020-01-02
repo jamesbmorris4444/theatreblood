@@ -13,36 +13,36 @@ class ColorMapper @Inject constructor() {
     // colorMapper.map(theme, "primaryDark")
 
     enum class LightColors(var colorName: String, val colorValue: String) {
-        PRIMARY("primary", "#3a3aff"),
+        PRIMARY("primary", "#5B0691"),
         SECONDARY("secondary", "#e50239"),
         SUCCESS("success", "#00ff00"),
-        WARNING("warning", "#FF9900"),
+        WARNING("warning", "#ff9900"),
         ERROR("error", "#E40449"),
-        WHITE("white", "#FFFFFF"),
+        WHITE("white", "#ffffff"),
         BLACK("black", "#000000"),
         VERY_LIGHT_GRAY("veryLightGray", "#08000000"),
         LIGHTER_GRAY("lighterGray", "#38000000"),
         LIGHT_GRAY("lightGray", "#68000000"),
         MEDIUM_GRAY("mediumGray", "#98000000"),
         DARK_GRAY("darkGray", "#c8000000"),
-        DARKEST_GRAY("darkestGray", "#e8FFFFFF")
+        DARKEST_GRAY("darkestGray", "#e8ffffff")
     }
 
     enum class DarkColors(var colorName: String, val colorValue: String) {
-        PRIMARY("primary", "#5B06F1"),
+        PRIMARY("primary", "#191970"),
         SECONDARY("secondary", "#e50239"),
         SUCCESS("success", "00ff00"),
-        WARNING("warning", "#FF9900"),
+        WARNING("warning", "#ff9900"),
         ERROR("error", "#E40449"),
-        WHITE("white", "#FFFFFF"),
+        WHITE("white", "#ffffff"),
         BLACK("black", "#000000"),
         CYAN("cyan", "#00ffff"),
-        DARKEST_GRAY("darkestGray", "#08FFFFFF"),
-        VERY_LIGHT_GRAY("darkGray", "#38FFFFFF"),
-        LIGHTER_GRAY("mediumGray", "#68FFFFFF"),
-        LIGHT_GRAY("lightGray", "#98FFFFFF"),
-        MEDIUM_GRAY("lighterGray", "#c8FFFFFF"),
-        DARK_GRAY("veryLightGray", "#e8FFFFFF")
+        DARKEST_GRAY("darkestGray", "#08ffffff"),
+        VERY_LIGHT_GRAY("darkGray", "#38ffffff"),
+        LIGHTER_GRAY("mediumGray", "#68ffffff"),
+        LIGHT_GRAY("lightGray", "#98ffffff"),
+        MEDIUM_GRAY("lighterGray", "#c8ffffff"),
+        DARK_GRAY("veryLightGray", "#e8ffffff")
     }
 
     private val colorMap: MutableList<MutableMap<String,String>> = mutableListOf()
