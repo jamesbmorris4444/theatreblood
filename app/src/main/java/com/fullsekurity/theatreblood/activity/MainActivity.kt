@@ -81,8 +81,8 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         uiViewModel.lottieAnimation(lottieBackgroundView, uiViewModel.backgroundLottieJsonFileName, LottieDrawable.INFINITE)
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         repository.closeDatabase()
         repository.onCleared()
     }

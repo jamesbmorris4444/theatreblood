@@ -319,21 +319,9 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             }
     }
 
-    fun insertDonorAndProductsIntoDatabaseChained(database: BloodDatabase, donor: Donor, products: List<Product>) {
+    fun insertDonorAndProductsIntoDatabase(database: BloodDatabase, donor: Donor, products: List<Product>) {
         var disposable: Disposable? = null
-        disposable = Completable.fromAction { database.databaseDao().insertDonor(donor) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-                disposable?.dispose()
-                disposable = null
-                insertProductsIntoDatabase(database, products)
-            }
-    }
-
-    private fun insertProductsIntoDatabase(database: BloodDatabase, products: List<Product>) {
-        var disposable: Disposable? = null
-        disposable = Completable.fromAction { database.databaseDao().insertProducts(products) }
+        disposable = Completable.fromAction { database.databaseDao().insertDonorAndProducts(donor, products) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe {
@@ -516,36 +504,5 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     private fun donorsFromNameAndDateWithProducts(database: BloodDatabase, donor: Donor): Single<DonorWithProducts> {
         return database.databaseDao().donorsFromNameAndDateWithProducts(donor.lastName, donor.firstName, donor.middleName, donor.dob)
     }
-
-//    fun insertProductList(database: BloodDatabase, products: List<Product>) {
-//        disposable = Completable.fromAction { database.databaseDao().insertProducts(products) }
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribeOn(Schedulers.io())
-//            .subscribe {
-//                StandardModal(
-//                    activityCallbacks,
-//                    modalType = StandardModal.ModalType.STANDARD,
-//                    titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_title),
-//                    bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_body),
-//                    positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
-//                    dialogFinishedListener = object : StandardModal.DialogFinishedListener {
-//                        override fun onPositive(string: String) {
-//                            disposable?.dispose()
-//                            disposable = null
-//                            activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-//                            activityCallbacks.fetchActivity().loadDonateProductsFragment()
-//                        }
-//                        override fun onNegative() { }
-//                        override fun onNeutral() { }
-//                        override fun onBackPressed() {
-//                            disposable?.dispose()
-//                            disposable = null
-//                            activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-//                            activityCallbacks.fetchActivity().loadDonateProductsFragment()
-//                        }
-//                    }
-//                ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
-//            }
-//    }
 
 }

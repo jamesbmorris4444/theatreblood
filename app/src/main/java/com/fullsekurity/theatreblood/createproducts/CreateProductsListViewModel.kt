@@ -225,7 +225,7 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
         for (productIndex in productList.indices) {
             productList[productIndex].donorId = donor.id
         }
-        repository.insertDonorAndProductsIntoDatabaseChained(repository.stagingBloodDatabase, donor, productList)
+        repository.insertDonorAndProductsIntoDatabase(repository.stagingBloodDatabase, donor, productList)
     }
 
     fun onCreateProductsDeleteClicked(view: View) {

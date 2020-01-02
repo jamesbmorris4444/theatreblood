@@ -1,6 +1,5 @@
 package com.fullsekurity.theatreblood.reassociateproducts
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -110,11 +109,12 @@ class ReassociateProductsAdapter(private val activityCallbacks: ActivityCallback
 
     override fun onBindViewHolder(holder: ItemViewHolder<Any, RecyclerViewItemViewModel<Any>>, position: Int) {
         super.onBindViewHolder(holder, position)
-        if (position % 2 == 1) {
-            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor1))
-        } else {
-            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor2))
-        }
+        return // so that there is not a warning on the "override fun"
+//        if (position % 2 == 1) {
+//            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor1))
+//        } else {
+//            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor2))
+//        }
     }
 
     override fun itemFilterable(item: Any, constraint: String): Boolean {

@@ -1,9 +1,6 @@
 package com.fullsekurity.theatreblood.repository.storage
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import io.reactivex.Single
 
 
@@ -20,6 +17,12 @@ interface DBDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertProducts(products: List<Product>)
+
+    @Transaction
+    fun insertDonorAndProducts(donor: Donor, products: List<Product>) {
+        insertDonor(donor)
+        insertProducts(products)
+    }
 
     // queries
 

@@ -16,31 +16,46 @@ abstract class BloodDatabase : RoomDatabase() {
     companion object {
         private var mainInstance: BloodDatabase? = null
         private var stagingInstance: BloodDatabase? = null
+        private val sLockMain = Any()
+        private val sLockStaging = Any()
 
         fun newInstance(context: Context, databaseName: String): BloodDatabase? {
             if (databaseName == Constants.MAIN_DATABASE_NAME) {
-                if (mainInstance == null) {
-                    mainInstance = Room.databaseBuilder(context, BloodDatabase::class.java, databaseName)
-                        .allowMainThreadQueries()
-                        .build()
-                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX NEW >>>>>>>>>>>>>>>>>  %s", mainInstance))
-                    return mainInstance
-                } else {
-                    return mainInstance
+                synchronized(sLockMain) {
+                    if (mainInstance == null) {
+                        mainInstance =
+                            Room.databaseBuilder(context, BloodDatabase::class.java, databaseName)
+                                .allowMainThreadQueries()
+                                .build()
+                        LogUtils.D(
+                            "JIMX",
+                            LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX),
+                            String.format("JIMX NEW >>>>>>>>>>>>>>>>>  %s", mainInstance)
+                        )
+                        return mainInstance
+                    } else {
+                        return mainInstance
+                    }
                 }
             } else {
-                if (stagingInstance == null) {
-                    stagingInstance = Room.databaseBuilder(context, BloodDatabase::class.java, databaseName)
-                        .allowMainThreadQueries()
-                        .build()
-                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("JIMX NEW >>>>>>>>>>>>>>>>>  %s", stagingInstance))
-                    return stagingInstance
-                } else {
-                    return stagingInstance
+                synchronized(sLockStaging) {
+                    if (stagingInstance == null) {
+                        stagingInstance =
+                            Room.databaseBuilder(context, BloodDatabase::class.java, databaseName)
+                                .allowMainThreadQueries()
+                                .build()
+                        LogUtils.D(
+                            "JIMX",
+                            LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX),
+                            String.format("JIMX NEW >>>>>>>>>>>>>>>>>  %s", stagingInstance)
+                        )
+                        return stagingInstance
+                    } else {
+                        return stagingInstance
+                    }
                 }
             }
         }
-
     }
 
 }

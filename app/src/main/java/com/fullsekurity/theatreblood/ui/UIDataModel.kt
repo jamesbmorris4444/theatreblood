@@ -78,7 +78,7 @@ class UIDataModel {
                         "largeText",
 
                         "black",
-                        "largeText",
+                        "largeTextBold",
 
                         "error",
                         "mainTitle",
@@ -86,7 +86,7 @@ class UIDataModel {
                         "primary",
 
                         "black",
-                        "mainTitle",
+                        "mainTitleBold",
 
                         "white",
                         "mainTitle",
@@ -192,10 +192,10 @@ class UIDataModel {
 
                         "white",
                         "mainTitle",
-                        R.drawable.lt_blood_grid_11,
-                        R.drawable.lt_blood_grid_12,
-                        R.drawable.lt_blood_grid_21,
-                        R.drawable.lt_blood_grid_22,
+                        R.drawable.dk_blood_grid_11,
+                        R.drawable.dk_blood_grid_12,
+                        R.drawable.dk_blood_grid_21,
+                        R.drawable.dk_blood_grid_22,
 
                         "darkGray",
                         "black",
