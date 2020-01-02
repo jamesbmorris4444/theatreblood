@@ -171,12 +171,12 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
 
         // change first name
         editTextDisplayModifyFirstName.get()?.let { editTextDisplayModifyFirstName ->
-            donor.posterPath = editTextDisplayModifyFirstName
+            donor.firstName = editTextDisplayModifyFirstName
         }
 
         // change middle name
         editTextDisplayModifyMiddleName.get()?.let { editTextDisplayModifyMiddleName ->
-            donor.voteCount = editTextDisplayModifyMiddleName.toInt()
+            donor.middleName = editTextDisplayModifyMiddleName.toInt()
         }
 
         // change date of birth
@@ -233,8 +233,8 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         activityCallbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_dob).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
 
         editTextDisplayModifyLastName.set(donor.lastName)
-        editTextDisplayModifyFirstName.set(donor.posterPath)
-        editTextDisplayModifyMiddleName.set(donor.voteCount.toString())
+        editTextDisplayModifyFirstName.set(donor.firstName)
+        editTextDisplayModifyMiddleName.set(donor.middleName.toString())
         editTextDisplayModifyDob.set(donor.releaseDate)
 
         if (donor.adult) {

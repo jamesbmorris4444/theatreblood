@@ -30,8 +30,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -481,38 +479,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .subscribeOn(Schedulers.io())
             .subscribe({ responseList ->
                 val response = responseList[0]
-//                for (donor in response[0] as List<Donor>) {
-//                    if (donor.posterPath.length > 11) {
-//                        donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
-//                    }
-//                    if (donor.releaseDate.isEmpty()) {
-//                        donor.releaseDate = "04 Jul 2019"
-//                    } else if (donor.releaseDate[4] == '-') {
-//                        val year: Int = donor.releaseDate.substring(0,4).toInt()
-//                        val monthOfYear = donor.releaseDate.substring(5,7).toInt()
-//                        val dayOfMonth = donor.releaseDate.substring(8,10).toInt()
-//                        val calendar = Calendar.getInstance()
-//                        calendar.set(year, monthOfYear, dayOfMonth)
-//                        val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
-//                        donor.releaseDate = dateFormatter.format(calendar.time)
-//                    }
-//                }
-//                for (donor in response[1] as List<Donor>) {
-//                    if (donor.posterPath.length > 11) {
-//                        donor.posterPath = donor.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
-//                    }
-//                    if (donor.releaseDate.isEmpty()) {
-//                        donor.releaseDate = "04 Jul 2019"
-//                    } else if (donor.releaseDate[4] == '-') {
-//                        val year: Int = donor.releaseDate.substring(0,4).toInt()
-//                        val monthOfYear = donor.releaseDate.substring(5,7).toInt()
-//                        val dayOfMonth = donor.releaseDate.substring(8,10).toInt()
-//                        val calendar = Calendar.getInstance()
-//                        calendar.set(year, monthOfYear, dayOfMonth)
-//                        val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
-//                        donor.releaseDate = dateFormatter.format(calendar.time)
-//                    }
-//                }
                 val stagingDatabaseList = response[1] as List<Donor>
                 val mainDatabaseList = response[0] as List<Donor>
                 val newList = stagingDatabaseList.union(mainDatabaseList).distinctBy { donor -> Utils.donorUnionStringForDistinctBy(donor) }
@@ -531,29 +497,9 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe{ donorWithProducts ->
-                for (index in donorWithProducts.indices) {
-                    transformDonorData(donorWithProducts[index].donor)
-                }
                 showDonorsAndProducts(donorWithProducts)
             }
 
-    }
-
-    private fun transformDonorData(donorResponse: Donor) {
-        if (donorResponse.posterPath.length > 11) {
-            donorResponse.posterPath = donorResponse.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
-        }
-        if (donorResponse.releaseDate.isEmpty()) {
-            donorResponse.releaseDate = "04 Jul 2019"
-        } else if (donorResponse.releaseDate[4] == '-') {
-            val year: Int = donorResponse.releaseDate.substring(0,4).toInt()
-            val monthOfYear = donorResponse.releaseDate.substring(5,7).toInt()
-            val dayOfMonth = donorResponse.releaseDate.substring(8,10).toInt()
-            val calendar = Calendar.getInstance()
-            calendar.set(year, monthOfYear, dayOfMonth)
-            val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
-            donorResponse.releaseDate = dateFormatter.format(calendar.time)
-        }
     }
 
     fun getAllNewProductsForDonor(donor: Donor, showProducts: (productList: List<Product>) -> Unit) {
@@ -562,28 +508,13 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe{ donorWithProducts ->
-                val donorResponse = donorWithProducts.donor
-                if (donorResponse.posterPath.length > 11) {
-                    donorResponse.posterPath = donorResponse.posterPath.substring(1,11).toUpperCase(Locale.getDefault())
-                }
-                if (donorResponse.releaseDate.isEmpty()) {
-                    donorResponse.releaseDate = "04 Jul 2019"
-                } else if (donorResponse.releaseDate[4] == '-') {
-                    val year: Int = donorResponse.releaseDate.substring(0,4).toInt()
-                    val monthOfYear = donorResponse.releaseDate.substring(5,7).toInt()
-                    val dayOfMonth = donorResponse.releaseDate.substring(8,10).toInt()
-                    val calendar = Calendar.getInstance()
-                    calendar.set(year, monthOfYear, dayOfMonth)
-                    val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
-                    donorResponse.releaseDate = dateFormatter.format(calendar.time)
-                }
                 showProducts(donorWithProducts.products)
             }
                 
     }
 
     private fun donorsFromNameAndDateWithProducts(database: BloodDatabase, donor: Donor): Single<DonorWithProducts> {
-        return database.databaseDao().donorsFromNameAndDateWithProducts(donor.lastName, donor.posterPath, donor.voteCount.toString(), donor.releaseDate)
+        return database.databaseDao().donorsFromNameAndDateWithProducts(donor.lastName, donor.firstName, donor.middleName.toString(), donor.releaseDate)
     }
 
 //    fun insertProductList(database: BloodDatabase, products: List<Product>) {

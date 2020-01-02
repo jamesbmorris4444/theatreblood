@@ -10,12 +10,12 @@ class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbac
 
     private lateinit var donor: Donor
 
-    val voteCount: ObservableField<String> = ObservableField("")
+    val middleName: ObservableField<String> = ObservableField("")
     val video: ObservableField<String> = ObservableField("")
     val voteAverage: ObservableField<String> = ObservableField("")
-    val title: ObservableField<String> = ObservableField("")
+    val lastName: ObservableField<String> = ObservableField("")
     val popularity: ObservableField<String> = ObservableField("")
-    val posterPath: ObservableField<String> = ObservableField("")
+    val firstName: ObservableField<String> = ObservableField("")
     val originalLanguage: ObservableField<String> = ObservableField("")
     val originalTitle: ObservableField<String> = ObservableField("")
     val backdropPath: ObservableField<String> = ObservableField("")
@@ -26,12 +26,12 @@ class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbac
 
     override fun setItem(item: Donor) {
         donor = item
-        voteCount.set(item.voteCount.toString())
+        middleName.set(item.middleName.toString())
         video.set(if (item.video) "T" else "F")
         voteAverage.set(item.voteAverage.toString())
-        title.set(item.lastName)
+        lastName.set(item.lastName)
         popularity.set(item.popularity.toString())
-        posterPath.set(item.posterPath)
+        firstName.set(item.firstName)
         originalLanguage.set(item.originalLanguage)
         originalTitle.set(item.originalTitle)
         backdropPath.set(item.backdropPath)

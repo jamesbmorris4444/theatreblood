@@ -132,7 +132,7 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
 
     fun setDonor(donor: Donor) {
         this.donor = donor
-        donorName.set("DONOR: " + donor.lastName + ", " + donor.posterPath)
+        donorName.set("DONOR: " + donor.lastName + ", " + donor.firstName)
         donorBloodType.set(donor.backdropPath)
     }
 
