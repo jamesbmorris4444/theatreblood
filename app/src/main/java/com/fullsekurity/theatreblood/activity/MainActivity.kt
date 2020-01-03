@@ -20,8 +20,7 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
-import com.airbnb.lottie.LottieAnimationView
-import com.airbnb.lottie.LottieDrawable
+import com.airbnb.lottie.*
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.barcode.BarCodeScannerActivity
 import com.fullsekurity.theatreblood.createproducts.CreateProductsFragment
@@ -29,6 +28,8 @@ import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
 import com.fullsekurity.theatreblood.donor.DonorFragment
+import com.fullsekurity.theatreblood.logger.LogUtils
+import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.ANX
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsFragment
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -122,10 +123,30 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         navDrawerView = findViewById(R.id.nav_drawer_view)
         navDrawerView.setNavigationItemSelectedListener(this)
-        drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        drawerLayout = findViewById(R.id.drawer_layout)
         lottieBackgroundView = activityMainBinding.root.findViewById(R.id.main_background_lottie)
-        if (savedInstanceState == null) {
-            navView.selectedItemId = R.id.navigation_donations
+        setupLottieForBottomNavigationBar()
+        navView.selectedItemId = R.id.navigation_donations
+    }
+
+    private fun setupLottieForBottomNavigationBar() {
+        setupMenuItemLottieAnimation(0, R.raw.donations)
+        setupMenuItemLottieAnimation(1, R.raw.transfusions)
+        setupMenuItemLottieAnimation(2, R.raw.inventory)
+    }
+
+    private fun setupMenuItemLottieAnimation(position: Int, resInt: Int) {
+        val task: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, resInt)
+        val lottieDrawable = LottieDrawable()
+        task.addListener { result ->
+            lottieDrawable.composition = result
+            lottieDrawable.repeatCount = LottieDrawable.INFINITE
+            lottieDrawable.scale = 2.0f
+            lottieDrawable.playAnimation()
+            navView.menu.getItem(position).icon = lottieDrawable
+        }
+        task.addFailureListener { result ->
+            LogUtils.E(LogUtils.FilterTags.withTags(ANX), "Lottie Drawable Failure", result)
         }
     }
 

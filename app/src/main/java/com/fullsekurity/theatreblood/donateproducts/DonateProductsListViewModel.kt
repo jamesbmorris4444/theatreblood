@@ -74,7 +74,7 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
         }
     }
 
-    // observable used for two-way data binding. Values set into this field will show in view.
+    // observable used for two-way donations binding. Values set into this field will show in view.
     // Text typed into EditText in view will be stored into this field after each character is typed.
     var editTextNameInput: ObservableField<String> = ObservableField("")
     fun onTextNameChanged(key: CharSequence, start: Int, before: Int, count: Int) {

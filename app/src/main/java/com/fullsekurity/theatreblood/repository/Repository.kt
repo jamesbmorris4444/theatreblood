@@ -180,7 +180,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         }
     }
 
-    // The code below here refreshes the main data base
+    // The code below here refreshes the main donations base
 
     fun refreshDatabase(progressBar: ProgressBar, activity: MainActivity) {
         saveDatabase(activity, MAIN_DATABASE_NAME)
