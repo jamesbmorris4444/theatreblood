@@ -68,18 +68,46 @@ class CreateProductsFragment : Fragment(), ActivityCallbacks {
     }
 
     private fun setupLottieDrawables(view: View) {
-        val rootView = view.findViewById(R.id.calendar_icon_22) as LottieAnimationView
-        val task: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(context, R.raw.calendar_icon)
-        val lottieDrawable = LottieDrawable()
-        task.addListener { result ->
-            lottieDrawable.composition = result
-            lottieDrawable.repeatCount = LottieDrawable.INFINITE
-            lottieDrawable.playAnimation()
-            lottieDrawable.scale = 0.35f
-            lottieDrawable.speed = 2.0f
-            rootView.background = lottieDrawable
+        val rootView1 = view.findViewById(R.id.calendar_icon_22) as LottieAnimationView
+        val task1: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(context, R.raw.calendar_icon)
+        val lottieDrawable1 = LottieDrawable()
+        task1.addListener { result ->
+            lottieDrawable1.composition = result
+            lottieDrawable1.repeatCount = LottieDrawable.INFINITE
+            lottieDrawable1.playAnimation()
+            lottieDrawable1.scale = 0.35f
+            lottieDrawable1.speed = 2.0f
+            rootView1.background = lottieDrawable1
         }
-        task.addFailureListener { result ->
+        task1.addFailureListener { result ->
+            LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
+        }
+
+        val rootView2 = view.findViewById(R.id.barcode_scanner_11) as LottieAnimationView
+        val task2 = LottieCompositionFactory.fromRawRes(context, R.raw.barcode_scanner)
+        val lottieDrawable2 = LottieDrawable()
+        task2.addListener { result ->
+            lottieDrawable2.composition = result
+            lottieDrawable2.repeatCount = LottieDrawable.INFINITE
+            lottieDrawable2.playAnimation()
+            lottieDrawable2.scale = 0.12f
+            rootView2.background = lottieDrawable2
+        }
+        task2.addFailureListener { result ->
+            LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
+        }
+
+        val rootView3 = view.findViewById(R.id.barcode_scanner_21) as LottieAnimationView
+        val task3 = LottieCompositionFactory.fromRawRes(context, R.raw.barcode_scanner)
+        val lottieDrawable3 = LottieDrawable()
+        task3.addListener { result ->
+            lottieDrawable3.composition = result
+            lottieDrawable3.repeatCount = LottieDrawable.INFINITE
+            lottieDrawable3.playAnimation()
+            lottieDrawable3.scale = 0.12f
+            rootView3.background = lottieDrawable3
+        }
+        task3.addFailureListener { result ->
             LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
         }
     }

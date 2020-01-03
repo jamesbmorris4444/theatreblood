@@ -130,9 +130,44 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
     }
 
     private fun setupLottieForBottomNavigationBar() {
-        setupMenuItemLottieAnimation(0, R.raw.donations)
-        setupMenuItemLottieAnimation(1, R.raw.transfusions)
-        setupMenuItemLottieAnimation(2, R.raw.inventory)
+        val task1: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, R.raw.donations)
+        val lottieDrawable1 = LottieDrawable()
+        task1.addListener { result ->
+            lottieDrawable1.composition = result
+            lottieDrawable1.repeatCount = LottieDrawable.INFINITE
+            lottieDrawable1.playAnimation()
+            lottieDrawable1.scale = 5.0f
+            navView.menu.getItem(0).icon = lottieDrawable1
+        }
+        task1.addFailureListener { result ->
+            LogUtils.E(LogUtils.FilterTags.withTags(ANX), "Lottie Drawable Failure", result)
+        }
+
+        val task2: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, R.raw.transfusions)
+        val lottieDrawable2 = LottieDrawable()
+        task2.addListener { result ->
+            lottieDrawable2.composition = result
+            lottieDrawable2.repeatCount = LottieDrawable.INFINITE
+            lottieDrawable2.playAnimation()
+            lottieDrawable2.scale = 5.0f
+            navView.menu.getItem(1).icon = lottieDrawable2
+        }
+        task2.addFailureListener { result ->
+            LogUtils.E(LogUtils.FilterTags.withTags(ANX), "Lottie Drawable Failure", result)
+        }
+
+        val task3: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, R.raw.inventory)
+        val lottieDrawable3 = LottieDrawable()
+        task3.addListener { result ->
+            lottieDrawable3.composition = result
+            lottieDrawable3.repeatCount = LottieDrawable.INFINITE
+            lottieDrawable3.playAnimation()
+            lottieDrawable3.scale = 5.0f
+            navView.menu.getItem(2).icon = lottieDrawable3
+        }
+        task2.addFailureListener { result ->
+            LogUtils.E(LogUtils.FilterTags.withTags(ANX), "Lottie Drawable Failure", result)
+        }
     }
 
     private fun setupMenuItemLottieAnimation(position: Int, resInt: Int) {

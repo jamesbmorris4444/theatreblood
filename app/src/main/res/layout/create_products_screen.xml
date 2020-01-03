@@ -58,41 +58,61 @@
                         android:layout_height="wrap_content"
                         android:scaleType="center"
                         android:background="@{uiViewModel.productGridBackgroundDrawable11}"
-                        android:onClick="@{(view) -> createProductsListViewModel.onGridElement11Clicked(view)}"
                         app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
                         app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
                         android:layout_centerInParent="true" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/create_product_edit_text_11"
+                <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="40dp"
-                        android:hint="@{createProductsListViewModel.hintTextDin}"
-                        app:upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}" >
+                        android:layout_height="wrap_content" >
 
-                    <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/create_product_edit_text_display_din_11"
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/create_product_edit_text_11"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardEditTextProductInnerWidth)}"
-                            app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridEditTextHeight)}"
-                            app:layout_marginLeft="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
-                            app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
-                            app:background="@{uiViewModel.editTextProductBackground}"
-                            app:text_hint_color="@{uiViewModel.editTextProductHintColor}"
-                            app:edit_text_cursor="@{uiViewModel.editTextCursor}"
-                            android:text="@={createProductsListViewModel.editTextProductDin}"
-                            android:onTextChanged="@{createProductsListViewModel::onTextDinChanged}"
-                            android:paddingStart="5dp"
-                            android:paddingEnd="10dp"
-                            android:paddingTop="20dp"
-                            android:inputType="textCapCharacters"
-                            app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
-                            app:edit_text_color="@{uiViewModel.editTextProductColor}"
-                            app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+                            android:layout_marginTop="40dp"
+                            android:hint="@{createProductsListViewModel.hintTextDin}"
+                            app:upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent" >
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/create_product_edit_text_display_din_11"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardEditTextProductInnerWidth)}"
+                                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridEditTextHeight)}"
+                                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                                app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                                app:background="@{uiViewModel.editTextProductBackground}"
+                                app:text_hint_color="@{uiViewModel.editTextProductHintColor}"
+                                app:edit_text_cursor="@{uiViewModel.editTextCursor}"
+                                android:text="@={createProductsListViewModel.editTextProductDin}"
+                                android:onTextChanged="@{createProductsListViewModel::onTextDinChanged}"
+                                android:paddingStart="5dp"
+                                android:paddingEnd="10dp"
+                                android:paddingTop="20dp"
+                                android:inputType="textCapCharacters"
+                                app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
+                                app:edit_text_color="@{uiViewModel.editTextProductColor}"
+                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/barcode_scanner_11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleType="centerCrop"
+                            android:src="@raw/barcode_scanner"
+                            android:onClick="@{(view) -> createProductsListViewModel.onGridElement11Clicked(view)}"
+                            android:layout_marginTop="28dp"
+                            app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                            app:layout_constraintTop_toTopOf="@+id/create_product_edit_text_11"
+                            app:layout_constraintRight_toRightOf="@+id/create_product_edit_text_11" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                         android:id="@+id/create_product_id_11"
@@ -179,41 +199,61 @@
                         android:layout_height="wrap_content"
                         android:scaleType="center"
                         android:background="@{uiViewModel.productGridBackgroundDrawable21}"
-                        android:onClick="@{(view) -> createProductsListViewModel.onGridElement21Clicked(view)}"
                         app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardHalfWidth)}"
                         app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridHeight)}"
                         android:layout_centerInParent="true" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/create_product_edit_text_21"
+                <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="40dp"
-                        android:hint="@{createProductsListViewModel.hintTextCode}"
-                        app:upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}" >
+                        android:layout_height="wrap_content" >
 
-                    <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/create_product_edit_text_display_din_21"
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/create_product_edit_text_21"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridEditTextHeight)}"
-                            app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardEditTextProductInnerWidth)}"
-                            app:layout_marginLeft="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
-                            app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
-                            app:background="@{uiViewModel.editTextProductBackground}"
-                            app:text_hint_color="@{uiViewModel.editTextProductHintColor}"
-                            app:edit_text_cursor="@{uiViewModel.editTextCursor}"
-                            android:text="@={createProductsListViewModel.editTextProductCode}"
-                            android:onTextChanged="@{createProductsListViewModel::onTextCodeChanged}"
-                            android:paddingStart="5dp"
-                            android:paddingEnd="10dp"
-                            android:paddingTop="20dp"
-                            android:inputType="textCapCharacters"
-                            app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
-                            app:edit_text_color="@{uiViewModel.editTextProductColor}"
-                            app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+                            android:layout_marginTop="40dp"
+                            android:hint="@{createProductsListViewModel.hintTextCode}"
+                            app:upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent" >
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/create_product_edit_text_display_din_21"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardGridEditTextHeight)}"
+                                app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardEditTextProductInnerWidth)}"
+                                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                                app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
+                                app:background="@{uiViewModel.editTextProductBackground}"
+                                app:text_hint_color="@{uiViewModel.editTextProductHintColor}"
+                                app:edit_text_cursor="@{uiViewModel.editTextCursor}"
+                                android:text="@={createProductsListViewModel.editTextProductCode}"
+                                android:onTextChanged="@{createProductsListViewModel::onTextCodeChanged}"
+                                android:paddingStart="5dp"
+                                android:paddingEnd="10dp"
+                                android:paddingTop="20dp"
+                                android:inputType="textCapCharacters"
+                                app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
+                                app:edit_text_color="@{uiViewModel.editTextProductColor}"
+                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/barcode_scanner_21"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleType="centerCrop"
+                            android:src="@raw/barcode_scanner"
+                            android:onClick="@{(view) -> createProductsListViewModel.onGridElement21Clicked(view)}"
+                            android:layout_marginTop="28dp"
+                            app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                            app:layout_constraintTop_toTopOf="@+id/create_product_edit_text_21"
+                            app:layout_constraintRight_toRightOf="@+id/create_product_edit_text_21" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                         android:id="@+id/create_product_id_21"
