@@ -12,7 +12,7 @@ class UIDataModel {
                 if (lightViewUIDataClass == null) {
                     lightViewUIDataClass = UIDataClass(
                         R.drawable.lt_background,
-                        "background_full_screen_train.json", // background_full_screen_train.json
+                        "background_full_screen_daylight.json", // background_full_screen_daylight.json
                         R.drawable.lt_standard_modal_background,
                         R.drawable.lt_dashed_line,
                         "lightGray",

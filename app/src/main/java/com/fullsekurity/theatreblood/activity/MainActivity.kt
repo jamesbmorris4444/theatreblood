@@ -141,9 +141,10 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         task.addListener { result ->
             lottieDrawable.composition = result
             lottieDrawable.repeatCount = LottieDrawable.INFINITE
-            lottieDrawable.scale = 2.0f
             lottieDrawable.playAnimation()
+            lottieDrawable.scale = 5.0f
             navView.menu.getItem(position).icon = lottieDrawable
+            //navView.itemIconSize = 120
         }
         task.addFailureListener { result ->
             LogUtils.E(LogUtils.FilterTags.withTags(ANX), "Lottie Drawable Failure", result)

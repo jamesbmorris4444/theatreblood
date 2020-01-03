@@ -177,18 +177,17 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <android.widget.ImageView
+            <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/calendar_icon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_calendar"
-                    android:scaleType="fitXY"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@raw/calendar_icon"
                     android:onClick="@{(view) -> donorViewModel.onCalendarClicked(view)}"
-                    android:layout_marginBottom="10dp"
-                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    android:layout_marginBottom="4dp"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_text_display_dob"
                     app:layout_constraintLeft_toLeftOf="@+id/edit_text_display_dob"
-                    app:layout_constraintEnd_toEndOf="@+id/edit_text_display_dob"/>
+                    app:layout_constraintEnd_toEndOf="@+id/edit_text_display_dob" />
 
             <!-- End DOB -->
 

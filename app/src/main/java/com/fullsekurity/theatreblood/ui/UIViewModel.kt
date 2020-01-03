@@ -228,7 +228,6 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             backgroundVisibleForLottie.set(true)
             animationView.visibility = View.VISIBLE
             animationView.setAnimation(jsonFile)
-            animationView.enableMergePathsForKitKatAndAbove(true)
             animationView.playAnimation()
             animationView.repeatCount = repeatCount
         }

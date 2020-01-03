@@ -292,18 +292,17 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.widget.ImageView
+                    <com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/calendar_icon_22"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginTop="30dp"
-                            android:src="@drawable/ic_calendar"
-                            android:scaleType="fitXY"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleType="centerCrop"
+                            android:src="@raw/calendar_icon"
                             android:onClick="@{(view) -> createProductsListViewModel.onCalendarClicked(view)}"
-                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="23dp"
                             app:layout_marginRight="@{safeUnbox(uiViewModel.standardEditTextProductSmallMargin)}"
                             app:layout_constraintTop_toTopOf="@+id/create_product_edit_text_22"
-                            app:layout_constraintRight_toRightOf="@+id/create_product_edit_text_22"/>
+                            app:layout_constraintRight_toRightOf="@+id/create_product_edit_text_22" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

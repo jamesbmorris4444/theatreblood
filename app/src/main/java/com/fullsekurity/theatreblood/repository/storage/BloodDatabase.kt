@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.utils.Constants
 
 
@@ -27,11 +26,6 @@ abstract class BloodDatabase : RoomDatabase() {
                             Room.databaseBuilder(context, BloodDatabase::class.java, databaseName)
                                 .allowMainThreadQueries()
                                 .build()
-                        LogUtils.D(
-                            "JIMX",
-                            LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX),
-                            String.format("JIMX NEW >>>>>>>>>>>>>>>>>  %s", mainInstance)
-                        )
                         return mainInstance
                     } else {
                         return mainInstance
@@ -44,11 +38,6 @@ abstract class BloodDatabase : RoomDatabase() {
                             Room.databaseBuilder(context, BloodDatabase::class.java, databaseName)
                                 .allowMainThreadQueries()
                                 .build()
-                        LogUtils.D(
-                            "JIMX",
-                            LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX),
-                            String.format("JIMX NEW >>>>>>>>>>>>>>>>>  %s", stagingInstance)
-                        )
                         return stagingInstance
                     } else {
                         return stagingInstance

@@ -72,10 +72,10 @@
     <string name="product_din">DIN</string>
     <string name="product_abo_rh">ABO/RH</string>
     <string name="product_code">PRODUCT CODE</string>
-    <string name="product_expiration_date">EXPIRATION DATE</string>
+    <string name="product_expiration_date">EXPIRATION</string>
     <string name="product_din_hint_string">DIN</string>
     <string name="product_code_hint_string">Product Code</string>
-    <string name="product_expiration_date_hint_string">Expiration Date</string>
+    <string name="product_expiration_date_hint_string">Expiration</string>
 
     <!-- navigation drawer menu -->
     <string name="nav_drawer_donate_products">Donate Products</string>
