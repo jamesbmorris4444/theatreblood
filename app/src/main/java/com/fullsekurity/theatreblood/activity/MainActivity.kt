@@ -138,6 +138,7 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             lottieDrawable1.playAnimation()
             lottieDrawable1.scale = 5.0f
             navView.menu.getItem(0).icon = lottieDrawable1
+
         }
         task1.addFailureListener { result ->
             LogUtils.E(LogUtils.FilterTags.withTags(ANX), "Lottie Drawable Failure", result)
@@ -166,22 +167,6 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             navView.menu.getItem(2).icon = lottieDrawable3
         }
         task2.addFailureListener { result ->
-            LogUtils.E(LogUtils.FilterTags.withTags(ANX), "Lottie Drawable Failure", result)
-        }
-    }
-
-    private fun setupMenuItemLottieAnimation(position: Int, resInt: Int) {
-        val task: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, resInt)
-        val lottieDrawable = LottieDrawable()
-        task.addListener { result ->
-            lottieDrawable.composition = result
-            lottieDrawable.repeatCount = LottieDrawable.INFINITE
-            lottieDrawable.playAnimation()
-            lottieDrawable.scale = 5.0f
-            navView.menu.getItem(position).icon = lottieDrawable
-            //navView.itemIconSize = 120
-        }
-        task.addFailureListener { result ->
             LogUtils.E(LogUtils.FilterTags.withTags(ANX), "Lottie Drawable Failure", result)
         }
     }
