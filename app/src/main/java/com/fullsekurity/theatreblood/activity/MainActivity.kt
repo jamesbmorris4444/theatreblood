@@ -71,11 +71,6 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
 
     override fun onResume() {
         super.onResume()
-        val settings = getSharedPreferences("THEME", Context.MODE_PRIVATE)
-        val name: String? = settings.getString("THEME", UITheme.LIGHT.name)
-        if (name != null) {
-            currentTheme = UITheme.valueOf(name)
-        }
         setupRepositoryDatabase()
         setupToolbar()
         setToolbarNetworkStatus()
@@ -127,6 +122,11 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         lottieBackgroundView = activityMainBinding.root.findViewById(R.id.main_background_lottie)
         setupLottieForBottomNavigationBar()
         navView.selectedItemId = R.id.navigation_donations
+        val settings = getSharedPreferences("THEME", Context.MODE_PRIVATE)
+        val name: String? = settings.getString("THEME", UITheme.LIGHT.name)
+        if (name != null) {
+            currentTheme = UITheme.valueOf(name)
+        }
     }
 
     private fun setupLottieForBottomNavigationBar() {

@@ -186,6 +186,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
                 val editor = settings.edit()
                 editor.putString("THEME", value.name)
                 editor.apply()
+                val settings1 = context.getSharedPreferences("THEME", Context.MODE_PRIVATE)
                 uiDataClass = uiDataModel.loadData(value)
                 themeSwitcher(value)
             }
