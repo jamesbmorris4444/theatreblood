@@ -182,7 +182,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
-                    android:src="@raw/calendar_icon"
                     android:onClick="@{(view) -> donorViewModel.onCalendarClicked(view)}"
                     android:layout_marginBottom="4dp"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_text_display_dob"

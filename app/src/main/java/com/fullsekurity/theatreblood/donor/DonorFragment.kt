@@ -91,7 +91,7 @@ class DonorFragment : Fragment(), ActivityCallbacks {
             lottieDrawable.playAnimation()
             lottieDrawable.scale = 0.35f
             lottieDrawable.speed = 2.0f
-            rootView.background = lottieDrawable
+            rootView.setImageDrawable(lottieDrawable)
         }
         task.addFailureListener { result ->
             LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)

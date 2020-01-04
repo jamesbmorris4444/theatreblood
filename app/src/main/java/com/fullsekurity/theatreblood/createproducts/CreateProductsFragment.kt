@@ -77,7 +77,7 @@ class CreateProductsFragment : Fragment(), ActivityCallbacks {
             lottieDrawable1.playAnimation()
             lottieDrawable1.scale = 0.35f
             lottieDrawable1.speed = 2.0f
-            rootView1.background = lottieDrawable1
+            rootView1.setImageDrawable(lottieDrawable1)
         }
         task1.addFailureListener { result ->
             LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
@@ -91,7 +91,7 @@ class CreateProductsFragment : Fragment(), ActivityCallbacks {
             lottieDrawable2.repeatCount = LottieDrawable.INFINITE
             lottieDrawable2.playAnimation()
             lottieDrawable2.scale = 0.12f
-            rootView2.background = lottieDrawable2
+            rootView2.setImageDrawable(lottieDrawable2)
         }
         task2.addFailureListener { result ->
             LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
@@ -105,7 +105,7 @@ class CreateProductsFragment : Fragment(), ActivityCallbacks {
             lottieDrawable3.repeatCount = LottieDrawable.INFINITE
             lottieDrawable3.playAnimation()
             lottieDrawable3.scale = 0.12f
-            rootView3.background = lottieDrawable3
+            rootView3.setImageDrawable(lottieDrawable3)
         }
         task3.addFailureListener { result ->
             LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)

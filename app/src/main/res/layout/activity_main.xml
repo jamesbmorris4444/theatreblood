@@ -4,9 +4,14 @@
 
     <data>
         <import type="android.view.View"/>
+
         <variable
                 name="uiViewModel"
                 type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+
+        <variable
+                name="mainActivity"
+                type="com.fullsekurity.theatreblood.activity.MainActivity" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -37,8 +42,7 @@
                 android:visibility="@{safeUnbox(uiViewModel.backgroundVisibleForLottie ? View.VISIBLE : View.GONE)}"
                 android:scaleType="centerCrop"
                 android:fillViewport="true"
-                android:layout_below="@+id/toolbar"
-                android:layout_above="@+id/bottom_nav_view" />
+                android:layout_below="@+id/toolbar" />
 
         <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -65,13 +69,80 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/bottom_nav_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                app:itemTextColor="@color/white"
-                app:menu="@menu/bottom_nav_menu" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/nav_bar_image_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:onClick="@{() -> mainActivity.onDonationsClicked()}"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/nav_bar_image_2"/>
+
+            <TextView
+                    android:id="@+id/nav_bar_text_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_donations"
+                    app:text_font="@{uiViewModel.buttonTextTypeface}"
+                    app:text_color="@{uiViewModel.buttonTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
+                    app:layout_constraintStart_toStartOf="@+id/nav_bar_image_1"
+                    app:layout_constraintEnd_toEndOf="@+id/nav_bar_image_1"
+                    app:layout_constraintBottom_toBottomOf="@+id/nav_bar_image_1" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/nav_bar_image_2"
+                    android:layout_width="120dp"
+                    android:layout_height="125dp"
+                    android:scaleType="centerCrop"
+                    android:onClick="@{() -> mainActivity.onTransfusionsClicked()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/nav_bar_image_1"
+                    app:layout_constraintRight_toLeftOf="@+id/nav_bar_image_3" />
+
+            <TextView
+                    android:id="@+id/nav_bar_text_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_transfusions"
+                    app:text_font="@{uiViewModel.buttonTextTypeface}"
+                    app:text_color="@{uiViewModel.buttonTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
+                    app:layout_constraintStart_toStartOf="@+id/nav_bar_image_2"
+                    app:layout_constraintEnd_toEndOf="@+id/nav_bar_image_2"
+                    app:layout_constraintBottom_toBottomOf="@+id/nav_bar_image_2" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/nav_bar_image_3"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:onClick="@{() -> mainActivity.onInventoryClicked()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/nav_bar_image_2"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                    android:id="@+id/nav_bar_text_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_inventory"
+                    app:text_font="@{uiViewModel.buttonTextTypeface}"
+                    app:text_color="@{uiViewModel.buttonTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
+                    app:layout_constraintStart_toStartOf="@+id/nav_bar_image_3"
+                    app:layout_constraintEnd_toEndOf="@+id/nav_bar_image_3"
+                    app:layout_constraintBottom_toBottomOf="@+id/nav_bar_image_3" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar
                 android:id="@+id/main_progress_bar"

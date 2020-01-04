@@ -14,6 +14,7 @@ import android.view.View
 import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.GravityCompat
@@ -29,7 +30,6 @@ import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
 import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.logger.LogUtils
-import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.ANX
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsFragment
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -38,7 +38,6 @@ import com.fullsekurity.theatreblood.utils.Constants.ROOT_FRAGMENT_TAG
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import com.fullsekurity.theatreblood.viewdonorlist.ViewDonorListFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
@@ -54,7 +53,7 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
     lateinit var uiViewModel: UIViewModel
 
     private var networkStatusMenuItem: MenuItem? = null
-    private lateinit var navView: BottomNavigationView
+    private lateinit var navView: ConstraintLayout
     private lateinit var navDrawerView: NavigationView
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var lottieBackgroundView: LottieAnimationView
@@ -83,24 +82,6 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         repository.onCleared()
     }
 
-    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_donations -> {
-                supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                transitionToCreateDonation = true
-                loadDonateProductsFragment(transitionToCreateDonation)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_inventory -> {
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_transfusions -> {
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.plant(Timber.DebugTree())
         repository = Repository(this)
@@ -111,21 +92,21 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         super.onCreate(savedInstanceState)
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         activityMainBinding.uiViewModel = uiViewModel
+        activityMainBinding.mainActivity = this
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener { onBackPressed() }
         navView = findViewById(R.id.bottom_nav_view)
-        navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         navDrawerView = findViewById(R.id.nav_drawer_view)
         navDrawerView.setNavigationItemSelectedListener(this)
         drawerLayout = findViewById(R.id.drawer_layout)
         lottieBackgroundView = activityMainBinding.root.findViewById(R.id.main_background_lottie)
         setupLottieForBottomNavigationBar()
-        navView.selectedItemId = R.id.navigation_donations
+        onDonationsClicked()
         val settings = getSharedPreferences("THEME", Context.MODE_PRIVATE)
         val name: String? = settings.getString("THEME", UITheme.LIGHT.name)
         if (name != null) {
-            currentTheme = UITheme.valueOf(name)
+            uiViewModel.currentTheme = UITheme.valueOf(name)
         }
     }
 
@@ -136,12 +117,14 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             lottieDrawable1.composition = result
             lottieDrawable1.repeatCount = LottieDrawable.INFINITE
             lottieDrawable1.playAnimation()
-            lottieDrawable1.scale = 5.0f
-            navView.menu.getItem(0).icon = lottieDrawable1
+            lottieDrawable1.scale = 0.25f
+
+            val lottieView1 = navView.findViewById<LottieAnimationView>(R.id.nav_bar_image_1)
+            lottieView1.setImageDrawable(lottieDrawable1)
 
         }
         task1.addFailureListener { result ->
-            LogUtils.E(LogUtils.FilterTags.withTags(ANX), "Lottie Drawable Failure", result)
+            LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
         }
 
         val task2: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, R.raw.transfusions)
@@ -150,11 +133,12 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             lottieDrawable2.composition = result
             lottieDrawable2.repeatCount = LottieDrawable.INFINITE
             lottieDrawable2.playAnimation()
-            lottieDrawable2.scale = 5.0f
-            navView.menu.getItem(1).icon = lottieDrawable2
+            lottieDrawable2.scale = 0.35f
+            val lottieView2 = navView.findViewById<LottieAnimationView>(R.id.nav_bar_image_2)
+            lottieView2.setImageDrawable(lottieDrawable2)
         }
         task2.addFailureListener { result ->
-            LogUtils.E(LogUtils.FilterTags.withTags(ANX), "Lottie Drawable Failure", result)
+            LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
         }
 
         val task3: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, R.raw.inventory)
@@ -163,11 +147,12 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             lottieDrawable3.composition = result
             lottieDrawable3.repeatCount = LottieDrawable.INFINITE
             lottieDrawable3.playAnimation()
-            lottieDrawable3.scale = 5.0f
-            navView.menu.getItem(2).icon = lottieDrawable3
+            lottieDrawable3.scale = 0.20f
+            val lottieView3 = navView.findViewById<LottieAnimationView>(R.id.nav_bar_image_3)
+            lottieView3.setImageDrawable(lottieDrawable3)
         }
         task2.addFailureListener { result ->
-            LogUtils.E(LogUtils.FilterTags.withTags(ANX), "Lottie Drawable Failure", result)
+            LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
         }
     }
 
@@ -239,7 +224,6 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             val upArrow = ContextCompat.getDrawable(this, R.drawable.toolbar_back_arrow)
             actionBar.setHomeAsUpIndicator(upArrow);
             toolbar.setTitleTextColor(Color.parseColor(uiViewModel.toolbarTextColor))
-            navView.itemBackground = ColorDrawable(Color.parseColor(uiViewModel.primaryColor))
         }
     }
 
@@ -299,6 +283,18 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         else -> {
             super.onOptionsItemSelected(item)
         }
+    }
+
+    fun onDonationsClicked() {
+        supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        transitionToCreateDonation = true
+        loadDonateProductsFragment(transitionToCreateDonation)
+    }
+
+    fun onTransfusionsClicked() {
+    }
+
+    fun onInventoryClicked() {
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
