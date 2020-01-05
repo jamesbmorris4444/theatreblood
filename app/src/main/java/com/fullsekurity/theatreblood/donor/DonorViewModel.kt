@@ -244,7 +244,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         }
 
         val aboRhDropdownView: Spinner = activityCallbacks.fetchRootView().findViewById(R.id.abo_rh_dropdown)
-        aboRhDropdownView.background = uiViewModel.editTextDisplayModifyBackground.get()
+        aboRhDropdownView.background = uiViewModel.editTextBackground.get()
         val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array)
         val aboRhAdapter = CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
         aboRhDropdownView.adapter = aboRhAdapter
@@ -261,7 +261,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         }
 
         val militaryBranchDropdownView: Spinner = activityCallbacks.fetchRootView().findViewById(R.id.military_branch_dropdown)
-        militaryBranchDropdownView.background = uiViewModel.editTextDisplayModifyBackground.get()
+        militaryBranchDropdownView.background = uiViewModel.editTextBackground.get()
         val militaryBranchDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.military_branch_array)
         val militaryBranchAdapter = CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, militaryBranchDropdownArray)
         militaryBranchDropdownView.adapter = militaryBranchAdapter

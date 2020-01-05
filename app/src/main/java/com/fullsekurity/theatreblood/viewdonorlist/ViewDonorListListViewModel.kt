@@ -103,7 +103,7 @@ class ViewDonorListListViewModel(private val activityCallbacks: ActivityCallback
 
     fun setDropdowns() {
         val aboRhDropdownView: Spinner = activityCallbacks.fetchRootView().findViewById(R.id.abo_rh_dropdown)
-        aboRhDropdownView.background = uiViewModel.editTextDisplayModifyBackground.get()
+        aboRhDropdownView.background = uiViewModel.editTextBackground.get()
         val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array)
         val aboRhAdapter = DonorViewModel.CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
         aboRhDropdownView.adapter = aboRhAdapter

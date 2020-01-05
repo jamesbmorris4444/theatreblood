@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:hint="@{viewDonorListListViewModel.hintTextName}"
-                app:upper_text_hint_color="@{uiViewModel.editTextNameUpperHintColor}"
+                app:upper_text_hint_color="@{uiViewModel.editTextUpperHintColor}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 android:visibility="@{safeUnbox(viewDonorListListViewModel.editTextNameVisibility)}"
@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
                     app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardWidth)}"
-                    app:text_hint_color="@{uiViewModel.editTextNameHintColor}"
+                    app:text_hint_color="@{uiViewModel.editTextHintColor}"
                     android:text="@={viewDonorListListViewModel.editTextNameInput}"
                     android:onTextChanged="@{viewDonorListListViewModel::onTextNameChanged}"
                     android:paddingStart="10dp"
@@ -49,11 +49,11 @@
                     android:paddingTop="20dp"
                     android:inputType="textPersonName"
                     app:edit_text_cursor="@{uiViewModel.editTextCursor}"
-                    app:background="@{uiViewModel.editTextNameBackground}"
-                    app:edit_text_font="@{uiViewModel.editTextNameTypeface}"
-                    app:edit_text_color="@{uiViewModel.editTextNameColor}"
-                    app:edit_text_size="@{safeUnbox(uiViewModel.editTextNameSize)}"
-                    app:edit_text_background_color="@{uiViewModel.editTextNameBackgroundColor}" />
+                    app:background="@{uiViewModel.editTextBackground}"
+                    app:edit_text_font="@{uiViewModel.editTextTypeface}"
+                    app:edit_text_color="@{uiViewModel.editTextColor}"
+                    app:edit_text_size="@{safeUnbox(uiViewModel.editTextSize)}"
+                    app:edit_text_background_color="@{uiViewModel.editTextBackgroundColor}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,9 +70,9 @@
                 android:layout_marginTop="7dp"
                 android:paddingStart="10dp"
                 android:paddingEnd="0dp"
-                app:text_font="@{uiViewModel.editTextDisplayModifyHintTypeface}"
-                app:text_color="@{uiViewModel.editTextDisplayModifyHintColor}"
-                app:text_size="@{safeUnbox(uiViewModel.editTextDisplayModifyHintSize)}"
+                app:text_font="@{uiViewModel.editTextHintTypeface}"
+                app:text_color="@{uiViewModel.editTextHintColor}"
+                app:text_size="@{safeUnbox(uiViewModel.editTextHintSize)}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_constraintTop_toBottomOf="@+id/edit_text_input_name"
                 app:layout_constraintBottom_toTopOf="@+id/abo_rh_dropdown"

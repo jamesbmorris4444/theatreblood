@@ -12,9 +12,9 @@
             android:id="@+id/abo_rh_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:text_font="@{uiViewModel.editTextDisplayModifyTypeface}"
-            app:text_color="@{uiViewModel.editTextDisplayModifyColor}"
-            app:text_size="@{safeUnbox(uiViewModel.editTextDisplayModifySize)}"
+            app:text_font="@{uiViewModel.editTextTypeface}"
+            app:text_color="@{uiViewModel.editTextColor}"
+            app:text_size="@{safeUnbox(uiViewModel.editTextSize)}"
             android:paddingStart="10dp"
             android:paddingEnd="0dp"/>
 
