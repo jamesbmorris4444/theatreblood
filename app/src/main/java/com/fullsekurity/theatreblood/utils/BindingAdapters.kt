@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.logger.LogUtils
+import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.MIS
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -224,7 +225,7 @@ fun setUpperHintColor(textInputLayout: TextInputLayout, color: String) {
         method.isAccessible = true
         method.invoke(textInputLayout, true)
     } catch (e: Exception) {
-        LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), e)
+        LogUtils.E(LogUtils.FilterTags.withTags(MIS), e)
     }
 
 }

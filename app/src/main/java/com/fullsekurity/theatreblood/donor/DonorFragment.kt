@@ -17,6 +17,7 @@ import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.databinding.DonorScreenBinding
 import com.fullsekurity.theatreblood.logger.LogUtils
+import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.LOT
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
@@ -94,7 +95,7 @@ class DonorFragment : Fragment(), ActivityCallbacks {
             rootView.setImageDrawable(lottieDrawable)
         }
         task.addFailureListener { result ->
-            LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
+            LogUtils.E(LogUtils.FilterTags.withTags(LOT), "Lottie Drawable Failure", result)
         }
     }
 

@@ -16,6 +16,7 @@ import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.databinding.CreateProductsScreenBinding
 import com.fullsekurity.theatreblood.logger.LogUtils
+import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.API
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
@@ -80,7 +81,7 @@ class CreateProductsFragment : Fragment(), ActivityCallbacks {
             rootView1.setImageDrawable(lottieDrawable1)
         }
         task1.addFailureListener { result ->
-            LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
+            LogUtils.E(LogUtils.FilterTags.withTags(API), "Lottie Drawable Failure", result)
         }
 
         val rootView2 = view.findViewById(R.id.barcode_scanner_11) as LottieAnimationView
@@ -94,7 +95,7 @@ class CreateProductsFragment : Fragment(), ActivityCallbacks {
             rootView2.setImageDrawable(lottieDrawable2)
         }
         task2.addFailureListener { result ->
-            LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
+            LogUtils.E(LogUtils.FilterTags.withTags(API), "Lottie Drawable Failure", result)
         }
 
         val rootView3 = view.findViewById(R.id.barcode_scanner_21) as LottieAnimationView
@@ -108,7 +109,7 @@ class CreateProductsFragment : Fragment(), ActivityCallbacks {
             rootView3.setImageDrawable(lottieDrawable3)
         }
         task3.addFailureListener { result ->
-            LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
+            LogUtils.E(LogUtils.FilterTags.withTags(API), "Lottie Drawable Failure", result)
         }
     }
 

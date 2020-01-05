@@ -16,6 +16,7 @@ import com.airbnb.lottie.LottieAnimationView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.logger.LogUtils
+import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.THM
 import com.fullsekurity.theatreblood.utils.*
 import com.fullsekurity.theatreblood.utils.Constants.STANDARD_BUTTON_HEIGHT
 import com.fullsekurity.theatreblood.utils.Constants.STANDARD_EDIT_TEXT_HEIGHT
@@ -181,12 +182,11 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     var currentTheme: MainActivity.UITheme = MainActivity.UITheme.NOT_ASSIGNED
         set(value) {
             if (value != currentTheme) {
-                LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("LOAD THEME for %s  ->  %s", currentTheme.name, value.name))
+                LogUtils.D(TAG, LogUtils.FilterTags.withTags(THM), String.format("LOAD THEME for %s  ->  %s", currentTheme.name, value.name))
                 val settings = context.getSharedPreferences("THEME", Context.MODE_PRIVATE)
                 val editor = settings.edit()
                 editor.putString("THEME", value.name)
                 editor.apply()
-                val settings1 = context.getSharedPreferences("THEME", Context.MODE_PRIVATE)
                 uiDataClass = uiDataModel.loadData(value)
                 themeSwitcher(value)
             }

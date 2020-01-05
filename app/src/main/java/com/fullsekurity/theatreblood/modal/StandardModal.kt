@@ -275,12 +275,10 @@ class StandardModal (
 //    private var dataStorageAreaOutsideOfObservableField: String = "HINT TEXT"
 //
 //    fun readTestEditFieldValue() { // click Locations button_light, observes current value of observable testEdit field that has been typed by the user
-//        LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("getTestEdit=%s", editTextInput.get()))
 //    }
 //
 //    fun transferTestEditToLocalVariable() { // click Direct Deposit button_light
 //        dataStorageAreaOutsideOfObservableField = editTextInput.get() ?: return
-//        LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("setTestEdit, dataStorageAreaOutsideOfObservableField=%s", dataStorageAreaOutsideOfObservableField))
 //    }
 //
 //    fun forceTestEditToASpecificValue() { // click MoneyBot button_light

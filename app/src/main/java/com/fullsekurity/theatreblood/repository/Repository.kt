@@ -266,7 +266,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         val dbBackup = File(db.parent, databaseName+"_backup")
         if (db.exists()) {
             db.copyTo(dbBackup, true)
-            LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("Path Name \"%s\" exists and was backed up", db.toString()))
+            LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("Path Name \"%s\" exists and was backed up", db.toString()))
         }
     }
 

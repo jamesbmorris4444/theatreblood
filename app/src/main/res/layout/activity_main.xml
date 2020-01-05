@@ -77,9 +77,11 @@
 
             <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/nav_bar_image_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:layout_marginBottom="5dp"
                     android:onClick="@{() -> mainActivity.onDonationsClicked()}"
                     app:layout_constraintHorizontal_chainStyle="spread"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -96,13 +98,15 @@
                     app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
                     app:layout_constraintStart_toStartOf="@+id/nav_bar_image_1"
                     app:layout_constraintEnd_toEndOf="@+id/nav_bar_image_1"
-                    app:layout_constraintBottom_toBottomOf="@+id/nav_bar_image_1" />
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
             <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/nav_bar_image_2"
-                    android:layout_width="120dp"
-                    android:layout_height="125dp"
-                    android:scaleType="centerCrop"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:layout_marginBottom="10dp"
                     android:onClick="@{() -> mainActivity.onTransfusionsClicked()}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/nav_bar_image_1"
@@ -118,13 +122,14 @@
                     app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
                     app:layout_constraintStart_toStartOf="@+id/nav_bar_image_2"
                     app:layout_constraintEnd_toEndOf="@+id/nav_bar_image_2"
-                    app:layout_constraintBottom_toBottomOf="@+id/nav_bar_image_2" />
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
             <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/nav_bar_image_3"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
                     android:onClick="@{() -> mainActivity.onInventoryClicked()}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/nav_bar_image_2"
@@ -140,7 +145,7 @@
                     app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
                     app:layout_constraintStart_toStartOf="@+id/nav_bar_image_3"
                     app:layout_constraintEnd_toEndOf="@+id/nav_bar_image_3"
-                    app:layout_constraintBottom_toBottomOf="@+id/nav_bar_image_3" />
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

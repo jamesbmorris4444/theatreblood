@@ -1,6 +1,7 @@
 package com.fullsekurity.theatreblood.repository.network
 
 import com.fullsekurity.theatreblood.logger.LogUtils
+import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.API
 import com.fullsekurity.theatreblood.utils.Constants.DONOR_LIST_CLASS_TYPE
 import com.fullsekurity.theatreblood.utils.Constants.THEATRE_BLOOD_BASE_URL
 import com.google.gson.GsonBuilder
@@ -19,7 +20,7 @@ object APIClient {
         get() {
             val interceptor = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
                 override fun log(message: String) {
-                    LogUtils.D(APIClient::class.java.simpleName, LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), String.format("okHttp logging interceptor=%s", message))
+                    LogUtils.D(APIClient::class.java.simpleName, LogUtils.FilterTags.withTags(API), String.format("okHttp logging interceptor=%s", message))
                 }
             })
             interceptor.level = HttpLoggingInterceptor.Level.BASIC  // or BODY

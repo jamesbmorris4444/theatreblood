@@ -30,6 +30,7 @@ import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
 import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.logger.LogUtils
+import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.LOT
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsFragment
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         LIGHT, DARK, NOT_ASSIGNED,
     }
 
-    var currentTheme: UITheme = UITheme.LIGHT
+    lateinit var currentTheme: UITheme
 
     override fun onResume() {
         super.onResume()
@@ -106,39 +107,37 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         val settings = getSharedPreferences("THEME", Context.MODE_PRIVATE)
         val name: String? = settings.getString("THEME", UITheme.LIGHT.name)
         if (name != null) {
-            uiViewModel.currentTheme = UITheme.valueOf(name)
+            currentTheme = UITheme.valueOf(name)
         }
     }
 
     private fun setupLottieForBottomNavigationBar() {
-        val task1: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, R.raw.donations)
+        val task1: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, R.raw.transfusions)
         val lottieDrawable1 = LottieDrawable()
         task1.addListener { result ->
             lottieDrawable1.composition = result
             lottieDrawable1.repeatCount = LottieDrawable.INFINITE
             lottieDrawable1.playAnimation()
-            lottieDrawable1.scale = 0.25f
-
+            lottieDrawable1.scale = 0.20f
             val lottieView1 = navView.findViewById<LottieAnimationView>(R.id.nav_bar_image_1)
             lottieView1.setImageDrawable(lottieDrawable1)
-
         }
         task1.addFailureListener { result ->
-            LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
+            LogUtils.E(LogUtils.FilterTags.withTags(LOT), "Lottie Drawable Failure", result)
         }
 
-        val task2: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, R.raw.transfusions)
+        val task2: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, R.raw.donations)
         val lottieDrawable2 = LottieDrawable()
         task2.addListener { result ->
             lottieDrawable2.composition = result
             lottieDrawable2.repeatCount = LottieDrawable.INFINITE
             lottieDrawable2.playAnimation()
-            lottieDrawable2.scale = 0.35f
+            lottieDrawable2.scale = 0.20f
             val lottieView2 = navView.findViewById<LottieAnimationView>(R.id.nav_bar_image_2)
             lottieView2.setImageDrawable(lottieDrawable2)
         }
         task2.addFailureListener { result ->
-            LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
+            LogUtils.E(LogUtils.FilterTags.withTags(LOT), "Lottie Drawable Failure", result)
         }
 
         val task3: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, R.raw.inventory)
@@ -147,12 +146,12 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             lottieDrawable3.composition = result
             lottieDrawable3.repeatCount = LottieDrawable.INFINITE
             lottieDrawable3.playAnimation()
-            lottieDrawable3.scale = 0.20f
+            lottieDrawable3.scale = 0.25f
             val lottieView3 = navView.findViewById<LottieAnimationView>(R.id.nav_bar_image_3)
             lottieView3.setImageDrawable(lottieDrawable3)
         }
-        task2.addFailureListener { result ->
-            LogUtils.E(LogUtils.FilterTags.withTags(LogUtils.TagFilter.ANX), "Lottie Drawable Failure", result)
+        task3.addFailureListener { result ->
+            LogUtils.E(LogUtils.FilterTags.withTags(LOT), "Lottie Drawable Failure", result)
         }
     }
 
