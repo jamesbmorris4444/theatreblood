@@ -58,13 +58,13 @@ class UIDataClass(
     val editTextNameUpperHintColor: String,               // Input EditText upper hint text color (hint text color when it is elevated)
     val editTextNameBackground: Int,                      // Input EditText background drawable (used to provide rounded corners only)
 
-    val editTextDisplayModifyHintColor: String,           // Display/Modify EditText hint text color
-    val editTextDisplayModifyHintSize: String,            // Display/Modify EditText hint text color (changes to this value should be synchronized with styles.TextInputLayoutForLight/Dark)
-    val editTextDisplayModifyColor: String,               // Display/Modify EditText text color
-    val editTextDisplayModifySize: String,                // Display/Modify EditText text size
-    val editTextDisplayModifyBackgroundColor: String,     // Display/Modify EditText underline color
-    val editTextDisplayModifyUpperHintColor: String,      // Display/Modify EditText upper hint text color
-    val editTextDisplayModifyBackground: Int,             // Display/Modify EditText background drawable
+    val editTextHintColor: String,                        // EditText hint text color
+    val editTextHintSize: String,                         // EditText hint text size (changes to this value should be synchronized with styles.TextInputLayoutForLight/Dark)
+    val editTextColor: String,                            // EditText text color
+    val editTextSize: String,                             // EditText text size
+    val editTextBackgroundColor: String,                  // EditText background color (color of the background drawable)
+    val editTextUpperHintColor: String,                   // EditText upper hint text color (hint text color when it is elevated)
+    val editTextBackground: Int,                          // EditText background drawable (used to provide rounded corners only)
 
     val buttonDrawable: Int,                              // Button drawable icon
     val buttonTextColor: String,                          // Button text color
