@@ -54,9 +54,9 @@ class UIDataClass(
     val editTextNameHintColor: String,                    // Input EditText hint text color
     val editTextNameColor: String,                        // Input EditText text color
     val editTextNameSize: String,                         // Input EditText text size
-    val editTextNameBackgroundColor: String,              // Input EditText background color
-    val editTextNameUpperHintColor: String,               // Input EditText upper hint text color
-    val editTextNameBackground: Int,                      // Input EditText background drawable
+    val editTextNameBackgroundColor: String,              // Input EditText background color (color of the background drawable)
+    val editTextNameUpperHintColor: String,               // Input EditText upper hint text color (hint text color when it is elevated)
+    val editTextNameBackground: Int,                      // Input EditText background drawable (used to provide rounded corners only)
 
     val editTextDisplayModifyHintColor: String,           // Display/Modify EditText hint text color
     val editTextDisplayModifyHintSize: String,            // Display/Modify EditText hint text color (changes to this value should be synchronized with styles.TextInputLayoutForLight/Dark)

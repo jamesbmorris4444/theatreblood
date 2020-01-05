@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
-import com.fullsekurity.theatreblood.databinding.DonorsItemBinding
+import com.fullsekurity.theatreblood.databinding.DonorsListItemBinding
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFilterAdapter
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
@@ -26,14 +26,14 @@ class DonateProductsAdapter(private val activityCallbacks: ActivityCallbacks) : 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DonorsViewHolder {
-        val donorsItemBinding: DonorsItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.donors_item, parent, false)
+        val donorsItemBinding: DonorsListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.donors_list_item, parent, false)
         val donateProductsItemViewModel = DonateProductsItemViewModel(activityCallbacks)
         donorsItemBinding.donateProductsItemViewModel = donateProductsItemViewModel
         donorsItemBinding.uiViewModel = uiViewModel
         return DonorsViewHolder(donorsItemBinding.root, donateProductsItemViewModel, donorsItemBinding)
     }
 
-    inner class DonorsViewHolder internal constructor(itemView: View, viewModel: DonateProductsItemViewModel, viewDataBinding: DonorsItemBinding) :
+    inner class DonorsViewHolder internal constructor(itemView: View, viewModel: DonateProductsItemViewModel, viewDataBinding: DonorsListItemBinding) :
         ItemViewHolder<Donor, DonateProductsItemViewModel> (itemView, viewModel, viewDataBinding)
 
     override fun onBindViewHolder(holder: ItemViewHolder<Donor, DonateProductsItemViewModel>, position: Int) {

@@ -15,7 +15,7 @@ import com.airbnb.lottie.*
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
-import com.fullsekurity.theatreblood.databinding.DonorScreenBinding
+import com.fullsekurity.theatreblood.databinding.ManageDonorScreenBinding
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.LOT
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -30,7 +30,7 @@ class DonorFragment : Fragment(), ActivityCallbacks {
 
     private lateinit var donorViewModel: DonorViewModel
     private lateinit var donor: Donor
-    private lateinit var binding: DonorScreenBinding
+    private lateinit var binding: ManageDonorScreenBinding
     private lateinit var mainActivity: MainActivity
     private var transitionToCreateDonation = true
 
@@ -64,7 +64,7 @@ class DonorFragment : Fragment(), ActivityCallbacks {
             .viewModelInjectorModule(ViewModelInjectorModule(activity as MainActivity))
             .build()
             .inject(this)
-        binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.donor_screen, container, false) as DonorScreenBinding
+        binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.manage_donor_screen, container, false) as ManageDonorScreenBinding
         binding.lifecycleOwner = this
         donorViewModel = ViewModelProviders.of(this, DonorViewModelFactory(this)).get(DonorViewModel::class.java)
         binding.donorViewModel = donorViewModel
