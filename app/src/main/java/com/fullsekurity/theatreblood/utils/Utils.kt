@@ -23,8 +23,10 @@ class Utils {
         }
 
         fun newPatternOfSubpatterns(patternOfSubpatterns: String, index: Int, newPattern: String): String {
-            // patternOfSubpatterns = P|P|P|...|P|
+            // patternOfSubpatterns = P|P|P|...|P
             // if there are N subpatterns then index = 0 to N-1
+            // example of usage: newPatternOfSubpatterns("aaaa|bbbb|cccc|dddd", 2, "xxxxxxxx")
+            // will return the string value: "aaaa|bbbb|xxxxxxxx|dddd"
             val split: MutableList<String> = patternOfSubpatterns.split('|').toMutableList()
             val stringBuilder = StringBuilder()
             split[index] = newPattern
@@ -40,6 +42,8 @@ class Utils {
         fun getPatternOfSubpatterns(patternOfSubpatterns: String, index: Int): String {
             // patternOfSubpatterns = P|P|P|...|P|
             // if there are N subpatterns then index = 0 to N-1
+            // example of usage: getPatternOfSubpatterns("aaaa|bbbb|cccc|dddd", 2)
+            // will return the string value: "cccc"
             val split: MutableList<String> = patternOfSubpatterns.split('|').toMutableList()
             return split[index]
         }
