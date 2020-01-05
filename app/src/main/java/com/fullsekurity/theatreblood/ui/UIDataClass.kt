@@ -51,8 +51,8 @@ class UIDataClass(
 
     val editTextCursor: Int,                              // hammer cursor drawable for edit texts
 
-    val editTextHintColor: String,                        // EditText hint text color
-    val editTextHintSize: String,                         // EditText hint text size (changes to this value should be synchronized with styles.TextInputLayoutForLight/Dark)
+    val editTextLabelColor: String,                        // EditText hint text color
+    val editTextLabelSize: String,                         // EditText hint text size (changes to this value should be synchronized with styles.TextInputLayoutForLight/Dark)
     val editTextColor: String,                            // EditText text color
     val editTextSize: String,                             // EditText text size
     val editTextBackgroundColor: String,                  // EditText background color (color of the background drawable)

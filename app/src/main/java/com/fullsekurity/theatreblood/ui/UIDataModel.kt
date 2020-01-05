@@ -62,7 +62,7 @@ class UIDataModel {
                         "largeText",
                         "black",
                         "subTitle",
-                        "veryLightGray",
+                        "lighterGray",
                         "primary",
                         R.drawable.edit_text_background,
 
@@ -157,8 +157,8 @@ class UIDataModel {
                         "largeText",
                         "black",
                         "subTitle",
-                        "veryLightGray",
-                        "primary",
+                        "lightGray",
+                        "white",
                         R.drawable.edit_text_background,
 
                         R.drawable.button_dark,

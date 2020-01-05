@@ -90,9 +90,9 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
 
     val editTextCursor: ObservableField<Int> = ObservableField(0)
 
-    val editTextHintColor: ObservableField<String> = ObservableField("#ffffff")
-    val editTextHintSize: ObservableField<Float> = ObservableField(0f)
-    val editTextHintTypeface: ObservableField<String> = ObservableField("")
+    val editTextLabelColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextLabelSize: ObservableField<Float> = ObservableField(0f)
+    val editTextLabelTypeface: ObservableField<String> = ObservableField("")
     val editTextColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextSize: ObservableField<Float> = ObservableField(0f)
     val editTextBackgroundColor: ObservableField<String> = ObservableField("#ffffff")
@@ -344,9 +344,9 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
 
             editTextCursor.set(uiDataClass.editTextCursor)
 
-            editTextHintColor.set(colorMapper.map(theme, uiDataClass.editTextHintColor))
-            editTextHintSize.set(textSizeMapper.map(theme, uiDataClass.editTextHintSize))
-            editTextHintTypeface.set(typefaceMapper.map(theme, uiDataClass.editTextHintSize))
+            editTextLabelColor.set(colorMapper.map(theme, uiDataClass.editTextLabelColor))
+            editTextLabelSize.set(textSizeMapper.map(theme, uiDataClass.editTextLabelSize))
+            editTextLabelTypeface.set(typefaceMapper.map(theme, uiDataClass.editTextLabelSize))
             editTextColor.set(colorMapper.map(theme, uiDataClass.editTextColor))
             editTextSize.set(textSizeMapper.map(theme, uiDataClass.editTextSize))
             editTextBackgroundColor.set(colorMapper.map(theme, uiDataClass.editTextBackgroundColor))

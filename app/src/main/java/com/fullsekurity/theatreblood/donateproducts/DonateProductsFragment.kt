@@ -19,7 +19,6 @@ import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -65,7 +64,7 @@ class DonateProductsFragment : Fragment(), ActivityCallbacks {
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
         //lottieBackgroundView = binding.root.findViewById(R.id.background_lottie)
         //uiViewModel.lottieAnimation(lottieBackgroundView, uiViewModel.backgroundLottieJsonFileName, LottieDrawable.INFINITE)
-        binding.root.findViewById<TextInputLayout>(R.id.edit_text_input_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        donateProductsListViewModel.initialize(binding.root)
         return binding.root
     }
 

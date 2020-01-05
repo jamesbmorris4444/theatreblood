@@ -14,7 +14,10 @@ import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
+import com.fullsekurity.theatreblood.utils.Utils
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import javax.inject.Inject
 
 class DonateProductsListViewModelFactory(private val activityCallbacks: ActivityCallbacks) : ViewModelProvider.Factory {
@@ -72,6 +75,14 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
         } else {
             newDonorVisible.set(View.GONE)
         }
+    }
+
+    fun initialize(view: View) {
+        val textInputLayout: TextInputLayout = view.findViewById(R.id.edit_text_input_name)
+        val textInputEditText: TextInputEditText = view.findViewById(R.id.edit_text_input_name_editText)
+        textInputLayout.setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        Utils.showKeyboard(textInputEditText)
+        textInputEditText.requestFocus()
     }
 
     // observable used for two-way donations binding. Values set into this field will show in view.

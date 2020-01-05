@@ -44,12 +44,12 @@
 
     <!-- TextInputLayout styles are used in EditText forms for donors and products -->
     <style name="TextInputLayoutForLight" parent="@android:style/TextAppearance">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">16sp</item> <!-- sets upper hint text size  -->
         <item name="android:typeface">@font/avenir_regular</item>
     </style>
 
     <style name="TextInputLayoutForDark" parent="@android:style/TextAppearance">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">16sp</item> <!-- sets upper hint text size  -->
         <item name="android:typeface">@font/avenir_regular</item>
     </style>
 
@@ -62,9 +62,5 @@
         <item name="android:colorAccent">@color/darkPrimary</item>
     </style>
     <!-- end styles used in theming, uiViewModel should select on of these two styles based on the theme -->
-
-    <style name="edit_text_hint_style" parent="TextAppearance.AppCompat">
-    <item name="android:textColor">@color/red</item>
-    </style>
 
 </resources>

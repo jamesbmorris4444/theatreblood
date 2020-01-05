@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
                     app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardWidthWithButton)}"
-                    app:text_hint_color="@{uiViewModel.editTextHintColor}"
+                    app:text_hint_color="@{uiViewModel.editTextLabelColor}"
                     android:text="@={reassociateProductsSearchItemViewModel.editTextNameInput}"
                     android:onTextChanged="@{reassociateProductsSearchItemViewModel::onTextNameChanged}"
                     android:paddingStart="10dp"

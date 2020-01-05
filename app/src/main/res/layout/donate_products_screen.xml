@@ -26,7 +26,6 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:hint="@{donateProductsListViewModel.hintTextName}"
-                android:textColorHint="@color/primary"
                 app:upper_text_hint_color="@{uiViewModel.editTextUpperHintColor}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 android:visibility="@{safeUnbox(donateProductsListViewModel.editTextNameVisibility)}"

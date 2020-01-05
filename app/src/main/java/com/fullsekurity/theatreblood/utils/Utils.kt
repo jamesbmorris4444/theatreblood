@@ -11,7 +11,13 @@ class Utils {
         fun hideKeyboard(view: View?) {
             if (view == null) return
             val inputManager = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputManager?.hideSoftInputFromWindow(view.windowToken, 0)
+            inputManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+
+        fun showKeyboard(view: View?) {
+            if (view == null) return
+            val inputManager = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
         }
 
         fun donorEquals(donor: Donor, otherDonor: Donor): Boolean {
