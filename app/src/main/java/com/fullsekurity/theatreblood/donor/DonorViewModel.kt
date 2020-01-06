@@ -36,6 +36,7 @@ class DonorViewModelFactory(private val activityCallbacks: ActivityCallbacks) : 
     }
 }
 
+@Suppress("UNCHECKED_CAST")
 class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : AndroidViewModel(activityCallbacks.fetchActivity().application) {
 
     private val calendar = Calendar.getInstance()
@@ -45,11 +46,18 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     private var dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
     private lateinit var donor: Donor
     var transitionToCreateDonation = true
+    
+    private lateinit var originalLastName: String
+    private lateinit var originalFirstName: String
+    private lateinit var originalMiddleName: String
+    private lateinit var originalDob: String
+    private var originalGender: Boolean = true
+    private lateinit var originalAboRh: String
+    private lateinit var originalBranch: String
 
     // At least one entry changed. If no entries ever change, do not add this donor to the staging database.
     // When the view is loaded the first time, onText...Changed is called, so ignore this call until isStable is true.
     private var atLeastOneEntryChanged = false
-    var isStable = false
     private var aboRhDropdownInitialized = false
     private var militaryBranchDropdownInitialized = false
 
@@ -63,7 +71,6 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
             .viewModelInjectorModule(ViewModelInjectorModule(activityCallbacks.fetchActivity()))
             .build()
             .inject(this)
-        isStable = false
     }
 
     // last name
@@ -71,9 +78,6 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     // Text typed into EditText in view will be stored into this field after each character is typed.
     var editTextDisplayModifyLastName: ObservableField<String> = ObservableField("")
     fun onTextLastNameChanged(string: CharSequence, start: Int, before: Int, count: Int) {
-        if (isStable) {
-            atLeastOneEntryChanged = true
-        }
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
     var hintTextLastName: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_last_name))
@@ -82,9 +86,6 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     // first name
     var editTextDisplayModifyFirstName: ObservableField<String> = ObservableField("")
     fun onTextFirstNameChanged(string: CharSequence, start: Int, before: Int, count: Int) {
-        if (isStable) {
-            atLeastOneEntryChanged = true
-        }
     }
     var hintTextFirstName: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_first_name))
     var editTextFirstNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
@@ -92,9 +93,6 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     // middle name
     var editTextDisplayModifyMiddleName: ObservableField<String> = ObservableField("")
     fun onTextMiddleNameChanged(string: CharSequence, start: Int, before: Int, count: Int) {
-        if (isStable) {
-            atLeastOneEntryChanged = true
-        }
     }
     var hintTextMiddleName: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_middle_name))
     var editTextMiddleNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
@@ -113,9 +111,6 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         val listener = object : DatePickerDialog.OnDateSetListener {
             override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int) {
                 calendar.set(year, monthOfYear, dayOfMonth)
-                if (isStable) {
-                    atLeastOneEntryChanged = true
-                }
                 editTextDisplayModifyDob.set(dateFormatter.format(calendar.time))
             }
         }
@@ -127,9 +122,6 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     var radioButtonsGenderVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     fun onGenderChanged(radioGroup: RadioGroup, id: Int) {
-        if (isStable) {
-            atLeastOneEntryChanged = true
-        }
         if (id == R.id.radio_male) {
             activityCallbacks.fetchRadioButton(R.id.radio_male)?.isChecked = true
         } else {
@@ -147,19 +139,15 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     var dropdownMilitaryBranchVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
     var currentMilitaryBranchSelectedValue: String = "NO Military Branch"
 
-//    <string name="donor_search_string">Enter Search String</string>
-//    <string name="donor_last_name">Enter Last Name</string>
-//    <string name="donor_middle_name">Enter Middle Name</string>
-//    <string name="donor_first_name">Enter First Name</string>
-//    <string name="donor_dob">Enter DOB</string>
-//    <string name="donor_gender">Enter Gender</string>
-//    <string name="donor_abo_rh">Enter ABO/Rh</string>
-//    <string name="donor_branch">Enter Branch</string>
-//    <string name="donor_nationality">Enter Nationality</string>
-//    <string name="donor_military_unit">Enter Military Unit</string>
-//    <string name="donor_today_date">Enter Date</string>
-//    <string name="dd_572_completed">DD-572 Completed?</string>
-//    <string name="ttd_samples_collected">TTD Samples Collected?</string>
+    fun initializeDonorValues(donor: Donor) {
+        originalLastName = donor.lastName
+        originalFirstName = donor.firstName
+        originalMiddleName = donor.middleName
+        originalDob = donor.dob
+        originalGender = donor.gender
+        originalAboRh = donor.aboRh
+        originalBranch = donor.branch
+    }
 
     fun onUpdateClicked(view: View) {
         // update new values into donor
@@ -186,13 +174,23 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
 
         // change gender
         activityCallbacks.fetchRadioButton(R.id.radio_male)?.let {
-            donor.adult = it.isChecked
+            donor.gender = it.isChecked
         }
 
         // change ABO/Rh
         donor.aboRh = currentAboRhSelectedValue
 
+        // change branch
         donor.branch = currentMilitaryBranchSelectedValue
+
+        val atLeastOneEntryChanged =
+            donor.lastName != originalLastName ||
+            donor.firstName != originalFirstName ||
+            donor.middleName != originalMiddleName ||
+            donor.dob != originalDob ||
+            donor.gender != originalGender ||
+            donor.aboRh != originalAboRh ||
+            donor.branch != originalBranch
 
         if (atLeastOneEntryChanged) {
             repository.insertDonorIntoDatabase(repository.stagingBloodDatabase, donor, transitionToCreateDonation)
@@ -237,7 +235,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         editTextDisplayModifyMiddleName.set(donor.middleName)
         editTextDisplayModifyDob.set(donor.dob)
 
-        if (donor.adult) {
+        if (donor.gender) {
             activityCallbacks.fetchRadioButton(R.id.radio_male)?.isChecked = true
         } else {
             activityCallbacks.fetchRadioButton(R.id.radio_female)?.isChecked = true

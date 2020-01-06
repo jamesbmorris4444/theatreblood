@@ -471,7 +471,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                 val mainDatabaseList = response[0] as List<Donor>
                 val newList = stagingDatabaseList.union(mainDatabaseList).distinctBy { donor -> Utils.donorUnionStringForDistinctBy(donor) }
                 showDonors(newList)
-                Utils.hideKeyboard(view)
             }, { response -> val c = response })
     }
 

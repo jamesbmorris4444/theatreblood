@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.OnRebindCallback
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -70,13 +69,8 @@ class DonorFragment : Fragment(), ActivityCallbacks {
         binding.donorViewModel = donorViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
-        binding.addOnRebindCallback(object :
-            OnRebindCallback<ViewDataBinding>() {
-            override fun onBound(binding: ViewDataBinding) {
-                donorViewModel.isStable = true
-            }
-        })
         donorViewModel.setDonor(donor)
+        donorViewModel.initializeDonorValues(donor)
         donorViewModel.transitionToCreateDonation = transitionToCreateDonation
         setupLottieDrawables(binding.root)
         return binding.root

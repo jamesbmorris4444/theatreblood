@@ -103,6 +103,7 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     fun onSearchClicked(view: View) {
+        Utils.hideKeyboard(view)
         repository.handleSearchClick(view, editTextNameInput.get() ?: "", this::showDonors)
     }
 

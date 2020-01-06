@@ -16,7 +16,7 @@ data class Donor(
     @ColumnInfo(name = "original_language") @SerializedName(value = "original_language") var middleName: String = "",
     @ColumnInfo(name = "original_title") @SerializedName(value = "original_title") var branch: String = "",
     @ColumnInfo(name = "backdrop_path") @SerializedName(value = "backdrop_path") var aboRh: String = "",
-    @ColumnInfo(name = "adult") @SerializedName(value = "adult") var adult: Boolean = false,
+    @ColumnInfo(name = "adult") @SerializedName(value = "adult") var gender: Boolean = false,
     @ColumnInfo(name = "overview") @SerializedName(value = "overview") var overview: String = "",
     @ColumnInfo(name = "release_date") @SerializedName(value = "release_date") var dob: String = "",
     @Ignore var inReassociate: Boolean = false

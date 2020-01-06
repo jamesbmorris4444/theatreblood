@@ -1,9 +1,11 @@
 package com.fullsekurity.theatreblood.donateproducts
 
+import android.view.View
 import androidx.databinding.ObservableField
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 import com.fullsekurity.theatreblood.repository.storage.Donor
+import com.fullsekurity.theatreblood.utils.Utils
 
 @Suppress("UNCHECKED_CAST")
 class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewItemViewModel<Donor>() {
@@ -19,7 +21,7 @@ class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbac
     val middleName: ObservableField<String> = ObservableField("")
     val branch: ObservableField<String> = ObservableField("")
     val aboRh: ObservableField<String> = ObservableField("")
-    val adult: ObservableField<String> = ObservableField("")
+    val gender: ObservableField<String> = ObservableField("")
     val overview: ObservableField<String> = ObservableField("")
     val dob: ObservableField<String> = ObservableField("")
     var inReassociate = false
@@ -35,13 +37,14 @@ class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbac
         middleName.set(item.middleName)
         branch.set(item.branch)
         aboRh.set(item.aboRh)
-        adult.set(if (item.adult) "T" else "F")
+        gender.set(if (item.gender) "Male" else "Female")
         overview.set(item.overview)
         dob.set(item.dob)
         this.inReassociate = item.inReassociate
     }
 
-    fun onItemClicked() {
+    fun onItemClicked(view: View) {
+        Utils.hideKeyboard(view)
         if (inReassociate) {
             activityCallbacks.fetchActivity().reassociateIncorrectDonorClicked(donor)
         } else {
