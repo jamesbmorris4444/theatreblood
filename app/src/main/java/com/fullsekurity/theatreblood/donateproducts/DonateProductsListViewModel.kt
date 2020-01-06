@@ -81,8 +81,8 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
         val textInputLayout: TextInputLayout = view.findViewById(R.id.edit_text_input_name)
         val textInputEditText: TextInputEditText = view.findViewById(R.id.edit_text_input_name_editText)
         textInputLayout.setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
-        Utils.showKeyboard(textInputEditText)
         textInputEditText.requestFocus()
+        Utils.showKeyboard(textInputEditText)
     }
 
     // observable used for two-way donations binding. Values set into this field will show in view.

@@ -20,7 +20,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
         <activity
             android:name="com.fullsekurity.theatreblood.activity.MainActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="stateVisible|adjustPan"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

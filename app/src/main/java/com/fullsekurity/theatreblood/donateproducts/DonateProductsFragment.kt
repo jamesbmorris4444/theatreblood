@@ -52,6 +52,7 @@ class DonateProductsFragment : Fragment(), ActivityCallbacks {
     override fun onResume() {
         super.onResume()
         (activity as MainActivity).toolbar.title = if (transitionToCreateDonation) Constants.DONATE_PRODUCTS_TITLE else Constants.MANAGE_DONOR_TITLE
+        donateProductsListViewModel.initialize(binding.root)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,7 +65,6 @@ class DonateProductsFragment : Fragment(), ActivityCallbacks {
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
         //lottieBackgroundView = binding.root.findViewById(R.id.background_lottie)
         //uiViewModel.lottieAnimation(lottieBackgroundView, uiViewModel.backgroundLottieJsonFileName, LottieDrawable.INFINITE)
-        donateProductsListViewModel.initialize(binding.root)
         return binding.root
     }
 

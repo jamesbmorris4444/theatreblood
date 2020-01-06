@@ -17,7 +17,7 @@ class Utils {
         fun showKeyboard(view: View?) {
             if (view == null) return
             val inputManager = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+            inputManager.showSoftInput(view, InputMethodManager.SHOW_FORCED)
         }
 
         fun donorEquals(donor: Donor, otherDonor: Donor): Boolean {
