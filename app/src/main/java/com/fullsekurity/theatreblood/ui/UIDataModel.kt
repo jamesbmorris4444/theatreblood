@@ -60,7 +60,7 @@ class UIDataModel {
 
                         "mediumGray",
                         "largeText",
-                        "black",
+                        "white",
                         "subTitle",
                         "lighterGray",
                         "primary",
@@ -87,7 +87,7 @@ class UIDataModel {
                         R.drawable.lt_blood_grid_22,
 
                         "darkGray",
-                        "black",
+                        "white",
                         "black",
                         "subTitle",
                         "lightGray",

@@ -330,7 +330,7 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         return true
     }
 
-    // CreateProducts handlers
+    // Start CreateProducts handlers
 
     fun onCreateProductsDeleteClicked(view: View) {
         createProductsListViewModel.onCreateProductsDeleteClicked(view)
@@ -340,7 +340,9 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         createProductsListViewModel.onCreateProductsEditClicked(view)
     }
 
-    // Reassociate Products handlers
+    // End CreateProducts handlers
+
+    // Start Reassociate Products handlers
 
     fun reassociateOnTextNameChanged(key: String) {
         reassociateProductsFragment.reassociateProductsListViewModel.onTextNameChanged(key, 0, 0, 0)
@@ -354,9 +356,13 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         loadDonorFragment(null, transitionToCreateDonation)
     }
 
-    fun reassociateIncorrectDonorClicked(donor: Donor) {
-        reassociateProductsFragment.reassociateProductsListViewModel.handleReassociateIncorrectDonorClick(donor)
+    fun reassociateDonorClicked(view: View, donor: Donor) {
+        reassociateProductsFragment.reassociateProductsListViewModel.handleReassociateDonorClick(view, donor)
     }
+
+    // End Reassociate Products handlers
+
+    // Start Barcode Scanner handler
 
     fun barcodeScanner(gridNumber: Int) {
         val intent = Intent(this, BarCodeScannerActivity::class.java)
@@ -381,6 +387,8 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             }
         }
     }
+
+    // End Barcode Scanner handler
 
     override fun fetchActivity(): MainActivity {
         return this

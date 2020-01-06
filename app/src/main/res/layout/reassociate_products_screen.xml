@@ -15,45 +15,37 @@
 
     </data>
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/donorsRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                app:recyclerViewViewModel="@{reassociateProductsListViewModel}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/donorsRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="300dp"
-                    android:clipToPadding="false"
-                    app:recyclerViewViewModel="@{reassociateProductsListViewModel}"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent" />
+        <android.widget.TextView
+                android:id="@+id/search_no_elements_found"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{reassociateProductsListViewModel.errorMessage}"
+                android:visibility="@{safeUnbox(reassociateProductsListViewModel.errorVisibility)}"
+                android:layout_marginTop="120dp"
+                app:text_font="@{uiViewModel.largeErrorTextTypeface}"
+                app:text_color="@{uiViewModel.largeErrorTextColor}"
+                app:text_size="@{safeUnbox(uiViewModel.largeErrorTextSize)}"
+                app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
 
-            <android.widget.TextView
-                    android:id="@+id/search_no_elements_found"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{reassociateProductsListViewModel.errorMessage}"
-                    android:visibility="@{safeUnbox(reassociateProductsListViewModel.errorVisibility)}"
-                    android:layout_marginTop="120dp"
-                    app:text_font="@{uiViewModel.largeErrorTextTypeface}"
-                    app:text_color="@{uiViewModel.largeErrorTextColor}"
-                    app:text_size="@{safeUnbox(uiViewModel.largeErrorTextSize)}"
-                    app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

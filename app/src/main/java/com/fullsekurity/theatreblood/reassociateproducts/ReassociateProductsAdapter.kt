@@ -3,6 +3,7 @@ package com.fullsekurity.theatreblood.reassociateproducts
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
@@ -109,12 +110,9 @@ class ReassociateProductsAdapter(private val activityCallbacks: ActivityCallback
 
     override fun onBindViewHolder(holder: ItemViewHolder<Any, RecyclerViewItemViewModel<Any>>, position: Int) {
         super.onBindViewHolder(holder, position)
-        return // so that there is not a warning on the "override fun"
-//        if (position % 2 == 1) {
-//            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor1))
-//        } else {
-//            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor2))
-//        }
+        if (holder.itemViewType == ViewTypes.DONOR.ordinal) {
+            holder.itemView.findViewById<ConstraintLayout>(R.id.donate_products_item_root_view).tag = position
+        }
     }
 
     override fun itemFilterable(item: Any, constraint: String): Boolean {

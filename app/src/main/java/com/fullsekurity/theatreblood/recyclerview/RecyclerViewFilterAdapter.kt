@@ -65,16 +65,13 @@ abstract class RecyclerViewFilterAdapter<T, VM : RecyclerViewItemViewModel<T>>(v
         itemListFiltered.clear()
     }
 
-    open class ItemViewHolder<T, VM : RecyclerViewItemViewModel<T>>(
-        itemView: View,
-        val viewModel: VM?,
-        val viewDataBinding: ViewDataBinding?
-    ) : RecyclerView.ViewHolder(itemView) {
+    open class ItemViewHolder<T, VM : RecyclerViewItemViewModel<T>>(itemView: View, val viewModel: VM?, val viewDataBinding: ViewDataBinding?) : RecyclerView.ViewHolder(itemView) {
 
         fun setItem(item: T) {
             viewModel?.setItem(item)
             viewDataBinding?.executePendingBindings()
         }
+
     }
 
     // filter

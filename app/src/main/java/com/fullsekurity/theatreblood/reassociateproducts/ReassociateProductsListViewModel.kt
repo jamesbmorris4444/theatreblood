@@ -61,7 +61,7 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
             }
 
             override fun canScrollVertically(): Boolean {
-                return false
+                return true
             }
         }
     }
@@ -143,14 +143,21 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
         }
     }
 
-    fun handleReassociateIncorrectDonorClick(donor: Donor) {
+    fun handleReassociateDonorClick(view: View, donor: Donor) {
+        val position = view.tag as Int
         if (incorrectDonorIdentified) {
-            // click on correct donor
-            // move products to correct donor
-            // show initial view search box
-            moveProductsToCorrectDonor(incorrectDonor, donor)
+            if (position == 1) {
+                // this is a click on the incorrect donor, which has already been identified
+                // start over
+                initializeView()
+            } else {
+                // this is a click on the correct donor
+                // move products to correct donor
+                // show initial view search box
+                moveProductsToCorrectDonor(incorrectDonor, donor)
+            }
         } else {
-            // click on incorrect donor
+            // this is a click on the incorrect donor, which has not yet been identified
             // show
             //   incorrect donor label
             //   incorrect donor

@@ -46,7 +46,7 @@ class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbac
     fun onItemClicked(view: View) {
         Utils.hideKeyboard(view)
         if (inReassociate) {
-            activityCallbacks.fetchActivity().reassociateIncorrectDonorClicked(donor)
+            activityCallbacks.fetchActivity().reassociateDonorClicked(view, donor)
         } else {
             activityCallbacks.fetchActivity().loadDonorFragment(donor, activityCallbacks.fetchActivity().transitionToCreateDonation)
         }
