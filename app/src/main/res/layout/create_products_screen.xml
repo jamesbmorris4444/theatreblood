@@ -96,7 +96,8 @@
                                 android:inputType="textCapCharacters"
                                 app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
                                 app:edit_text_color="@{uiViewModel.editTextProductColor}"
-                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}"
+                                app:edit_text_background_color="@{uiViewModel.editTextProductBackgroundColor}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -161,7 +162,7 @@
                         android:layout_marginTop="70dp"
                         android:text="@{createProductsListViewModel.donorBloodType}"
                         app:text_font="@{uiViewModel.editTextProductTypeface}"
-                        app:text_color="@{uiViewModel.editTextProductColor}"
+                        app:text_color="@{uiViewModel.editTextAboRhProductColor}"
                         app:text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
 
                 <TextView
@@ -236,7 +237,8 @@
                                 android:inputType="textCapCharacters"
                                 app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
                                 app:edit_text_color="@{uiViewModel.editTextProductColor}"
-                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}"
+                                app:edit_text_background_color="@{uiViewModel.editTextProductBackgroundColor}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -323,10 +325,11 @@
                                 android:paddingStart="3dp"
                                 android:paddingEnd="10dp"
                                 android:paddingTop="20dp"
-                                android:inputType="textCapCharacters"
+                                android:focusable="false"
                                 app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
                                 app:edit_text_color="@{uiViewModel.editTextProductColor}"
-                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
+                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}"
+                                app:edit_text_background_color="@{uiViewModel.editTextProductBackgroundColor}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 

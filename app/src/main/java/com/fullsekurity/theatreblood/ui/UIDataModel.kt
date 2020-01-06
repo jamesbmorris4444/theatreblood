@@ -81,8 +81,6 @@ class UIDataModel {
                         "black",
                         "mainTitleBold",
 
-                        "white",
-                        "mainTitle",
                         R.drawable.lt_blood_grid_11,
                         R.drawable.lt_blood_grid_12,
                         R.drawable.lt_blood_grid_21,
@@ -90,7 +88,9 @@ class UIDataModel {
 
                         "darkGray",
                         "black",
+                        "black",
                         "subTitle",
+                        "lightGray",
                         "primary",
                         R.drawable.edit_text_background,
 
@@ -176,8 +176,6 @@ class UIDataModel {
                         "white",
                         "mainTitle",
 
-                        "white",
-                        "mainTitle",
                         R.drawable.dk_blood_grid_11,
                         R.drawable.dk_blood_grid_12,
                         R.drawable.dk_blood_grid_21,
@@ -185,7 +183,9 @@ class UIDataModel {
 
                         "darkGray",
                         "black",
+                        "white",
                         "subTitle",
+                        "lightGray",
                         "white",
                         R.drawable.edit_text_background,
 

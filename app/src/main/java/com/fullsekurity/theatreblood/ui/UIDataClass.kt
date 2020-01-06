@@ -74,8 +74,6 @@ class UIDataClass(
     val productItemTextColor: String,                     // Product item text color
     val productItemTextSize: String,                      // Product item text size
 
-    val productGridTextColor: String,                     // Product grid item text color
-    val productGridTextSize: String,                      // Product grid item text size
     val productGridBackgroundDrawable11: Int,             // Product grid background drawable upper left
     val productGridBackgroundDrawable12: Int,             // Product grid background drawable upper right
     val productGridBackgroundDrawable21: Int,             // Product grid background drawable lower left
@@ -83,7 +81,9 @@ class UIDataClass(
 
     val editTextProductHintColor: String,                 // Product EditText hint text color
     val editTextProductColor: String,                     // Product EditText text color
+    val editTextAboRhProductColor: String,                // Product EditText text color for ABO Rh entry only
     val editTextProductSize: String,                      // Product EditText text size
+    val editTextProductBackgroundColor: String,           // Product EditText background color (color of the background drawable)
     val editTextProductUpperHintColor: String,            // Product EditText upper hint text color
     val editTextProductBackground: Int,                   // Product EditText background drawable resource
 

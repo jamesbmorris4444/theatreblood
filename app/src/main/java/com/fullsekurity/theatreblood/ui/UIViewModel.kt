@@ -120,9 +120,6 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val productItemTextSize: ObservableField<Float> = ObservableField(0f)
     val productItemTextTypeface: ObservableField<String> = ObservableField("")
 
-    val productGridTextColor: ObservableField<String> = ObservableField("#ffffff")
-    val productGridTextSize: ObservableField<Float> = ObservableField(0f)
-    val productGridTextTypeface: ObservableField<String> = ObservableField("")
     val productGridBackgroundDrawable11: ObservableField<Drawable> = ObservableField()
     val productGridBackgroundDrawable12: ObservableField<Drawable> = ObservableField()
     val productGridBackgroundDrawable21: ObservableField<Drawable> = ObservableField()
@@ -130,10 +127,12 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
 
     val editTextProductHintColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextProductColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextAboRhProductColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextProductSize: ObservableField<Float> = ObservableField(0f)
+    val editTextProductBackgroundColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextProductTypeface: ObservableField<String> = ObservableField("")
     val editTextProductUpperHintColor: ObservableField<String> = ObservableField("#ffffff")
-    val editTextProductBackground: ObservableField<Drawable> = ObservableField()                  // Product EditText background drawable resource
+    val editTextProductBackground: ObservableField<Drawable> = ObservableField()
 
     val productIdTextColor: ObservableField<String> = ObservableField("#ffffff")
     val productIdTextSize: ObservableField<Float> = ObservableField(0f)
@@ -374,9 +373,6 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             productItemTextSize.set(textSizeMapper.map(theme, uiDataClass.productItemTextSize))
             productItemTextTypeface.set(typefaceMapper.map(theme, uiDataClass.productItemTextSize))
 
-            productGridTextColor.set(colorMapper.map(theme, uiDataClass.productGridTextColor))
-            productGridTextSize.set(textSizeMapper.map(theme, uiDataClass.productGridTextSize))
-            productGridTextTypeface.set(typefaceMapper.map(theme, uiDataClass.productGridTextSize))
             productGridBackgroundDrawable11.set(ContextCompat.getDrawable(context, uiDataClass.productGridBackgroundDrawable11))
             productGridBackgroundDrawable12.set(ContextCompat.getDrawable(context, uiDataClass.productGridBackgroundDrawable12))
             productGridBackgroundDrawable21.set(ContextCompat.getDrawable(context, uiDataClass.productGridBackgroundDrawable21))
@@ -384,7 +380,9 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
 
             editTextProductHintColor.set(colorMapper.map(theme, uiDataClass.editTextProductHintColor))
             editTextProductColor.set(colorMapper.map(theme, uiDataClass.editTextProductColor))
+            editTextAboRhProductColor.set(colorMapper.map(theme, uiDataClass.editTextAboRhProductColor))
             editTextProductSize.set(textSizeMapper.map(theme, uiDataClass.editTextProductSize))
+            editTextProductBackgroundColor.set(colorMapper.map(theme, uiDataClass.editTextProductBackgroundColor))
             editTextProductTypeface.set(typefaceMapper.map(theme, uiDataClass.editTextProductSize))
             editTextProductUpperHintColor.set(colorMapper.map(theme, uiDataClass.editTextProductUpperHintColor))
             editTextProductBackground.set(ContextCompat.getDrawable(context, uiDataClass.editTextProductBackground))
