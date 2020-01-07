@@ -77,12 +77,6 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         uiViewModel.lottieAnimation(lottieBackgroundView, uiViewModel.backgroundLottieJsonFileName, LottieDrawable.INFINITE)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        repository.closeDatabase()
-        repository.onCleared()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.plant(Timber.DebugTree())
         repository = Repository(this)

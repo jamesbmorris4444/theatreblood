@@ -16,6 +16,7 @@ object LogUtils {
             MIS("MIS"),
             NET("NET"),
             THM("THM"),
+            EXC("EXC"),
             APP("APP")
     }
 

@@ -13,6 +13,7 @@ import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.logger.LogUtils
+import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.EXC
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.network.APIClient
 import com.fullsekurity.theatreblood.repository.network.APIInterface
@@ -39,7 +40,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     lateinit var mainBloodDatabase: BloodDatabase
     lateinit var stagingBloodDatabase: BloodDatabase
     private val donorsService: APIInterface = APIClient.client
-    private var disposable: Disposable? = null
     private var transportType = TransportType.NONE
     private var isMetered: Boolean = false
     private var cellularNetwork: Network? = null
@@ -53,13 +53,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         }
         BloodDatabase.newInstance(context, MODIFIED_DATABASE_NAME)?.let {
             stagingBloodDatabase = it
-        }
-    }
-
-    fun onCleared() {
-        disposable?.let {
-            it.dispose()
-            disposable = null
         }
     }
 
@@ -185,16 +178,19 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     fun refreshDatabase(progressBar: ProgressBar, activity: MainActivity) {
         saveDatabase(activity, MAIN_DATABASE_NAME)
         deleteDatabase(activity, MAIN_DATABASE_NAME)
+        var disposable: Disposable? = null
         disposable = donorsService.getDonors(Constants.API_KEY, Constants.LANGUAGE, 13)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .timeout(15L, TimeUnit.SECONDS)
             .subscribe ({ donorResponse ->
+                disposable?.dispose()
+                disposable = null
                 progressBar.visibility = View.GONE
                 initializeDataBase(donorResponse.results, donorResponse.products, activity)
             },
             {
-                throwable -> initializeDatabaseFailureModal(activity, throwable.message)
+                throwable -> initializeDatabaseFailureModal(activity, throwable.message); disposable?.dispose(); disposable = null
             })
     }
 
@@ -290,7 +286,9 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         disposable = Completable.fromAction { database.databaseDao().insertDonor(donor) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe {
+            .subscribe ({
+                disposable?.dispose()
+                disposable = null
                 StandardModal(
                     activityCallbacks,
                     modalType = StandardModal.ModalType.STANDARD,
@@ -299,8 +297,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                     positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
                     dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                         override fun onPositive(string: String) {
-                            disposable?.dispose()
-                            disposable = null
                             if (transitionToCreateDonation) {
                                 activityCallbacks.fetchActivity().loadCreateProductsFragment(donor)
                             } else {
@@ -310,13 +306,23 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                         override fun onNegative() { }
                         override fun onNeutral() { }
                         override fun onBackPressed() {
-                            disposable?.dispose()
-                            disposable = null
                             activityCallbacks.fetchActivity().onBackPressed()
                         }
                     }
                 ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
-            }
+            },
+            {
+                throwable -> insertDonorIntoDatabaseFailure(transitionToCreateDonation, donor, "insertDonorIntoDatabase", throwable); disposable?.dispose(); disposable = null
+            })
+    }
+
+    private fun insertDonorIntoDatabaseFailure(transition: Boolean, donor: Donor, method: String, throwable: Throwable) {
+        LogUtils.E(LogUtils.FilterTags.withTags(EXC), method, throwable)
+        if (transition) {
+            activityCallbacks.fetchActivity().loadCreateProductsFragment(donor)
+        } else {
+            activityCallbacks.fetchActivity().onBackPressed()
+        }
     }
 
     fun insertDonorAndProductsIntoDatabase(database: BloodDatabase, donor: Donor, products: List<Product>) {
@@ -324,7 +330,9 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         disposable = Completable.fromAction { database.databaseDao().insertDonorAndProducts(donor, products) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe {
+            .subscribe ({
+                disposable?.dispose()
+                disposable = null
                 StandardModal(
                     activityCallbacks,
                     modalType = StandardModal.ModalType.STANDARD,
@@ -333,22 +341,27 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                     positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
                     dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                         override fun onPositive(string: String) {
-                            disposable?.dispose()
-                            disposable = null
                             activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                             activityCallbacks.fetchActivity().loadDonateProductsFragment(true)
                         }
                         override fun onNegative() { }
                         override fun onNeutral() { }
                         override fun onBackPressed() {
-                            disposable?.dispose()
-                            disposable = null
                             activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                             activityCallbacks.fetchActivity().loadDonateProductsFragment(true)
                         }
                     }
                 ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
-            }
+            },
+            {
+                throwable -> insertDonorAndProductsIntoDatabaseFailure("insertDonorAndProductsIntoDatabase", throwable); disposable?.dispose(); disposable = null
+            })
+    }
+
+    private fun insertDonorAndProductsIntoDatabaseFailure(method: String, throwable: Throwable) {
+        LogUtils.E(LogUtils.FilterTags.withTags(EXC), method, throwable)
+        activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        activityCallbacks.fetchActivity().loadDonateProductsFragment(true)
     }
 
     fun insertReassociatedProductsIntoDatabase(database: BloodDatabase, products: List<Product>, initializeView: () -> Unit) {
@@ -356,7 +369,9 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         disposable = Completable.fromAction { database.databaseDao().insertProducts(products) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe {
+            .subscribe ({
+                disposable?.dispose()
+                disposable = null
                 StandardModal(
                     activityCallbacks,
                     modalType = StandardModal.ModalType.STANDARD,
@@ -374,7 +389,15 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                         }
                     }
                 ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
-            }
+            },
+            {
+                throwable -> insertReassociatedProductsIntoDatabaseFailure("insertReassociatedProductsIntoDatabase", throwable, initializeView); disposable?.dispose(); disposable = null
+            })
+    }
+
+    private fun insertReassociatedProductsIntoDatabaseFailure(method: String, throwable: Throwable, initializeView: () -> Unit) {
+        LogUtils.E(LogUtils.FilterTags.withTags(EXC), method, throwable)
+        initializeView()
     }
 
     private fun donorsFromFullName(database: BloodDatabase, search: String): Single<List<Donor>> {
@@ -408,28 +431,35 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     }
     
     fun databaseCounts() {
-        var disposable: Disposable? = null
         val entryCountList = listOf(
             databaseDonorCount(stagingBloodDatabase),
             databaseDonorCount(mainBloodDatabase)
         )
+        var disposable: Disposable? = null
         disposable = Single.zip(entryCountList) { args -> listOf(args) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ responseList ->
+                disposable?.dispose()
+                disposable = null
                 val response = responseList[0]
                 getProductEntryCount(response[0] as Int, response[1] as Int)
-            }, { response -> val c = response })
+            },
+            {
+                throwable -> LogUtils.E(LogUtils.FilterTags.withTags(EXC), "databaseCounts", throwable); disposable?.dispose(); disposable = null
+            })
     }
 
     private fun getProductEntryCount(modifiedDonors: Int, mainDonors: Int) {
-        var disposable: Disposable? = null
         val entryCountList = listOf(
             databaseProductCount(stagingBloodDatabase),
             databaseProductCount(mainBloodDatabase)
         )
+        var disposable: Disposable? = null
         disposable = Single.zip(entryCountList) { args -> listOf(args) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ responseList ->
+                disposable?.dispose()
+                disposable = null
                 val response = responseList[0]
                 StandardModal(
                     activityCallbacks,
@@ -444,7 +474,10 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                         override fun onBackPressed() { }
                     }
                 ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
-            }, { response -> val c = response })
+            },
+            {
+                throwable -> LogUtils.E(LogUtils.FilterTags.withTags(EXC), "getProductEntryCount", throwable); disposable?.dispose(); disposable = null
+            })
     }
 
     private fun databaseDonorCount(database: BloodDatabase): Single<Int> {
@@ -457,21 +490,26 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
 
     @Suppress("UNCHECKED_CAST")
     fun handleSearchClick(view: View, searchKey: String, showDonors: (donorList: List<Donor>) -> Unit) {
-        var disposable: Disposable? = null
         val fullNameResponseList = listOf(
             donorsFromFullName(mainBloodDatabase, searchKey),
             donorsFromFullName(stagingBloodDatabase, searchKey)
         )
+        var disposable: Disposable? = null
         disposable = Single.zip(fullNameResponseList) { args -> listOf(args) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe({ responseList ->
+                disposable?.dispose()
+                disposable = null
                 val response = responseList[0]
                 val stagingDatabaseList = response[1] as List<Donor>
                 val mainDatabaseList = response[0] as List<Donor>
                 val newList = stagingDatabaseList.union(mainDatabaseList).distinctBy { donor -> Utils.donorUnionStringForDistinctBy(donor) }
                 showDonors(newList)
-            }, { response -> val c = response })
+            },
+            {
+                throwable -> LogUtils.E(LogUtils.FilterTags.withTags(EXC), "handleSearchClick", throwable); disposable?.dispose(); disposable = null
+            })
     }
 
     fun handleReassociateNewDonorClick(view: View) {
@@ -483,22 +521,32 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         disposable = donorsFromFullNameWithProducts(stagingBloodDatabase, searchKey)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe{ donorWithProducts ->
+            .subscribe ({ donorWithProducts ->
+                disposable?.dispose()
+                disposable = null
                 showDonorsAndProducts(donorWithProducts)
-            }
+            },
+            {
+                throwable -> LogUtils.E(LogUtils.FilterTags.withTags(EXC), "handleReassociateSearchClick", throwable); disposable?.dispose(); disposable = null
+            })
 
     }
 
-    fun getAllNewProductsForDonor(donor: Donor, showProducts: (productList: List<Product>) -> Unit) {
-        var disposable: Disposable? = null
-        disposable = donorsFromNameAndDateWithProducts(stagingBloodDatabase, donor)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe{ donorWithProducts ->
-                showProducts(donorWithProducts.products)
-            }
-                
-    }
+//    fun getAllNewProductsForDonor(donor: Donor, showProducts: (productList: List<Product>) -> Unit) {
+//        var disposable: Disposable? = null
+//        disposable = donorsFromNameAndDateWithProducts(stagingBloodDatabase, donor)
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribeOn(Schedulers.io())
+//            .subscribe ({ donorWithProducts ->
+//                disposable?.dispose()
+//                disposable = null
+//                showProducts(donorWithProducts.products)
+//            },
+//            {
+//                throwable -> LogUtils.E(LogUtils.FilterTags.withTags(EXC), "getAllNewProductsForDonor", throwable); disposable?.dispose(); disposable = null
+//            })
+//
+//    }
 
     private fun donorsFromNameAndDateWithProducts(database: BloodDatabase, donor: Donor): Single<DonorWithProducts> {
         return database.databaseDao().donorsFromNameAndDateWithProducts(donor.lastName, donor.firstName, donor.middleName, donor.dob)
