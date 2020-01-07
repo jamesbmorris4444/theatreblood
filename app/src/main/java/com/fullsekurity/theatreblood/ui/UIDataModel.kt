@@ -98,7 +98,10 @@ class UIDataModel {
                         "largeTextBold",
 
                         "black",
-                        "mainTitleBold"
+                        "mainTitleBold",
+
+                        "primary",
+                        "subTitle"
                     )
                 }
                 lightViewUIDataClass
@@ -193,8 +196,10 @@ class UIDataModel {
                         "largeTextBold",
 
                         "white",
-                        "mainTitleBold"
+                        "mainTitleBold",
 
+                        "primary",
+                        "subTitle"
                     )
                 }
                 darkViewUIDataClass

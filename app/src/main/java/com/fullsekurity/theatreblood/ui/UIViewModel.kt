@@ -142,6 +142,10 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val incorrectDonorTextSize: ObservableField<Float> = ObservableField(0f)
     val incorrectDonorTextTypeface: ObservableField<String> = ObservableField("")
 
+    val dropdownTextColor: ObservableField<String> = ObservableField("#ffffff")
+    val dropdownTextSize: ObservableField<Float> = ObservableField(0f)
+    val dropdownTextTypeface: ObservableField<String> = ObservableField("")
+
     // computed values
 
     var standardLeftAndRightMargin: ObservableField<Int> = ObservableField(0)
@@ -395,7 +399,9 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             incorrectDonorTextSize.set(textSizeMapper.map(theme, uiDataClass.incorrectDonorTextSize))
             incorrectDonorTextTypeface.set(typefaceMapper.map(theme, uiDataClass.incorrectDonorTextSize))
 
-
+            dropdownTextColor.set(colorMapper.map(theme, uiDataClass.dropdownTextColor))
+            dropdownTextSize.set(textSizeMapper.map(theme, uiDataClass.dropdownTextSize))
+            dropdownTextTypeface.set(typefaceMapper.map(theme, uiDataClass.dropdownTextSize))
         }
     }
 

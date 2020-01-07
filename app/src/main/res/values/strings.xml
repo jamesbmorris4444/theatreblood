@@ -105,6 +105,7 @@
     </string-array>
 
     <string-array name="military_branch_array">
+        <item>[NO VALUE]</item>
         <item>The Army</item>
         <item>The Marines</item>
         <item>The Navy</item>

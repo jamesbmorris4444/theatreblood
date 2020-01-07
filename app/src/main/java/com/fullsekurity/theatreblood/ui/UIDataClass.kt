@@ -91,5 +91,8 @@ class UIDataClass(
     val productIdTextSize: String,                        // Product grid id label text size
 
     val incorrectDonorTextColor: String,                  // Reassociate donor label text color
-    val incorrectDonorTextSize: String                    // Reassociate donor label text size
+    val incorrectDonorTextSize: String,                    // Reassociate donor label text size
+
+    val dropdownTextColor: String,                        // aboRh/branch dropdown label text color
+    val dropdownTextSize: String                          // aboRh/branch dropdown label text size
 )

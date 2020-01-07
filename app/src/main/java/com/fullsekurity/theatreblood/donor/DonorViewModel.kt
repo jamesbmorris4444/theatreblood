@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.ActivityCallbacks
-import com.fullsekurity.theatreblood.databinding.AborhDropdownItemBinding
+import com.fullsekurity.theatreblood.databinding.AborhAndBranchDropdownItemBinding
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -307,7 +307,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
             val viewHolder: ViewHolder
             var convertViewShadow = convertView
             if (convertView == null) {
-                val binding: AborhDropdownItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.aborh_dropdown_item, parent, false)
+                val binding: AborhAndBranchDropdownItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.aborh_and_branch_dropdown_item, parent, false)
                 binding.uiViewModel = uiViewModel
                 convertViewShadow = binding.root
                 val textView = convertViewShadow.findViewById<View>(R.id.abo_rh_item) as TextView
@@ -321,7 +321,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         }
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val binding: AborhDropdownItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.aborh_dropdown_item, parent, false)
+            val binding: AborhAndBranchDropdownItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.aborh_and_branch_dropdown_item, parent, false)
             val view = binding.root
             binding.uiViewModel = uiViewModel
             val textView = view.findViewById(R.id.abo_rh_item) as TextView
