@@ -185,47 +185,53 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .timeout(15L, TimeUnit.SECONDS)
             .subscribe ({ donorResponse ->
                 disposable?.dispose()
-                disposable = null
-                progressBar.visibility = View.GONE
-                initializeDataBase(donorResponse.results, donorResponse.products, activity)
+                initializeDataBase(progressBar, donorResponse.results, donorResponse.products, activity)
             },
-            {
-                throwable -> initializeDatabaseFailureModal(activity, throwable.message); disposable?.dispose(); disposable = null
+            { throwable ->
+                progressBar.visibility = View.GONE
+                disposable?.dispose()
+                initializeDatabaseFailureModal(activity, throwable.message)
             })
     }
 
-    private fun initializeDataBase(donors: List<Donor>, products: List<List<Product>>, activity: MainActivity) {
+    private fun initializeDataBase(progressBar: ProgressBar, donors: List<Donor>, products: List<List<Product>>, activity: MainActivity) {
         for (donorIndex in donors.indices) {
             for (productIndex in products[donorIndex].indices) {
                 products[donorIndex][productIndex].donorId = donors[donorIndex].id
             }
         }
-        insertDonorsIntoLocalDatabase(mainBloodDatabase, donors)
-        insertProductsIntoLocalDatabase(mainBloodDatabase, products)
-        liveViewDonorList.postValue(donors)
-        StandardModal(
-            activity,
-            modalType = StandardModal.ModalType.STANDARD,
-            titleText = activity.getString(R.string.std_modal_refresh_success_title),
-            bodyText = String.format(activity.getString(R.string.std_modal_refresh_success_body, activity.getDatabasePath(MAIN_DATABASE_NAME))),
-            positiveText = activity.getString(R.string.std_modal_ok),
-            dialogFinishedListener = object : StandardModal.DialogFinishedListener {
-                override fun onPositive(string: String) { }
-                override fun onNegative() { }
-                override fun onNeutral() { }
-                override fun onBackPressed() { }
-            }
-        ).show(activity.supportFragmentManager, "MODAL")
+        insertDonorsAndProductsIntoLocalDatabase(progressBar, mainBloodDatabase, donors, products, activity)
     }
 
-    private fun insertDonorsIntoLocalDatabase(database: BloodDatabase, donors: List<Donor>) {
-        database.databaseDao().insertLocalDonors(donors)
-    }
+    private fun insertDonorsAndProductsIntoLocalDatabase(progressBar: ProgressBar, database: BloodDatabase, donors: List<Donor>, products: List<List<Product>>, activity: MainActivity) {
+        var disposable: Disposable? = null
+        disposable = Completable.fromAction { database.databaseDao().insertDonorsAndProductLists(donors, products) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe ({
+                disposable?.dispose()
+                progressBar.visibility = View.GONE
+                liveViewDonorList.postValue(donors)
+                StandardModal(
+                    activity,
+                    modalType = StandardModal.ModalType.STANDARD,
+                    titleText = activity.getString(R.string.std_modal_refresh_success_title),
+                    bodyText = String.format(activity.getString(R.string.std_modal_refresh_success_body, activity.getDatabasePath(MAIN_DATABASE_NAME))),
+                    positiveText = activity.getString(R.string.std_modal_ok),
+                    dialogFinishedListener = object : StandardModal.DialogFinishedListener {
+                        override fun onPositive(string: String) { }
+                        override fun onNegative() { }
+                        override fun onNeutral() { }
+                        override fun onBackPressed() { }
+                    }
+                ).show(activity.supportFragmentManager, "MODAL")
+            },
+            { throwable ->
+                disposable?.dispose()
+                progressBar.visibility = View.GONE
+                LogUtils.E(LogUtils.FilterTags.withTags(EXC), "insertDonorsAndProductsIntoLocalDatabase", throwable)
 
-    private fun insertProductsIntoLocalDatabase(database: BloodDatabase, products: List<List<Product>>) {
-        for (index in products.indices) {
-            database.databaseDao().insertProducts(products[index])
-        }
+            })
     }
 
     private fun initializeDatabaseFailureModal(activity: MainActivity, errorMessage: String?) {
@@ -258,25 +264,22 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     }
 
     private fun saveDatabase(context: Context, databaseName: String) {
-        val db = context.getDatabasePath(databaseName)
-        val dbBackup = File(db.parent, databaseName+"_backup")
+        val db: File = context.getDatabasePath(databaseName)
+        val dbShm = File(db.parent, "$databaseName-shm")
+        val dbWal = File(db.parent, "$databaseName-wal")
+        val dbBackup = File(db.parent, "$databaseName-backup")
+        val dbShmBackup = File(db.parent, "$databaseName-backup-shm")
+        val dbWalBackup = File(db.parent, "$databaseName-backup-wal")
         if (db.exists()) {
             db.copyTo(dbBackup, true)
-            LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("Path Name \"%s\" exists and was backed up", db.toString()))
         }
-    }
-
-    fun closeDatabase() {
-        mainBloodDatabase.let { bloodDatabase ->
-            if (bloodDatabase.isOpen) {
-                bloodDatabase.close()
-            }
+        if (dbShm.exists()) {
+            dbShm.copyTo(dbShmBackup, true)
         }
-        stagingBloodDatabase.let { bloodDatabase ->
-            if (bloodDatabase.isOpen) {
-                bloodDatabase.close()
-            }
+        if (dbWal.exists()) {
+            dbWal.copyTo(dbWalBackup, true)
         }
+        LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("Path Name \"%s\" exists and was backed up", db.toString()))
     }
 
     // The code below here does CRUD on the database
@@ -288,7 +291,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .subscribeOn(Schedulers.io())
             .subscribe ({
                 disposable?.dispose()
-                disposable = null
                 StandardModal(
                     activityCallbacks,
                     modalType = StandardModal.ModalType.STANDARD,
@@ -311,8 +313,9 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                     }
                 ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
             },
-            {
-                throwable -> insertDonorIntoDatabaseFailure(transitionToCreateDonation, donor, "insertDonorIntoDatabase", throwable); disposable?.dispose(); disposable = null
+            { throwable ->
+                disposable?.dispose()
+                insertDonorIntoDatabaseFailure(transitionToCreateDonation, donor, "insertDonorIntoDatabase", throwable)
             })
     }
 
@@ -332,7 +335,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .subscribeOn(Schedulers.io())
             .subscribe ({
                 disposable?.dispose()
-                disposable = null
                 StandardModal(
                     activityCallbacks,
                     modalType = StandardModal.ModalType.STANDARD,
@@ -353,8 +355,9 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                     }
                 ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
             },
-            {
-                throwable -> insertDonorAndProductsIntoDatabaseFailure("insertDonorAndProductsIntoDatabase", throwable); disposable?.dispose(); disposable = null
+            { throwable ->
+                disposable?.dispose()
+                insertDonorAndProductsIntoDatabaseFailure("insertDonorAndProductsIntoDatabase", throwable)
             })
     }
 
@@ -371,7 +374,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .subscribeOn(Schedulers.io())
             .subscribe ({
                 disposable?.dispose()
-                disposable = null
                 StandardModal(
                     activityCallbacks,
                     modalType = StandardModal.ModalType.STANDARD,
@@ -390,44 +392,15 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                     }
                 ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
             },
-            {
-                throwable -> insertReassociatedProductsIntoDatabaseFailure("insertReassociatedProductsIntoDatabase", throwable, initializeView); disposable?.dispose(); disposable = null
+            { throwable ->
+                disposable?.dispose()
+                insertReassociatedProductsIntoDatabaseFailure("insertReassociatedProductsIntoDatabase", throwable, initializeView)
             })
     }
 
     private fun insertReassociatedProductsIntoDatabaseFailure(method: String, throwable: Throwable, initializeView: () -> Unit) {
         LogUtils.E(LogUtils.FilterTags.withTags(EXC), method, throwable)
         initializeView()
-    }
-
-    private fun donorsFromFullName(database: BloodDatabase, search: String): Single<List<Donor>> {
-        val searchLast: String
-        var searchFirst = "%"
-        val index = search.indexOf(',')
-        if (index < 0) {
-            searchLast = "$search%"
-        } else {
-            val last = search.substring(0, index)
-            val first = search.substring(index + 1)
-            searchFirst = "$first%"
-            searchLast = "$last%"
-        }
-        return database.databaseDao().donorsFromFullName(searchLast, searchFirst)
-    }
-
-    private fun donorsFromFullNameWithProducts(database: BloodDatabase, search: String): Single<List<DonorWithProducts>> {
-        var searchLast: String
-        var searchFirst = "%"
-        val index = search.indexOf(',')
-        if (index < 0) {
-            searchLast = "$search%"
-        } else {
-            val last = search.substring(0, index)
-            val first = search.substring(index + 1)
-            searchFirst = "$first%"
-            searchLast = "$last%"
-        }
-        return database.databaseDao().donorsFromFullNameWithProducts(searchLast, searchFirst)
     }
     
     fun databaseCounts() {
@@ -440,12 +413,12 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ responseList ->
                 disposable?.dispose()
-                disposable = null
                 val response = responseList[0]
                 getProductEntryCount(response[0] as Int, response[1] as Int)
             },
-            {
-                throwable -> LogUtils.E(LogUtils.FilterTags.withTags(EXC), "databaseCounts", throwable); disposable?.dispose(); disposable = null
+            { throwable ->
+                disposable?.dispose()
+                LogUtils.E(LogUtils.FilterTags.withTags(EXC), "databaseCounts", throwable)
             })
     }
 
@@ -459,7 +432,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ responseList ->
                 disposable?.dispose()
-                disposable = null
                 val response = responseList[0]
                 StandardModal(
                     activityCallbacks,
@@ -475,8 +447,9 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                     }
                 ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
             },
-            {
-                throwable -> LogUtils.E(LogUtils.FilterTags.withTags(EXC), "getProductEntryCount", throwable); disposable?.dispose(); disposable = null
+            { throwable ->
+                disposable?.dispose()
+                LogUtils.E(LogUtils.FilterTags.withTags(EXC), "getProductEntryCount", throwable)
             })
     }
 
@@ -500,16 +473,31 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .subscribeOn(Schedulers.io())
             .subscribe({ responseList ->
                 disposable?.dispose()
-                disposable = null
                 val response = responseList[0]
                 val stagingDatabaseList = response[1] as List<Donor>
                 val mainDatabaseList = response[0] as List<Donor>
                 val newList = stagingDatabaseList.union(mainDatabaseList).distinctBy { donor -> Utils.donorUnionStringForDistinctBy(donor) }
                 showDonors(newList)
             },
-            {
-                throwable -> LogUtils.E(LogUtils.FilterTags.withTags(EXC), "handleSearchClick", throwable); disposable?.dispose(); disposable = null
+            { throwable ->
+                disposable?.dispose()
+                LogUtils.E(LogUtils.FilterTags.withTags(EXC), "handleSearchClick", throwable)
             })
+    }
+
+    private fun donorsFromFullName(database: BloodDatabase, search: String): Single<List<Donor>> {
+        val searchLast: String
+        var searchFirst = "%"
+        val index = search.indexOf(',')
+        if (index < 0) {
+            searchLast = "$search%"
+        } else {
+            val last = search.substring(0, index)
+            val first = search.substring(index + 1)
+            searchFirst = "$first%"
+            searchLast = "$last%"
+        }
+        return database.databaseDao().donorsFromFullName(searchLast, searchFirst)
     }
 
     fun handleReassociateSearchClick(view: View, searchKey: String, showDonorsAndProducts: (donorsAndProductsList: List<DonorWithProducts>) -> Unit) {
@@ -519,13 +507,28 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .subscribeOn(Schedulers.io())
             .subscribe ({ donorWithProducts ->
                 disposable?.dispose()
-                disposable = null
                 showDonorsAndProducts(donorWithProducts)
             },
-            {
-                throwable -> LogUtils.E(LogUtils.FilterTags.withTags(EXC), "handleReassociateSearchClick", throwable); disposable?.dispose(); disposable = null
+            { throwable ->
+                disposable?.dispose()
+                LogUtils.E(LogUtils.FilterTags.withTags(EXC), "handleReassociateSearchClick", throwable)
             })
 
+    }
+
+    private fun donorsFromFullNameWithProducts(database: BloodDatabase, search: String): Single<List<DonorWithProducts>> {
+        var searchLast: String
+        var searchFirst = "%"
+        val index = search.indexOf(',')
+        if (index < 0) {
+            searchLast = "$search%"
+        } else {
+            val last = search.substring(0, index)
+            val first = search.substring(index + 1)
+            searchFirst = "$first%"
+            searchLast = "$last%"
+        }
+        return database.databaseDao().donorsFromFullNameWithProducts(searchLast, searchFirst)
     }
 
 }

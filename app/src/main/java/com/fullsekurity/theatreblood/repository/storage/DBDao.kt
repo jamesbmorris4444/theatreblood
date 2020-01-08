@@ -19,6 +19,14 @@ interface DBDao {
     fun insertProducts(products: List<Product>)
 
     @Transaction
+    fun insertDonorsAndProductLists(donors: List<Donor>, products: List<List<Product>>) {
+        insertLocalDonors(donors)
+        for (index in products.indices) {
+            insertProducts(products[index])
+        }
+    }
+
+    @Transaction
     fun insertDonorAndProducts(donor: Donor, products: List<Product>) {
         insertDonor(donor)
         insertProducts(products)
