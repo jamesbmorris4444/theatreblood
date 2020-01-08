@@ -405,12 +405,12 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         var searchFirst = "%"
         val index = search.indexOf(',')
         if (index < 0) {
-            searchLast = "%$search%"
+            searchLast = "$search%"
         } else {
             val last = search.substring(0, index)
             val first = search.substring(index + 1)
-            searchFirst = "%$first%"
-            searchLast = "%$last%"
+            searchFirst = "$first%"
+            searchLast = "$last%"
         }
         return database.databaseDao().donorsFromFullName(searchLast, searchFirst)
     }
@@ -420,12 +420,12 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
         var searchFirst = "%"
         val index = search.indexOf(',')
         if (index < 0) {
-            searchLast = "%$search%"
+            searchLast = "$search%"
         } else {
             val last = search.substring(0, index)
             val first = search.substring(index + 1)
-            searchFirst = "%$first%"
-            searchLast = "%$last%"
+            searchFirst = "$first%"
+            searchLast = "$last%"
         }
         return database.databaseDao().donorsFromFullNameWithProducts(searchLast, searchFirst)
     }
@@ -512,10 +512,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             })
     }
 
-    fun handleReassociateNewDonorClick(view: View) {
-
-    }
-
     fun handleReassociateSearchClick(view: View, searchKey: String, showDonorsAndProducts: (donorsAndProductsList: List<DonorWithProducts>) -> Unit) {
         var disposable: Disposable? = null
         disposable = donorsFromFullNameWithProducts(stagingBloodDatabase, searchKey)
@@ -530,26 +526,6 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                 throwable -> LogUtils.E(LogUtils.FilterTags.withTags(EXC), "handleReassociateSearchClick", throwable); disposable?.dispose(); disposable = null
             })
 
-    }
-
-//    fun getAllNewProductsForDonor(donor: Donor, showProducts: (productList: List<Product>) -> Unit) {
-//        var disposable: Disposable? = null
-//        disposable = donorsFromNameAndDateWithProducts(stagingBloodDatabase, donor)
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribeOn(Schedulers.io())
-//            .subscribe ({ donorWithProducts ->
-//                disposable?.dispose()
-//                disposable = null
-//                showProducts(donorWithProducts.products)
-//            },
-//            {
-//                throwable -> LogUtils.E(LogUtils.FilterTags.withTags(EXC), "getAllNewProductsForDonor", throwable); disposable?.dispose(); disposable = null
-//            })
-//
-//    }
-
-    private fun donorsFromNameAndDateWithProducts(database: BloodDatabase, donor: Donor): Single<DonorWithProducts> {
-        return database.databaseDao().donorsFromNameAndDateWithProducts(donor.lastName, donor.firstName, donor.middleName, donor.dob)
     }
 
 }

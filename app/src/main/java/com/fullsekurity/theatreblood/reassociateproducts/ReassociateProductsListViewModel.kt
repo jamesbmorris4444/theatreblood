@@ -252,8 +252,4 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
 
-    fun handleReassociateNewDonorClick(view: View) {
-        repository.handleReassociateNewDonorClick(view)
-    }
-
 }
