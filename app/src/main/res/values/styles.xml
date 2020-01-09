@@ -37,7 +37,6 @@
 
     <style name="App_SpinnerStyle" >
         <item name="android:colorAccent">@color/white</item>
-        <item name="android:fadeScrollbars">false</item>
     </style>
 
     <!-- Start styles used in theming, uiViewModel should select one of these two styles based on the theme. -->
