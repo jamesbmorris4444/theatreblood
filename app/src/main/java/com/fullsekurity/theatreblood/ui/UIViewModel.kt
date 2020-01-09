@@ -115,6 +115,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val largeErrorTextTypeface: ObservableField<String> = ObservableField("")
 
     val radioButtonColor: ObservableField<String> = ObservableField("#ffffff")
+    val dropdownBackground: ObservableField<Drawable> = ObservableField()
 
     val productItemTextColor: ObservableField<String> = ObservableField("#ffffff")
     val productItemTextSize: ObservableField<Float> = ObservableField(0f)
@@ -372,6 +373,7 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             largeErrorTextTypeface.set(typefaceMapper.map(theme, uiDataClass.largeErrorTextSize))
 
             radioButtonColor.set(colorMapper.map(theme, uiDataClass.radioButtonColor))
+            dropdownBackground.set(ContextCompat.getDrawable(context, uiDataClass.dropdownBackground))
 
             productItemTextColor.set(colorMapper.map(theme, uiDataClass.productItemTextColor))
             productItemTextSize.set(textSizeMapper.map(theme, uiDataClass.productItemTextSize))

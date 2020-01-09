@@ -36,6 +36,7 @@
     </style>
 
     <style name="App_SpinnerStyle" >
+        <item name="android:colorAccent">@color/white</item>
         <item name="android:fadeScrollbars">false</item>
     </style>
 

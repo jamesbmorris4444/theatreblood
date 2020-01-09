@@ -51,8 +51,8 @@ class UIDataClass(
 
     val editTextCursor: Int,                              // hammer cursor drawable for edit texts
 
-    val editTextLabelColor: String,                        // EditText hint text color
-    val editTextLabelSize: String,                         // EditText hint text size (changes to this value should be synchronized with styles.TextInputLayoutForLight/Dark)
+    val editTextLabelColor: String,                       // EditText hint text color
+    val editTextLabelSize: String,                        // EditText hint text size (changes to this value should be synchronized with styles.TextInputLayoutForLight/Dark)
     val editTextColor: String,                            // EditText text color
     val editTextSize: String,                             // EditText text size
     val editTextBackgroundColor: String,                  // EditText background color (color of the background drawable)
@@ -69,7 +69,8 @@ class UIDataClass(
     val largeErrorTextColor: String,                      // Standard large error text color
     val largeErrorTextSize: String,                       // Standard large error text size
 
-    val radioButtonColor:String,                          // radio button_light color
+    val radioButtonColor: String,                         // radio button_light color
+    val dropdownBackground: Int,                          // dropdown background drawable used to set background color
 
     val productItemTextColor: String,                     // Product item text color
     val productItemTextSize: String,                      // Product item text size
@@ -91,7 +92,7 @@ class UIDataClass(
     val productIdTextSize: String,                        // Product grid id label text size
 
     val incorrectDonorTextColor: String,                  // Reassociate donor label text color
-    val incorrectDonorTextSize: String,                    // Reassociate donor label text size
+    val incorrectDonorTextSize: String,                   // Reassociate donor label text size
 
     val dropdownTextColor: String,                        // aboRh/branch dropdown label text color
     val dropdownTextSize: String                          // aboRh/branch dropdown label text size

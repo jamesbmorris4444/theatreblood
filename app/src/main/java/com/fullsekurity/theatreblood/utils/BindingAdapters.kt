@@ -5,10 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.cardview.widget.CardView
 import androidx.databinding.BindingAdapter
@@ -40,6 +37,12 @@ fun setImageViewResource(imageView: ImageView, resource: Int) {
 @BindingAdapter("background")
 fun setBackground(view: EditText, drawable: Drawable?) {
     view.background = drawable
+    view.requestLayout()
+}
+
+@BindingAdapter("dropdown_background")
+fun setDropdownBackground(view: Spinner, drawable: Drawable?) {
+    view.setPopupBackgroundDrawable(drawable)
     view.requestLayout()
 }
 

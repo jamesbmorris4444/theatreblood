@@ -55,12 +55,6 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
     private lateinit var originalAboRh: String
     private lateinit var originalBranch: String
 
-    // At least one entry changed. If no entries ever change, do not add this donor to the staging database.
-    // When the view is loaded the first time, onText...Changed is called, so ignore this call until isStable is true.
-    private var atLeastOneEntryChanged = false
-    private var aboRhDropdownInitialized = false
-    private var militaryBranchDropdownInitialized = false
-
     @Inject
     lateinit var uiViewModel: UIViewModel
     @Inject
@@ -242,7 +236,6 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         }
 
         val aboRhDropdownView: Spinner = activityCallbacks.fetchRootView().findViewById(R.id.abo_rh_dropdown)
-        aboRhDropdownView.background = uiViewModel.editTextBackground.get()
         val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array)
         val aboRhAdapter = CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
         aboRhDropdownView.adapter = aboRhAdapter
@@ -250,16 +243,11 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         aboRhDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 currentAboRhSelectedValue = if (position > 0) parent.getItemAtPosition(position) as String else ""
-                if (aboRhDropdownInitialized) {
-                    atLeastOneEntryChanged = true
-                }
-                aboRhDropdownInitialized = true
             }
             override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
 
         val militaryBranchDropdownView: Spinner = activityCallbacks.fetchRootView().findViewById(R.id.military_branch_dropdown)
-        militaryBranchDropdownView.background = uiViewModel.editTextBackground.get()
         val militaryBranchDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.military_branch_array)
         val militaryBranchAdapter = CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, militaryBranchDropdownArray)
         militaryBranchDropdownView.adapter = militaryBranchAdapter
@@ -267,10 +255,6 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         militaryBranchDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 currentMilitaryBranchSelectedValue = parent.getItemAtPosition(position) as String
-                if (militaryBranchDropdownInitialized) {
-                    atLeastOneEntryChanged = true
-                }
-                militaryBranchDropdownInitialized = true
             }
             override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
@@ -310,7 +294,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
                 val binding: AborhAndBranchDropdownItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.aborh_and_branch_dropdown_item, parent, false)
                 binding.uiViewModel = uiViewModel
                 convertViewShadow = binding.root
-                val textView = convertViewShadow.findViewById<View>(R.id.abo_rh_item) as TextView
+                val textView = convertViewShadow.findViewById<View>(R.id.dropdown_item) as TextView
                 viewHolder = ViewHolder(textView)
                 convertViewShadow.tag = viewHolder
             } else {
@@ -324,7 +308,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
             val binding: AborhAndBranchDropdownItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.aborh_and_branch_dropdown_item, parent, false)
             val view = binding.root
             binding.uiViewModel = uiViewModel
-            val textView = view.findViewById(R.id.abo_rh_item) as TextView
+            val textView = view.findViewById(R.id.dropdown_item) as TextView
             textView.text = aboRhList[position]
             return view
         }

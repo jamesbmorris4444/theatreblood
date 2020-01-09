@@ -9,13 +9,13 @@
     </data>
 
     <android.widget.TextView
-            android:id="@+id/abo_rh_item"
+            android:id="@+id/dropdown_item"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             app:text_font="@{uiViewModel.dropdownTextTypeface}"
             app:text_color="@{uiViewModel.dropdownTextColor}"
             app:text_size="@{safeUnbox(uiViewModel.dropdownTextSize)}"
             android:paddingStart="10dp"
-            android:paddingEnd="0dp"/>
+            android:paddingEnd="0dp" />
 
 </layout>

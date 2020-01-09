@@ -77,6 +77,7 @@ class UIDataModel {
                         "mainTitle",
 
                         "primary",
+                        R.drawable.lt_dropdown_background,
 
                         "black",
                         "mainTitleBold",
@@ -100,7 +101,7 @@ class UIDataModel {
                         "black",
                         "mainTitleBold",
 
-                        "primary",
+                        "white",
                         "subTitle"
                     )
                 }
@@ -175,6 +176,7 @@ class UIDataModel {
                         "mainTitle",
 
                         "primary",
+                        R.drawable.dk_dropdown_background,
 
                         "white",
                         "mainTitle",
@@ -198,7 +200,7 @@ class UIDataModel {
                         "white",
                         "mainTitleBold",
 
-                        "primary",
+                        "white",
                         "subTitle"
                     )
                 }
