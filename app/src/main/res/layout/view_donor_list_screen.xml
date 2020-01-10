@@ -84,7 +84,6 @@
                 android:layout_height="wrap_content"
                 android:spinnerMode="dropdown"
                 android:paddingTop="20dp"
-                android:popupTheme="@style/App_SpinnerStyle"
                 app:dropdown_background="@{uiViewModel.dropdownBackground}"
                 app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"

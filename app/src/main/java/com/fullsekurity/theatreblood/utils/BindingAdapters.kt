@@ -230,5 +230,21 @@ fun setUpperHintColor(textInputLayout: TextInputLayout, color: String) {
     } catch (e: Exception) {
         LogUtils.E(LogUtils.FilterTags.withTags(MIS), e)
     }
+}
 
+@BindingAdapter("unfocused_upper_text_hint_color")
+fun setUnfocusedUpperHintColor(textInputLayout: TextInputLayout, color: String) {
+    try {
+        val field = TextInputLayout::class.java.getDeclaredField("defaultHintTextColor")
+        field.isAccessible = true
+        val states = arrayOf(intArrayOf())
+        val colors = intArrayOf(Color.parseColor(color))
+        val myList = ColorStateList(states, colors)
+        field.set(textInputLayout, myList)
+        val method = textInputLayout::class.java.getDeclaredMethod("updateLabelState", Boolean::class.javaPrimitiveType)
+        method.isAccessible = true
+        method.invoke(textInputLayout, true)
+    } catch (e: Exception) {
+        LogUtils.E(LogUtils.FilterTags.withTags(MIS), e)
+    }
 }
