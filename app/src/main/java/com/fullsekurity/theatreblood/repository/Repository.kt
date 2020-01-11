@@ -10,7 +10,7 @@ import android.widget.ProgressBar
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import com.fullsekurity.theatreblood.R
-import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.EXC
@@ -34,7 +34,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 
-class Repository(private val activityCallbacks: ActivityCallbacks) {
+class Repository(private val callbacks: Callbacks) {
 
     private val TAG = Repository::class.java.simpleName
     lateinit var mainBloodDatabase: BloodDatabase
@@ -66,7 +66,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     }
 
     init {
-        val connectivityManager = activityCallbacks.fetchActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager = callbacks.fetchActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val builder: NetworkRequest.Builder = NetworkRequest.Builder()
         connectivityManager.registerNetworkCallback(
             builder.build(),
@@ -104,11 +104,11 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                     if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                         wiFiNetwork = network
                         transportType = TransportType.WIFI
-                        activityCallbacks.fetchActivity().setToolbarNetworkStatus()
+                        callbacks.fetchActivity().setToolbarNetworkStatus()
                     } else if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                         cellularNetwork = network
                         transportType = TransportType.CELLULAR
-                        activityCallbacks.fetchActivity().setToolbarNetworkStatus()
+                        callbacks.fetchActivity().setToolbarNetworkStatus()
                     }
                 }
             }
@@ -117,7 +117,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                     if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                         cellularNetwork = network
                         transportType = TransportType.BOTH
-                        activityCallbacks.fetchActivity().setToolbarNetworkStatus()
+                        callbacks.fetchActivity().setToolbarNetworkStatus()
                     }
                 }
             }
@@ -126,7 +126,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                     if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                         wiFiNetwork = network
                         transportType = TransportType.BOTH
-                        activityCallbacks.fetchActivity().setToolbarNetworkStatus()
+                        callbacks.fetchActivity().setToolbarNetworkStatus()
                     }
                 }
 
@@ -140,21 +140,21 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             TransportType.NONE -> { }
             TransportType.WIFI, TransportType.CELLULAR -> {
                 transportType = TransportType.NONE
-                activityCallbacks.fetchActivity().setToolbarNetworkStatus()
+                callbacks.fetchActivity().setToolbarNetworkStatus()
             }
             TransportType.BOTH -> {
-                val connectivityManager = activityCallbacks.fetchActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val connectivityManager = callbacks.fetchActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
                 connectivityManager.getNetworkCapabilities(wiFiNetwork)?.let { networkCapabiities ->
                     if (networkCapabiities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                         transportType = TransportType.WIFI
-                        activityCallbacks.fetchActivity().setToolbarNetworkStatus()
+                        callbacks.fetchActivity().setToolbarNetworkStatus()
                     }
                 }
                 if (transportType == TransportType.BOTH) {
                     transportType = TransportType.CELLULAR
-                    activityCallbacks.fetchActivity().setToolbarNetworkStatus()
+                    callbacks.fetchActivity().setToolbarNetworkStatus()
                 }
-                activityCallbacks.fetchActivity().setToolbarNetworkStatus()
+                callbacks.fetchActivity().setToolbarNetworkStatus()
             }
         }
     }
@@ -292,26 +292,26 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .subscribe ({
                 disposable?.dispose()
                 StandardModal(
-                    activityCallbacks,
+                    callbacks,
                     modalType = StandardModal.ModalType.STANDARD,
-                    titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_donor_staging_title),
-                    bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_donor_staging_body),
-                    positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
+                    titleText = callbacks.fetchActivity().getString(R.string.std_modal_insert_donor_staging_title),
+                    bodyText = callbacks.fetchActivity().getString(R.string.std_modal_insert_donor_staging_body),
+                    positiveText = callbacks.fetchActivity().getString(R.string.std_modal_ok),
                     dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                         override fun onPositive(string: String) {
                             if (transitionToCreateDonation) {
-                                activityCallbacks.fetchActivity().loadCreateProductsFragment(donor)
+                                callbacks.fetchActivity().loadCreateProductsFragment(donor)
                             } else {
-                                activityCallbacks.fetchActivity().onBackPressed()
+                                callbacks.fetchActivity().onBackPressed()
                             }
                         }
                         override fun onNegative() { }
                         override fun onNeutral() { }
                         override fun onBackPressed() {
-                            activityCallbacks.fetchActivity().onBackPressed()
+                            callbacks.fetchActivity().onBackPressed()
                         }
                     }
-                ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
+                ).show(callbacks.fetchActivity().supportFragmentManager, "MODAL")
             },
             { throwable ->
                 disposable?.dispose()
@@ -322,9 +322,9 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
     private fun insertDonorIntoDatabaseFailure(transition: Boolean, donor: Donor, method: String, throwable: Throwable) {
         LogUtils.E(LogUtils.FilterTags.withTags(EXC), method, throwable)
         if (transition) {
-            activityCallbacks.fetchActivity().loadCreateProductsFragment(donor)
+            callbacks.fetchActivity().loadCreateProductsFragment(donor)
         } else {
-            activityCallbacks.fetchActivity().onBackPressed()
+            callbacks.fetchActivity().onBackPressed()
         }
     }
 
@@ -336,24 +336,24 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .subscribe ({
                 disposable?.dispose()
                 StandardModal(
-                    activityCallbacks,
+                    callbacks,
                     modalType = StandardModal.ModalType.STANDARD,
-                    titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_title),
-                    bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_body),
-                    positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
+                    titleText = callbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_title),
+                    bodyText = callbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_body),
+                    positiveText = callbacks.fetchActivity().getString(R.string.std_modal_ok),
                     dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                         override fun onPositive(string: String) {
-                            activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                            activityCallbacks.fetchActivity().loadDonateProductsFragment(true)
+                            callbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                            callbacks.fetchActivity().loadDonateProductsFragment(true)
                         }
                         override fun onNegative() { }
                         override fun onNeutral() { }
                         override fun onBackPressed() {
-                            activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                            activityCallbacks.fetchActivity().loadDonateProductsFragment(true)
+                            callbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                            callbacks.fetchActivity().loadDonateProductsFragment(true)
                         }
                     }
-                ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
+                ).show(callbacks.fetchActivity().supportFragmentManager, "MODAL")
             },
             { throwable ->
                 disposable?.dispose()
@@ -363,8 +363,8 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
 
     private fun insertDonorAndProductsIntoDatabaseFailure(method: String, throwable: Throwable) {
         LogUtils.E(LogUtils.FilterTags.withTags(EXC), method, throwable)
-        activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        activityCallbacks.fetchActivity().loadDonateProductsFragment(true)
+        callbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        callbacks.fetchActivity().loadDonateProductsFragment(true)
     }
 
     fun insertReassociatedProductsIntoDatabase(database: BloodDatabase, products: List<Product>, initializeView: () -> Unit) {
@@ -375,11 +375,11 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
             .subscribe ({
                 disposable?.dispose()
                 StandardModal(
-                    activityCallbacks,
+                    callbacks,
                     modalType = StandardModal.ModalType.STANDARD,
-                    titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_title),
-                    bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_body),
-                    positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
+                    titleText = callbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_title),
+                    bodyText = callbacks.fetchActivity().getString(R.string.std_modal_insert_products_staging_body),
+                    positiveText = callbacks.fetchActivity().getString(R.string.std_modal_ok),
                     dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                         override fun onPositive(string: String) {
                             initializeView()
@@ -390,7 +390,7 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                             initializeView()
                         }
                     }
-                ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
+                ).show(callbacks.fetchActivity().supportFragmentManager, "MODAL")
             },
             { throwable ->
                 disposable?.dispose()
@@ -434,18 +434,18 @@ class Repository(private val activityCallbacks: ActivityCallbacks) {
                 disposable?.dispose()
                 val response = responseList[0]
                 StandardModal(
-                    activityCallbacks,
+                    callbacks,
                     modalType = StandardModal.ModalType.STANDARD,
-                    titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_staging_database_count_title),
-                    bodyText = String.format(activityCallbacks.fetchActivity().getString(R.string.std_modal_staging_database_count_body), modifiedDonors, mainDonors, response[0] as Int, response[1] as Int),
-                    positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_ok),
+                    titleText = callbacks.fetchActivity().getString(R.string.std_modal_staging_database_count_title),
+                    bodyText = String.format(callbacks.fetchActivity().getString(R.string.std_modal_staging_database_count_body), modifiedDonors, mainDonors, response[0] as Int, response[1] as Int),
+                    positiveText = callbacks.fetchActivity().getString(R.string.std_modal_ok),
                     dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                         override fun onPositive(password: String) { }
                         override fun onNegative() { }
                         override fun onNeutral() { }
                         override fun onBackPressed() { }
                     }
-                ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
+                ).show(callbacks.fetchActivity().supportFragmentManager, "MODAL")
             },
             { throwable ->
                 disposable?.dispose()

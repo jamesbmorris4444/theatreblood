@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import com.fullsekurity.theatreblood.R
-import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.createproducts.CreateProductsItemViewModel
 import com.fullsekurity.theatreblood.databinding.DonorsListItemBinding
 import com.fullsekurity.theatreblood.databinding.ProductsItemBinding
@@ -20,7 +20,7 @@ import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.google.android.material.textfield.TextInputLayout
 
-class ReassociateProductsAdapter(private val activityCallbacks: ActivityCallbacks) : RecyclerViewFilterAdapter<Any, RecyclerViewItemViewModel<Any>>(activityCallbacks.fetchActivity().applicationContext) {
+class ReassociateProductsAdapter(private val callbacks: Callbacks) : RecyclerViewFilterAdapter<Any, RecyclerViewItemViewModel<Any>>(callbacks.fetchActivity().applicationContext) {
 
     private var adapterFilter: AdapterFilter? = null
     lateinit var uiViewModel: UIViewModel
@@ -55,14 +55,14 @@ class ReassociateProductsAdapter(private val activityCallbacks: ActivityCallback
         when (viewType) {
             ViewTypes.LABEL.ordinal -> {
                 val reassociateLabelItemBinding: ReassociateLabelItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.reassociate_label_item, parent, false)
-                val reassociateProductsLabelItemViewModel = ReassociateProductsLabelItemViewModel(activityCallbacks)
+                val reassociateProductsLabelItemViewModel = ReassociateProductsLabelItemViewModel(callbacks)
                 reassociateLabelItemBinding.reassociateProductsLabelItemViewModel = reassociateProductsLabelItemViewModel
                 reassociateLabelItemBinding.uiViewModel = uiViewModel
                 return ReassociateLabelViewHolder(reassociateLabelItemBinding.root, reassociateProductsLabelItemViewModel as RecyclerViewItemViewModel<Any>, reassociateLabelItemBinding)
             }
             ViewTypes.SEARCH.ordinal -> {
                 val reassociateSearchItemBinding: ReassociateSearchItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.reassociate_search_item, parent, false)
-                val reassociateProductsSearchItemViewModel = ReassociateProductsSearchItemViewModel(activityCallbacks)
+                val reassociateProductsSearchItemViewModel = ReassociateProductsSearchItemViewModel(callbacks)
                 reassociateSearchItemBinding.reassociateProductsSearchItemViewModel = reassociateProductsSearchItemViewModel
                 reassociateSearchItemBinding.uiViewModel = uiViewModel
                 searchRootView = reassociateSearchItemBinding.root
@@ -72,7 +72,7 @@ class ReassociateProductsAdapter(private val activityCallbacks: ActivityCallback
             }
             ViewTypes.DONOR.ordinal -> {
                 val donorsItemBinding: DonorsListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.donors_list_item, parent, false)
-                val donateProductsItemViewModel = DonateProductsItemViewModel(activityCallbacks)
+                val donateProductsItemViewModel = DonateProductsItemViewModel(callbacks)
                 donorsItemBinding.donateProductsItemViewModel = donateProductsItemViewModel
                 donorsItemBinding.uiViewModel = uiViewModel
                 return ReassociateDonorViewHolder(donorsItemBinding.root, donateProductsItemViewModel as RecyclerViewItemViewModel<Any>, donorsItemBinding)
@@ -80,7 +80,7 @@ class ReassociateProductsAdapter(private val activityCallbacks: ActivityCallback
             }
             ViewTypes.PRODUCT.ordinal -> {
                 val productsItemBinding: ProductsItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.products_item, parent, false)
-                val createProductsItemViewModel = CreateProductsItemViewModel(activityCallbacks)
+                val createProductsItemViewModel = CreateProductsItemViewModel(callbacks)
                 productsItemBinding.createProductsItemViewModel = createProductsItemViewModel
                 productsItemBinding.uiViewModel = uiViewModel
                 return ReassociateProductViewHolder(productsItemBinding.root, createProductsItemViewModel as RecyclerViewItemViewModel<Any>, productsItemBinding)
@@ -88,7 +88,7 @@ class ReassociateProductsAdapter(private val activityCallbacks: ActivityCallback
             }
             else -> {
                 val reassociateLabelItemBinding: ReassociateLabelItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.reassociate_label_item, parent, false)
-                val reassociateProductsLabelItemViewModel = ReassociateProductsLabelItemViewModel(activityCallbacks)
+                val reassociateProductsLabelItemViewModel = ReassociateProductsLabelItemViewModel(callbacks)
                 reassociateLabelItemBinding.reassociateProductsLabelItemViewModel = reassociateProductsLabelItemViewModel
                 reassociateLabelItemBinding.uiViewModel = uiViewModel
                 return ReassociateLabelViewHolder(reassociateLabelItemBinding.root, reassociateProductsLabelItemViewModel as RecyclerViewItemViewModel<Any>, reassociateLabelItemBinding)

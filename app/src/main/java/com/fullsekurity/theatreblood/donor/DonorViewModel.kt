@@ -14,7 +14,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.R
-import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.databinding.AborhAndBranchDropdownItemBinding
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.repository.Repository
@@ -30,14 +30,14 @@ import javax.inject.Inject
 
 
 @Suppress("UNCHECKED_CAST")
-class DonorViewModelFactory(private val activityCallbacks: ActivityCallbacks) : ViewModelProvider.Factory {
+class DonorViewModelFactory(private val callbacks: Callbacks) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DonorViewModel(activityCallbacks) as T
+        return DonorViewModel(callbacks) as T
     }
 }
 
 @Suppress("UNCHECKED_CAST")
-class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : AndroidViewModel(activityCallbacks.fetchActivity().application) {
+class DonorViewModel(private val callbacks: Callbacks) : AndroidViewModel(callbacks.fetchActivity().application) {
 
     private val calendar = Calendar.getInstance()
     private val year = calendar.get(Calendar.YEAR)
@@ -62,7 +62,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
 
     init {
         DaggerViewModelDependencyInjector.builder()
-            .viewModelInjectorModule(ViewModelInjectorModule(activityCallbacks.fetchActivity()))
+            .viewModelInjectorModule(ViewModelInjectorModule(callbacks.fetchActivity()))
             .build()
             .inject(this)
     }
@@ -108,7 +108,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
                 editTextDisplayModifyDob.set(dateFormatter.format(calendar.time))
             }
         }
-        DatePickerDialog(activityCallbacks.fetchActivity(), uiViewModel.datePickerColorStyle, listener, year, month, day).show()
+        DatePickerDialog(callbacks.fetchActivity(), uiViewModel.datePickerColorStyle, listener, year, month, day).show()
     }
 
     // gender
@@ -117,9 +117,9 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
 
     fun onGenderChanged(radioGroup: RadioGroup, id: Int) {
         if (id == R.id.radio_male) {
-            activityCallbacks.fetchRadioButton(R.id.radio_male)?.isChecked = true
+            callbacks.fetchRadioButton(R.id.radio_male)?.isChecked = true
         } else {
-            activityCallbacks.fetchRadioButton(R.id.radio_female)?.isChecked = true
+            callbacks.fetchRadioButton(R.id.radio_female)?.isChecked = true
         }
     }
 
@@ -167,7 +167,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         }
 
         // change gender
-        activityCallbacks.fetchRadioButton(R.id.radio_male)?.let {
+        callbacks.fetchRadioButton(R.id.radio_male)?.let {
             donor.gender = it.isChecked
         }
 
@@ -190,7 +190,7 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
             repository.insertDonorIntoDatabase(repository.stagingBloodDatabase, donor, transitionToCreateDonation)
         } else {
             StandardModal(
-                activityCallbacks,
+                callbacks,
                 modalType = StandardModal.ModalType.STANDARD,
                 titleText = getApplication<Application>().applicationContext.getString(R.string.std_modal_no_change_in_database_title),
                 positiveText = getApplication<Application>().applicationContext.getString(R.string.std_modal_ok),
@@ -199,30 +199,30 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
                         if (transitionToCreateDonation) {
                             loadCreateProductsFragment()
                         } else {
-                            activityCallbacks.fetchActivity().onBackPressed()
+                            callbacks.fetchActivity().onBackPressed()
                         }
                     }
                     override fun onNegative() { }
                     override fun onNeutral() { }
                     override fun onBackPressed() {
-                        activityCallbacks.fetchActivity().onBackPressed()
+                        callbacks.fetchActivity().onBackPressed()
                     }
                 }
-            ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
+            ).show(callbacks.fetchActivity().supportFragmentManager, "MODAL")
         }
 
     }
 
     private fun loadCreateProductsFragment() {
-        activityCallbacks.fetchActivity().loadCreateProductsFragment(donor)
+        callbacks.fetchActivity().loadCreateProductsFragment(donor)
     }
 
     fun setDonor(donor: Donor) {
         this.donor = donor
-        activityCallbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_last_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
-        activityCallbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_first_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
-        activityCallbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_middle_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
-        activityCallbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_dob).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        callbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_last_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        callbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_first_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        callbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_middle_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        callbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_dob).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
 
         editTextDisplayModifyLastName.set(donor.lastName)
         editTextDisplayModifyFirstName.set(donor.firstName)
@@ -230,14 +230,14 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
         editTextDisplayModifyDob.set(donor.dob)
 
         if (donor.gender) {
-            activityCallbacks.fetchRadioButton(R.id.radio_male)?.isChecked = true
+            callbacks.fetchRadioButton(R.id.radio_male)?.isChecked = true
         } else {
-            activityCallbacks.fetchRadioButton(R.id.radio_female)?.isChecked = true
+            callbacks.fetchRadioButton(R.id.radio_female)?.isChecked = true
         }
 
-        val aboRhDropdownView: Spinner = activityCallbacks.fetchRootView().findViewById(R.id.abo_rh_dropdown)
+        val aboRhDropdownView: Spinner = callbacks.fetchRootView().findViewById(R.id.abo_rh_dropdown)
         val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array)
-        val aboRhAdapter = CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
+        val aboRhAdapter = CustomSpinnerAdapter(callbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
         aboRhDropdownView.adapter = aboRhAdapter
         aboRhDropdownView.setSelection(getDropdownSelection(donor.aboRh, aboRhDropdownArray))
         aboRhDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
@@ -247,9 +247,9 @@ class DonorViewModel(private val activityCallbacks: ActivityCallbacks) : Android
             override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
 
-        val militaryBranchDropdownView: Spinner = activityCallbacks.fetchRootView().findViewById(R.id.military_branch_dropdown)
+        val militaryBranchDropdownView: Spinner = callbacks.fetchRootView().findViewById(R.id.military_branch_dropdown)
         val militaryBranchDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.military_branch_array)
-        val militaryBranchAdapter = CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, militaryBranchDropdownArray)
+        val militaryBranchAdapter = CustomSpinnerAdapter(callbacks.fetchActivity(), uiViewModel, militaryBranchDropdownArray)
         militaryBranchDropdownView.adapter = militaryBranchAdapter
         militaryBranchDropdownView.setSelection(getDropdownSelection(donor.branch, militaryBranchDropdownArray))
         militaryBranchDropdownView.onItemSelectedListener = object : OnItemSelectedListener {

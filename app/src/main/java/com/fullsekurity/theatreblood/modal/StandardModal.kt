@@ -17,7 +17,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
-import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.databinding.StandardModalBinding
 import com.fullsekurity.theatreblood.databinding.StandardModalFooterItemBinding
 import com.fullsekurity.theatreblood.databinding.StandardModalHeaderItemBinding
@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 class StandardModal (
 
-        /**
+    /**
          * Creates a standard modal for all modals throughout the app.
          * All current modals should be converted to use StandardModal, and then the current modals should be deleted.
          * See TransactionsDetailDialog for an example of creating LIST type modals
@@ -80,19 +80,19 @@ class StandardModal (
                 fragment.fragmentManager?.let { dialog.show(it, TAG) }
          */
 
-        private val activityCallbacks: ActivityCallbacks,
-        private var modalType: ModalType = ModalType.STANDARD,
-        private var iconType: IconType = IconType.NONE,
-        titleText: String = "",
-        bodyText: String = "",
-        bodyGravity: Int = Gravity.LEFT,
-        hintText: String = "",
-        positiveText: String = "",
-        negativeText: String = "",
-        neutralText: String = "",
-        private val transactionIcon: Int = 0,
-        val modalItemList: List<ModalItem> = arrayListOf(),
-        val dialogFinishedListener : DialogFinishedListener? = null
+        private val callbacks: Callbacks,
+    private var modalType: ModalType = ModalType.STANDARD,
+    private var iconType: IconType = IconType.NONE,
+    titleText: String = "",
+    bodyText: String = "",
+    bodyGravity: Int = Gravity.LEFT,
+    hintText: String = "",
+    positiveText: String = "",
+    negativeText: String = "",
+    neutralText: String = "",
+    private val transactionIcon: Int = 0,
+    val modalItemList: List<ModalItem> = arrayListOf(),
+    val dialogFinishedListener : DialogFinishedListener? = null
 
 ) : DialogFragment() {
 
@@ -164,7 +164,7 @@ class StandardModal (
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         DaggerViewModelDependencyInjector.builder()
-                .viewModelInjectorModule(ViewModelInjectorModule(activityCallbacks.fetchActivity()))
+                .viewModelInjectorModule(ViewModelInjectorModule(callbacks.fetchActivity()))
                 .build()
                 .inject(this)
 
@@ -214,7 +214,7 @@ class StandardModal (
                 val resultLayoutManager = LinearLayoutManager(activity)
                 lateinit var adapter: ModalListAdapter
                 context?.let {
-                    adapter = ModalListAdapter(activityCallbacks, uiViewModel,this, it)
+                    adapter = ModalListAdapter(callbacks, uiViewModel,this, it)
                 }
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = resultLayoutManager
@@ -255,7 +255,7 @@ class StandardModal (
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return object: Dialog(activityCallbacks.fetchActivity(), theme) {
+        return object: Dialog(callbacks.fetchActivity(), theme) {
             override fun onBackPressed() {
                 dismiss()
                 dialogFinishedListener?.onBackPressed()
@@ -295,7 +295,7 @@ class StandardModal (
                     val line1: String,
                     val line2: String)
 
-    class ModalListAdapter(private val activityCallbacks: ActivityCallbacks, val uiViewModel: UIViewModel, val standardModal: StandardModal, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    class ModalListAdapter(private val callbacks: Callbacks, val uiViewModel: UIViewModel, val standardModal: StandardModal, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         private val TAG = ModalListAdapter::class.java.simpleName
         private var itemList = arrayListOf<ModalItem>()
@@ -306,19 +306,19 @@ class StandardModal (
                     val binding: StandardModalHeaderItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.standard_modal_header_item, parent, false)
                     binding.uiViewModel = uiViewModel
                     binding.standardModal = standardModal
-                    uiViewModel.currentTheme = activityCallbacks.fetchActivity().currentTheme
+                    uiViewModel.currentTheme = callbacks.fetchActivity().currentTheme
                     return HeaderViewHolder(binding.root)
                 }
                 ModalListType.LIST_ITEM.ordinal -> {
                     val binding: StandardModalListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.standard_modal_list_item, parent, false)
                     binding.uiViewModel = uiViewModel
-                    uiViewModel.currentTheme = activityCallbacks.fetchActivity().currentTheme
+                    uiViewModel.currentTheme = callbacks.fetchActivity().currentTheme
                     return ListViewHolder(binding.root)
                 }
                 ModalListType.FOOTER_ITEM.ordinal -> {
                     val binding: StandardModalFooterItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.standard_modal_footer_item, parent, false)
                     binding.uiViewModel = uiViewModel
-                    uiViewModel.currentTheme = activityCallbacks.fetchActivity().currentTheme
+                    uiViewModel.currentTheme = callbacks.fetchActivity().currentTheme
                     return FooterViewHolder(binding.root)
                 }
                 else -> {

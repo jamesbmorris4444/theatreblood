@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import com.fullsekurity.theatreblood.R
-import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.databinding.ProductsItemBinding
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFilterAdapter
 import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
 
-class CreateProductsAdapter(val activityCallbacks: ActivityCallbacks) : RecyclerViewFilterAdapter<Product, CreateProductsItemViewModel>(activityCallbacks.fetchActivity().applicationContext) {
+class CreateProductsAdapter(val callbacks: Callbacks) : RecyclerViewFilterAdapter<Product, CreateProductsItemViewModel>(callbacks.fetchActivity().applicationContext) {
 
     private var adapterFilter: AdapterFilter? = null
     lateinit var uiViewModel: UIViewModel
@@ -27,7 +27,7 @@ class CreateProductsAdapter(val activityCallbacks: ActivityCallbacks) : Recycler
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductsViewHolder {
         val productsItemBinding: ProductsItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.products_item, parent, false)
-        val productsItemViewModel = CreateProductsItemViewModel(activityCallbacks)
+        val productsItemViewModel = CreateProductsItemViewModel(callbacks)
         productsItemBinding.createProductsItemViewModel = productsItemViewModel
         productsItemBinding.uiViewModel = uiViewModel
         return ProductsViewHolder(productsItemBinding.root, productsItemViewModel, productsItemBinding)

@@ -6,26 +6,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.lottie.*
 import com.fullsekurity.theatreblood.R
-import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.databinding.CreateProductsScreenBinding
+import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.API
+import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
+import com.fullsekurity.theatreblood.viewdonorlist.ViewDonorListListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class CreateProductsFragment : Fragment(), ActivityCallbacks {
+class CreateProductsFragment : Fragment(), Callbacks {
 
     private lateinit var createProductsListViewModel: CreateProductsListViewModel
     private lateinit var donor: Donor
@@ -59,7 +63,7 @@ class CreateProductsFragment : Fragment(), ActivityCallbacks {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.create_products_screen, container, false) as CreateProductsScreenBinding
         binding.lifecycleOwner = this
-        createProductsListViewModel = ViewModelProviders.of(this, CreateProductsListViewModelFactory(activity as MainActivity)).get(CreateProductsListViewModel::class.java)
+        createProductsListViewModel = ViewModelProviders.of(this, CreateProductsListViewModelFactory(this)).get(CreateProductsListViewModel::class.java)
         binding.createProductsListViewModel = createProductsListViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
@@ -138,5 +142,15 @@ class CreateProductsFragment : Fragment(), ActivityCallbacks {
     override fun fetchRadioButton(resId: Int): RadioButton {
         return fetchRootView().findViewById(resId)
     }
+
+    override fun fetchDropdown(resId: Int) : Spinner? { return null }
+
+    override fun fetchCreateProductsListViewModel() : CreateProductsListViewModel? {
+        return createProductsListViewModel
+    }
+
+    override fun fetchDonateProductsListViewModel() : DonateProductsListViewModel? { return null }
+    override fun fetchReassociateProductsListViewModel() : ReassociateProductsListViewModel? { return null }
+    override fun fetchViewDonorListViewModel() : ViewDonorListListViewModel? { return null }
 
 }

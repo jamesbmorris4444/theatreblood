@@ -10,8 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
-import com.fullsekurity.theatreblood.activity.ActivityCallbacks
-import com.fullsekurity.theatreblood.activity.MainActivity
+import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
@@ -28,17 +27,17 @@ import javax.inject.Inject
 
 
 @Suppress("UNCHECKED_CAST")
-class CreateProductsListViewModelFactory(private val activity: MainActivity) : ViewModelProvider.Factory {
+class CreateProductsListViewModelFactory(private val callbacks: Callbacks) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return CreateProductsListViewModel(activity) as T
+        return CreateProductsListViewModel(callbacks) as T
     }
 }
 
 @Suppress("UNCHECKED_CAST")
-class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewViewModel(activityCallbacks.fetchActivity().application) {
+class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerViewViewModel(callbacks.fetchActivity().application) {
 
     private val tag = CreateProductsListViewModel::class.java.simpleName
-    override var adapter: CreateProductsAdapter = CreateProductsAdapter(activityCallbacks)
+    override var adapter: CreateProductsAdapter = CreateProductsAdapter(callbacks)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     private lateinit var donor: Donor
     private val calendar = Calendar.getInstance()
@@ -54,7 +53,7 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     private val deleteButtonVisibility = View.VISIBLE
     private var confirmNeeded = false
     private val productList: MutableList<Product> = mutableListOf()
-    private val anyNonNullView = activityCallbacks.fetchRootView()
+    private val anyNonNullView = callbacks.fetchRootView()
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -63,15 +62,15 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
 
     init {
         DaggerViewModelDependencyInjector.builder()
-            .viewModelInjectorModule(ViewModelInjectorModule(activityCallbacks.fetchActivity()))
+            .viewModelInjectorModule(ViewModelInjectorModule(callbacks.fetchActivity()))
             .build()
             .inject(this)
         adapter.uiViewModel = uiViewModel
-        activityCallbacks.fetchActivity().createProductsListViewModel = this
+        callbacks.fetchActivity().createProductsListViewModel = this
     }
 
     override fun setLayoutManager(): RecyclerView.LayoutManager {
-        return object : LinearLayoutManager(activityCallbacks.fetchActivity().applicationContext) {
+        return object : LinearLayoutManager(callbacks.fetchActivity().applicationContext) {
             override fun canScrollHorizontally(): Boolean {
                 return false
             }
@@ -87,21 +86,21 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
         onTextEntered(key.toString())
         // within "key", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
-    var hintTextDin: ObservableField<String> = ObservableField(activityCallbacks.fetchActivity().getString(R.string.product_din_hint_string))
+    var hintTextDin: ObservableField<String> = ObservableField(callbacks.fetchActivity().getString(R.string.product_din_hint_string))
     var editTextDinVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     var editTextProductCode: ObservableField<String> = ObservableField("")
     fun onTextCodeChanged(key: CharSequence, start: Int, before: Int, count: Int) {
         onTextEntered(key.toString())
     }
-    var hintTextCode: ObservableField<String> = ObservableField(activityCallbacks.fetchActivity().getString(R.string.product_code_hint_string))
+    var hintTextCode: ObservableField<String> = ObservableField(callbacks.fetchActivity().getString(R.string.product_code_hint_string))
     var editTextCodeVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     var editTextProductExpDate: ObservableField<String> = ObservableField("")
     fun onTextExpDateChanged(key: CharSequence, start: Int, before: Int, count: Int) {
         onTextEntered(key.toString())
     }
-    var hintTextExpDate: ObservableField<String> = ObservableField(activityCallbacks.fetchActivity().getString(R.string.product_expiration_date_hint_string))
+    var hintTextExpDate: ObservableField<String> = ObservableField(callbacks.fetchActivity().getString(R.string.product_expiration_date_hint_string))
     var editTextExpDateVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     private fun onTextEntered(enteredText: String) {
@@ -125,7 +124,7 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
                 editTextProductExpDate.set(dateFormatter.format(calendar.time))
             }
         }
-        DatePickerDialog(activityCallbacks.fetchActivity(), uiViewModel.datePickerColorStyle, listener, year, month, day).show()
+        DatePickerDialog(callbacks.fetchActivity(), uiViewModel.datePickerColorStyle, listener, year, month, day).show()
     }
 
     var donorBloodType: ObservableField<String> = ObservableField("")
@@ -137,19 +136,19 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     }
 
     fun onGridElement11Clicked(view: View) {
-        activityCallbacks.fetchActivity().barcodeScanner(11)
+        callbacks.fetchActivity().barcodeScanner(11)
     }
 
     fun onGridElement12Clicked(view: View) {
-        activityCallbacks.fetchActivity().barcodeScanner(12)
+        callbacks.fetchActivity().barcodeScanner(12)
     }
 
     fun onGridElement21Clicked(view: View) {
-        activityCallbacks.fetchActivity().barcodeScanner(21)
+        callbacks.fetchActivity().barcodeScanner(21)
     }
 
     fun onGridElement22Clicked(view: View) {
-        activityCallbacks.fetchActivity().barcodeScanner(22)
+        callbacks.fetchActivity().barcodeScanner(22)
     }
 
     fun onClearClicked(view: View) {
@@ -191,12 +190,12 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
         Utils.hideKeyboard(view)
         if (confirmNeeded) {
             StandardModal(
-                activityCallbacks,
+                callbacks,
                 modalType = StandardModal.ModalType.STANDARD,
-                titleText = activityCallbacks.fetchActivity().getString(R.string.std_modal_noconfirm_title),
-                bodyText = activityCallbacks.fetchActivity().getString(R.string.std_modal_noconfirm_body),
-                positiveText = activityCallbacks.fetchActivity().getString(R.string.std_modal_yes),
-                negativeText = activityCallbacks.fetchActivity().getString(R.string.std_modal_no),
+                titleText = callbacks.fetchActivity().getString(R.string.std_modal_noconfirm_title),
+                bodyText = callbacks.fetchActivity().getString(R.string.std_modal_noconfirm_body),
+                positiveText = callbacks.fetchActivity().getString(R.string.std_modal_yes),
+                negativeText = callbacks.fetchActivity().getString(R.string.std_modal_no),
                 dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                     override fun onPositive(string: String) {
                         processNewProduct()
@@ -209,13 +208,13 @@ class CreateProductsListViewModel(private val activityCallbacks: ActivityCallbac
                         addDonorWithProductsToModifiedDatabase()
                     }
                 }
-            ).show(activityCallbacks.fetchActivity().supportFragmentManager, "MODAL")
+            ).show(callbacks.fetchActivity().supportFragmentManager, "MODAL")
         } else {
             if (productList.size > 0) {
                 addDonorWithProductsToModifiedDatabase()
             } else {
-                activityCallbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                activityCallbacks.fetchActivity().loadDonateProductsFragment(true)
+                callbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                callbacks.fetchActivity().loadDonateProductsFragment(true)
             }
         }
         confirmNeeded = false

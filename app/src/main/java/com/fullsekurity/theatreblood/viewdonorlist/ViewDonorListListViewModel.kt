@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
-import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsAdapter
 import com.fullsekurity.theatreblood.donor.DonorViewModel
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
@@ -22,16 +22,16 @@ import com.fullsekurity.theatreblood.utils.Utils
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import javax.inject.Inject
 
-class ViewDonorListListViewModelFactory(private val activityCallbacks: ActivityCallbacks) : ViewModelProvider.Factory {
+class ViewDonorListListViewModelFactory(private val callbacks: Callbacks) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ViewDonorListListViewModel(activityCallbacks) as T
+        return ViewDonorListListViewModel(callbacks) as T
     }
 }
 
-class ViewDonorListListViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewViewModel(activityCallbacks.fetchActivity().application) {
+class ViewDonorListListViewModel(private val callbacks: Callbacks) : RecyclerViewViewModel(callbacks.fetchActivity().application) {
 
     private val tag = ViewDonorListListViewModel::class.java.simpleName
-    override var adapter: DonateProductsAdapter = DonateProductsAdapter(activityCallbacks)
+    override var adapter: DonateProductsAdapter = DonateProductsAdapter(callbacks)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     val listIsVisible: ObservableField<Boolean> = ObservableField(true)
     val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
@@ -46,7 +46,7 @@ class ViewDonorListListViewModel(private val activityCallbacks: ActivityCallback
 
     init {
         DaggerViewModelDependencyInjector.builder()
-            .viewModelInjectorModule(ViewModelInjectorModule(activityCallbacks.fetchActivity()))
+            .viewModelInjectorModule(ViewModelInjectorModule(callbacks.fetchActivity()))
             .build()
             .inject(this)
         adapter.uiViewModel = uiViewModel
@@ -102,10 +102,10 @@ class ViewDonorListListViewModel(private val activityCallbacks: ActivityCallback
     var currentAboRhSelectedValue: String = ""
 
     fun setDropdowns() {
-        val aboRhDropdownView: Spinner = activityCallbacks.fetchRootView().findViewById(R.id.abo_rh_dropdown)
+        val aboRhDropdownView: Spinner = callbacks.fetchRootView().findViewById(R.id.abo_rh_dropdown)
         aboRhDropdownView.background = uiViewModel.editTextBackground.get()
         val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array_with_no_value)
-        val aboRhAdapter = DonorViewModel.CustomSpinnerAdapter(activityCallbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
+        val aboRhAdapter = DonorViewModel.CustomSpinnerAdapter(callbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
         aboRhDropdownView.adapter = aboRhAdapter
         aboRhDropdownView.setSelection(0)
         aboRhDropdownView.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

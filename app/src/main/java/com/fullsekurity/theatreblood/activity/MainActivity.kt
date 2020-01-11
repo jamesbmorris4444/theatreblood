@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.RadioButton
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -28,10 +29,12 @@ import com.fullsekurity.theatreblood.createproducts.CreateProductsFragment
 import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
+import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
 import com.fullsekurity.theatreblood.donor.DonorFragment
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.LOT
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsFragment
+import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
@@ -39,13 +42,14 @@ import com.fullsekurity.theatreblood.utils.Constants.ROOT_FRAGMENT_TAG
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import com.fullsekurity.theatreblood.viewdonorlist.ViewDonorListFragment
+import com.fullsekurity.theatreblood.viewdonorlist.ViewDonorListListViewModel
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigationItemSelectedListener {
 
     private val tag = MainActivity::class.java.simpleName
 
@@ -210,6 +214,10 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
             .commitAllowingStateLoss()
     }
 
+    fun reassociateOnNewDonorClicked(view: View) {
+        loadDonorFragment(null, transitionToCreateDonation)
+    }
+
     private fun setupToolbar() {
         supportActionBar?.let { actionBar ->
             actionBar.setBackgroundDrawable(ColorDrawable(Color.parseColor(uiViewModel.primaryColor)))
@@ -324,38 +332,6 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         return true
     }
 
-    // Start CreateProducts handlers
-
-    fun onCreateProductsDeleteClicked(view: View) {
-        createProductsListViewModel.onCreateProductsDeleteClicked(view)
-    }
-
-    fun onCreateProductsEditClicked(view: View) {
-        createProductsListViewModel.onCreateProductsEditClicked(view)
-    }
-
-    // End CreateProducts handlers
-
-    // Start Reassociate Products handlers
-
-    fun reassociateOnTextNameChanged(key: String) {
-        reassociateProductsFragment.reassociateProductsListViewModel.onTextNameChanged(key, 0, 0, 0)
-    }
-
-    fun reassociateOnSearchClicked(view: View) {
-        reassociateProductsFragment.reassociateProductsListViewModel.handleReassociateSearchClick(view)
-    }
-
-    fun reassociateOnNewDonorClicked(view: View) {
-        loadDonorFragment(null, transitionToCreateDonation)
-    }
-
-    fun reassociateDonorClicked(view: View, donor: Donor) {
-        reassociateProductsFragment.reassociateProductsListViewModel.handleReassociateDonorClick(view, donor)
-    }
-
-    // End Reassociate Products handlers
-
     // Start Barcode Scanner handler
 
     fun barcodeScanner(gridNumber: Int) {
@@ -392,8 +368,11 @@ class MainActivity : AppCompatActivity(), ActivityCallbacks, NavigationView.OnNa
         return activityMainBinding.root
     }
 
-    override fun fetchRadioButton(resId:Int): RadioButton? {
-        return null
-    }
+    override fun fetchRadioButton(resId:Int): RadioButton? { return null }
+    override fun fetchDropdown(resId: Int) : Spinner? { return null }
+    override fun fetchCreateProductsListViewModel() : CreateProductsListViewModel? { return null }
+    override fun fetchDonateProductsListViewModel() : DonateProductsListViewModel? { return null }
+    override fun fetchReassociateProductsListViewModel() : ReassociateProductsListViewModel? { return null }
+    override fun fetchViewDonorListViewModel() : ViewDonorListListViewModel? { return null }
 
 }

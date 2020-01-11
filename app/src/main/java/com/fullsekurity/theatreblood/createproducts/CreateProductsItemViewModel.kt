@@ -2,12 +2,12 @@ package com.fullsekurity.theatreblood.createproducts
 
 import android.view.View
 import androidx.databinding.ObservableField
-import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 import com.fullsekurity.theatreblood.repository.storage.Product
 
 @Suppress("UNCHECKED_CAST")
-class CreateProductsItemViewModel(val activityCallbacks: ActivityCallbacks) : RecyclerViewItemViewModel<Product>() {
+class CreateProductsItemViewModel(val callbacks: Callbacks) : RecyclerViewItemViewModel<Product>() {
 
     private lateinit var product: Product
 
@@ -33,12 +33,12 @@ class CreateProductsItemViewModel(val activityCallbacks: ActivityCallbacks) : Re
             product.removedForReassociation = true
             deleteButtonVisibility.set(View.GONE)
         } else {
-            activityCallbacks.fetchActivity().onCreateProductsDeleteClicked(view)
+            callbacks.fetchCreateProductsListViewModel()?.onCreateProductsDeleteClicked(view)
         }
     }
 
     fun onEditClicked(view: View) {
-        activityCallbacks.fetchActivity().onCreateProductsEditClicked(view)
+        callbacks.fetchCreateProductsListViewModel()?.onCreateProductsEditClicked(view)
     }
 
 }

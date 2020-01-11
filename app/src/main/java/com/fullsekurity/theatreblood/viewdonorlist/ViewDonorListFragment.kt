@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -13,9 +14,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.lottie.LottieAnimationView
 import com.fullsekurity.theatreblood.R
-import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
+import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.databinding.ViewDonorListScreenBinding
+import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
+import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
@@ -24,7 +28,7 @@ import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class ViewDonorListFragment : Fragment(), ActivityCallbacks {
+class ViewDonorListFragment : Fragment(), Callbacks {
 
     private lateinit var viewDonorListListViewModel: ViewDonorListListViewModel
     private lateinit var lottieBackgroundView: LottieAnimationView
@@ -95,6 +99,15 @@ class ViewDonorListFragment : Fragment(), ActivityCallbacks {
 
     override fun fetchRadioButton(resId: Int): RadioButton {
         return fetchRootView().findViewById(resId)
+    }
+
+    override fun fetchDropdown(resId: Int) : Spinner? { return null }
+    override fun fetchCreateProductsListViewModel() : CreateProductsListViewModel? { return null }
+    override fun fetchDonateProductsListViewModel() : DonateProductsListViewModel? { return null }
+    override fun fetchReassociateProductsListViewModel() : ReassociateProductsListViewModel? { return null }
+
+    override fun fetchViewDonorListViewModel() : ViewDonorListListViewModel? {
+        return viewDonorListListViewModel
     }
 
 }

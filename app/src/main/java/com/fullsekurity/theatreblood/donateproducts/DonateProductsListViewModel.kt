@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
-import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -20,16 +20,16 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import javax.inject.Inject
 
-class DonateProductsListViewModelFactory(private val activityCallbacks: ActivityCallbacks) : ViewModelProvider.Factory {
+class DonateProductsListViewModelFactory(private val callbacks: Callbacks) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DonateProductsListViewModel(activityCallbacks) as T
+        return DonateProductsListViewModel(callbacks) as T
     }
 }
 
-class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewViewModel(activityCallbacks.fetchActivity().application) {
+class DonateProductsListViewModel(private val callbacks: Callbacks) : RecyclerViewViewModel(callbacks.fetchActivity().application) {
 
     private val tag = DonateProductsListViewModel::class.java.simpleName
-    override var adapter: DonateProductsAdapter = DonateProductsAdapter(activityCallbacks)
+    override var adapter: DonateProductsAdapter = DonateProductsAdapter(callbacks)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     val listIsVisible: ObservableField<Boolean> = ObservableField(true)
     val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
@@ -44,7 +44,7 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
 
     init {
         DaggerViewModelDependencyInjector.builder()
-            .viewModelInjectorModule(ViewModelInjectorModule(activityCallbacks.fetchActivity()))
+            .viewModelInjectorModule(ViewModelInjectorModule(callbacks.fetchActivity()))
             .build()
             .inject(this)
         adapter.uiViewModel = uiViewModel
@@ -108,7 +108,7 @@ class DonateProductsListViewModel(private val activityCallbacks: ActivityCallbac
     }
 
     fun onNewDonorClicked(view: View) {
-        activityCallbacks.fetchActivity().loadDonorFragment(null, transitionToCreateDonation)
+        callbacks.fetchActivity().loadDonorFragment(null, transitionToCreateDonation)
     }
 
 }

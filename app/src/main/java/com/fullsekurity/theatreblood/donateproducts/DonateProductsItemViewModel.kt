@@ -2,13 +2,13 @@ package com.fullsekurity.theatreblood.donateproducts
 
 import android.view.View
 import androidx.databinding.ObservableField
-import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.utils.Utils
 
 @Suppress("UNCHECKED_CAST")
-class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewItemViewModel<Donor>() {
+class DonateProductsItemViewModel(private val callbacks: Callbacks) : RecyclerViewItemViewModel<Donor>() {
 
     private lateinit var donor: Donor
 
@@ -46,9 +46,9 @@ class DonateProductsItemViewModel(private val activityCallbacks: ActivityCallbac
     fun onItemClicked(view: View) {
         Utils.hideKeyboard(view)
         if (inReassociate) {
-            activityCallbacks.fetchActivity().reassociateDonorClicked(view, donor)
+            callbacks.fetchReassociateProductsListViewModel()?.handleReassociateDonorClick(view, donor)
         } else {
-            activityCallbacks.fetchActivity().loadDonorFragment(donor, activityCallbacks.fetchActivity().transitionToCreateDonation)
+            callbacks.fetchActivity().loadDonorFragment(donor, callbacks.fetchActivity().transitionToCreateDonation)
         }
     }
 

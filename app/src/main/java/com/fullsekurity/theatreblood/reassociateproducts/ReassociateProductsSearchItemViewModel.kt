@@ -2,10 +2,10 @@ package com.fullsekurity.theatreblood.reassociateproducts
 
 import android.view.View
 import androidx.databinding.ObservableField
-import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
 
-class ReassociateProductsSearchItemViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewItemViewModel<ReassociateProductsSearchData>() {
+class ReassociateProductsSearchItemViewModel(private val callbacks: Callbacks) : RecyclerViewItemViewModel<ReassociateProductsSearchData>() {
 
     val hintTextName: ObservableField<String> = ObservableField("")
     val editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
@@ -22,15 +22,15 @@ class ReassociateProductsSearchItemViewModel(private val activityCallbacks: Acti
     }
 
     fun onSearchClicked(view: View) {
-        activityCallbacks.fetchActivity().reassociateOnSearchClicked(view)
+        callbacks.fetchReassociateProductsListViewModel()?.handleReassociateSearchClick(view)
     }
 
     fun onNewDonorClicked(view: View) {
-        activityCallbacks.fetchActivity().reassociateOnNewDonorClicked(view)
+        callbacks.fetchActivity().reassociateOnNewDonorClicked(view)
     }
 
     fun onTextNameChanged(key: CharSequence, start: Int, before: Int, count: Int) {
-        activityCallbacks.fetchActivity().reassociateOnTextNameChanged(key.toString())
+        callbacks.fetchReassociateProductsListViewModel()?.onTextNameChanged(key.toString(), 0, 0, 0)
     }
 
 }

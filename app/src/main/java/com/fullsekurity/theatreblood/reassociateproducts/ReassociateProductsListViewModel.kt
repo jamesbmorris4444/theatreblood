@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
-import com.fullsekurity.theatreblood.activity.ActivityCallbacks
+import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -19,16 +19,16 @@ import com.fullsekurity.theatreblood.utils.Utils
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import javax.inject.Inject
 
-class ReassociateProductsListViewModelFactory(private val activityCallbacks: ActivityCallbacks) : ViewModelProvider.Factory {
+class ReassociateProductsListViewModelFactory(private val callbacks: Callbacks) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ReassociateProductsListViewModel(activityCallbacks) as T
+        return ReassociateProductsListViewModel(callbacks) as T
     }
 }
 
-class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCallbacks) : RecyclerViewViewModel(activityCallbacks.fetchActivity().application) {
+class ReassociateProductsListViewModel(private val callbacks: Callbacks) : RecyclerViewViewModel(callbacks.fetchActivity().application) {
 
     private val tag = ReassociateProductsListViewModel::class.java.simpleName
-    override var adapter: ReassociateProductsAdapter = ReassociateProductsAdapter(activityCallbacks)
+    override var adapter: ReassociateProductsAdapter = ReassociateProductsAdapter(callbacks)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     val errorVisibility: ObservableField<Int> = ObservableField(View.GONE)
     val errorMessage: ObservableField<String> = ObservableField("")
@@ -48,7 +48,7 @@ class ReassociateProductsListViewModel(private val activityCallbacks: ActivityCa
 
     init {
         DaggerViewModelDependencyInjector.builder()
-            .viewModelInjectorModule(ViewModelInjectorModule(activityCallbacks.fetchActivity()))
+            .viewModelInjectorModule(ViewModelInjectorModule(callbacks.fetchActivity()))
             .build()
             .inject(this)
         adapter.uiViewModel = uiViewModel
