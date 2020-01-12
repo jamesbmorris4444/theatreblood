@@ -188,6 +188,7 @@ class DonorViewModel(private val callbacks: Callbacks) : AndroidViewModel(callba
 
         if (atLeastOneEntryChanged) {
             repository.insertDonorIntoDatabase(repository.stagingBloodDatabase, donor, transitionToCreateDonation)
+            callbacks.fetchActivity().newDonor = donor
         } else {
             StandardModal(
                 callbacks,
@@ -235,28 +236,32 @@ class DonorViewModel(private val callbacks: Callbacks) : AndroidViewModel(callba
             callbacks.fetchRadioButton(R.id.radio_female)?.isChecked = true
         }
 
-        val aboRhDropdownView: Spinner = callbacks.fetchRootView().findViewById(R.id.abo_rh_dropdown)
-        val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array)
-        val aboRhAdapter = CustomSpinnerAdapter(callbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
-        aboRhDropdownView.adapter = aboRhAdapter
-        aboRhDropdownView.setSelection(getDropdownSelection(donor.aboRh, aboRhDropdownArray))
-        aboRhDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                currentAboRhSelectedValue = if (position > 0) parent.getItemAtPosition(position) as String else ""
+        callbacks.fetchDropdown(R.id.abo_rh_dropdown)?.let {
+            val aboRhDropdownView: Spinner = it
+            val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array)
+            val aboRhAdapter = CustomSpinnerAdapter(callbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
+            aboRhDropdownView.adapter = aboRhAdapter
+            aboRhDropdownView.setSelection(getDropdownSelection(donor.aboRh, aboRhDropdownArray))
+            aboRhDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                    currentAboRhSelectedValue = if (position > 0) parent.getItemAtPosition(position) as String else ""
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) { }
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
 
-        val militaryBranchDropdownView: Spinner = callbacks.fetchRootView().findViewById(R.id.military_branch_dropdown)
-        val militaryBranchDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.military_branch_array)
-        val militaryBranchAdapter = CustomSpinnerAdapter(callbacks.fetchActivity(), uiViewModel, militaryBranchDropdownArray)
-        militaryBranchDropdownView.adapter = militaryBranchAdapter
-        militaryBranchDropdownView.setSelection(getDropdownSelection(donor.branch, militaryBranchDropdownArray))
-        militaryBranchDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                currentMilitaryBranchSelectedValue = parent.getItemAtPosition(position) as String
+        callbacks.fetchDropdown(R.id.military_branch_dropdown)?.let {
+            val militaryBranchDropdownView: Spinner = it
+            val militaryBranchDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.military_branch_array)
+            val militaryBranchAdapter = CustomSpinnerAdapter(callbacks.fetchActivity(), uiViewModel, militaryBranchDropdownArray)
+            militaryBranchDropdownView.adapter = militaryBranchAdapter
+            militaryBranchDropdownView.setSelection(getDropdownSelection(donor.branch, militaryBranchDropdownArray))
+            militaryBranchDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                    currentMilitaryBranchSelectedValue = parent.getItemAtPosition(position) as String
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) { }
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
     }
 

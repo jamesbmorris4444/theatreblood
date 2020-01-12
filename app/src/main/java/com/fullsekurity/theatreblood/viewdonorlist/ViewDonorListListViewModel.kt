@@ -71,7 +71,7 @@ class ViewDonorListListViewModel(private val callbacks: Callbacks) : RecyclerVie
 
     fun showDonors(donorList: List<Donor>) {
         listIsVisible.set(donorList.isNotEmpty())
-        adapter.addAll(donorList)
+        adapter.addAll(donorList.sortedBy { donor -> Utils.donorComparisonByString(donor) })
         numberOfItemsDisplayed = donorList.size
         setNewDonorVisibility("NONEMPTY")
     }
@@ -102,20 +102,22 @@ class ViewDonorListListViewModel(private val callbacks: Callbacks) : RecyclerVie
     var currentAboRhSelectedValue: String = ""
 
     fun setDropdowns() {
-        val aboRhDropdownView: Spinner = callbacks.fetchRootView().findViewById(R.id.abo_rh_dropdown)
-        aboRhDropdownView.background = uiViewModel.editTextBackground.get()
-        val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array_with_no_value)
-        val aboRhAdapter = DonorViewModel.CustomSpinnerAdapter(callbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
-        aboRhDropdownView.adapter = aboRhAdapter
-        aboRhDropdownView.setSelection(0)
-        aboRhDropdownView.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                val temp = if (position > 0) parent.getItemAtPosition(position) as String else ""
-                currentAboRhSelectedValue = if (temp.isEmpty()) "<>" else temp
-                patternOfSubpatterns = Utils.newPatternOfSubpatterns(patternOfSubpatterns, 1, currentAboRhSelectedValue)
-                adapter.filter.filter(patternOfSubpatterns)
+        callbacks.fetchDropdown(R.id.abo_rh_dropdown)?.let {
+            val aboRhDropdownView: Spinner = it
+            aboRhDropdownView.background = uiViewModel.editTextBackground.get()
+            val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array_with_no_value)
+            val aboRhAdapter = DonorViewModel.CustomSpinnerAdapter(callbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
+            aboRhDropdownView.adapter = aboRhAdapter
+            aboRhDropdownView.setSelection(0)
+            aboRhDropdownView.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                    val temp = if (position > 0) parent.getItemAtPosition(position) as String else ""
+                    currentAboRhSelectedValue = if (temp.isEmpty()) "<>" else temp
+                    patternOfSubpatterns = Utils.newPatternOfSubpatterns(patternOfSubpatterns, 1, currentAboRhSelectedValue)
+                    adapter.filter.filter(patternOfSubpatterns)
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) { }
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
     }
 

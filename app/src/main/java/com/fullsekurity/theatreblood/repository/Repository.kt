@@ -402,7 +402,7 @@ class Repository(private val callbacks: Callbacks) {
         LogUtils.E(LogUtils.FilterTags.withTags(EXC), method, throwable)
         initializeView()
     }
-    
+
     fun databaseCounts() {
         val entryCountList = listOf(
             databaseDonorCount(stagingBloodDatabase),
@@ -476,7 +476,7 @@ class Repository(private val callbacks: Callbacks) {
                 val response = responseList[0]
                 val stagingDatabaseList = response[1] as List<Donor>
                 val mainDatabaseList = response[0] as List<Donor>
-                val newList = stagingDatabaseList.union(mainDatabaseList).distinctBy { donor -> Utils.donorUnionStringForDistinctBy(donor) }
+                val newList = stagingDatabaseList.union(mainDatabaseList).distinctBy { donor -> Utils.donorComparisonByString(donor) }
                 showDonors(newList)
             },
             { throwable ->
@@ -498,6 +498,22 @@ class Repository(private val callbacks: Callbacks) {
             searchLast = "$last%"
         }
         return database.databaseDao().donorsFromFullName(searchLast, searchFirst)
+    }
+
+    fun retrieveDonorFromNameAndDate(progressBar: ProgressBar, donor: Donor, completeReassociationToNewDonor: (completeReassociationToNewDonor: Donor) -> Unit) {
+        var disposable: Disposable? = null
+        disposable = stagingBloodDatabase.databaseDao().donorFromNameAndDate(donor.lastName, donor.firstName, donor.middleName, donor.dob)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe({ donor ->
+                disposable?.dispose()
+                progressBar.visibility = View.GONE
+                completeReassociationToNewDonor(donor)
+            },
+            { throwable ->
+                disposable?.dispose()
+                LogUtils.E(LogUtils.FilterTags.withTags(EXC), "donorFromNameAndDateStoreAndRetrieve", throwable)
+            })
     }
 
     fun handleReassociateSearchClick(view: View, searchKey: String, showDonorsAndProducts: (donorsAndProductsList: List<DonorWithProducts>) -> Unit) {

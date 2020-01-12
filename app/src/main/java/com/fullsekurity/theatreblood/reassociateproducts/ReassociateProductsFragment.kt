@@ -51,6 +51,10 @@ class ReassociateProductsFragment : Fragment(), Callbacks {
     override fun onResume() {
         super.onResume()
         (activity as MainActivity).toolbar.title = Constants.REASSOCIATE_DONATION_TITLE
+        if (fetchActivity().newDonor != null) {
+            // re-entry to reassociateProductsListViewModel after creating a new donor, which is now stored in fetchActivity().newDonor
+            reassociateProductsListViewModel.initializeView()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

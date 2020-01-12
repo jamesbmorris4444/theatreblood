@@ -64,7 +64,7 @@ class DonateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
 
     private fun showDonors(donorList: List<Donor>) {
         listIsVisible.set(donorList.isNotEmpty())
-        adapter.addAll(donorList)
+        adapter.addAll(donorList.sortedBy { donor -> Utils.donorComparisonByString(donor) })
         numberOfItemsDisplayed = donorList.size
         setNewDonorVisibility("NONEMPTY")
     }

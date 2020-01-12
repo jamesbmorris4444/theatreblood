@@ -101,7 +101,10 @@ class ViewDonorListFragment : Fragment(), Callbacks {
         return fetchRootView().findViewById(resId)
     }
 
-    override fun fetchDropdown(resId: Int) : Spinner? { return null }
+    override fun fetchDropdown(resId: Int) : Spinner? {
+        return fetchRootView().findViewById(resId)
+    }
+
     override fun fetchCreateProductsListViewModel() : CreateProductsListViewModel? { return null }
     override fun fetchDonateProductsListViewModel() : DonateProductsListViewModel? { return null }
     override fun fetchReassociateProductsListViewModel() : ReassociateProductsListViewModel? { return null }

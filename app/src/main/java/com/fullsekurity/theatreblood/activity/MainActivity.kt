@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
     lateinit var createProductsListViewModel: CreateProductsListViewModel
     private lateinit var reassociateProductsFragment: ReassociateProductsFragment
     var transitionToCreateDonation = true
+    var newDonor: Donor? = null
 
     enum class UITheme {
         LIGHT, DARK, NOT_ASSIGNED,
@@ -215,6 +216,8 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
     }
 
     fun reassociateOnNewDonorClicked(view: View) {
+        newDonor = null
+        transitionToCreateDonation = false
         loadDonorFragment(null, transitionToCreateDonation)
     }
 

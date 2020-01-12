@@ -24,7 +24,7 @@ class Utils {
             return donor.lastName == otherDonor.lastName && donor.firstName == otherDonor.firstName && donor.middleName == otherDonor.middleName && donor.dob == otherDonor.dob
         }
 
-        fun donorUnionStringForDistinctBy(donor: Donor): String {
+        fun donorComparisonByString(donor: Donor): String {
             return donor.lastName + "," + donor.firstName + "," + donor.middleName + "," + donor.dob
         }
 
