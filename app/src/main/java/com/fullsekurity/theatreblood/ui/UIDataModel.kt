@@ -58,13 +58,14 @@ class UIDataModel {
                         "white",
                         R.drawable.lt_edit_text_cursor,
 
-                        "white",
+                        "primary",
                         "largeText",
-                        "white",
+                        "black",
                         "subTitle",
                         "lighterGray",
                         "primary",
-                        R.drawable.edit_text_background,
+                        "primary",
+                        R.drawable.lt_edit_text_background,
 
                         R.drawable.button_light,
                         "white",
@@ -93,7 +94,7 @@ class UIDataModel {
                         "subTitle",
                         "lightGray",
                         "primary",
-                        R.drawable.edit_text_background,
+                        R.drawable.lt_edit_text_background,
 
                         "black",
                         "largeTextBold",
@@ -161,9 +162,10 @@ class UIDataModel {
                         "largeText",
                         "black",
                         "subTitle",
-                        "lightGray",
+                        "darkestGray",
                         "white",
-                        R.drawable.edit_text_background,
+                        "white",
+                        R.drawable.dk_edit_text_background,
 
                         R.drawable.button_dark,
                         "white",
@@ -192,7 +194,7 @@ class UIDataModel {
                         "subTitle",
                         "lightGray",
                         "white",
-                        R.drawable.edit_text_background,
+                        R.drawable.lt_edit_text_background,
 
                         "white",
                         "largeTextBold",

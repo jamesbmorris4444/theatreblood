@@ -15,4 +15,16 @@
     <color name="black">#000000</color>
     <color name="cyan">#00ffff</color>
     <color name="transparent">#00000000</color>
+    <color name="veryLightGrayFromBlack">#08000000</color>
+    <color name="lighterGrayFromBlack">#38000000</color>
+    <color name="lightGrayFromBlack">#68000000</color>
+    <color name="mediumGrayFromBlack">#98000000</color>
+    <color name="darkGrayFromBlack">#c8000000</color>
+    <color name="darkestGrayFromBlack">#e8000000</color>
+    <color name="veryLightGrayFromWhite">#08ffffff</color>
+    <color name="lighterGrayFromWhite">#38ffffff</color>
+    <color name="lightGrayFromWhite">#68ffffff</color>
+    <color name="mediumGrayFromWhite">#98ffffff</color>
+    <color name="darkGrayFromWhite">#c8ffffff</color>
+    <color name="darkestGrayFromWhite">#e8ffffff</color>
 </resources>

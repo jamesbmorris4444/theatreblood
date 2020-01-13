@@ -56,7 +56,8 @@ class UIDataClass(
     val editTextColor: String,                            // EditText text color
     val editTextSize: String,                             // EditText text size
     val editTextBackgroundColor: String,                  // EditText background color (color of the background drawable)
-    val editTextUpperHintColor: String,                   // EditText upper hint text color (hint text color when it is elevated)
+    val editTextUpperHintColor: String,                   // EditText upper hint text color (hint text color when it is elevated above the EditText, focused or text-filled)
+    val editTextLowerHintColor: String,                   // EditText lower hint text color (hint text color when it is inside the EditText, not focused and not text-filled)
     val editTextBackground: Int,                          // EditText background drawable (used to provide rounded corners only)
 
     val buttonDrawable: Int,                              // Button drawable icon

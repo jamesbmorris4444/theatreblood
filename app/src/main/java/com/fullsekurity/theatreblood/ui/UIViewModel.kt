@@ -98,7 +98,9 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
     val editTextBackgroundColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextTypeface: ObservableField<String> = ObservableField("")
     val editTextUpperHintColor: ObservableField<String> = ObservableField("#ffffff")
+    val editTextLowerHintColor: ObservableField<String> = ObservableField("#ffffff")
     val editTextBackground: ObservableField<Drawable> = ObservableField()
+    val editTextBackgroundResInt: ObservableField<Int> = ObservableField(0)
 
     val buttonDrawable: ObservableField<Drawable> = ObservableField()
     val largeButtonDrawable: ObservableField<Drawable> = ObservableField()
@@ -356,7 +358,9 @@ class UIViewModel(val activity: Application) : AndroidViewModel(activity) {
             editTextBackgroundColor.set(colorMapper.map(theme, uiDataClass.editTextBackgroundColor))
             editTextTypeface.set(typefaceMapper.map(theme, uiDataClass.editTextSize))
             editTextUpperHintColor.set(colorMapper.map(theme, uiDataClass.editTextUpperHintColor))
+            editTextLowerHintColor.set(colorMapper.map(theme, uiDataClass.editTextLowerHintColor))
             editTextBackground.set(ContextCompat.getDrawable(context, uiDataClass.editTextBackground))
+            editTextBackgroundResInt.set(uiDataClass.editTextBackground)
 
             buttonDrawable.set(ContextCompat.getDrawable(context, uiDataClass.buttonDrawable)?.mutate())
             largeButtonDrawable.set(ContextCompat.getDrawable(context, uiDataClass.buttonDrawable)?.mutate())

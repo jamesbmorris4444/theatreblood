@@ -25,7 +25,7 @@ class ColorMapper @Inject constructor() {
         LIGHT_GRAY("lightGray", "#68000000"),
         MEDIUM_GRAY("mediumGray", "#98000000"),
         DARK_GRAY("darkGray", "#c8000000"),
-        DARKEST_GRAY("darkestGray", "#e8ffffff")
+        DARKEST_GRAY("darkestGray", "#e8000000")
     }
 
     enum class DarkColors(var colorName: String, val colorValue: String) {

@@ -40,6 +40,12 @@ fun setBackground(view: EditText, drawable: Drawable?) {
     view.requestLayout()
 }
 
+@BindingAdapter("background_from_res_int")
+fun setBackgroundr(view: EditText, resInt: Int) {
+    view.setBackgroundResource(resInt)
+    view.requestLayout()
+}
+
 @BindingAdapter("dropdown_background")
 fun setDropdownBackground(view: Spinner, drawable: Drawable?) {
     view.setPopupBackgroundDrawable(drawable)
@@ -215,7 +221,8 @@ fun setRecyclerViewViewModel(recyclerView: RecyclerView, viewModel: RecyclerView
     viewModel?.setupRecyclerView(recyclerView)
 }
 
-@BindingAdapter("upper_text_hint_color")
+// TextInputLayout: Hint color ABOVE the EditText box when the editText IS focused
+@BindingAdapter("focused_upper_text_hint_color")
 fun setUpperHintColor(textInputLayout: TextInputLayout, color: String) {
     try {
         val field = TextInputLayout::class.java.getDeclaredField("focusedTextColor")
@@ -232,7 +239,8 @@ fun setUpperHintColor(textInputLayout: TextInputLayout, color: String) {
     }
 }
 
-@BindingAdapter("unfocused_upper_text_hint_color")
+// TextInputLayout: Hint color INSIDE the EditText box when the editText IS NOT focused
+@BindingAdapter("unfocused_edit_text_hint_color")
 fun setUnfocusedUpperHintColor(textInputLayout: TextInputLayout, color: String) {
     try {
         val field = TextInputLayout::class.java.getDeclaredField("defaultHintTextColor")
