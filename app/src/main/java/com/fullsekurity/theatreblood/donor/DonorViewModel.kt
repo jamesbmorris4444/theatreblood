@@ -244,7 +244,7 @@ class DonorViewModel(private val callbacks: Callbacks) : AndroidViewModel(callba
             aboRhDropdownView.setSelection(getDropdownSelection(donor.aboRh, aboRhDropdownArray))
             aboRhDropdownView.onItemSelectedListener = object : OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                    currentAboRhSelectedValue = if (position > 0) parent.getItemAtPosition(position) as String else ""
+                    currentAboRhSelectedValue = parent.getItemAtPosition(position) as String
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) { }
             }

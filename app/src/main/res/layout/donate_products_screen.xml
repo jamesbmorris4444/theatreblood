@@ -27,6 +27,7 @@
                 android:paddingTop="10dp"
                 android:hint="@{donateProductsListViewModel.hintTextName}"
                 app:upper_text_hint_color="@{uiViewModel.editTextUpperHintColor}"
+                app:unfocused_upper_text_hint_color="@{uiViewModel.editTextLabelColor}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 android:visibility="@{safeUnbox(donateProductsListViewModel.editTextNameVisibility)}"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"

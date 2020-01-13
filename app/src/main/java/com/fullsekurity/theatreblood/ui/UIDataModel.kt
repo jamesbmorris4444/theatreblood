@@ -58,7 +58,7 @@ class UIDataModel {
                         "white",
                         R.drawable.lt_edit_text_cursor,
 
-                        "mediumGray",
+                        "white",
                         "largeText",
                         "white",
                         "subTitle",
@@ -157,7 +157,7 @@ class UIDataModel {
                         "white",
                         R.drawable.dk_edit_text_cursor,
 
-                        "mediumGray",
+                        "white",
                         "largeText",
                         "black",
                         "subTitle",
