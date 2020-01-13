@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit
 
 class Repository(private val callbacks: Callbacks) {
 
-    private val TAG = Repository::class.java.simpleName
+    private val tag = Repository::class.java.simpleName
     lateinit var mainBloodDatabase: BloodDatabase
     lateinit var stagingBloodDatabase: BloodDatabase
     private val donorsService: APIInterface = APIClient.client
@@ -48,12 +48,9 @@ class Repository(private val callbacks: Callbacks) {
     val liveViewDonorList: MutableLiveData<List<Donor>> = MutableLiveData()
 
     fun setBloodDatabase(context: Context) {
-        BloodDatabase.newInstance(context, MAIN_DATABASE_NAME)?.let {
-            mainBloodDatabase = it
-        }
-        BloodDatabase.newInstance(context, MODIFIED_DATABASE_NAME)?.let {
-            stagingBloodDatabase = it
-        }
+        val dbList = BloodDatabase.newInstance(context, MAIN_DATABASE_NAME, MODIFIED_DATABASE_NAME)
+        mainBloodDatabase = dbList[0]
+        stagingBloodDatabase = dbList[1]
     }
 
     // The code below here manages the network status
@@ -86,14 +83,14 @@ class Repository(private val callbacks: Callbacks) {
         isOfflineMode = false
         setConnectedTransportType(connectivityManager, network)
         isMetered = connectivityManager.isActiveNetworkMetered
-        LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.NET), String.format("Network is connected, TYPE: %s (metered=%b)", transportType.name, isMetered))
+        LogUtils.W(tag, LogUtils.FilterTags.withTags(LogUtils.TagFilter.NET), String.format("Network is connected, TYPE: %s (metered=%b)", transportType.name, isMetered))
     }
 
     private fun onLostHelper() {
         isOfflineMode = false
         setDisconnectedTransportType()
         isMetered = false
-        LogUtils.W(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.NET), String.format("Network connectivity is lost, TYPE: %s (metered=%b)", transportType.name, isMetered))
+        LogUtils.W(tag, LogUtils.FilterTags.withTags(LogUtils.TagFilter.NET), String.format("Network connectivity is lost, TYPE: %s (metered=%b)", transportType.name, isMetered))
     }
 
 
@@ -279,7 +276,7 @@ class Repository(private val callbacks: Callbacks) {
         if (dbWal.exists()) {
             dbWal.copyTo(dbWalBackup, true)
         }
-        LogUtils.D(TAG, LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("Path Name \"%s\" exists and was backed up", db.toString()))
+        LogUtils.D(tag, LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("Path Name \"%s\" exists and was backed up", db.toString()))
     }
 
     // The code below here does CRUD on the database
@@ -476,6 +473,7 @@ class Repository(private val callbacks: Callbacks) {
                 val response = responseList[0]
                 val stagingDatabaseList = response[1] as List<Donor>
                 val mainDatabaseList = response[0] as List<Donor>
+                LogUtils.D(tag, LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("Retrieve all donors:  main=%d   staging=%d", mainDatabaseList.size, stagingDatabaseList.size))
                 val newList = stagingDatabaseList.union(mainDatabaseList).distinctBy { donor -> Utils.donorComparisonByString(donor) }
                 showDonors(newList)
             },
