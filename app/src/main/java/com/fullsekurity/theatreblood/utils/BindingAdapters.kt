@@ -118,6 +118,12 @@ fun setFont(view: TextView, font: String) {
     view.typeface = typeface
 }
 
+@BindingAdapter("text_font_text_input_layout")
+fun setFontTextInputLayout(textInputLayout: TextInputLayout, font: String) {
+    val typeface = FontFamily.newInstance().getFontResId(textInputLayout.context, font)
+    textInputLayout.typeface = typeface
+}
+
 @BindingAdapter("edit_text_font")
 fun setEditTextFont(view: EditText, font: String) {
     val typeface = FontFamily.newInstance().getFontResId(view.context, font)

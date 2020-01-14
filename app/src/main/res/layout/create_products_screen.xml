@@ -72,7 +72,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="40dp"
                             android:hint="@{createProductsListViewModel.hintTextDin}"
-                            app:focused_upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}"
+                            app:unfocused_edit_text_hint_color="@{uiViewModel.editTextLowerHintColor}"
+                            app:focused_upper_text_hint_color="@{uiViewModel.editTextUpperHintColor}"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent" >
@@ -97,8 +98,7 @@
                                 app:background_from_res_int="@{uiViewModel.editTextBackgroundResInt}"
                                 app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
                                 app:edit_text_color="@{uiViewModel.editTextProductColor}"
-                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}"
-                                app:edit_text_background_color="@{uiViewModel.editTextProductBackgroundColor}"/>
+                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -214,7 +214,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="40dp"
                             android:hint="@{createProductsListViewModel.hintTextCode}"
-                            app:focused_upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}"
+                            app:text_font_text_input_layout="@{uiViewModel.editTextTypeface}"
+                            app:unfocused_edit_text_hint_color="@{uiViewModel.editTextLowerHintColor}"
+                            app:focused_upper_text_hint_color="@{uiViewModel.editTextUpperHintColor}"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent" >
@@ -239,8 +241,7 @@
                                 app:background_from_res_int="@{uiViewModel.editTextBackgroundResInt}"
                                 app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
                                 app:edit_text_color="@{uiViewModel.editTextProductColor}"
-                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}"
-                                app:edit_text_background_color="@{uiViewModel.editTextProductBackgroundColor}"/>
+                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -306,7 +307,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="40dp"
                             android:hint="@{createProductsListViewModel.hintTextExpDate}"
-                            app:focused_upper_text_hint_color="@{uiViewModel.editTextProductUpperHintColor}"
+                            app:text_font_text_input_layout="@{uiViewModel.editTextTypeface}"
+                            app:unfocused_edit_text_hint_color="@{uiViewModel.editTextLowerHintColor}"
+                            app:focused_upper_text_hint_color="@{uiViewModel.editTextUpperHintColor}"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent">
@@ -331,8 +334,7 @@
                                 app:background_from_res_int="@{uiViewModel.editTextBackgroundResInt}"
                                 app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
                                 app:edit_text_color="@{uiViewModel.editTextProductColor}"
-                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}"
-                                app:edit_text_background_color="@{uiViewModel.editTextProductBackgroundColor}"/>
+                                app:edit_text_size="@{safeUnbox(uiViewModel.editTextProductSize)}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 

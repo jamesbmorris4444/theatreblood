@@ -26,6 +26,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:hint="@{viewDonorListListViewModel.hintTextName}"
+                app:text_font_text_input_layout="@{uiViewModel.editTextTypeface}"
+                app:unfocused_edit_text_hint_color="@{uiViewModel.editTextLowerHintColor}"
                 app:focused_upper_text_hint_color="@{uiViewModel.editTextUpperHintColor}"
                 app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                 app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
@@ -52,8 +54,7 @@
                     app:background_from_res_int="@{uiViewModel.editTextBackgroundResInt}"
                     app:edit_text_font="@{uiViewModel.editTextTypeface}"
                     app:edit_text_color="@{uiViewModel.editTextColor}"
-                    app:edit_text_size="@{safeUnbox(uiViewModel.editTextSize)}"
-                    app:edit_text_background_color="@{uiViewModel.editTextBackgroundColor}" />
+                    app:edit_text_size="@{safeUnbox(uiViewModel.editTextSize)}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
