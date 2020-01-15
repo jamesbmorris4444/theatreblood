@@ -237,9 +237,9 @@ fun setUpperHintColor(textInputLayout: TextInputLayout, color: String) {
         val colors = intArrayOf(Color.parseColor(color))
         val myList = ColorStateList(states, colors)
         field.set(textInputLayout, myList)
-        val method = textInputLayout::class.java.getDeclaredMethod("updateLabelState", Boolean::class.javaPrimitiveType)
+        val method = textInputLayout::class.java.getDeclaredMethod("updateLabelState", Boolean::class.javaPrimitiveType, Boolean::class.javaPrimitiveType)
         method.isAccessible = true
-        method.invoke(textInputLayout, true)
+        method.invoke(textInputLayout, true, true)
     } catch (e: Exception) {
         LogUtils.E(LogUtils.FilterTags.withTags(MIS), e)
     }
@@ -255,9 +255,9 @@ fun setUnfocusedUpperHintColor(textInputLayout: TextInputLayout, color: String) 
         val colors = intArrayOf(Color.parseColor(color))
         val myList = ColorStateList(states, colors)
         field.set(textInputLayout, myList)
-        val method = textInputLayout::class.java.getDeclaredMethod("updateLabelState", Boolean::class.javaPrimitiveType)
+        val method = textInputLayout::class.java.getDeclaredMethod("updateLabelState", Boolean::class.javaPrimitiveType, Boolean::class.javaPrimitiveType)
         method.isAccessible = true
-        method.invoke(textInputLayout, true)
+        method.invoke(textInputLayout, true, true)
     } catch (e: Exception) {
         LogUtils.E(LogUtils.FilterTags.withTags(MIS), e)
     }

@@ -67,6 +67,9 @@ class CreateProductsFragment : Fragment(), Callbacks {
         binding.createProductsListViewModel = createProductsListViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
+        if (!::donor.isInitialized) {
+            donor = Donor()
+        }
         createProductsListViewModel.setDonor(donor)
         setupLottieDrawables(binding.root)
         return binding.root

@@ -74,7 +74,7 @@ class DonorFragment : Fragment(), Callbacks {
         binding.donorViewModel = donorViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
-        if (::donor.isInitialized) {
+        if (!::donor.isInitialized) {
             donor = Donor()
         }
         donorViewModel.setDonor(donor)

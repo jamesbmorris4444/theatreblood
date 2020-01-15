@@ -34,17 +34,16 @@
     </style>
 
     <!-- Start styles used in theming, uiViewModel should select one of these two styles based on the theme. -->
-    <!-- Changes in size here should be synchronized with the value of uiViewModel.editTextDisplayModifyHintSize. -->
-
     <!-- TextInputLayout styles are used in EditText forms for donors and products -->
+    <!-- sets upper hint text size and color -->
     <style name="TextInputLayoutForLight" parent="@android:style/TextAppearance">
-        <item name="android:textSize">16sp</item> <!-- sets upper hint text size  -->
-        <item name="android:typeface">@font/avenir_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/lightPrimary</item>
     </style>
 
-    <style name="TextInputLayoutForDark" parent="@android:style/TextAppearance">
+    <style name="TextInputLayoutForDark" parent="TextAppearance.Design.Hint">
         <item name="android:textSize">16sp</item> <!-- sets upper hint text size  -->
-        <item name="android:typeface">@font/avenir_regular</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <!-- DatePicker styles are used for the color areas in the calendar for a DatePicker -->

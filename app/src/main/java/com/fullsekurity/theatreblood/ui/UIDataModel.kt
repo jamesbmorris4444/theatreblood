@@ -62,7 +62,6 @@ class UIDataModel {
                         "largeText",
                         "black",
                         "subTitle",
-                        "lighterGray",
                         "primary",
                         "primary",
                         R.drawable.lt_edit_text_background,
@@ -92,8 +91,6 @@ class UIDataModel {
                         "white",
                         "black",
                         "subTitle",
-                        "lightGray",
-                        "primary",
                         R.drawable.lt_edit_text_background,
 
                         "black",
@@ -162,7 +159,6 @@ class UIDataModel {
                         "largeText",
                         "black",
                         "subTitle",
-                        "darkestGray",
                         "white",
                         "white",
                         R.drawable.dk_edit_text_background,
@@ -192,8 +188,6 @@ class UIDataModel {
                         "black",
                         "white",
                         "subTitle",
-                        "lightGray",
-                        "white",
                         R.drawable.lt_edit_text_background,
 
                         "white",

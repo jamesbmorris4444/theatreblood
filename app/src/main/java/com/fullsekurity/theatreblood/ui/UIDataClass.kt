@@ -55,7 +55,6 @@ class UIDataClass(
     val editTextLabelSize: String,                        // EditText hint text size (changes to this value should be synchronized with styles.TextInputLayoutForLight/Dark)
     val editTextColor: String,                            // EditText text color
     val editTextSize: String,                             // EditText text size
-    val editTextBackgroundColor: String,                  // EditText background color (color of the background drawable)
     val editTextUpperHintColor: String,                   // EditText upper hint text color (hint text color when it is elevated above the EditText, focused or text-filled)
     val editTextLowerHintColor: String,                   // EditText lower hint text color (hint text color when it is inside the EditText, not focused and not text-filled)
     val editTextBackground: Int,                          // EditText background drawable (used to provide rounded corners only)
@@ -85,8 +84,6 @@ class UIDataClass(
     val editTextProductColor: String,                     // Product EditText text color
     val editTextAboRhProductColor: String,                // Product EditText text color for ABO Rh entry only
     val editTextProductSize: String,                      // Product EditText text size
-    val editTextProductBackgroundColor: String,           // Product EditText background color (color of the background drawable)
-    val editTextProductUpperHintColor: String,            // Product EditText upper hint text color
     val editTextProductBackground: Int,                   // Product EditText background drawable resource
 
     val productIdTextColor: String,                       // Product grid id label text color
