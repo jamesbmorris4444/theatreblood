@@ -99,7 +99,7 @@ class UIDataModel {
                         "black",
                         "mainTitleBold",
 
-                        "white",
+                        "primary",
                         "subTitle"
                     )
                 }

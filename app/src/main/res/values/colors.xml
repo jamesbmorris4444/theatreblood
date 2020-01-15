@@ -27,4 +27,5 @@
     <color name="mediumGrayFromWhite">#98ffffff</color>
     <color name="darkGrayFromWhite">#c8ffffff</color>
     <color name="darkestGrayFromWhite">#e8ffffff</color>
+    <color name="lightDropdownBkg">#dBc6f1</color>
 </resources>

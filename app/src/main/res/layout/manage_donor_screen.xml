@@ -235,7 +235,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:text_font="@{uiViewModel.editTextTypeface}"
-                        app:text_color="@{uiViewModel.editTextColor}"
+                        app:text_color="@{uiViewModel.editTextUpperHintColor}"
                         app:text_size="@{safeUnbox(uiViewModel.editTextSize)}"
                         app:radio_button_color="@{uiViewModel.radioButtonColor}"
                         android:text="@string/radio_gender_male" />
@@ -245,7 +245,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:text_font="@{uiViewModel.editTextTypeface}"
-                        app:text_color="@{uiViewModel.editTextColor}"
+                        app:text_color="@{uiViewModel.editTextUpperHintColor}"
                         app:text_size="@{safeUnbox(uiViewModel.editTextSize)}"
                         app:radio_button_color="@{uiViewModel.radioButtonColor}"
                         android:text="@string/radio_gender_female" />
