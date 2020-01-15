@@ -28,4 +28,6 @@
     <color name="darkGrayFromWhite">#c8ffffff</color>
     <color name="darkestGrayFromWhite">#e8ffffff</color>
     <color name="lightDropdownBkg">#dBc6f1</color>
+    <color name="lightPrimaryStartButtonGradient">#bB66f1</color>
+    <color name="darkPrimaryStartButtonGradient">#7979e0</color>
 </resources>
