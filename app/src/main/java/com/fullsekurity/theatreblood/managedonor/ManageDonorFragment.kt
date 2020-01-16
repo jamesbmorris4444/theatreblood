@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.donor
+package com.fullsekurity.theatreblood.managedonor
 
 import android.content.Context
 import android.os.Bundle
@@ -16,7 +16,7 @@ import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
-import com.fullsekurity.theatreblood.databinding.ManageDonorScreenBinding
+import com.fullsekurity.theatreblood.databinding.ManageDonorFragmentBinding
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.LOT
@@ -32,9 +32,9 @@ import javax.inject.Inject
 
 class DonorFragment : Fragment(), Callbacks {
 
-    private lateinit var donorViewModel: DonorViewModel
+    private lateinit var manageDonorViewModel: ManageDonorViewModel
     private lateinit var donor: Donor
-    private lateinit var binding: ManageDonorScreenBinding
+    private lateinit var binding: ManageDonorFragmentBinding
     private lateinit var mainActivity: MainActivity
     private var transitionToCreateDonation = true
 
@@ -68,18 +68,18 @@ class DonorFragment : Fragment(), Callbacks {
             .viewModelInjectorModule(ViewModelInjectorModule(activity as MainActivity))
             .build()
             .inject(this)
-        binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.manage_donor_screen, container, false) as ManageDonorScreenBinding
+        binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.manage_donor_fragment, container, false) as ManageDonorFragmentBinding
         binding.lifecycleOwner = this
-        donorViewModel = ViewModelProviders.of(this, DonorViewModelFactory(this)).get(DonorViewModel::class.java)
-        binding.donorViewModel = donorViewModel
+        manageDonorViewModel = ViewModelProviders.of(this, ManageDonorViewModelFactory(this)).get(ManageDonorViewModel::class.java)
+        binding.donorViewModel = manageDonorViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
         if (!::donor.isInitialized) {
             donor = Donor()
         }
-        donorViewModel.setDonor(donor)
-        donorViewModel.initializeDonorValues(donor)
-        donorViewModel.transitionToCreateDonation = transitionToCreateDonation
+        manageDonorViewModel.setDonor(donor)
+        manageDonorViewModel.initializeDonorValues(donor)
+        manageDonorViewModel.transitionToCreateDonation = transitionToCreateDonation
         setupLottieDrawables(binding.root)
         return binding.root
     }

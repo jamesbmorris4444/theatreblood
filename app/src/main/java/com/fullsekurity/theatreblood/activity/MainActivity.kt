@@ -30,7 +30,7 @@ import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
-import com.fullsekurity.theatreblood.donor.DonorFragment
+import com.fullsekurity.theatreblood.managedonor.DonorFragment
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.LOT
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsFragment

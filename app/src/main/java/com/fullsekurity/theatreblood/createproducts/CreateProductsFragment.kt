@@ -15,7 +15,7 @@ import com.airbnb.lottie.*
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
-import com.fullsekurity.theatreblood.databinding.CreateProductsScreenBinding
+import com.fullsekurity.theatreblood.databinding.CreateProductsFragmentBinding
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.API
@@ -33,7 +33,7 @@ class CreateProductsFragment : Fragment(), Callbacks {
 
     private lateinit var createProductsListViewModel: CreateProductsListViewModel
     private lateinit var donor: Donor
-    private lateinit var binding: CreateProductsScreenBinding
+    private lateinit var binding: CreateProductsFragmentBinding
     private lateinit var mainActivity: MainActivity
 
     companion object {
@@ -61,7 +61,7 @@ class CreateProductsFragment : Fragment(), Callbacks {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.create_products_screen, container, false) as CreateProductsScreenBinding
+        binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.create_products_fragment, container, false) as CreateProductsFragmentBinding
         binding.lifecycleOwner = this
         createProductsListViewModel = ViewModelProviders.of(this, CreateProductsListViewModelFactory(this)).get(CreateProductsListViewModel::class.java)
         binding.createProductsListViewModel = createProductsListViewModel

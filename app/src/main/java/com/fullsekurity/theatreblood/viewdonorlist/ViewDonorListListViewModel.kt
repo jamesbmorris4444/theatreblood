@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsAdapter
-import com.fullsekurity.theatreblood.donor.DonorViewModel
+import com.fullsekurity.theatreblood.managedonor.ManageDonorViewModel
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -106,7 +106,7 @@ class ViewDonorListListViewModel(private val callbacks: Callbacks) : RecyclerVie
             val aboRhDropdownView: Spinner = it
             aboRhDropdownView.background = uiViewModel.editTextBackground.get()
             val aboRhDropdownArray = getApplication<Application>().applicationContext.resources.getStringArray(R.array.abo_rh_array_with_no_value)
-            val aboRhAdapter = DonorViewModel.CustomSpinnerAdapter(callbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
+            val aboRhAdapter = ManageDonorViewModel.CustomSpinnerAdapter(callbacks.fetchActivity(), uiViewModel, aboRhDropdownArray)
             aboRhDropdownView.adapter = aboRhAdapter
             aboRhDropdownView.setSelection(0)
             aboRhDropdownView.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

@@ -16,7 +16,7 @@ import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
-import com.fullsekurity.theatreblood.databinding.DonateProductsScreenBinding
+import com.fullsekurity.theatreblood.databinding.DonateProductsFragmentBinding
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
@@ -30,7 +30,7 @@ class DonateProductsFragment : Fragment(), Callbacks {
 
     private lateinit var donateProductsListViewModel: DonateProductsListViewModel
     private lateinit var lottieBackgroundView: LottieAnimationView
-    private lateinit var binding: DonateProductsScreenBinding
+    private lateinit var binding: DonateProductsFragmentBinding
     private lateinit var mainActivity: MainActivity
     private var transitionToCreateDonation = true
 
@@ -60,7 +60,7 @@ class DonateProductsFragment : Fragment(), Callbacks {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.donate_products_screen, container, false) as DonateProductsScreenBinding
+        binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.donate_products_fragment, container, false) as DonateProductsFragmentBinding
         binding.lifecycleOwner = this
         donateProductsListViewModel = ViewModelProviders.of(this, DonateProductsListViewModelFactory(this)).get(DonateProductsListViewModel::class.java)
         binding.donateProductsListViewModel = donateProductsListViewModel

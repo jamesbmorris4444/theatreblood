@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
-import com.fullsekurity.theatreblood.databinding.DonorsListItemBinding
+import com.fullsekurity.theatreblood.databinding.DonateProductsListItemBinding
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFilterAdapter
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
@@ -26,14 +26,14 @@ class DonateProductsAdapter(private val callbacks: Callbacks) : RecyclerViewFilt
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DonorsViewHolder {
-        val donorsItemBinding: DonorsListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.donors_list_item, parent, false)
+        val donateProductsListItemBinding: DonateProductsListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.donate_products_list_item, parent, false)
         val donateProductsItemViewModel = DonateProductsItemViewModel(callbacks)
-        donorsItemBinding.donateProductsItemViewModel = donateProductsItemViewModel
-        donorsItemBinding.uiViewModel = uiViewModel
-        return DonorsViewHolder(donorsItemBinding.root, donateProductsItemViewModel, donorsItemBinding)
+        donateProductsListItemBinding.donateProductsItemViewModel = donateProductsItemViewModel
+        donateProductsListItemBinding.uiViewModel = uiViewModel
+        return DonorsViewHolder(donateProductsListItemBinding.root, donateProductsItemViewModel, donateProductsListItemBinding)
     }
 
-    inner class DonorsViewHolder internal constructor(itemView: View, viewModel: DonateProductsItemViewModel, viewDataBinding: DonorsListItemBinding) :
+    inner class DonorsViewHolder internal constructor(itemView: View, viewModel: DonateProductsItemViewModel, viewDataBinding: DonateProductsListItemBinding) :
         ItemViewHolder<Donor, DonateProductsItemViewModel> (itemView, viewModel, viewDataBinding)
 
     override fun onBindViewHolder(holder: ItemViewHolder<Donor, DonateProductsItemViewModel>, position: Int) {

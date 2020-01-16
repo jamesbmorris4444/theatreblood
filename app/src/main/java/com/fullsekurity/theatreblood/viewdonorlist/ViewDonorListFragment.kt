@@ -17,7 +17,7 @@ import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
-import com.fullsekurity.theatreblood.databinding.ViewDonorListScreenBinding
+import com.fullsekurity.theatreblood.databinding.ViewDonorListFragmentBinding
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel
 import com.fullsekurity.theatreblood.ui.UIViewModel
@@ -32,7 +32,7 @@ class ViewDonorListFragment : Fragment(), Callbacks {
 
     private lateinit var viewDonorListListViewModel: ViewDonorListListViewModel
     private lateinit var lottieBackgroundView: LottieAnimationView
-    private lateinit var binding: ViewDonorListScreenBinding
+    private lateinit var binding: ViewDonorListFragmentBinding
     private lateinit var mainActivity: MainActivity
 
     companion object {
@@ -59,7 +59,7 @@ class ViewDonorListFragment : Fragment(), Callbacks {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.view_donor_list_screen, container, false) as ViewDonorListScreenBinding
+        binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.view_donor_list_fragment, container, false) as ViewDonorListFragmentBinding
         binding.lifecycleOwner = this
         viewDonorListListViewModel = ViewModelProviders.of(this, ViewDonorListListViewModelFactory(this)).get(ViewDonorListListViewModel::class.java)
         binding.viewDonorListListViewModel = viewDonorListListViewModel

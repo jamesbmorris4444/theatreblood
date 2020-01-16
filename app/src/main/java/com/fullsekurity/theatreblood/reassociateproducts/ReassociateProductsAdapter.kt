@@ -8,8 +8,8 @@ import androidx.databinding.DataBindingUtil
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.createproducts.CreateProductsItemViewModel
-import com.fullsekurity.theatreblood.databinding.DonorsListItemBinding
-import com.fullsekurity.theatreblood.databinding.ProductsItemBinding
+import com.fullsekurity.theatreblood.databinding.CreateProductsListItemBinding
+import com.fullsekurity.theatreblood.databinding.DonateProductsListItemBinding
 import com.fullsekurity.theatreblood.databinding.ReassociateLabelItemBinding
 import com.fullsekurity.theatreblood.databinding.ReassociateSearchItemBinding
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsItemViewModel
@@ -71,19 +71,19 @@ class ReassociateProductsAdapter(private val callbacks: Callbacks) : RecyclerVie
 
             }
             ViewTypes.DONOR.ordinal -> {
-                val donorsItemBinding: DonorsListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.donors_list_item, parent, false)
+                val donateProductsListItemBinding: DonateProductsListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.donate_products_list_item, parent, false)
                 val donateProductsItemViewModel = DonateProductsItemViewModel(callbacks)
-                donorsItemBinding.donateProductsItemViewModel = donateProductsItemViewModel
-                donorsItemBinding.uiViewModel = uiViewModel
-                return ReassociateDonorViewHolder(donorsItemBinding.root, donateProductsItemViewModel as RecyclerViewItemViewModel<Any>, donorsItemBinding)
+                donateProductsListItemBinding.donateProductsItemViewModel = donateProductsItemViewModel
+                donateProductsListItemBinding.uiViewModel = uiViewModel
+                return ReassociateDonorViewHolder(donateProductsListItemBinding.root, donateProductsItemViewModel as RecyclerViewItemViewModel<Any>, donateProductsListItemBinding)
 
             }
             ViewTypes.PRODUCT.ordinal -> {
-                val productsItemBinding: ProductsItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.products_item, parent, false)
+                val createProductsListItemBinding: CreateProductsListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.create_products_list_item, parent, false)
                 val createProductsItemViewModel = CreateProductsItemViewModel(callbacks)
-                productsItemBinding.createProductsItemViewModel = createProductsItemViewModel
-                productsItemBinding.uiViewModel = uiViewModel
-                return ReassociateProductViewHolder(productsItemBinding.root, createProductsItemViewModel as RecyclerViewItemViewModel<Any>, productsItemBinding)
+                createProductsListItemBinding.createProductsItemViewModel = createProductsItemViewModel
+                createProductsListItemBinding.uiViewModel = uiViewModel
+                return ReassociateProductViewHolder(createProductsListItemBinding.root, createProductsItemViewModel as RecyclerViewItemViewModel<Any>, createProductsListItemBinding)
 
             }
             else -> {
@@ -102,10 +102,10 @@ class ReassociateProductsAdapter(private val callbacks: Callbacks) : RecyclerVie
     inner class ReassociateSearchViewHolder internal constructor(itemView: View, viewModel: RecyclerViewItemViewModel<Any>, viewDataBinding: ReassociateSearchItemBinding) :
         ItemViewHolder<Any, RecyclerViewItemViewModel<Any>> (itemView, viewModel, viewDataBinding)
     
-    inner class ReassociateDonorViewHolder internal constructor(itemView: View, viewModel: RecyclerViewItemViewModel<Any>, viewDataBinding: DonorsListItemBinding) :
+    inner class ReassociateDonorViewHolder internal constructor(itemView: View, viewModel: RecyclerViewItemViewModel<Any>, viewDataBinding: DonateProductsListItemBinding) :
         ItemViewHolder<Any, RecyclerViewItemViewModel<Any>> (itemView, viewModel, viewDataBinding)
 
-    inner class ReassociateProductViewHolder internal constructor(itemView: View, viewModel: RecyclerViewItemViewModel<Any>, viewDataBinding: ProductsItemBinding) :
+    inner class ReassociateProductViewHolder internal constructor(itemView: View, viewModel: RecyclerViewItemViewModel<Any>, viewDataBinding: CreateProductsListItemBinding) :
         ItemViewHolder<Any, RecyclerViewItemViewModel<Any>> (itemView, viewModel, viewDataBinding)
 
     override fun onBindViewHolder(holder: ItemViewHolder<Any, RecyclerViewItemViewModel<Any>>, position: Int) {

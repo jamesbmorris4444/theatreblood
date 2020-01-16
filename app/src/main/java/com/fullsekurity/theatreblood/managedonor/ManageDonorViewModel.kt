@@ -1,4 +1,4 @@
-package com.fullsekurity.theatreblood.donor
+package com.fullsekurity.theatreblood.managedonor
 
 import android.app.Application
 import android.app.DatePickerDialog
@@ -30,14 +30,14 @@ import javax.inject.Inject
 
 
 @Suppress("UNCHECKED_CAST")
-class DonorViewModelFactory(private val callbacks: Callbacks) : ViewModelProvider.Factory {
+class ManageDonorViewModelFactory(private val callbacks: Callbacks) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DonorViewModel(callbacks) as T
+        return ManageDonorViewModel(callbacks) as T
     }
 }
 
 @Suppress("UNCHECKED_CAST")
-class DonorViewModel(private val callbacks: Callbacks) : AndroidViewModel(callbacks.fetchActivity().application) {
+class ManageDonorViewModel(private val callbacks: Callbacks) : AndroidViewModel(callbacks.fetchActivity().application) {
 
     private val calendar = Calendar.getInstance()
     private val year = calendar.get(Calendar.YEAR)

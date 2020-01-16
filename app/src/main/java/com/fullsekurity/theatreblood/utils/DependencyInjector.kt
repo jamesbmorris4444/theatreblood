@@ -6,8 +6,8 @@ import com.fullsekurity.theatreblood.createproducts.CreateProductsFragment
 import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
-import com.fullsekurity.theatreblood.donor.DonorFragment
-import com.fullsekurity.theatreblood.donor.DonorViewModel
+import com.fullsekurity.theatreblood.managedonor.DonorFragment
+import com.fullsekurity.theatreblood.managedonor.ManageDonorViewModel
 import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsFragment
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel
@@ -34,7 +34,7 @@ interface ViewModelDependencyInjector {
     fun inject(modal: StandardModal)
     fun inject(fragment: DonorFragment)
     fun inject(viewModel: DonateProductsListViewModel)
-    fun inject(viewModel: DonorViewModel)
+    fun inject(viewModelManage: ManageDonorViewModel)
     fun inject(activity: MainActivity)
     fun inject(viewModel: CreateProductsListViewModel)
     fun inject(fragment: CreateProductsFragment)

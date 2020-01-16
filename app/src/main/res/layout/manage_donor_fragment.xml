@@ -8,7 +8,7 @@
                 type="com.fullsekurity.theatreblood.ui.UIViewModel" />
         <variable
                 name="donorViewModel"
-                type="com.fullsekurity.theatreblood.donor.DonorViewModel" />
+                type="com.fullsekurity.theatreblood.managedonor.ManageDonorViewModel" />
     </data>
     
     <ScrollView
