@@ -40,10 +40,19 @@ class DonorFragment : Fragment(), Callbacks {
 
     companion object {
         fun newInstance(donor: Donor, transitionToCreateDonation: Boolean): DonorFragment {
+            val bundle = Bundle()
+            bundle.putSerializable("donorArgument", donor)
+            bundle.putBoolean("transitionToCreateDonationArgument", transitionToCreateDonation)
             val fragment = DonorFragment()
-            fragment.donor = donor
-            fragment.transitionToCreateDonation = transitionToCreateDonation
+            fragment.arguments = bundle
             return fragment
+        }
+    }
+
+    private fun readBundle(bundle: Bundle?) {
+        bundle?.let {
+            donor = it.getSerializable("donorArgument") as Donor
+            transitionToCreateDonation = it.getBoolean("transitionToCreateDonationArgument")
         }
     }
 
@@ -64,19 +73,13 @@ class DonorFragment : Fragment(), Callbacks {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        DaggerViewModelDependencyInjector.builder()
-            .viewModelInjectorModule(ViewModelInjectorModule(activity as MainActivity))
-            .build()
-            .inject(this)
+        readBundle(arguments)
         binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.manage_donor_fragment, container, false) as ManageDonorFragmentBinding
         binding.lifecycleOwner = this
         manageDonorViewModel = ViewModelProviders.of(this, ManageDonorViewModelFactory(this)).get(ManageDonorViewModel::class.java)
         binding.donorViewModel = manageDonorViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
-        if (!::donor.isInitialized) {
-            donor = Donor()
-        }
         manageDonorViewModel.setDonor(donor)
         manageDonorViewModel.initializeDonorValues(donor)
         manageDonorViewModel.transitionToCreateDonation = transitionToCreateDonation

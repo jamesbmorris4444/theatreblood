@@ -2,6 +2,7 @@ package com.fullsekurity.theatreblood.repository.storage
 
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 @Entity(tableName = "donors")
 data class Donor(
@@ -21,7 +22,7 @@ data class Donor(
     @ColumnInfo(name = "release_date") @SerializedName(value = "release_date") var dob: String = "",
     @Ignore var inReassociate: Boolean = false
 
-)
+) : Serializable
 
 @Entity(tableName = "products")
 data class Product(

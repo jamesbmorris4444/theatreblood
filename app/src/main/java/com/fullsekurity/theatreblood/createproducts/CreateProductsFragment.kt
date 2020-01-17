@@ -38,9 +38,17 @@ class CreateProductsFragment : Fragment(), Callbacks {
 
     companion object {
         fun newInstance(donor: Donor): CreateProductsFragment {
+            val bundle = Bundle()
+            bundle.putSerializable("donorArgument", donor)
             val fragment = CreateProductsFragment()
-            fragment.donor = donor
+            fragment.arguments = bundle
             return fragment
+        }
+    }
+
+    private fun readBundle(bundle: Bundle?) {
+        bundle?.let {
+            donor = it.getSerializable("donorArgument") as Donor
         }
     }
 
@@ -61,15 +69,13 @@ class CreateProductsFragment : Fragment(), Callbacks {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        readBundle(arguments)
         binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.create_products_fragment, container, false) as CreateProductsFragmentBinding
         binding.lifecycleOwner = this
         createProductsListViewModel = ViewModelProviders.of(this, CreateProductsListViewModelFactory(this)).get(CreateProductsListViewModel::class.java)
         binding.createProductsListViewModel = createProductsListViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
-        if (!::donor.isInitialized) {
-            donor = Donor()
-        }
         createProductsListViewModel.setDonor(donor)
         setupLottieDrawables(binding.root)
         return binding.root
