@@ -18,6 +18,7 @@ import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.databinding.ReassociateProductsFragmentBinding
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
+import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
@@ -39,6 +40,9 @@ class ReassociateProductsFragment : Fragment(), Callbacks {
 
     @Inject
     lateinit var uiViewModel: UIViewModel
+    @Inject
+    lateinit var repository: Repository
+
 
     override fun onAttach(context: Context) {
         DaggerViewModelDependencyInjector.builder()
@@ -51,8 +55,8 @@ class ReassociateProductsFragment : Fragment(), Callbacks {
     override fun onResume() {
         super.onResume()
         (activity as MainActivity).toolbar.title = Constants.REASSOCIATE_DONATION_TITLE
-        if (fetchActivity().newDonor != null) {
-            // re-entry to reassociateProductsListViewModel after creating a new donor, which is now stored in fetchActivity().newDonor
+        if (repository.newDonor != null) {
+            // re-entry to reassociateProductsListViewModel after creating a new donor, which is now stored in repository.newDonor
             reassociateProductsListViewModel.initializeView()
         }
     }

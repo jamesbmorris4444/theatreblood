@@ -46,6 +46,8 @@ class Repository(private val callbacks: Callbacks) {
     private var wiFiNetwork: Network? = null
     var isOfflineMode = true
     val liveViewDonorList: MutableLiveData<List<Donor>> = MutableLiveData()
+    var newDonor: Donor? = null
+    var newDonorInProgressForReassociation = false
 
     fun setBloodDatabase(context: Context) {
         val dbList = BloodDatabase.newInstance(context, MAIN_DATABASE_NAME, MODIFIED_DATABASE_NAME)
@@ -503,10 +505,10 @@ class Repository(private val callbacks: Callbacks) {
         disposable = stagingBloodDatabase.databaseDao().donorFromNameAndDate(donor.lastName, donor.firstName, donor.middleName, donor.dob)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe({ donor ->
+            .subscribe({ donorObtained ->
                 disposable?.dispose()
                 progressBar.visibility = View.GONE
-                completeReassociationToNewDonor(donor)
+                completeReassociationToNewDonor(donorObtained)
             },
             { throwable ->
                 disposable?.dispose()

@@ -82,7 +82,13 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
     //   12. user clicks on correct donor item, and products from incorrect donor are moved to correct donor (moveProductsToCorrectDonor)
 
     fun initializeView() {
-        if (callbacks.fetchActivity().newDonor == null) {
+        if (repository.newDonor != null) {
+            // re-initialize view after creating a new donor while trying to reassociate to a donor, the new donor is now stored in fetchActivity().newDonor
+            repository.retrieveDonorFromNameAndDate(
+                callbacks.fetchActivity().fetchRootView().findViewById(R.id.main_progress_bar),
+                repository.newDonor as Donor,
+                this::completeReassociationToNewDonor)
+        } else {
             // initial entry
             // show
             //    search box
@@ -97,12 +103,6 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
                 editTextNameInput = editTextNameInput)
             )
             adapter.addAll(list)
-        } else {
-            // re-initialize view after creating a new donor, which is now stored in fetchActivity().newDonor
-            repository.retrieveDonorFromNameAndDate(
-                callbacks.fetchActivity().fetchRootView().findViewById(R.id.main_progress_bar),
-                callbacks.fetchActivity().newDonor as Donor,
-                this::completeReassociationToNewDonor)
         }
     }
 
@@ -117,7 +117,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
         newDonor.inReassociate = true
         list.add(newDonor)
         adapter.addAll(list)
-        callbacks.fetchActivity().newDonor = null
+        repository.newDonor = null
     }
 
     fun handleReassociateSearchClick(view: View) {

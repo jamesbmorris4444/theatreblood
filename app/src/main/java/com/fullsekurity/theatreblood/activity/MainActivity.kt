@@ -30,9 +30,9 @@ import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
-import com.fullsekurity.theatreblood.managedonor.DonorFragment
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.LOT
+import com.fullsekurity.theatreblood.managedonor.DonorFragment
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsFragment
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel
 import com.fullsekurity.theatreblood.repository.Repository
@@ -66,7 +66,6 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
     lateinit var createProductsListViewModel: CreateProductsListViewModel
     private lateinit var reassociateProductsFragment: ReassociateProductsFragment
     var transitionToCreateDonation = true
-    var newDonor: Donor? = null
 
     enum class UITheme {
         LIGHT, DARK, NOT_ASSIGNED,
@@ -216,7 +215,6 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
     }
 
     fun reassociateOnNewDonorClicked(view: View) {
-        newDonor = null
         transitionToCreateDonation = false
         loadDonorFragment(null, transitionToCreateDonation)
     }

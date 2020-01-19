@@ -186,9 +186,11 @@ class ManageDonorViewModel(private val callbacks: Callbacks) : AndroidViewModel(
             donor.aboRh != originalAboRh ||
             donor.branch != originalBranch
 
-        if (atLeastOneEntryChanged) {
+        if (atLeastOneEntryChanged && isDonorValid(donor)) {
             repository.insertDonorIntoDatabase(repository.stagingBloodDatabase, donor, transitionToCreateDonation)
-            callbacks.fetchActivity().newDonor = donor
+            if (repository.newDonorInProgressForReassociation) {
+                repository.newDonor = donor
+            }
         } else {
             StandardModal(
                 callbacks,
@@ -211,7 +213,11 @@ class ManageDonorViewModel(private val callbacks: Callbacks) : AndroidViewModel(
                 }
             ).show(callbacks.fetchActivity().supportFragmentManager, "MODAL")
         }
+        repository.newDonorInProgressForReassociation = false
+    }
 
+    private fun isDonorValid(donor: Donor): Boolean {
+        return donor.lastName.isNotEmpty() && donor.firstName.isNotEmpty() && donor.dob.isNotEmpty()
     }
 
     private fun loadCreateProductsFragment() {
