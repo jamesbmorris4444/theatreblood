@@ -188,8 +188,15 @@ class ManageDonorViewModel(private val callbacks: Callbacks) : AndroidViewModel(
 
         if (atLeastOneEntryChanged && isDonorValid(donor)) {
             repository.insertDonorIntoDatabase(repository.stagingBloodDatabase, donor, transitionToCreateDonation)
-            if (repository.newDonorInProgressForReassociation) {
+            if (repository.newDonorInProgress) {
                 repository.newDonor = donor
+                if (transitionToCreateDonation) {
+                    // retrieve the new donor from the staging database in order to set its id
+                    repository.retrieveDonorFromNameAndDate(
+                        callbacks.fetchActivity().fetchRootView().findViewById(R.id.main_progress_bar),
+                        donor,
+                        this::completeProcessingOfNewDonor)
+                }
             }
         } else {
             StandardModal(
@@ -213,7 +220,12 @@ class ManageDonorViewModel(private val callbacks: Callbacks) : AndroidViewModel(
                 }
             ).show(callbacks.fetchActivity().supportFragmentManager, "MODAL")
         }
-        repository.newDonorInProgressForReassociation = false
+        repository.newDonorInProgress = false
+    }
+
+    private fun completeProcessingOfNewDonor(newDonor: Donor) {
+        donor.id = newDonor.id
+        repository.newDonor = null
     }
 
     private fun isDonorValid(donor: Donor): Boolean {

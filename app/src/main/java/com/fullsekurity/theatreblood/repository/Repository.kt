@@ -47,7 +47,7 @@ class Repository(private val callbacks: Callbacks) {
     var isOfflineMode = true
     val liveViewDonorList: MutableLiveData<List<Donor>> = MutableLiveData()
     var newDonor: Donor? = null
-    var newDonorInProgressForReassociation = false
+    var newDonorInProgress = false
 
     fun setBloodDatabase(context: Context) {
         val dbList = BloodDatabase.newInstance(context, MAIN_DATABASE_NAME, MODIFIED_DATABASE_NAME)

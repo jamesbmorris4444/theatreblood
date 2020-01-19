@@ -27,7 +27,7 @@ class ReassociateProductsSearchItemViewModel(private val callbacks: Callbacks) :
 
     fun onNewDonorClicked(view: View) {
         callbacks.fetchActivity().reassociateOnNewDonorClicked(view)
-        callbacks.fetchReassociateProductsListViewModel()?.repository?.newDonorInProgressForReassociation = true
+        callbacks.fetchReassociateProductsListViewModel()?.repository?.newDonorInProgress = true
     }
 
     fun onTextNameChanged(key: CharSequence, start: Int, before: Int, count: Int) {

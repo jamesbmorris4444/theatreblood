@@ -109,7 +109,7 @@ class DonateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
 
     fun onNewDonorClicked(view: View) {
         callbacks.fetchActivity().loadDonorFragment(null, transitionToCreateDonation)
-        repository.newDonorInProgressForReassociation = !transitionToCreateDonation
+        repository.newDonorInProgress = true
         repository.newDonor = null
     }
 
