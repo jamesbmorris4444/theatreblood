@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
 
     fun loadDonateProductsFragment(transitionToCreateDonation: Boolean) {
         supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
+            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
             .replace(R.id.main_activity_container, DonateProductsFragment.newInstance(transitionToCreateDonation))
             .commitAllowingStateLoss()
     }
@@ -177,14 +177,14 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
     private fun loadReassociateProductsFragment() {
         reassociateProductsFragment = ReassociateProductsFragment.newInstance()
         supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
+            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
             .replace(R.id.main_activity_container, reassociateProductsFragment)
             .commitAllowingStateLoss()
     }
 
     private fun loadViewDonorListFragment() {
         supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
+            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
             .replace(R.id.main_activity_container, ViewDonorListFragment.newInstance())
             .commitAllowingStateLoss()
     }
@@ -192,13 +192,13 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
     fun loadDonorFragment(donor: Donor?, transitionToCreateDonation: Boolean) {
         if (donor == null) {
             supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_right, R.anim.exit_to_left)
                 .replace(R.id.main_activity_container, DonorFragment.newInstance(Donor(), transitionToCreateDonation))
                 .addToBackStack(ROOT_FRAGMENT_TAG)
                 .commitAllowingStateLoss()
         } else {
             supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_right, R.anim.exit_to_left)
                 .replace(R.id.main_activity_container, DonorFragment.newInstance(donor, transitionToCreateDonation))
                 .addToBackStack(ROOT_FRAGMENT_TAG)
                 .commitAllowingStateLoss()
@@ -208,7 +208,7 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
     fun loadCreateProductsFragment(donor: Donor) {
         supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_right, R.anim.exit_to_left)
             .replace(R.id.main_activity_container, CreateProductsFragment.newInstance(donor))
             .addToBackStack(ROOT_FRAGMENT_TAG)
             .commitAllowingStateLoss()
