@@ -49,11 +49,8 @@ class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
     val clearButtonVisibility: ObservableField<Int> = ObservableField(View.GONE)
     val confirmButtonVisibility: ObservableField<Int> = ObservableField(View.GONE)
     val completeButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
-    private val editButtonVisibility = View.VISIBLE
-    private val deleteButtonVisibility = View.VISIBLE
     private var confirmNeeded = false
     private val productList: MutableList<Product> = mutableListOf()
-    private val anyNonNullView = callbacks.fetchRootView()
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -87,21 +84,18 @@ class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
         // within "key", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
     var hintTextDin: ObservableField<String> = ObservableField(callbacks.fetchActivity().getString(R.string.product_din_hint_string))
-    var editTextDinVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     var editTextProductCode: ObservableField<String> = ObservableField("")
     fun onTextCodeChanged(key: CharSequence, start: Int, before: Int, count: Int) {
         onTextEntered(key.toString())
     }
     var hintTextCode: ObservableField<String> = ObservableField(callbacks.fetchActivity().getString(R.string.product_code_hint_string))
-    var editTextCodeVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     var editTextProductExpDate: ObservableField<String> = ObservableField("")
     fun onTextExpDateChanged(key: CharSequence, start: Int, before: Int, count: Int) {
         onTextEntered(key.toString())
     }
     var hintTextExpDate: ObservableField<String> = ObservableField(callbacks.fetchActivity().getString(R.string.product_expiration_date_hint_string))
-    var editTextExpDateVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     private fun onTextEntered(enteredText: String) {
         if (enteredText.isEmpty()) {

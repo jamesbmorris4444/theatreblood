@@ -1,6 +1,5 @@
 package com.fullsekurity.theatreblood.recyclerview
 
-import android.content.Context
 import android.view.View
 import android.widget.Filter
 import android.widget.Filterable
@@ -10,7 +9,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-abstract class RecyclerViewFilterAdapter<T, VM : RecyclerViewItemViewModel<T>>(var context: Context) :  RecyclerView.Adapter<RecyclerViewFilterAdapter.ItemViewHolder<T, VM>>(), Filterable {
+abstract class RecyclerViewFilterAdapter<T, VM : RecyclerViewItemViewModel<T>> :  RecyclerView.Adapter<RecyclerViewFilterAdapter.ItemViewHolder<T, VM>>(), Filterable {
 
     private var recyclerView: RecyclerView? = null
     private var adapterFilter: AdapterFilter? = null

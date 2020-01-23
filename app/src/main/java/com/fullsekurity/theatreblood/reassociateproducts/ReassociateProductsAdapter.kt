@@ -20,7 +20,7 @@ import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.google.android.material.textfield.TextInputLayout
 
-class ReassociateProductsAdapter(private val callbacks: Callbacks) : RecyclerViewFilterAdapter<Any, RecyclerViewItemViewModel<Any>>(callbacks.fetchActivity().applicationContext) {
+class ReassociateProductsAdapter(private val callbacks: Callbacks) : RecyclerViewFilterAdapter<Any, RecyclerViewItemViewModel<Any>>() {
 
     private var adapterFilter: AdapterFilter? = null
     lateinit var uiViewModel: UIViewModel

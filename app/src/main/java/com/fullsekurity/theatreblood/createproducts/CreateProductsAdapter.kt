@@ -13,7 +13,7 @@ import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFilterAdapter
 import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
 
-class CreateProductsAdapter(val callbacks: Callbacks) : RecyclerViewFilterAdapter<Product, CreateProductsItemViewModel>(callbacks.fetchActivity().applicationContext) {
+class CreateProductsAdapter(val callbacks: Callbacks) : RecyclerViewFilterAdapter<Product, CreateProductsItemViewModel>() {
 
     private var adapterFilter: AdapterFilter? = null
     lateinit var uiViewModel: UIViewModel
