@@ -40,6 +40,7 @@ import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants.ROOT_FRAGMENT_TAG
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
+import com.fullsekurity.theatreblood.utils.Utils
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import com.fullsekurity.theatreblood.viewdonorlist.ViewDonorListFragment
 import com.fullsekurity.theatreblood.viewdonorlist.ViewDonorListListViewModel
@@ -49,7 +50,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener {
 
     private val tag = MainActivity::class.java.simpleName
 
@@ -99,6 +100,7 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
         navDrawerView = findViewById(R.id.nav_drawer_view)
         navDrawerView.setNavigationItemSelectedListener(this)
         drawerLayout = findViewById(R.id.drawer_layout)
+        drawerLayout.addDrawerListener(this)
         lottieBackgroundView = activityMainBinding.root.findViewById(R.id.main_background_lottie)
         setupLottieForBottomNavigationBar()
         onDonationsClicked()
@@ -325,6 +327,14 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
+
+    override fun onDrawerOpened(view: View) {
+        Utils.hideKeyboard(view)
+    }
+
+    override fun onDrawerClosed(view: View) { }
+    override fun onDrawerSlide(view: View, float: Float) { }
+    override fun onDrawerStateChanged(state: Int) { }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
