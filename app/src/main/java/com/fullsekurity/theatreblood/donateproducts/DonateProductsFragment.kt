@@ -10,7 +10,7 @@ import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.airbnb.lottie.LottieAnimationView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
@@ -71,7 +71,7 @@ class DonateProductsFragment : Fragment(), Callbacks {
         readBundle(arguments)
         binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.donate_products_fragment, container, false) as DonateProductsFragmentBinding
         binding.lifecycleOwner = this
-        donateProductsListViewModel = ViewModelProviders.of(this, DonateProductsListViewModelFactory(this)).get(DonateProductsListViewModel::class.java)
+        donateProductsListViewModel = ViewModelProvider(this, DonateProductsListViewModelFactory(this)).get(DonateProductsListViewModel::class.java)
         binding.donateProductsListViewModel = donateProductsListViewModel
         binding.uiViewModel = uiViewModel
         donateProductsListViewModel.transitionToCreateDonation = transitionToCreateDonation

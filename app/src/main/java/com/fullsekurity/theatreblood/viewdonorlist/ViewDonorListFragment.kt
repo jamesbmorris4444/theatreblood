@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.airbnb.lottie.LottieAnimationView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
@@ -61,7 +61,7 @@ class ViewDonorListFragment : Fragment(), Callbacks {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.view_donor_list_fragment, container, false) as ViewDonorListFragmentBinding
         binding.lifecycleOwner = this
-        viewDonorListListViewModel = ViewModelProviders.of(this, ViewDonorListListViewModelFactory(this)).get(ViewDonorListListViewModel::class.java)
+        viewDonorListListViewModel = ViewModelProvider(this, ViewDonorListListViewModelFactory(this)).get(ViewDonorListListViewModel::class.java)
         binding.viewDonorListListViewModel = viewDonorListListViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme

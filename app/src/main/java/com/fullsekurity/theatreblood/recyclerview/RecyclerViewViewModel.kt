@@ -15,15 +15,15 @@ abstract class RecyclerViewViewModel(application: Application) : AndroidViewMode
     abstract fun setLayoutManager(): RecyclerView.LayoutManager
 
     fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView?.layoutManager = setLayoutManager()
-        recyclerView?.overScrollMode = View.OVER_SCROLL_NEVER
-        recyclerView?.setItemViewCacheSize(50)
+        recyclerView.layoutManager = setLayoutManager()
+        recyclerView.overScrollMode = View.OVER_SCROLL_NEVER
+        recyclerView.setItemViewCacheSize(50)
         itemDecorator?.let {
-            if (recyclerView?.itemDecorationCount == 0) {
-                recyclerView?.addItemDecoration(it)
+            if (recyclerView.itemDecorationCount == 0) {
+                recyclerView.addItemDecoration(it)
             }
         }
-        recyclerView?.adapter = adapter
+        recyclerView.adapter = adapter
     }
 
 }

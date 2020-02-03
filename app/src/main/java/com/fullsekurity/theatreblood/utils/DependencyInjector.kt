@@ -1,6 +1,6 @@
 package com.fullsekurity.theatreblood.utils
 
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.activity.MainActivity
 import com.fullsekurity.theatreblood.createproducts.CreateProductsFragment
 import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
@@ -74,7 +74,7 @@ class ViewModelInjectorModule(val activity: MainActivity) {
     @Provides
     @Singleton
     fun uiViewModelProvider() : UIViewModel {
-        return ViewModelProviders.of(activity, UIViewModelFactory(activity.application)).get(UIViewModel::class.java)
+        return ViewModelProvider(activity, UIViewModelFactory(activity.application)).get(UIViewModel::class.java)
     }
     @Provides
     @Singleton

@@ -10,7 +10,7 @@ import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.airbnb.lottie.*
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
@@ -76,7 +76,7 @@ class DonorFragment : Fragment(), Callbacks {
         readBundle(arguments)
         binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.manage_donor_fragment, container, false) as ManageDonorFragmentBinding
         binding.lifecycleOwner = this
-        manageDonorViewModel = ViewModelProviders.of(this, ManageDonorViewModelFactory(this)).get(ManageDonorViewModel::class.java)
+        manageDonorViewModel = ViewModelProvider(this, ManageDonorViewModelFactory(this)).get(ManageDonorViewModel::class.java)
         binding.donorViewModel = manageDonorViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme

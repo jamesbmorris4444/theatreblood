@@ -10,7 +10,7 @@ import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.airbnb.lottie.*
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
@@ -72,7 +72,7 @@ class CreateProductsFragment : Fragment(), Callbacks {
         readBundle(arguments)
         binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.create_products_fragment, container, false) as CreateProductsFragmentBinding
         binding.lifecycleOwner = this
-        createProductsListViewModel = ViewModelProviders.of(this, CreateProductsListViewModelFactory(this)).get(CreateProductsListViewModel::class.java)
+        createProductsListViewModel = ViewModelProvider(this, CreateProductsListViewModelFactory(this)).get(CreateProductsListViewModel::class.java)
         binding.createProductsListViewModel = createProductsListViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme

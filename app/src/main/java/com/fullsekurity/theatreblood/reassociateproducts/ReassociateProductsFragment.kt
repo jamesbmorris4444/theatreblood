@@ -10,7 +10,7 @@ import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.airbnb.lottie.LottieAnimationView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
@@ -64,7 +64,7 @@ class ReassociateProductsFragment : Fragment(), Callbacks {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.reassociate_products_fragment, container, false) as ReassociateProductsFragmentBinding
         binding.lifecycleOwner = this
-        reassociateProductsListViewModel = ViewModelProviders.of(this, ReassociateProductsListViewModelFactory(this)).get(ReassociateProductsListViewModel::class.java)
+        reassociateProductsListViewModel = ViewModelProvider(this, ReassociateProductsListViewModelFactory(this)).get(ReassociateProductsListViewModel::class.java)
         binding.reassociateProductsListViewModel = reassociateProductsListViewModel
         binding.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
