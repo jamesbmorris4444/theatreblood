@@ -48,7 +48,7 @@
                     android:paddingEnd="0dp"
                     android:paddingTop="20dp"
                     android:inputType="textPersonName"
-                    app:edit_text_cursor="@{uiViewModel.editTextCursor}"
+                    android:textCursorDrawable="@{uiViewModel.editTextCursor}"
                     app:background_from_res_int="@{uiViewModel.editTextBackgroundResInt}"
                     app:edit_text_font="@{uiViewModel.editTextTypeface}"
                     app:edit_text_color="@{uiViewModel.editTextColor}"
