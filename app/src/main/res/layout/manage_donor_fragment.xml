@@ -22,7 +22,7 @@
             <!-- Start Last Name -->
 
             <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/edit_text_display_last_name"
+                    android:id="@+id/edit_text_display_latitude"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
@@ -35,7 +35,7 @@
                     android:visibility="@{safeUnbox(donorViewModel.editTextLastNameVisibility)}"
                     app:layout_constraintVertical_chainStyle="spread_inside"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/edit_text_display_first_name"
+                    app:layout_constraintBottom_toTopOf="@+id/edit_text_display_longitude"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" >
 
@@ -64,7 +64,7 @@
             <!-- Start First Name -->
 
             <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/edit_text_display_first_name"
+                    android:id="@+id/edit_text_display_longitude"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
@@ -75,8 +75,8 @@
                     app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                     app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                     android:visibility="@{safeUnbox(donorViewModel.editTextFirstNameVisibility)}"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_text_display_last_name"
-                    app:layout_constraintBottom_toTopOf="@+id/edit_text_display_middle_name"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text_display_latitude"
+                    app:layout_constraintBottom_toTopOf="@+id/edit_text_display_radius"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" >
 
@@ -105,7 +105,7 @@
             <!-- Start Middle Name -->
 
             <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/edit_text_display_middle_name"
+                    android:id="@+id/edit_text_display_radius"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
@@ -116,7 +116,7 @@
                     app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                     app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                     android:visibility="@{safeUnbox(donorViewModel.editTextMiddleNameVisibility)}"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_text_display_first_name"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text_display_longitude"
                     app:layout_constraintBottom_toTopOf="@+id/edit_text_display_dob"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" >
@@ -157,7 +157,7 @@
                     app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                     app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
                     android:visibility="@{safeUnbox(donorViewModel.editTextDobVisibility)}"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_text_display_middle_name"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text_display_radius"
                     app:layout_constraintBottom_toTopOf="@+id/radio_buttons_gender"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" >

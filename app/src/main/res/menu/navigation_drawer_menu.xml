@@ -27,5 +27,11 @@
                 android:textColor="@color/blue"
                 android:icon="@mipmap/ic_launcher_round"
                 android:title="@string/nav_drawer_view_donor_list" />
+
+        <item
+                android:id="@+id/geofencing"
+                android:textColor="@color/blue"
+                android:icon="@mipmap/ic_launcher_round"
+                android:title="@string/nav_drawer_geofencing" />
     </group>
 </menu>

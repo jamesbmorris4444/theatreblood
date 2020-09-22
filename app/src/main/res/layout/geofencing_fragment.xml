@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <data>
+        <variable
+                name="uiViewModel"
+                type="com.fullsekurity.theatreblood.ui.UIViewModel" />
+        <variable
+                name="geofencingViewModel"
+                type="com.fullsekurity.theatreblood.geofencing.GeofencingViewModel" />
+    </data>
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+            <!-- Start Latitude -->
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/edit_text_display_latitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:hint="@{geofencingViewModel.hintTextLatitude}"
+                    app:text_font_text_input_layout="@{uiViewModel.editTextTypeface}"
+                    app:unfocused_edit_text_hint_color="@{uiViewModel.editTextLowerHintColor}"
+                    app:focused_upper_text_hint_color="@{uiViewModel.editTextUpperHintColor}"
+                    app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    android:visibility="@{safeUnbox(geofencingViewModel.editTextLatitudeVisibility)}"
+                    app:layout_constraintVertical_chainStyle="spread_inside"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/edit_text_display_longitude"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_display_latitude_editText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
+                        app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardWidth)}"
+                        android:text="@={geofencingViewModel.editTextDisplayLatitude}"
+                        android:onTextChanged="@{geofencingViewModel::onTextLatitudeChanged}"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="0dp"
+                        android:paddingTop="20dp"
+                        android:inputType="textPersonName"
+                        android:textCursorDrawable="@{uiViewModel.editTextCursor}"
+                        app:background_from_res_int="@{uiViewModel.editTextBackgroundResInt}"
+                        app:edit_text_font="@{uiViewModel.editTextTypeface}"
+                        app:edit_text_color="@{uiViewModel.editTextColor}"
+                        app:edit_text_size="@{safeUnbox(uiViewModel.editTextSize)}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- End Latitude -->
+
+            <!-- Start Longitude -->
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/edit_text_display_longitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:hint="@{geofencingViewModel.hintTextLongitude}"
+                    app:text_font_text_input_layout="@{uiViewModel.editTextTypeface}"
+                    app:unfocused_edit_text_hint_color="@{uiViewModel.editTextLowerHintColor}"
+                    app:focused_upper_text_hint_color="@{uiViewModel.editTextUpperHintColor}"
+                    app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    android:visibility="@{safeUnbox(geofencingViewModel.editTextLongitudeVisibility)}"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text_display_latitude"
+                    app:layout_constraintBottom_toTopOf="@+id/edit_text_display_radius"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_display_longitude_edit_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
+                        app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardWidth)}"
+                        android:text="@={geofencingViewModel.editTextDisplayLongitude}"
+                        android:onTextChanged="@{geofencingViewModel::onTextLongitudeChanged}"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="0dp"
+                        android:paddingTop="20dp"
+                        android:inputType="textPersonName"
+                        android:textCursorDrawable="@{uiViewModel.editTextCursor}"
+                        app:background_from_res_int="@{uiViewModel.editTextBackgroundResInt}"
+                        app:edit_text_font="@{uiViewModel.editTextTypeface}"
+                        app:edit_text_color="@{uiViewModel.editTextColor}"
+                        app:edit_text_size="@{safeUnbox(uiViewModel.editTextSize)}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- End Longitude -->
+
+            <!-- Start Radius -->
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/edit_text_display_radius"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:hint="@{geofencingViewModel.hintTextRadius}"
+                    app:text_font_text_input_layout="@{uiViewModel.editTextTypeface}"
+                    app:unfocused_edit_text_hint_color="@{uiViewModel.editTextLowerHintColor}"
+                    app:focused_upper_text_hint_color="@{uiViewModel.editTextUpperHintColor}"
+                    app:layout_marginLeft="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
+                    android:visibility="@{safeUnbox(geofencingViewModel.editTextRadiusVisibility)}"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text_display_longitude"
+                    app:layout_constraintBottom_toTopOf="@+id/submit_update_button_icon"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_display_radius_edit_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardEditTextHeight)}"
+                        app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardWidth)}"
+                        android:text="@={geofencingViewModel.editTextDisplayRadius}"
+                        android:onTextChanged="@{geofencingViewModel::onTextRadiusChanged}"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="0dp"
+                        android:paddingTop="20dp"
+                        android:inputType="textPersonName"
+                        android:textCursorDrawable="@{uiViewModel.editTextCursor}"
+                        app:background_from_res_int="@{uiViewModel.editTextBackgroundResInt}"
+                        app:edit_text_font="@{uiViewModel.editTextTypeface}"
+                        app:edit_text_color="@{uiViewModel.editTextColor}"
+                        app:edit_text_size="@{safeUnbox(uiViewModel.editTextSize)}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- End Radius -->
+
+            <!-- Start Submit -->
+
+            <android.widget.ImageView
+                    android:id="@+id/submit_update_button_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@{uiViewModel.largeButtonDrawable}"
+                    android:layout_marginTop="20dp"
+                    android:onClick="@{(view) -> geofencingViewModel.onSubmitClicked(view)}"
+                    app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
+                    app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardLargeButtonWidth)}"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text_display_radius"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                    android:id="@+id/submit_update_button_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_submit"
+                    app:text_font="@{uiViewModel.buttonTextTypeface}"
+                    app:text_color="@{uiViewModel.buttonTextColor}"
+                    app:text_size="@{safeUnbox(uiViewModel.buttonTextSize)}"
+                    app:layout_constraintStart_toStartOf="@+id/submit_update_button_icon"
+                    app:layout_constraintEnd_toEndOf="@+id/submit_update_button_icon"
+                    app:layout_constraintTop_toTopOf="@+id/submit_update_button_icon"
+                    app:layout_constraintBottom_toBottomOf="@+id/submit_update_button_icon" />
+
+            <!-- End Submit Button -->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</layout>

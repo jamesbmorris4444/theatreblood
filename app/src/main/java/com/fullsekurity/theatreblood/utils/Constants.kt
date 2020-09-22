@@ -32,7 +32,7 @@ object Constants {
     const val CREATE_PRODUCTS_TITLE = "Create Products"
     const val MANAGE_DONOR_TITLE = "Manage Donor"
     const val REASSOCIATE_DONATION_TITLE = "Reassociate Donation"
-    const val UPDATE_TEST_RESULTS_TITLE = "Update Test Results"
+    const val GEOFENCING_TITLE = "Geofencing"
     const val VIEW_DONOR_LIST_TITLE = "View Donor List"
 
 }

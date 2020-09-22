@@ -6,6 +6,8 @@ import com.fullsekurity.theatreblood.createproducts.CreateProductsFragment
 import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
+import com.fullsekurity.theatreblood.geofencing.GeofencingFragment
+import com.fullsekurity.theatreblood.geofencing.GeofencingViewModel
 import com.fullsekurity.theatreblood.managedonor.DonorFragment
 import com.fullsekurity.theatreblood.managedonor.ManageDonorViewModel
 import com.fullsekurity.theatreblood.modal.StandardModal
@@ -34,12 +36,14 @@ interface ViewModelDependencyInjector {
     fun inject(modal: StandardModal)
     fun inject(fragment: DonorFragment)
     fun inject(viewModel: DonateProductsListViewModel)
-    fun inject(viewModelManage: ManageDonorViewModel)
+    fun inject(viewModel: ManageDonorViewModel)
+    fun inject(viewModel: GeofencingViewModel)
     fun inject(activity: MainActivity)
     fun inject(viewModel: CreateProductsListViewModel)
     fun inject(fragment: CreateProductsFragment)
     fun inject(viewModel: ReassociateProductsListViewModel)
     fun inject(fragment: ReassociateProductsFragment)
+    fun inject(fragment: GeofencingFragment)
     fun inject(fragment: ViewDonorListFragment)
     fun inject(viewModel: ViewDonorListListViewModel)
 }

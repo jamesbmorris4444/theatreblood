@@ -68,7 +68,7 @@ class ViewDonorListFragment : Fragment(), Callbacks {
         //lottieBackgroundView = binding.root.findViewById(R.id.background_lottie)
         //uiViewModel.lottieAnimation(lottieBackgroundView, uiViewModel.backgroundLottieJsonFileName, LottieDrawable.INFINITE)
         binding.root.findViewById<TextInputLayout>(R.id.edit_text_input_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
-        viewDonorListListViewModel.repository.liveViewDonorList.observe(this, Observer { donorList ->
+        viewDonorListListViewModel.repository.liveViewDonorList.observe(viewLifecycleOwner, Observer { donorList ->
             viewDonorListListViewModel.showDonors(donorList)
         })
         viewDonorListListViewModel.setDropdowns()

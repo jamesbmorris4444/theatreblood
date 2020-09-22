@@ -46,3 +46,9 @@ data class DonorWithProducts(
     )
     val products: List<Product>
 )
+
+data class GeofencingData(
+    var latitude: Double,
+    var longitude: Double,
+    var radius: Float
+)

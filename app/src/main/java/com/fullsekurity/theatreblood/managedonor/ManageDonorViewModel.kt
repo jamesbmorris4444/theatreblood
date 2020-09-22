@@ -238,9 +238,9 @@ class ManageDonorViewModel(private val callbacks: Callbacks) : AndroidViewModel(
 
     fun setDonor(donor: Donor) {
         this.donor = donor
-        callbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_last_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
-        callbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_first_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
-        callbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_middle_name).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        callbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_latitude).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        callbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_longitude).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
+        callbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_radius).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
         callbacks.fetchRootView().findViewById<TextInputLayout>(R.id.edit_text_display_dob).setHintTextAppearance(uiViewModel.editTextDisplayModifyHintStyle)
 
         editTextDisplayModifyLastName.set(donor.lastName)

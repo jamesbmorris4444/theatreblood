@@ -30,6 +30,7 @@ import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.databinding.ActivityMainBinding
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
+import com.fullsekurity.theatreblood.geofencing.GeofencingFragment
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.LOT
 import com.fullsekurity.theatreblood.managedonor.DonorFragment
@@ -191,6 +192,13 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
             .commitAllowingStateLoss()
     }
 
+    private fun loadGeofencingFragment() {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+            .replace(R.id.main_activity_container, GeofencingFragment.newInstance())
+            .commitAllowingStateLoss()
+    }
+
     fun loadDonorFragment(donor: Donor?, transitionToCreateDonation: Boolean) {
         if (donor == null) {
             supportFragmentManager.beginTransaction()
@@ -322,6 +330,10 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
             R.id.view_donor_list -> {
                 supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 loadViewDonorListFragment()
+            }
+            R.id.geofencing -> {
+                supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                loadGeofencingFragment()
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)

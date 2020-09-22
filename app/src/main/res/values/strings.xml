@@ -48,6 +48,11 @@
     <string name="button_done">Done</string>
     <string name="button_complete">Complete</string>
 
+    <!-- geofencing -->
+    <string name="latitude_hint">Enter Latitude</string>
+    <string name="longitude_hint">Enter Longitude</string>
+    <string name="radius_hint">Enter Radius</string>
+
     <!-- donor strings -->
     <string name="donor_search_string">Donor Search String</string>
     <string name="donor_incorrect_search_string">Incorrect Donor Search String</string>
@@ -83,6 +88,7 @@
     <string name="nav_drawer_reassociate_donation">Reassociate Donation</string>
     <string name="nav_drawer_update_test_results">Update Test Results</string>
     <string name="nav_drawer_view_donor_list">View Donor List</string>
+    <string name="nav_drawer_geofencing">Geofencing</string>
     <string name="nav_drawer_title">Theatre Blood Android App</string>
     <string name="nav_drawer_subtitle">JOMIS, Department of Defense</string>
 
