@@ -35,6 +35,8 @@
     <string name="std_modal_ok">OK</string>
     <string name="std_modal_yes">YES</string>
     <string name="std_modal_no">NO</string>
+    <string name="access_fine_permission_rationale_title">Access Fine Permission Rationale</string>
+    <string name="access_fine_permission_rationale_body">Rationale body goes here. Rationale body goes here. Rationale body goes here. Rationale body goes here. Rationale body goes here.</string>
 
     <!-- button name text -->
     <string name="button_insert">Insert</string>

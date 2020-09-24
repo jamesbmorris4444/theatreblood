@@ -27,6 +27,7 @@ import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.databinding.GeofencingFragmentBinding
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
 import com.fullsekurity.theatreblood.logger.LogUtils
+import com.fullsekurity.theatreblood.modal.StandardModal
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
@@ -93,8 +94,29 @@ class GeofencingFragment : Fragment(), Callbacks {
                 .setLoiteringDelay(10000)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT or Geofence.GEOFENCE_TRANSITION_DWELL)
                 .build())
-            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
+            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    StandardModal(
+                        this,
+                        modalType = StandardModal.ModalType.STANDARD,
+                        titleText = fetchActivity().getString(R.string.access_fine_permission_rationale_title),
+                        bodyText = fetchActivity().getString(R.string.access_fine_permission_rationale_body),
+                        positiveText = fetchActivity().getString(R.string.std_modal_yes),
+                        negativeText = fetchActivity().getString(R.string.std_modal_no),
+                        dialogFinishedListener = object : StandardModal.DialogFinishedListener {
+                            override fun onPositive(string: String) {
+                                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
+                            }
+                            override fun onNegative() { }
+                            override fun onNeutral() { }
+                            override fun onBackPressed() {
+                            }
+                        }
+                    ).show(fetchActivity().supportFragmentManager, "MODAL")
+                } else {
+                    Toast.makeText(requireActivity(),"Access Fine Permission Denied, show educational UI", Toast.LENGTH_SHORT).show()
+                    ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
+                }
             } else {
                 Toast.makeText(requireContext(),"Permission granted", Toast.LENGTH_SHORT).show()
                 geofencingClient.addGeofences(getGeofencingRequest(), geofencePendingIntent)?.run {
