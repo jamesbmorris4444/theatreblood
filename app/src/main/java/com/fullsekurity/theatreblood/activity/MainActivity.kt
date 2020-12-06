@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.ObservableField
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import com.airbnb.lottie.*
@@ -60,6 +61,7 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
     lateinit var uiViewModel: UIViewModel
 
     private var networkStatusMenuItem: MenuItem? = null
+    var versionName: ObservableField<String> = ObservableField("")
     private lateinit var navView: ConstraintLayout
     private lateinit var navDrawerView: NavigationView
     private lateinit var drawerLayout: DrawerLayout
@@ -80,7 +82,12 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
         setupRepositoryDatabase()
         setupToolbar()
         setToolbarNetworkStatus()
-        uiViewModel.lottieAnimation(lottieBackgroundView, uiViewModel.backgroundLottieJsonFileName, LottieDrawable.INFINITE)
+        versionName.set(packageManager.getPackageInfo(packageName, 0).versionName)
+        uiViewModel.lottieAnimation(
+            lottieBackgroundView,
+            uiViewModel.backgroundLottieJsonFileName,
+            LottieDrawable.INFINITE
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,7 +121,10 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
     }
 
     private fun setupLottieForBottomNavigationBar() {
-        val task1: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, R.raw.transfusions)
+        val task1: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(
+            this,
+            R.raw.transfusions
+        )
         val lottieDrawable1 = LottieDrawable()
         task1.addListener { result ->
             lottieDrawable1.composition = result
@@ -128,7 +138,10 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
             LogUtils.E(LogUtils.FilterTags.withTags(LOT), "Lottie Drawable Failure", result)
         }
 
-        val task2: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, R.raw.donations)
+        val task2: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(
+            this,
+            R.raw.donations
+        )
         val lottieDrawable2 = LottieDrawable()
         task2.addListener { result ->
             lottieDrawable2.composition = result
@@ -142,7 +155,10 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
             LogUtils.E(LogUtils.FilterTags.withTags(LOT), "Lottie Drawable Failure", result)
         }
 
-        val task3: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(this, R.raw.inventory)
+        val task3: LottieTask<LottieComposition> = LottieCompositionFactory.fromRawRes(
+            this,
+            R.raw.inventory
+        )
         val lottieDrawable3 = LottieDrawable()
         task3.addListener { result ->
             lottieDrawable3.composition = result
@@ -174,7 +190,11 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
     fun loadDonateProductsFragment(transitionToCreateDonation: Boolean) {
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-            .replace(R.id.main_activity_container, DonateProductsFragment.newInstance(transitionToCreateDonation))
+            .replace(
+                R.id.main_activity_container, DonateProductsFragment.newInstance(
+                    transitionToCreateDonation
+                )
+            )
             .commitAllowingStateLoss()
     }
 
@@ -203,23 +223,51 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
     fun loadDonorFragment(donor: Donor?, transitionToCreateDonation: Boolean) {
         if (donor == null) {
             supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_right, R.anim.exit_to_left)
-                .replace(R.id.main_activity_container, DonorFragment.newInstance(Donor(), transitionToCreateDonation))
+                .setCustomAnimations(
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left,
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left
+                )
+                .replace(
+                    R.id.main_activity_container, DonorFragment.newInstance(
+                        Donor(),
+                        transitionToCreateDonation
+                    )
+                )
                 .addToBackStack(ROOT_FRAGMENT_TAG)
                 .commitAllowingStateLoss()
         } else {
             supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_right, R.anim.exit_to_left)
-                .replace(R.id.main_activity_container, DonorFragment.newInstance(donor, transitionToCreateDonation))
+                .setCustomAnimations(
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left,
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left
+                )
+                .replace(
+                    R.id.main_activity_container, DonorFragment.newInstance(
+                        donor,
+                        transitionToCreateDonation
+                    )
+                )
                 .addToBackStack(ROOT_FRAGMENT_TAG)
                 .commitAllowingStateLoss()
         }
     }
 
     fun loadCreateProductsFragment(donor: Donor) {
-        supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        supportFragmentManager.popBackStack(
+            ROOT_FRAGMENT_TAG,
+            FragmentManager.POP_BACK_STACK_INCLUSIVE
+        )
         supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_right, R.anim.exit_to_left)
+            .setCustomAnimations(
+                R.anim.enter_from_right,
+                R.anim.exit_to_left,
+                R.anim.enter_from_right,
+                R.anim.exit_to_left
+            )
             .replace(R.id.main_activity_container, CreateProductsFragment.newInstance(donor))
             .addToBackStack(ROOT_FRAGMENT_TAG)
             .commitAllowingStateLoss()
@@ -275,7 +323,11 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
                 currentTheme = UITheme.LIGHT
             }
             uiViewModel.currentTheme = currentTheme
-            uiViewModel.lottieAnimation(lottieBackgroundView, uiViewModel.backgroundLottieJsonFileName, LottieDrawable.INFINITE)
+            uiViewModel.lottieAnimation(
+                lottieBackgroundView,
+                uiViewModel.backgroundLottieJsonFileName,
+                LottieDrawable.INFINITE
+            )
             setupToolbar()
             true
         }
@@ -299,7 +351,10 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
     }
 
     fun onDonationsClicked() {
-        supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        supportFragmentManager.popBackStack(
+            ROOT_FRAGMENT_TAG,
+            FragmentManager.POP_BACK_STACK_INCLUSIVE
+        )
         transitionToCreateDonation = true
         loadDonateProductsFragment(transitionToCreateDonation)
     }
@@ -313,21 +368,33 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.donate_products -> {
-                supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.popBackStack(
+                    ROOT_FRAGMENT_TAG,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
                 transitionToCreateDonation = true
                 loadDonateProductsFragment(transitionToCreateDonation)
             }
             R.id.manage_donor -> {
-                supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.popBackStack(
+                    ROOT_FRAGMENT_TAG,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
                 transitionToCreateDonation = false
                 loadDonateProductsFragment(transitionToCreateDonation)
             }
             R.id.reassociate_donation -> {
-                supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.popBackStack(
+                    ROOT_FRAGMENT_TAG,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
                 loadReassociateProductsFragment()
             }
             R.id.view_donor_list -> {
-                supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.popBackStack(
+                    ROOT_FRAGMENT_TAG,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
                 loadViewDonorListFragment()
             }
         }
@@ -386,7 +453,7 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
         return activityMainBinding.root
     }
 
-    override fun fetchRadioButton(resId:Int): RadioButton? { return null }
+    override fun fetchRadioButton(resId: Int): RadioButton? { return null }
     override fun fetchDropdown(resId: Int) : Spinner? { return null }
     override fun fetchCreateProductsListViewModel() : CreateProductsListViewModel? { return null }
     override fun fetchDonateProductsListViewModel() : DonateProductsListViewModel? { return null }
