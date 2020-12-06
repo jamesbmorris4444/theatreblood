@@ -15,6 +15,7 @@
     <color name="black">#000000</color>
     <color name="cyan">#00ffff</color>
     <color name="transparent">#00000000</color>
+    <color name="darkMagenta">#aa00aa</color>
     <color name="veryLightGrayFromBlack">#08000000</color>
     <color name="lighterGrayFromBlack">#38000000</color>
     <color name="lightGrayFromBlack">#68000000</color>

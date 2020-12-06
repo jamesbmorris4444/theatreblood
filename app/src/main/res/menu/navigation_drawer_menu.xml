@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
     <group android:checkableBehavior="single">
         <item
                 android:id="@+id/donate_products"
                 android:textColor="@color/blue"
-                android:icon="@mipmap/ic_launcher_round"
+                android:icon="@drawable/bullet"
                 android:title="@string/nav_drawer_donate_products" />
         <item
                 android:id="@+id/manage_donor"
                 android:textColor="@color/blue"
-                android:icon="@mipmap/ic_launcher_round"
+                android:icon="@drawable/bullet"
                 android:title="@string/nav_drawer_manage_donor" />
         <item
                 android:id="@+id/reassociate_donation"
                 android:textColor="@color/blue"
-                android:icon="@mipmap/ic_launcher_round"
+                android:icon="@drawable/bullet"
                 android:title="@string/nav_drawer_reassociate_donation" />
         <item
                 android:id="@+id/view_donor_list"
                 android:textColor="@color/blue"
-                android:icon="@mipmap/ic_launcher_round"
+                android:icon="@drawable/bullet"
                 android:title="@string/nav_drawer_view_donor_list" />
     </group>
 </menu>

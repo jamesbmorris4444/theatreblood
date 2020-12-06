@@ -100,6 +100,7 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
         navView = findViewById(R.id.bottom_nav_view)
         navDrawerView = findViewById(R.id.nav_drawer_view)
         navDrawerView.setNavigationItemSelectedListener(this)
+        navDrawerView.itemIconTintList = null
         drawerLayout = findViewById(R.id.drawer_layout)
         drawerLayout.addDrawerListener(this)
         lottieBackgroundView = activityMainBinding.root.findViewById(R.id.main_background_lottie)

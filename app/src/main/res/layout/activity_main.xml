@@ -169,6 +169,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="130dp"
                 android:layout_gravity="start"
+                app:itemBackground="@drawable/drawer_selected_item"
                 android:fitsSystemWindows="true"
                 app:headerLayout="@layout/nav_header"
                 app:menu="@menu/navigation_drawer_menu" />
