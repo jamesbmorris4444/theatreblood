@@ -44,6 +44,7 @@ class Repository(private val callbacks: Callbacks) {
     private var isMetered: Boolean = false
     private var cellularNetwork: Network? = null
     private var wiFiNetwork: Network? = null
+    private var reassociateReceiverInMainDatabase = false
     var isOfflineMode = true
     val liveViewDonorList: MutableLiveData<List<Donor>> = MutableLiveData()
     var newDonor: Donor? = null
@@ -366,9 +367,10 @@ class Repository(private val callbacks: Callbacks) {
         callbacks.fetchActivity().loadDonateProductsFragment(true)
     }
 
-    fun insertReassociatedProductsIntoDatabase(database: BloodDatabase, products: List<Product>, initializeView: () -> Unit) {
+    fun insertReassociatedProductsIntoDatabase(database: BloodDatabase, donor: Donor, products: List<Product>, initializeView: () -> Unit) {
         var disposable: Disposable? = null
-        disposable = Completable.fromAction { database.databaseDao().insertProducts(products) }
+        val completeableAction = if (reassociateReceiverInMainDatabase) database.databaseDao().insertDonorAndProducts(donor, products) else database.databaseDao().insertProducts(products)
+        disposable = Completable.fromAction { completeableAction }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe ({
@@ -516,14 +518,29 @@ class Repository(private val callbacks: Callbacks) {
             })
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun handleReassociateSearchClick(view: View, searchKey: String, showDonorsAndProducts: (donorsAndProductsList: List<DonorWithProducts>) -> Unit) {
+        val fullNameResponseList = listOf(
+            donorsFromFullNameWithProducts(mainBloodDatabase, searchKey),
+            donorsFromFullNameWithProducts(stagingBloodDatabase, searchKey)
+        )
         var disposable: Disposable? = null
-        disposable = donorsFromFullNameWithProducts(stagingBloodDatabase, searchKey)
+        disposable = Single.zip(fullNameResponseList) { args -> listOf(args) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe ({ donorWithProducts ->
+            .subscribe ({ responseList ->
                 disposable?.dispose()
-                showDonorsAndProducts(donorWithProducts)
+                val response = responseList[0]
+                val stagingDatabaseList = response[1] as List<DonorWithProducts>
+                val mainDatabaseList = response[0] as List<DonorWithProducts>
+                LogUtils.D(tag, LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("Retrieve all donors:  main=%d   staging=%d", mainDatabaseList.size, stagingDatabaseList.size))
+                if (stagingDatabaseList.isEmpty()) {
+                    reassociateReceiverInMainDatabase = true
+                    showDonorsAndProducts(mainDatabaseList)
+                } else {
+                    reassociateReceiverInMainDatabase = false
+                    showDonorsAndProducts(stagingDatabaseList)
+                }
             },
             { throwable ->
                 disposable?.dispose()

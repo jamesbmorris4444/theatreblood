@@ -256,7 +256,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
                     product.donorId = correctDonor.id
                 }
             }
-            repository.insertReassociatedProductsIntoDatabase(repository.stagingBloodDatabase, donorWithProducts.products, this::initializeView)
+            repository.insertReassociatedProductsIntoDatabase(repository.stagingBloodDatabase, correctDonor, donorWithProducts.products, this::initializeView)
         }
     }
 
