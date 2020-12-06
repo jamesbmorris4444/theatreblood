@@ -91,8 +91,8 @@
     <string name="nav_drawer_update_test_results">Update Test Results</string>
     <string name="nav_drawer_view_donor_list">View Donor List</string>
     <string name="nav_drawer_geofencing">Geofencing</string>
-    <string name="nav_drawer_title">Theatre Blood Android App</string>
-    <string name="nav_drawer_subtitle">JOMIS, Department of Defense</string>
+    <string name="nav_drawer_title">Walking Blood Bank Android App</string>
+    <string name="nav_drawer_subtitle">Florida Software</string>
 
     <!-- miscellaneous -->
     <string name="search_no_elements">No donors found in search</string>

@@ -325,15 +325,9 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
                 supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 loadReassociateProductsFragment()
             }
-            R.id.update_test_results -> {
-            }
             R.id.view_donor_list -> {
                 supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 loadViewDonorListFragment()
-            }
-            R.id.geofencing -> {
-                supportFragmentManager.popBackStack(ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                loadGeofencingFragment()
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)

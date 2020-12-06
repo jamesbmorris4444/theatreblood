@@ -14,7 +14,7 @@
     <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:srcCompat="@drawable/dod_logo"
+            app:srcCompat="@drawable/fs_logo"
             android:id="@+id/imageView"
             android:layout_marginBottom="15dp"/>
 

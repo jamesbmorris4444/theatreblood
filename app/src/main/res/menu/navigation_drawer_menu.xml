@@ -18,20 +18,9 @@
                 android:icon="@mipmap/ic_launcher_round"
                 android:title="@string/nav_drawer_reassociate_donation" />
         <item
-                android:id="@+id/update_test_results"
-                android:textColor="@color/blue"
-                android:icon="@mipmap/ic_launcher_round"
-                android:title="@string/nav_drawer_update_test_results" />
-        <item
                 android:id="@+id/view_donor_list"
                 android:textColor="@color/blue"
                 android:icon="@mipmap/ic_launcher_round"
                 android:title="@string/nav_drawer_view_donor_list" />
-
-        <item
-                android:id="@+id/geofencing"
-                android:textColor="@color/blue"
-                android:icon="@mipmap/ic_launcher_round"
-                android:title="@string/nav_drawer_geofencing" />
     </group>
 </menu>
