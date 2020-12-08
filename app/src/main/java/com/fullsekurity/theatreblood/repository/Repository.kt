@@ -44,7 +44,6 @@ class Repository(private val callbacks: Callbacks) {
     private var isMetered: Boolean = false
     private var cellularNetwork: Network? = null
     private var wiFiNetwork: Network? = null
-    private var reassociateReceiverInMainDatabase = false
     var isOfflineMode = true
     val liveViewDonorList: MutableLiveData<List<Donor>> = MutableLiveData()
     var newDonor: Donor? = null
@@ -282,9 +281,25 @@ class Repository(private val callbacks: Callbacks) {
         LogUtils.D(tag, LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("Path Name \"%s\" exists and was backed up", db.toString()))
     }
 
-    // The code below here does CRUD on the database
 
-    fun insertDonorIntoDatabase(database: BloodDatabase, donor: Donor, transitionToCreateDonation: Boolean) {
+    /*
+     *  The code below here does CRUD on the database
+     */
+    /**
+     * The code below here does CRUD on the database
+     * Methods:
+     *   insertDonorIntoDatabase
+     *   insertDonorAndProductsIntoDatabase
+     *   insertReassociatedProductsIntoDatabase
+     *   databaseCounts
+     *   getProductEntryCount
+     *   handleSearchClick
+     *   handleReassociateSearchClick
+     *   donorsFromFullName
+     *   retrieveDonorFromNameAndDate
+     */
+
+    fun insertDonorIntoDatabase(database: BloodDatabase, donor: Donor, transitionToCreateDonation: Boolean, showList: () -> Unit) {
         var disposable: Disposable? = null
         disposable = Completable.fromAction { database.databaseDao().insertDonor(donor) }
             .observeOn(AndroidSchedulers.mainThread())
@@ -312,13 +327,13 @@ class Repository(private val callbacks: Callbacks) {
                         }
                     }
                 ).show(callbacks.fetchActivity().supportFragmentManager, "MODAL")
+                showList()
             },
             { throwable ->
                 disposable?.dispose()
                 insertDonorIntoDatabaseFailure(transitionToCreateDonation, donor, "insertDonorIntoDatabase", throwable)
             })
     }
-
     private fun insertDonorIntoDatabaseFailure(transition: Boolean, donor: Donor, method: String, throwable: Throwable) {
         LogUtils.E(LogUtils.FilterTags.withTags(EXC), method, throwable)
         if (transition) {
@@ -328,7 +343,7 @@ class Repository(private val callbacks: Callbacks) {
         }
     }
 
-    fun insertDonorAndProductsIntoDatabase(database: BloodDatabase, donor: Donor, products: List<Product>) {
+    fun insertDonorAndProductsIntoDatabase(database: BloodDatabase, donor: Donor, products: List<Product>, showList: () -> Unit) {
         var disposable: Disposable? = null
         disposable = Completable.fromAction { database.databaseDao().insertDonorAndProducts(donor, products) }
             .observeOn(AndroidSchedulers.mainThread())
@@ -354,13 +369,13 @@ class Repository(private val callbacks: Callbacks) {
                         }
                     }
                 ).show(callbacks.fetchActivity().supportFragmentManager, "MODAL")
+                showList()
             },
             { throwable ->
                 disposable?.dispose()
                 insertDonorAndProductsIntoDatabaseFailure("insertDonorAndProductsIntoDatabase", throwable)
             })
     }
-
     private fun insertDonorAndProductsIntoDatabaseFailure(method: String, throwable: Throwable) {
         LogUtils.E(LogUtils.FilterTags.withTags(EXC), method, throwable)
         callbacks.fetchActivity().supportFragmentManager.popBackStack(Constants.ROOT_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -369,7 +384,7 @@ class Repository(private val callbacks: Callbacks) {
 
     fun insertReassociatedProductsIntoDatabase(database: BloodDatabase, donor: Donor, products: List<Product>, initializeView: () -> Unit) {
         var disposable: Disposable? = null
-        val completeableAction = if (reassociateReceiverInMainDatabase) database.databaseDao().insertDonorAndProducts(donor, products) else database.databaseDao().insertProducts(products)
+        val completeableAction = database.databaseDao().insertDonorAndProducts(donor, products)
         disposable = Completable.fromAction { completeableAction }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
@@ -404,6 +419,30 @@ class Repository(private val callbacks: Callbacks) {
         initializeView()
     }
 
+    /**
+     * @param   donorsAndProductsList     callback method in ViewModel when asynchronous operation finishes
+     * Calls the callback method with the donor and product list of entries in the staging database
+     *
+     */
+    fun getListOfDonorsAndProducts(donorsAndProductsList: (donorsAndProductsList: List<DonorWithProducts>) -> Unit) {
+        var disposable: Disposable? = null
+        disposable = databaseDonorAndProductsList(stagingBloodDatabase)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ donorsAndProductsList ->
+                disposable?.dispose()
+                donorsAndProductsList(donorsAndProductsList)
+            }, { throwable ->
+                disposable?.dispose()
+                LogUtils.E(LogUtils.FilterTags.withTags(EXC), "getListOfDonorsAndProducts", throwable)
+            })
+    }
+    private fun databaseDonorAndProductsList(database: BloodDatabase): Single<List<DonorWithProducts>> {
+        return database.databaseDao().loadAllDonorsWithProducts()
+    }
+
+    /**
+     * Shows the donor and product counts in both the main database and the staging database in a modal popup
+     */
     fun databaseCounts() {
         val entryCountList = listOf(
             databaseDonorCount(stagingBloodDatabase),
@@ -422,7 +461,9 @@ class Repository(private val callbacks: Callbacks) {
                 LogUtils.E(LogUtils.FilterTags.withTags(EXC), "databaseCounts", throwable)
             })
     }
-
+    private fun databaseDonorCount(database: BloodDatabase): Single<Int> {
+        return database.databaseDao().getDonorEntryCount()
+    }
     private fun getProductEntryCount(modifiedDonors: Int, mainDonors: Int) {
         val entryCountList = listOf(
             databaseProductCount(stagingBloodDatabase),
@@ -453,15 +494,36 @@ class Repository(private val callbacks: Callbacks) {
                 LogUtils.E(LogUtils.FilterTags.withTags(EXC), "getProductEntryCount", throwable)
             })
     }
-
-    private fun databaseDonorCount(database: BloodDatabase): Single<Int> {
-        return database.databaseDao().getDonorEntryCount()
-    }
-
     private fun databaseProductCount(database: BloodDatabase): Single<Int> {
         return database.databaseDao().getProductEntryCount()
     }
 
+    /**
+     * @param   searchKey                           first n characters of the last name, case insensitive
+     * @param   completeReassociationToNewDonor     callback method in ViewModel when asynchronous operation finishes
+     * Queries the staging database to find a donor from last name, first name, middle name, and date of birth.
+     */
+    fun retrieveDonorFromNameAndDob(progressBar: ProgressBar, donor: Donor, completeReassociationToNewDonor: (completeReassociationToNewDonor: Donor) -> Unit) {
+        var disposable: Disposable? = null
+        disposable = stagingBloodDatabase.databaseDao().donorFromNameAndDate(donor.lastName, donor.firstName, donor.middleName, donor.dob)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe({ donorObtained ->
+                disposable?.dispose()
+                progressBar.visibility = View.GONE
+                completeReassociationToNewDonor(donorObtained)
+            },
+                { throwable ->
+                    disposable?.dispose()
+                    LogUtils.E(LogUtils.FilterTags.withTags(EXC), "donorFromNameAndDateStoreAndRetrieve", throwable)
+                })
+    }
+
+    /**
+     * @param   searchKey      first n characters of the last name, case insensitive
+     * @param   showDonors     callback method in ViewModel when asynchronous operation finishes
+     * Queries both the staging database and the main database to find a donor from the search key.
+     */
     @Suppress("UNCHECKED_CAST")
     fun handleSearchClick(view: View, searchKey: String, showDonors: (donorList: List<Donor>) -> Unit) {
         val fullNameResponseList = listOf(
@@ -477,7 +539,6 @@ class Repository(private val callbacks: Callbacks) {
                 val response = responseList[0]
                 val stagingDatabaseList = response[1] as List<Donor>
                 val mainDatabaseList = response[0] as List<Donor>
-                LogUtils.D(tag, LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("Retrieve all donors:  main=%d   staging=%d", mainDatabaseList.size, stagingDatabaseList.size))
                 val newList = stagingDatabaseList.union(mainDatabaseList).distinctBy { donor -> Utils.donorComparisonByString(donor) }
                 showDonors(newList)
             },
@@ -486,7 +547,6 @@ class Repository(private val callbacks: Callbacks) {
                 LogUtils.E(LogUtils.FilterTags.withTags(EXC), "handleSearchClick", throwable)
             })
     }
-
     private fun donorsFromFullName(database: BloodDatabase, search: String): Single<List<Donor>> {
         val searchLast: String
         var searchFirst = "%"
@@ -502,22 +562,12 @@ class Repository(private val callbacks: Callbacks) {
         return database.databaseDao().donorsFromFullName(searchLast, searchFirst)
     }
 
-    fun retrieveDonorFromNameAndDate(progressBar: ProgressBar, donor: Donor, completeReassociationToNewDonor: (completeReassociationToNewDonor: Donor) -> Unit) {
-        var disposable: Disposable? = null
-        disposable = stagingBloodDatabase.databaseDao().donorFromNameAndDate(donor.lastName, donor.firstName, donor.middleName, donor.dob)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe({ donorObtained ->
-                disposable?.dispose()
-                progressBar.visibility = View.GONE
-                completeReassociationToNewDonor(donorObtained)
-            },
-            { throwable ->
-                disposable?.dispose()
-                LogUtils.E(LogUtils.FilterTags.withTags(EXC), "donorFromNameAndDateStoreAndRetrieve", throwable)
-            })
-    }
-
+    /**
+     * @param   searchKey                 first n characters of the last name, case insensitive
+     * @param   showDonorsAndProducts     callback method in ViewModel when asynchronous operation finishes
+     * Queries both the staging database and the main database to find a donor (with attached products) from the search key.
+     * Called both before and after the incorrect donor has been identified, but with a different callback method in ech case.
+     */
     @Suppress("UNCHECKED_CAST")
     fun handleReassociateSearchClick(view: View, searchKey: String, showDonorsAndProducts: (donorsAndProductsList: List<DonorWithProducts>) -> Unit) {
         val fullNameResponseList = listOf(
@@ -533,12 +583,9 @@ class Repository(private val callbacks: Callbacks) {
                 val response = responseList[0]
                 val stagingDatabaseList = response[1] as List<DonorWithProducts>
                 val mainDatabaseList = response[0] as List<DonorWithProducts>
-                LogUtils.D(tag, LogUtils.FilterTags.withTags(LogUtils.TagFilter.DAO), String.format("Retrieve all donors:  main=%d   staging=%d", mainDatabaseList.size, stagingDatabaseList.size))
                 if (stagingDatabaseList.isEmpty()) {
-                    reassociateReceiverInMainDatabase = true
                     showDonorsAndProducts(mainDatabaseList)
                 } else {
-                    reassociateReceiverInMainDatabase = false
                     showDonorsAndProducts(stagingDatabaseList)
                 }
             },
@@ -548,7 +595,6 @@ class Repository(private val callbacks: Callbacks) {
             })
 
     }
-
     private fun donorsFromFullNameWithProducts(database: BloodDatabase, search: String): Single<List<DonorWithProducts>> {
         var searchLast: String
         var searchFirst = "%"

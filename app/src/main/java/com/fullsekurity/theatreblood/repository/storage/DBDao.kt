@@ -55,7 +55,7 @@ interface DBDao {
     // get all donors and products
 
     @Query("SELECT * from donors")
-    fun loadAllDonorsWithProducts(): List<DonorWithProducts>
+    fun loadAllDonorsWithProducts(): Single<List<DonorWithProducts>>
 
     @Query("SELECT * FROM products")
     fun getAllProducts(): List<Product>

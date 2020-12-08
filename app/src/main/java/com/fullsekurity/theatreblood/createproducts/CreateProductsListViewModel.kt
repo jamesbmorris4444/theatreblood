@@ -218,7 +218,11 @@ class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
         for (productIndex in productList.indices) {
             productList[productIndex].donorId = donor.id
         }
-        repository.insertDonorAndProductsIntoDatabase(repository.stagingBloodDatabase, donor, productList)
+        repository.insertDonorAndProductsIntoDatabase(repository.stagingBloodDatabase, donor, productList, this::showStagingDatabaseEntries)
+    }
+
+    private fun showStagingDatabaseEntries() {
+        repository.getListOfDonorsAndProducts(Utils::donorsAndProductsList)
     }
 
     fun onCreateProductsDeleteClicked(view: View) {

@@ -3,7 +3,9 @@ package com.fullsekurity.theatreblood.utils
 import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.repository.storage.Donor
+import com.fullsekurity.theatreblood.repository.storage.DonorWithProducts
 
 class Utils {
 
@@ -52,6 +54,15 @@ class Utils {
             // will return the string value: "cccc"
             val split: MutableList<String> = patternOfSubpatterns.split('|').toMutableList()
             return split[index]
+        }
+
+        fun donorsAndProductsList(listOfDonorsAndProducts: List<DonorWithProducts>)  {
+            for (item in listOfDonorsAndProducts) {
+                LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.THM), String.format("donor=%s", item.donor.lastName))
+                for (product in item.products) {
+                    LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.THM), String.format("  product=%s---%s", product.din, product.aboRh))
+                }
+            }
         }
 
     }

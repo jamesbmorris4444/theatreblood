@@ -84,7 +84,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
     fun initializeView() {
         if (repository.newDonor != null) {
             // re-initialize view after creating a new donor while trying to reassociate to a donor, the new donor is now stored in fetchActivity().newDonor
-            repository.retrieveDonorFromNameAndDate(
+            repository.retrieveDonorFromNameAndDob(
                 callbacks.fetchActivity().fetchRootView().findViewById(R.id.main_progress_bar),
                 repository.newDonor as Donor,
                 this::completeReassociationToNewDonor)
@@ -103,7 +103,12 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
                 editTextNameInput = editTextNameInput)
             )
             adapter.addAll(list)
+            showStagingDatabaseDntries()
         }
+    }
+
+    private fun showStagingDatabaseDntries() {
+        repository.getListOfDonorsAndProducts(Utils::donorsAndProductsList)
     }
 
     private fun completeReassociationToNewDonor(newDonor: Donor) {

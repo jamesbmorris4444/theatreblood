@@ -187,12 +187,12 @@ class ManageDonorViewModel(private val callbacks: Callbacks) : AndroidViewModel(
             donor.branch != originalBranch
 
         if (atLeastOneEntryChanged && isDonorValid(donor)) {
-            repository.insertDonorIntoDatabase(repository.stagingBloodDatabase, donor, transitionToCreateDonation)
+            repository.insertDonorIntoDatabase(repository.stagingBloodDatabase, donor, transitionToCreateDonation, this::showStagingDatabaseEntries)
             if (repository.newDonorInProgress) {
                 repository.newDonor = donor
                 if (transitionToCreateDonation) {
                     // retrieve the new donor from the staging database in order to set its id
-                    repository.retrieveDonorFromNameAndDate(
+                    repository.retrieveDonorFromNameAndDob(
                         callbacks.fetchActivity().fetchRootView().findViewById(R.id.main_progress_bar),
                         donor,
                         this::completeProcessingOfNewDonor)
@@ -221,6 +221,10 @@ class ManageDonorViewModel(private val callbacks: Callbacks) : AndroidViewModel(
             ).show(callbacks.fetchActivity().supportFragmentManager, "MODAL")
         }
         repository.newDonorInProgress = false
+    }
+
+    private fun showStagingDatabaseEntries() {
+        repository.getListOfDonorsAndProducts(Utils::donorsAndProductsList)
     }
 
     private fun completeProcessingOfNewDonor(newDonor: Donor) {
