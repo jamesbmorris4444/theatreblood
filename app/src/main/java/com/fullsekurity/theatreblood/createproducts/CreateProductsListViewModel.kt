@@ -7,6 +7,7 @@ import androidx.databinding.ObservableField
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
@@ -156,7 +157,7 @@ class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
 
     fun onConfirmClicked(view: View) {
         processNewProduct()
-        adapter.addAll(productList)
+        adapter.addAll(productList, ProductListDiffCallback(adapter.itemList, productList))
         clearButtonVisibility.set(View.VISIBLE)
         confirmButtonVisibility.set(View.VISIBLE)
         confirmNeeded = false
@@ -228,7 +229,7 @@ class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
     fun onCreateProductsDeleteClicked(view: View) {
         val position = view.tag as Int
         productList.removeAt(position)
-        adapter.addAll(productList)
+        adapter.addAll(productList, ProductListDiffCallback(adapter.itemList, productList))
     }
 
     fun onCreateProductsEditClicked(view: View) {
@@ -237,7 +238,18 @@ class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
         editTextProductCode.set(productList[position].productCode)
         editTextProductExpDate.set(productList[position].expirationDate)
         productList.removeAt(position)
-        adapter.addAll(productList)
+        adapter.addAll(productList, ProductListDiffCallback(adapter.itemList, productList))
+    }
+
+    class ProductListDiffCallback(private val oldList: List<Product>, private val newList: List<Product>) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int = oldList.size
+        override fun getNewListSize(): Int = newList.size
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].din == newList[newItemPosition].din && oldList[oldItemPosition].productCode == newList[newItemPosition].productCode
+        }
+        override fun areContentsTheSame(oldItemPosition: Int, newPosition: Int): Boolean {
+            return areItemsTheSame(oldItemPosition, newPosition)
+        }
     }
 
 }

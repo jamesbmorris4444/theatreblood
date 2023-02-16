@@ -5,6 +5,7 @@ import android.view.View
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
@@ -13,6 +14,7 @@ import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.repository.storage.DonorWithProducts
+import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
 import com.fullsekurity.theatreblood.utils.Utils
@@ -102,7 +104,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
                 submitVisibility = submitVisibility,
                 editTextNameInput = editTextNameInput)
             )
-            adapter.addAll(list)
+            adapter.addAll(list, ReassociateProductaListDiffCallback(adapter, adapter.itemList, list))
             showStagingDatabaseDntries()
         }
     }
@@ -121,7 +123,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
         }
         newDonor.inReassociate = true
         list.add(newDonor)
-        adapter.addAll(list)
+        adapter.addAll(list, ReassociateProductaListDiffCallback(adapter, adapter.itemList, list))
         repository.newDonor = null
     }
 
@@ -167,7 +169,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
                     list.add(product)
                 }
             }
-            adapter.addAll(list)
+            adapter.addAll(list, ReassociateProductaListDiffCallback(adapter, adapter.itemList, list))
         }
     }
 
@@ -205,7 +207,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
             errorVisibility.set(View.GONE)
             val list: MutableList<Any> = mutableListOf()
             addHeaderToList(list, incorrectDonorWithProducts)
-            adapter.addAll(list)
+            adapter.addAll(list, ReassociateProductaListDiffCallback(adapter, adapter.itemList, list))
         } else {
             errorVisibility.set(View.VISIBLE)
             errorMessage.set(getApplication<Application>().applicationContext.getString(R.string.search_no_incorrect_donors))
@@ -247,7 +249,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
                 }
             }
         }
-        adapter.addAll(list)
+        adapter.addAll(list, ReassociateProductaListDiffCallback(adapter, adapter.itemList, list))
     }
 
     private fun moveProductsToCorrectDonor(incorrectDonor: Donor, correctDonor: Donor) {
@@ -279,6 +281,24 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
         editTextNameInput = key.toString()
         submitVisibility = View.VISIBLE
         // within "string", the "count" characters beginning at index "start" have just replaced old text that had length "before"
+    }
+
+    class ReassociateProductaListDiffCallback(private val adapter: ReassociateProductsAdapter, private val oldList: List<Any>, private val newList: List<Any>) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int = oldList.size
+        override fun getNewListSize(): Int = newList.size
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return when (adapter.getItemViewType(oldItemPosition)) {
+                ReassociateProductsAdapter.ViewTypes.LABEL.ordinal -> (oldList[oldItemPosition] as ReassociateProductsLabelData).title == (newList[oldItemPosition] as ReassociateProductsLabelData).title
+                ReassociateProductsAdapter.ViewTypes.SEARCH.ordinal -> (oldList[oldItemPosition] as ReassociateProductsSearchData).editTextNameInput == (newList[oldItemPosition] as ReassociateProductsSearchData).editTextNameInput
+                ReassociateProductsAdapter.ViewTypes.DONOR.ordinal -> (oldList[oldItemPosition] as Donor).firstName == (newList[oldItemPosition] as Donor).firstName &&
+                        (oldList[oldItemPosition] as Donor).lastName == (newList[oldItemPosition] as Donor).lastName
+                ReassociateProductsAdapter.ViewTypes.PRODUCT.ordinal -> (oldList[oldItemPosition] as Product).id == (newList[oldItemPosition] as Product).id
+                else ->false
+            }
+        }
+        override fun areContentsTheSame(oldItemPosition: Int, newPosition: Int): Boolean {
+            return areItemsTheSame(oldItemPosition, newPosition)
+        }
     }
 
 }

@@ -4,9 +4,9 @@ import android.view.View
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 abstract class RecyclerViewFilterAdapter<T, VM : RecyclerViewItemViewModel<T>> :  RecyclerView.Adapter<RecyclerViewFilterAdapter.ItemViewHolder<T, VM>>(), Filterable {
@@ -15,7 +15,7 @@ abstract class RecyclerViewFilterAdapter<T, VM : RecyclerViewItemViewModel<T>> :
     private var adapterFilter: AdapterFilter? = null
 
     val itemList: MutableList<T> = mutableListOf()
-    private var itemListFiltered: MutableList<T> = mutableListOf()
+    val itemListFiltered: MutableList<T> = mutableListOf()
 
     private val filter: AdapterFilter
         get() {
@@ -33,18 +33,21 @@ abstract class RecyclerViewFilterAdapter<T, VM : RecyclerViewItemViewModel<T>> :
         return itemList.size
     }
 
-    fun addAll(toAddList: List<T>) {
+    fun addAll(toAddList: List<T>, diffCallback: DiffUtil.Callback) {
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        clearAll()
+        itemList.addAll(toAddList)
+        diffResult.dispatchUpdatesTo(this)
+        recyclerView?.recycledViewPool?.clear()
+    }
+
+    fun addAllFiltered(toAddList: List<T>, diffCallback: DiffUtil.Callback) {
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
         clearAll()
         itemListFiltered.addAll(toAddList)
-        if (isFiltering()) {
-            adapterFilter?.filter()
-        } else {
-            itemList.addAll(toAddList)
-            if (recyclerView != null) {
-                recyclerView?.recycledViewPool?.clear()
-            }
-            notifyDataSetChanged()
-        }
+        diffResult.dispatchUpdatesTo(this)
+        adapterFilter?.filter()
+        recyclerView?.recycledViewPool?.clear()
     }
 
     fun remove(position: Int) {

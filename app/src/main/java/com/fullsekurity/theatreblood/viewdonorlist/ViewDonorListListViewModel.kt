@@ -7,6 +7,7 @@ import android.widget.Spinner
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
@@ -71,7 +72,8 @@ class ViewDonorListListViewModel(private val callbacks: Callbacks) : RecyclerVie
 
     fun showDonors(donorList: List<Donor>) {
         listIsVisible.set(donorList.isNotEmpty())
-        adapter.addAll(donorList.sortedBy { donor -> Utils.donorComparisonByString(donor) })
+        val newDonorList = donorList.sortedBy { donor -> Utils.donorComparisonByString(donor) }
+        adapter.addAllFiltered(newDonorList, DonorListDiffCallback(adapter.itemList, newDonorList))
         numberOfItemsDisplayed = donorList.size
         setNewDonorVisibility("NONEMPTY")
     }
@@ -118,6 +120,17 @@ class ViewDonorListListViewModel(private val callbacks: Callbacks) : RecyclerVie
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) { }
             }
+        }
+    }
+
+    class DonorListDiffCallback(private val oldList: List<Donor>, private val newList: List<Donor>) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int = oldList.size
+        override fun getNewListSize(): Int = newList.size
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].firstName == newList[newItemPosition].firstName && oldList[oldItemPosition].lastName == newList[newItemPosition].lastName
+        }
+        override fun areContentsTheSame(oldItemPosition: Int, newPosition: Int): Boolean {
+            return areItemsTheSame(oldItemPosition, newPosition)
         }
     }
 
