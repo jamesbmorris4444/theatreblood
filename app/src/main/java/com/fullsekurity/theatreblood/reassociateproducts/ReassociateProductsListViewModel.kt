@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
+import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
+import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -29,8 +31,35 @@ class ReassociateProductsListViewModelFactory(private val callbacks: Callbacks) 
 
 class ReassociateProductsListViewModel(private val callbacks: Callbacks) : RecyclerViewViewModel(callbacks.fetchActivity().application) {
 
-    private val tag = ReassociateProductsListViewModel::class.java.simpleName
-    override var adapter: ReassociateProductsAdapter = ReassociateProductsAdapter(callbacks)
+    private var listener = object : ReassociateProductsClickListener {
+        override fun onItemClick(view: View, position: Int, search: Boolean) {
+            if (search) {
+                handleReassociateSearchClick(view)
+            } else {
+                callbacks.fetchActivity().reassociateOnNewDonorClicked(view)
+                repository.newDonorInProgress = true
+            }
+        }
+    }
+    private var donateListener = object : DonateProductsListViewModel.DonateProductsClickListener {
+        override fun onItemClick(view: View, donorWithRemovedProduct: Donor?, position: Int) {
+            Utils.hideKeyboard(view)
+            if (donorWithRemovedProduct == null) {
+                handleReassociateDonorClick(adapter.itemList[position] as Donor, position)
+            } else {
+                if (donorWithRemovedProduct.firstName == (adapter.itemList[position] as Donor).firstName && donorWithRemovedProduct.lastName == (adapter.itemList[position] as Donor).lastName) {
+                    handleReassociateDonorClick(adapter.itemList[position] as Donor, position)
+                }
+            }
+        }
+    }
+    private var createListener = object : CreateProductsListViewModel.CreateProductsClickListener {
+        override fun onItemClick(view: View, position: Int, editor: Boolean) {
+            (adapter.itemList[position] as Product).removedForReassociation = true
+            view.visibility = View.GONE
+        }
+    }
+    override var adapter: ReassociateProductsAdapter = ReassociateProductsAdapter(callbacks, listener, donateListener, createListener)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     val errorVisibility: ObservableField<Int> = ObservableField(View.GONE)
     val errorMessage: ObservableField<String> = ObservableField("")
@@ -76,7 +105,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
     //   4.  handleReassociateSearchClick(view), incorrectIdentifierIdentified = false at entry
     //   5.  display all donors in the staging database and their new products that have been entered recently (showDonorsAndProducts)
     //   6.  user clicks on a donor item to select the incorrect donor
-    //   7.  handleReassociateIncorrectDonorClick(incorrectDonor), incorrectIdentifierIdentified = false at entry (showIncorrectDonorAndProductsWithSearchBox)
+    //   7.  handleReassociateDonorClick(incorrectDonor), incorrectIdentifierIdentified = false at entry (showIncorrectDonorAndProductsWithSearchBox)
     //   8.  show incorrect donor selected and products for this donor, and show search box for selecting correct donor at the bottom of the screen
     //   9.  user enters text and clicks on search button to find correct donor
     //   10. handleReassociateSearchClick(view), incorrectIdentifierIdentified = true at entry
@@ -105,11 +134,11 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
                 editTextNameInput = editTextNameInput)
             )
             adapter.addAll(list, ReassociateProductaListDiffCallback(adapter, adapter.itemList, list))
-            showStagingDatabaseDntries()
+            showStagingDatabaseEntries()
         }
     }
 
-    private fun showStagingDatabaseDntries() {
+    private fun showStagingDatabaseEntries() {
         repository.getListOfDonorsAndProducts(Utils::donorsAndProductsList)
     }
 
@@ -173,8 +202,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
         }
     }
 
-    fun handleReassociateDonorClick(view: View, donor: Donor) {
-        val position = view.tag as Int
+    fun handleReassociateDonorClick(donor: Donor, position: Int) {
         if (incorrectDonorIdentified) {
             if (position == 1) {
                 // this is a click on the incorrect donor, which has already been identified
@@ -259,7 +287,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
         } else {
             newDonorVisibility = View.GONE
             for (product in donorWithProducts.products) {
-                if (!product.removedForReassociation) {
+                if (product.removedForReassociation) {
                     product.donorId = correctDonor.id
                 }
             }
@@ -287,18 +315,27 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
         override fun getOldListSize(): Int = oldList.size
         override fun getNewListSize(): Int = newList.size
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return when (adapter.getItemViewType(oldItemPosition)) {
-                ReassociateProductsAdapter.ViewTypes.LABEL.ordinal -> (oldList[oldItemPosition] as ReassociateProductsLabelData).title == (newList[oldItemPosition] as ReassociateProductsLabelData).title
-                ReassociateProductsAdapter.ViewTypes.SEARCH.ordinal -> (oldList[oldItemPosition] as ReassociateProductsSearchData).editTextNameInput == (newList[oldItemPosition] as ReassociateProductsSearchData).editTextNameInput
-                ReassociateProductsAdapter.ViewTypes.DONOR.ordinal -> (oldList[oldItemPosition] as Donor).firstName == (newList[oldItemPosition] as Donor).firstName &&
-                        (oldList[oldItemPosition] as Donor).lastName == (newList[oldItemPosition] as Donor).lastName
-                ReassociateProductsAdapter.ViewTypes.PRODUCT.ordinal -> (oldList[oldItemPosition] as Product).id == (newList[oldItemPosition] as Product).id
-                else ->false
+            return if (oldList[oldItemPosition].javaClass.simpleName == newList[newItemPosition].javaClass.simpleName) {
+                when (adapter.getItemViewType(oldItemPosition)) {
+                    ReassociateProductsAdapter.ViewTypes.LABEL.ordinal -> (oldList[oldItemPosition] as ReassociateProductsLabelData).title == (newList[newItemPosition] as ReassociateProductsLabelData).title
+                    ReassociateProductsAdapter.ViewTypes.SEARCH.ordinal -> (oldList[oldItemPosition] as ReassociateProductsSearchData).editTextNameInput == (newList[newItemPosition] as ReassociateProductsSearchData).editTextNameInput
+                    ReassociateProductsAdapter.ViewTypes.DONOR.ordinal -> (oldList[oldItemPosition] as Donor).firstName == (newList[newItemPosition] as Donor).firstName &&
+                            (oldList[oldItemPosition] as Donor).lastName == (newList[newItemPosition] as Donor).lastName
+                    ReassociateProductsAdapter.ViewTypes.PRODUCT.ordinal -> (oldList[oldItemPosition] as Product).din == (newList[newItemPosition] as Product).din &&
+                            (oldList[oldItemPosition] as Product).productCode == (newList[newItemPosition] as Product).productCode
+                    else ->false
+                }
+            } else {
+                false
             }
         }
         override fun areContentsTheSame(oldItemPosition: Int, newPosition: Int): Boolean {
             return areItemsTheSame(oldItemPosition, newPosition)
         }
+    }
+
+    interface ReassociateProductsClickListener {
+        fun onItemClick(view: View, position: Int, search: Boolean)
     }
 
 }

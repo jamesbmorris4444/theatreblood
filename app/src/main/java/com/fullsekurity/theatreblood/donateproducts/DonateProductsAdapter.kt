@@ -13,7 +13,7 @@ import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Utils
 
-class DonateProductsAdapter(private val callbacks: Callbacks) : RecyclerViewFilterAdapter<Donor, DonateProductsItemViewModel>() {
+class DonateProductsAdapter(private val callbacks: Callbacks, val listener: DonateProductsListViewModel.DonateProductsClickListener?) : RecyclerViewFilterAdapter<Donor, DonateProductsItemViewModel>() {
 
     private var adapterFilter: AdapterFilter? = null
     lateinit var uiViewModel: UIViewModel
@@ -38,6 +38,9 @@ class DonateProductsAdapter(private val callbacks: Callbacks) : RecyclerViewFilt
 
     override fun onBindViewHolder(holder: ItemViewHolder<Donor, DonateProductsItemViewModel>, position: Int) {
         super.onBindViewHolder(holder, position)
+        holder.itemView.setOnClickListener {
+            listener?.onItemClick(it, itemList[position], position)
+        }
         if (position % 2 == 1) {
             holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor1))
         } else {

@@ -11,6 +11,7 @@ import com.fullsekurity.theatreblood.geofencing.GeofencingViewModel
 import com.fullsekurity.theatreblood.managedonor.DonorFragment
 import com.fullsekurity.theatreblood.managedonor.ManageDonorViewModel
 import com.fullsekurity.theatreblood.modal.StandardModal
+import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsAdapter
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsFragment
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel
 import com.fullsekurity.theatreblood.repository.Repository
@@ -46,6 +47,7 @@ interface ViewModelDependencyInjector {
     fun inject(fragment: GeofencingFragment)
     fun inject(fragment: ViewDonorListFragment)
     fun inject(viewModel: ViewDonorListListViewModel)
+    fun inject(adapter: ReassociateProductsAdapter)
 }
 
 @Module

@@ -18,7 +18,6 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
@@ -84,17 +83,37 @@ class GeofencingFragment : Fragment(), Callbacks {
 
     private fun setupGeofencing() {
         geofencingClient = LocationServices.getGeofencingClient(requireContext())
-        geofencingViewModel.geofencingLiveData.observe(viewLifecycleOwner, Observer { geoFencingList ->
-            LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.THM), String.format("location  size=%d,  %f   %f   %f", geoFencingList.size, geoFencingList[0].latitude, geoFencingList[0].longitude, geoFencingList[0].radius))
-            geofenceList.add( Geofence.Builder()
-                .setRequestId("KEY")
-                .setNotificationResponsiveness(1000)
-                .setCircularRegion(geoFencingList[0].latitude, geoFencingList[0].longitude, geoFencingList[0].radius)
-                .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setLoiteringDelay(10000)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT or Geofence.GEOFENCE_TRANSITION_DWELL)
-                .build())
-            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+        geofencingViewModel.geofencingLiveData.observe(viewLifecycleOwner) { geoFencingList ->
+            LogUtils.D(
+                "JIMX",
+                LogUtils.FilterTags.withTags(LogUtils.TagFilter.THM),
+                String.format(
+                    "location  size=%d,  %f   %f   %f",
+                    geoFencingList.size,
+                    geoFencingList[0].latitude,
+                    geoFencingList[0].longitude,
+                    geoFencingList[0].radius
+                )
+            )
+            geofenceList.add(
+                Geofence.Builder()
+                    .setRequestId("KEY")
+                    .setNotificationResponsiveness(1000)
+                    .setCircularRegion(
+                        geoFencingList[0].latitude,
+                        geoFencingList[0].longitude,
+                        geoFencingList[0].radius
+                    )
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                    .setLoiteringDelay(10000)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT or Geofence.GEOFENCE_TRANSITION_DWELL)
+                    .build()
+            )
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_DENIED
+            ) {
                 if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
                     StandardModal(
                         this,
@@ -105,34 +124,56 @@ class GeofencingFragment : Fragment(), Callbacks {
                         negativeText = fetchActivity().getString(R.string.std_modal_no),
                         dialogFinishedListener = object : StandardModal.DialogFinishedListener {
                             override fun onPositive(string: String) {
-                                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
+                                ActivityCompat.requestPermissions(
+                                    requireActivity(),
+                                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                                    1
+                                )
                             }
-                            override fun onNegative() { }
-                            override fun onNeutral() { }
+
+                            override fun onNegative() {}
+                            override fun onNeutral() {}
                             override fun onBackPressed() {
                             }
                         }
                     ).show(fetchActivity().supportFragmentManager, "MODAL")
                 } else {
-                    Toast.makeText(requireActivity(),"Access Fine Permission Denied, show educational UI", Toast.LENGTH_SHORT).show()
-                    ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
+                    Toast.makeText(
+                        requireActivity(),
+                        "Access Fine Permission Denied, show educational UI",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    ActivityCompat.requestPermissions(
+                        requireActivity(),
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        1
+                    )
                 }
             } else {
-                Toast.makeText(requireContext(),"Permission granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Permission granted", Toast.LENGTH_SHORT).show()
                 geofencingClient.addGeofences(getGeofencingRequest(), geofencePendingIntent)?.run {
                     addOnSuccessListener {
                         // Geofences added
-                        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.THM), String.format("ADD SUCCEEDED"))
-                        Toast.makeText(requireActivity(), "ADD SUCCEEDED", Toast.LENGTH_SHORT).show()
+                        LogUtils.D(
+                            "JIMX",
+                            LogUtils.FilterTags.withTags(LogUtils.TagFilter.THM),
+                            String.format("ADD SUCCEEDED")
+                        )
+                        Toast.makeText(requireActivity(), "ADD SUCCEEDED", Toast.LENGTH_SHORT)
+                            .show()
                     }
                     addOnFailureListener {
                         // Failed to add geofences
-                        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.THM), String.format("ADD FAILED"))
+                        LogUtils.D(
+                            "JIMX",
+                            LogUtils.FilterTags.withTags(LogUtils.TagFilter.THM),
+                            String.format("ADD FAILED")
+                        )
                         Toast.makeText(requireActivity(), "ADD FAILED", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
-        })
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

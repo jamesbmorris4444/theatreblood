@@ -32,11 +32,10 @@ class ViewDonorListListViewModelFactory(private val callbacks: Callbacks) : View
 class ViewDonorListListViewModel(private val callbacks: Callbacks) : RecyclerViewViewModel(callbacks.fetchActivity().application) {
 
     private val tag = ViewDonorListListViewModel::class.java.simpleName
-    override var adapter: DonateProductsAdapter = DonateProductsAdapter(callbacks)
+    override var adapter: DonateProductsAdapter = DonateProductsAdapter(callbacks, null)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     val listIsVisible: ObservableField<Boolean> = ObservableField(true)
-    val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
-    val submitVisible: ObservableField<Int> = ObservableField(View.GONE)
+    private val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
     private var numberOfItemsDisplayed = -1
     private var patternOfSubpatterns: String = "<>|<>"
 

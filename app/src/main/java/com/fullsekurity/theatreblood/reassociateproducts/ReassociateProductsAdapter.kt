@@ -1,30 +1,51 @@
 package com.fullsekurity.theatreblood.reassociateproducts
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.createproducts.CreateProductsItemViewModel
+import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.databinding.CreateProductsListItemBinding
 import com.fullsekurity.theatreblood.databinding.DonateProductsListItemBinding
 import com.fullsekurity.theatreblood.databinding.ReassociateLabelItemBinding
 import com.fullsekurity.theatreblood.databinding.ReassociateSearchItemBinding
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsItemViewModel
+import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFilterAdapter
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewItemViewModel
+import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
+import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
+import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import com.google.android.material.textfield.TextInputLayout
+import javax.inject.Inject
 
-class ReassociateProductsAdapter(private val callbacks: Callbacks) : RecyclerViewFilterAdapter<Any, RecyclerViewItemViewModel<Any>>() {
+class ReassociateProductsAdapter(private val callbacks: Callbacks,
+                                 private val listener: ReassociateProductsListViewModel.ReassociateProductsClickListener,
+                                 private val donateListener: DonateProductsListViewModel.DonateProductsClickListener,
+                                 private val createListener: CreateProductsListViewModel.CreateProductsClickListener
+                                 ) : RecyclerViewFilterAdapter<Any, RecyclerViewItemViewModel<Any>>() {
 
     private var adapterFilter: AdapterFilter? = null
     lateinit var uiViewModel: UIViewModel
     private lateinit var searchRootView: View
+
+    @Inject
+    lateinit var repository: Repository
+
+    init {
+        DaggerViewModelDependencyInjector.builder()
+            .viewModelInjectorModule(ViewModelInjectorModule(callbacks.fetchActivity()))
+            .build()
+            .inject(this)
+    }
 
     override fun getFilter(): AdapterFilter {
         adapterFilter?.let {
@@ -110,8 +131,67 @@ class ReassociateProductsAdapter(private val callbacks: Callbacks) : RecyclerVie
 
     override fun onBindViewHolder(holder: ItemViewHolder<Any, RecyclerViewItemViewModel<Any>>, position: Int) {
         super.onBindViewHolder(holder, position)
-        if (holder.itemViewType == ViewTypes.DONOR.ordinal) {
-            holder.itemView.findViewById<ConstraintLayout>(R.id.donate_products_item_root_view).tag = position
+        when (getItemViewType(position)) {
+            ViewTypes.LABEL.ordinal -> { }
+            ViewTypes.SEARCH.ordinal -> { }
+            ViewTypes.DONOR.ordinal -> {
+                if (getItemViewType(0) == ViewTypes.LABEL.ordinal) {
+                    holder.itemView.setOnClickListener {
+                        donateListener.onItemClick(holder.itemView, null, position)
+                    }
+                } else {
+                    holder.itemView.setOnClickListener {
+                        var donorClicked: Donor? = null
+                        val foundDonor = itemList.find { item ->
+                            if (item is Donor) {
+                                var foundProductRemoved = false
+                                repository.donorsWithProductsListForReassociate.find { donorWithProducts ->
+                                    foundProductRemoved = donorWithProducts.products.find { product -> product.removedForReassociation } != null
+                                    if (foundProductRemoved) {
+                                        donorClicked = donorWithProducts.donor
+                                    }
+                                    foundProductRemoved
+                                }
+                                foundProductRemoved
+                            } else {
+                                false
+                            }
+                        }
+                        foundDonor?.let {
+                            donorClicked?.let { donor ->
+                                donateListener.onItemClick(holder.itemView, donor, position)
+                            }
+                        }
+                    }
+                }
+            }
+            ViewTypes.PRODUCT.ordinal -> {
+                if (getItemViewType(0) == ViewTypes.LABEL.ordinal) {
+                    val deleteView = holder.itemView.findViewById<ImageView>(R.id.create_product_delete_button)
+                    deleteView.visibility = View.GONE
+                } else {
+                    val deleteView = holder.itemView.findViewById<ImageView>(R.id.create_product_delete_button)
+                    deleteView?.setOnClickListener { // delete button
+                        createListener.onItemClick(deleteView, position, false)
+                    }
+                    deleteView.visibility = View.VISIBLE
+                    (itemList[position] as Product).removedForReassociation = false
+                }
+            }
+            else -> { }
+        }
+        val submitView = holder.itemView.findViewById<ImageView>(R.id.submit_button_icon)
+        val newDonorView = holder.itemView.findViewById<ImageView>(R.id.new_donor_button_icon)
+        submitView?.setOnClickListener { // search button
+            listener.onItemClick(submitView, position, true)
+        }
+        newDonorView?.setOnClickListener { // edit button
+            listener.onItemClick(newDonorView, position, false)
+        }
+        if (position % 2 == 1) {
+            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor1))
+        } else {
+            holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor2))
         }
     }
 

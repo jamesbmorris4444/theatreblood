@@ -21,15 +21,6 @@ class ReassociateProductsSearchItemViewModel(private val callbacks: Callbacks) :
         editTextNameInput.set(item.editTextNameInput)
     }
 
-    fun onSearchClicked(view: View) {
-        callbacks.fetchReassociateProductsListViewModel()?.handleReassociateSearchClick(view)
-    }
-
-    fun onNewDonorClicked(view: View) {
-        callbacks.fetchActivity().reassociateOnNewDonorClicked(view)
-        callbacks.fetchReassociateProductsListViewModel()?.repository?.newDonorInProgress = true
-    }
-
     fun onTextNameChanged(key: CharSequence, start: Int, before: Int, count: Int) {
         callbacks.fetchReassociateProductsListViewModel()?.onTextNameChanged(key.toString(), 0, 0, 0)
     }

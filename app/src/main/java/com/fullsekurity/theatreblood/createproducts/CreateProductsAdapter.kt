@@ -13,7 +13,8 @@ import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFilterAdapter
 import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
 
-class CreateProductsAdapter(val callbacks: Callbacks) : RecyclerViewFilterAdapter<Product, CreateProductsItemViewModel>() {
+
+class CreateProductsAdapter(val callbacks: Callbacks, val listener: CreateProductsListViewModel.CreateProductsClickListener) : RecyclerViewFilterAdapter<Product, CreateProductsItemViewModel>() {
 
     private var adapterFilter: AdapterFilter? = null
     lateinit var uiViewModel: UIViewModel
@@ -38,8 +39,14 @@ class CreateProductsAdapter(val callbacks: Callbacks) : RecyclerViewFilterAdapte
 
     override fun onBindViewHolder(holder: ItemViewHolder<Product, CreateProductsItemViewModel>, position: Int) {
         super.onBindViewHolder(holder, position)
-        holder.itemView.findViewById<ImageView>(R.id.create_product_delete_button).tag = position // delete button
-        holder.itemView.findViewById<ImageView>(R.id.create_product_edit_button).tag = position // edit button
+        val deleteView = holder.itemView.findViewById<ImageView>(R.id.create_product_delete_button)
+        deleteView?.setOnClickListener { // delete button
+            listener.onItemClick(deleteView, position, false)
+        }
+        val editView = holder.itemView.findViewById<ImageView>(R.id.create_product_edit_button)
+        editView?.setOnClickListener { // edit button
+            listener.onItemClick(editView, position, true)
+        }
         if (position % 2 == 1) {
             holder.itemView.setBackgroundColor(Color.parseColor(uiViewModel.recyclerViewAlternatingColor1))
         } else {

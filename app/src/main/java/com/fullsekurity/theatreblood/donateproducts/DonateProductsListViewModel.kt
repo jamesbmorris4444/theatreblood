@@ -29,8 +29,13 @@ class DonateProductsListViewModelFactory(private val callbacks: Callbacks) : Vie
 
 class DonateProductsListViewModel(private val callbacks: Callbacks) : RecyclerViewViewModel(callbacks.fetchActivity().application) {
 
-    private val tag = DonateProductsListViewModel::class.java.simpleName
-    override var adapter: DonateProductsAdapter = DonateProductsAdapter(callbacks)
+    private val listener = object : DonateProductsClickListener {
+        override fun onItemClick(view: View, donorWithRemovedProduct: Donor?, position: Int) {
+            Utils.hideKeyboard(view)
+            callbacks.fetchActivity().loadDonorFragment(adapter.itemList[position], callbacks.fetchActivity().transitionToCreateDonation)
+        }
+    }
+    override var adapter: DonateProductsAdapter = DonateProductsAdapter(callbacks, listener)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     val listIsVisible: ObservableField<Boolean> = ObservableField(true)
     val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
@@ -124,6 +129,10 @@ class DonateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
         override fun areContentsTheSame(oldItemPosition: Int, newPosition: Int): Boolean {
             return areItemsTheSame(oldItemPosition, newPosition)
         }
+    }
+
+    interface DonateProductsClickListener {
+        fun onItemClick(view: View, donorWithRemovedProduct: Donor?, position: Int)
     }
 
 }

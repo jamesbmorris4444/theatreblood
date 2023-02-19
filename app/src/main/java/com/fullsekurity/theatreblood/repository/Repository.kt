@@ -48,6 +48,7 @@ class Repository(private val callbacks: Callbacks) {
     val liveViewDonorList: MutableLiveData<List<Donor>> = MutableLiveData()
     var newDonor: Donor? = null
     var newDonorInProgress = false
+    lateinit var donorsWithProductsListForReassociate: List<DonorWithProducts>
 
     fun setBloodDatabase(context: Context) {
         val dbList = BloodDatabase.newInstance(context, MAIN_DATABASE_NAME, MODIFIED_DATABASE_NAME)
@@ -585,8 +586,10 @@ class Repository(private val callbacks: Callbacks) {
                 val mainDatabaseList = response[0] as List<DonorWithProducts>
                 if (stagingDatabaseList.isEmpty()) {
                     showDonorsAndProducts(mainDatabaseList)
+                    donorsWithProductsListForReassociate = mainDatabaseList
                 } else {
                     showDonorsAndProducts(stagingDatabaseList)
+                    donorsWithProductsListForReassociate = stagingDatabaseList
                 }
             },
             { throwable ->
@@ -595,6 +598,7 @@ class Repository(private val callbacks: Callbacks) {
             })
 
     }
+
     private fun donorsFromFullNameWithProducts(database: BloodDatabase, search: String): Single<List<DonorWithProducts>> {
         var searchLast: String
         var searchFirst = "%"

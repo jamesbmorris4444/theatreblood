@@ -14,8 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/donate_products_item_root_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{(view) -> donateProductsItemViewModel.onItemClicked(view)}">
+            android:layout_height="wrap_content" >
 
         <android.widget.TextView
                 android:id="@+id/last_name"

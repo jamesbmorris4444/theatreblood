@@ -37,8 +37,23 @@ class CreateProductsListViewModelFactory(private val callbacks: Callbacks) : Vie
 @Suppress("UNCHECKED_CAST")
 class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerViewViewModel(callbacks.fetchActivity().application) {
 
-    private val tag = CreateProductsListViewModel::class.java.simpleName
-    override var adapter: CreateProductsAdapter = CreateProductsAdapter(callbacks)
+    private val listener = object : CreateProductsClickListener {
+        override fun onItemClick(view: View, position: Int, editor: Boolean) {
+            view.visibility = View.VISIBLE
+            if (editor) {
+                editTextProductDin.set(productList[position].din)
+                editTextProductCode.set(productList[position].productCode)
+                editTextProductExpDate.set(productList[position].expirationDate)
+                productList.removeAt(position)
+                adapter.addAll(productList, ProductListDiffCallback(adapter.itemList, productList))
+            } else {
+                productList.removeAt(position)
+                adapter.addAll(productList, ProductListDiffCallback(adapter.itemList, productList))
+                adapter.notifyItemRemoved(position)
+            }
+        }
+    }
+    override var adapter: CreateProductsAdapter = CreateProductsAdapter(callbacks, listener)
     override val itemDecorator: RecyclerView.ItemDecoration? = null
     private lateinit var donor: Donor
     private val calendar = Calendar.getInstance()
@@ -226,21 +241,6 @@ class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
         repository.getListOfDonorsAndProducts(Utils::donorsAndProductsList)
     }
 
-    fun onCreateProductsDeleteClicked(view: View) {
-        val position = view.tag as Int
-        productList.removeAt(position)
-        adapter.addAll(productList, ProductListDiffCallback(adapter.itemList, productList))
-    }
-
-    fun onCreateProductsEditClicked(view: View) {
-        val position = view.tag as Int
-        editTextProductDin.set(productList[position].din)
-        editTextProductCode.set(productList[position].productCode)
-        editTextProductExpDate.set(productList[position].expirationDate)
-        productList.removeAt(position)
-        adapter.addAll(productList, ProductListDiffCallback(adapter.itemList, productList))
-    }
-
     class ProductListDiffCallback(private val oldList: List<Product>, private val newList: List<Product>) : DiffUtil.Callback() {
         override fun getOldListSize(): Int = oldList.size
         override fun getNewListSize(): Int = newList.size
@@ -250,6 +250,10 @@ class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
         override fun areContentsTheSame(oldItemPosition: Int, newPosition: Int): Boolean {
             return areItemsTheSame(oldItemPosition, newPosition)
         }
+    }
+
+    interface CreateProductsClickListener {
+        fun onItemClick(view: View, position: Int, editor: Boolean)
     }
 
 }
