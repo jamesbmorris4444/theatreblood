@@ -12,6 +12,11 @@
         <variable
                 name="viewDonorListListViewModel"
                 type="com.fullsekurity.theatreblood.viewdonorlist.ViewDonorListListViewModel" />
+
+        <variable
+                name="viewDonorListFragment"
+                type="com.fullsekurity.theatreblood.viewdonorlist.ViewDonorListFragment" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -126,7 +131,7 @@
                 android:visibility="@{safeUnbox(viewDonorListListViewModel.listIsVisible ? View.VISIBLE : View.GONE)}"
                 android:paddingBottom="200dp"
                 android:clipToPadding="false"
-                app:recyclerViewViewModel="@{viewDonorListListViewModel}"
+                app:recyclerViewFragment="@{viewDonorListFragment}"
                 app:layout_constraintTop_toBottomOf="@+id/top_divider"
                 app:layout_constraintLeft_toLeftOf="parent" />
 

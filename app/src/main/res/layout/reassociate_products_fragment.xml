@@ -13,6 +13,10 @@
             name="reassociateProductsListViewModel"
             type="com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel" />
 
+        <variable
+            name="reassociateProductsFragment"
+            type="com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsFragment" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +27,7 @@
                 android:id="@+id/donorsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:recyclerViewViewModel="@{reassociateProductsListViewModel}"
+                app:recyclerViewFragment="@{reassociateProductsFragment}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"

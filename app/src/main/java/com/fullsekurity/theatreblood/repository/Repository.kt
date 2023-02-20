@@ -8,7 +8,6 @@ import android.net.NetworkRequest
 import android.view.View
 import android.widget.ProgressBar
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.MutableLiveData
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.activity.MainActivity
@@ -24,6 +23,7 @@ import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.utils.Constants
 import com.fullsekurity.theatreblood.utils.Constants.MAIN_DATABASE_NAME
 import com.fullsekurity.theatreblood.utils.Constants.MODIFIED_DATABASE_NAME
+import com.fullsekurity.theatreblood.utils.SingleLiveEvent
 import com.fullsekurity.theatreblood.utils.Utils
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -45,7 +45,10 @@ class Repository(private val callbacks: Callbacks) {
     private var cellularNetwork: Network? = null
     private var wiFiNetwork: Network? = null
     var isOfflineMode = true
-    val liveViewDonorList: MutableLiveData<List<Donor>> = MutableLiveData()
+
+    private val liveDonorListEvent: SingleLiveEvent<List<Donor>> = SingleLiveEvent()
+    fun getLiveDonorListEvent(): SingleLiveEvent<List<Donor>> { return liveDonorListEvent }
+
     var newDonor: Donor? = null
     var newDonorInProgress = false
     lateinit var donorsWithProductsListForReassociate: List<DonorWithProducts>
@@ -211,7 +214,7 @@ class Repository(private val callbacks: Callbacks) {
             .subscribe ({
                 disposable?.dispose()
                 progressBar.visibility = View.GONE
-                liveViewDonorList.postValue(donors)
+                liveDonorListEvent.value = donors
                 StandardModal(
                     activity,
                     modalType = StandardModal.ModalType.STANDARD,

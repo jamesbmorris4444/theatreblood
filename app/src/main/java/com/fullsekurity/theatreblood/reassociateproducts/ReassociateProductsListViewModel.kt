@@ -3,22 +3,20 @@ package com.fullsekurity.theatreblood.reassociateproducts
 import android.app.Application
 import android.view.View
 import androidx.databinding.ObservableField
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
-import com.fullsekurity.theatreblood.createproducts.CreateProductsFragment
-import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
-import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
+import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.repository.storage.DonorWithProducts
 import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.DaggerViewModelDependencyInjector
+import com.fullsekurity.theatreblood.utils.SingleLiveEvent
 import com.fullsekurity.theatreblood.utils.Utils
 import com.fullsekurity.theatreblood.utils.ViewModelInjectorModule
 import javax.inject.Inject
@@ -29,38 +27,8 @@ class ReassociateProductsListViewModelFactory(private val callbacks: Callbacks) 
     }
 }
 
-class ReassociateProductsListViewModel(private val callbacks: Callbacks) : RecyclerViewViewModel(callbacks.fetchActivity().application) {
+class ReassociateProductsListViewModel(private val callbacks: Callbacks) : AndroidViewModel(callbacks.fetchActivity().application) {
 
-    private var listener = object : ReassociateProductsClickListener {
-        override fun onItemClick(view: View, position: Int, search: Boolean) {
-            if (search) {
-                handleReassociateSearchClick(view)
-            } else {
-                callbacks.fetchActivity().reassociateOnNewDonorClicked(view)
-                repository.newDonorInProgress = true
-            }
-        }
-    }
-    private var donateListener = object : DonateProductsFragment.DonateProductsClickListener {
-        override fun onItemClick(view: View, donorWithRemovedProduct: Donor?, position: Int) {
-            Utils.hideKeyboard(view)
-            if (donorWithRemovedProduct == null) {
-                handleReassociateDonorClick(adapter.itemList[position] as Donor, position)
-            } else {
-                if (donorWithRemovedProduct.firstName == (adapter.itemList[position] as Donor).firstName && donorWithRemovedProduct.lastName == (adapter.itemList[position] as Donor).lastName) {
-                    handleReassociateDonorClick(adapter.itemList[position] as Donor, position)
-                }
-            }
-        }
-    }
-    private var createListener = object : CreateProductsFragment.CreateProductsClickListener {
-        override fun onItemClick(view: View, position: Int, editor: Boolean) {
-            (adapter.itemList[position] as Product).removedForReassociation = true
-            view.visibility = View.GONE
-        }
-    }
-    override var adapter: ReassociateProductsAdapter = ReassociateProductsAdapter(callbacks, listener, donateListener, createListener)
-    override val itemDecorator: RecyclerView.ItemDecoration? = null
     val errorVisibility: ObservableField<Int> = ObservableField(View.GONE)
     val errorMessage: ObservableField<String> = ObservableField("")
     private var editTextNameInput = ""
@@ -72,6 +40,9 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
     private lateinit var incorrectDonorWithProducts: DonorWithProducts
     private lateinit var donorWithProductsList: List<DonorWithProducts>
 
+    private val liveReassociateListEvent: SingleLiveEvent<List<Any>> = SingleLiveEvent()
+    fun getLiveReassociateListEvent(): SingleLiveEvent<List<Any>> { return liveReassociateListEvent }
+
     @Inject
     lateinit var uiViewModel: UIViewModel
     @Inject
@@ -82,19 +53,6 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
             .viewModelInjectorModule(ViewModelInjectorModule(callbacks.fetchActivity()))
             .build()
             .inject(this)
-        adapter.uiViewModel = uiViewModel
-    }
-
-    override fun setLayoutManager(): RecyclerView.LayoutManager {
-        return object : LinearLayoutManager(getApplication<Application>().applicationContext) {
-            override fun canScrollHorizontally(): Boolean {
-                return false
-            }
-
-            override fun canScrollVertically(): Boolean {
-                return true
-            }
-        }
     }
 
     // The flow through the reassociated donations is as follows
@@ -133,7 +91,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
                 submitVisibility = submitVisibility,
                 editTextNameInput = editTextNameInput)
             )
-            adapter.addAll(list, ReassociateProductaListDiffCallback(adapter, adapter.itemList, list))
+            liveReassociateListEvent.value = list
             showStagingDatabaseEntries()
         }
     }
@@ -152,7 +110,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
         }
         newDonor.inReassociate = true
         list.add(newDonor)
-        adapter.addAll(list, ReassociateProductaListDiffCallback(adapter, adapter.itemList, list))
+        liveReassociateListEvent.value = list
         repository.newDonor = null
     }
 
@@ -198,11 +156,12 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
                     list.add(product)
                 }
             }
-            adapter.addAll(list, ReassociateProductaListDiffCallback(adapter, adapter.itemList, list))
+            liveReassociateListEvent.value = list
         }
     }
 
     fun handleReassociateDonorClick(donor: Donor, position: Int) {
+        LogUtils.D("JIMX", LogUtils.FilterTags.withTags(LogUtils.TagFilter.THM), String.format("handleReassociateDonorClick=%d      %s", position, donor))
         if (incorrectDonorIdentified) {
             if (position == 1) {
                 // this is a click on the incorrect donor, which has already been identified
@@ -235,7 +194,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
             errorVisibility.set(View.GONE)
             val list: MutableList<Any> = mutableListOf()
             addHeaderToList(list, incorrectDonorWithProducts)
-            adapter.addAll(list, ReassociateProductaListDiffCallback(adapter, adapter.itemList, list))
+            liveReassociateListEvent.value = list
         } else {
             errorVisibility.set(View.VISIBLE)
             errorMessage.set(getApplication<Application>().applicationContext.getString(R.string.search_no_incorrect_donors))
@@ -277,7 +236,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
                 }
             }
         }
-        adapter.addAll(list, ReassociateProductaListDiffCallback(adapter, adapter.itemList, list))
+        liveReassociateListEvent.value = list
     }
 
     private fun moveProductsToCorrectDonor(incorrectDonor: Donor, correctDonor: Donor) {
