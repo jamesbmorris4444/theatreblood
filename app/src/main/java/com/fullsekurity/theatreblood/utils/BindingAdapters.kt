@@ -12,6 +12,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.MIS
+import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFragment
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -225,6 +226,11 @@ fun setHint(view: TextView, hint: String) {
 @BindingAdapter("recyclerViewViewModel")
 fun setRecyclerViewViewModel(recyclerView: RecyclerView, viewModel: RecyclerViewViewModel?) {
     viewModel?.setupRecyclerView(recyclerView)
+}
+
+@BindingAdapter("recyclerViewFragment")
+fun setRecyclerViewFragment(recyclerView: RecyclerView, fragment: RecyclerViewFragment?) {
+    fragment?.setupRecyclerView(recyclerView)
 }
 
 // TextInputLayout: Hint color ABOVE the EditText box when the editText IS focused

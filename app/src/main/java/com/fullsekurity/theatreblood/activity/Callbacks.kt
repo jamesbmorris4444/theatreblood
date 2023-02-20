@@ -3,6 +3,7 @@ package com.fullsekurity.theatreblood.activity
 import android.view.View
 import android.widget.RadioButton
 import android.widget.Spinner
+import androidx.fragment.app.Fragment
 import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel
@@ -11,6 +12,7 @@ import com.fullsekurity.theatreblood.viewdonorlist.ViewDonorListListViewModel
 interface Callbacks {
     fun fetchActivity(): MainActivity
     fun fetchRootView() : View
+    fun fetchFragment(): Fragment
     fun fetchRadioButton(resId: Int) : RadioButton?
     fun fetchDropdown(resId: Int) : Spinner?
     fun fetchCreateProductsListViewModel() : CreateProductsListViewModel?

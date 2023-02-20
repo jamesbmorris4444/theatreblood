@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
-import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
-import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
+import com.fullsekurity.theatreblood.createproducts.CreateProductsFragment
+import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
@@ -41,7 +41,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
             }
         }
     }
-    private var donateListener = object : DonateProductsListViewModel.DonateProductsClickListener {
+    private var donateListener = object : DonateProductsFragment.DonateProductsClickListener {
         override fun onItemClick(view: View, donorWithRemovedProduct: Donor?, position: Int) {
             Utils.hideKeyboard(view)
             if (donorWithRemovedProduct == null) {
@@ -53,7 +53,7 @@ class ReassociateProductsListViewModel(private val callbacks: Callbacks) : Recyc
             }
         }
     }
-    private var createListener = object : CreateProductsListViewModel.CreateProductsClickListener {
+    private var createListener = object : CreateProductsFragment.CreateProductsClickListener {
         override fun onItemClick(view: View, position: Int, editor: Boolean) {
             (adapter.itemList[position] as Product).removedForReassociation = true
             view.visibility = View.GONE

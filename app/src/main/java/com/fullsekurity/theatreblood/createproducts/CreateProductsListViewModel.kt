@@ -5,15 +5,13 @@ import android.view.View
 import android.widget.DatePicker
 import androidx.databinding.ObservableField
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
 import com.fullsekurity.theatreblood.modal.StandardModal
-import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.repository.storage.Product
@@ -35,26 +33,8 @@ class CreateProductsListViewModelFactory(private val callbacks: Callbacks) : Vie
 }
 
 @Suppress("UNCHECKED_CAST")
-class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerViewViewModel(callbacks.fetchActivity().application) {
+class CreateProductsListViewModel(private val callbacks: Callbacks) : AndroidViewModel(callbacks.fetchActivity().application) {
 
-    private val listener = object : CreateProductsClickListener {
-        override fun onItemClick(view: View, position: Int, editor: Boolean) {
-            view.visibility = View.VISIBLE
-            if (editor) {
-                editTextProductDin.set(productList[position].din)
-                editTextProductCode.set(productList[position].productCode)
-                editTextProductExpDate.set(productList[position].expirationDate)
-                productList.removeAt(position)
-                adapter.addAll(productList, ProductListDiffCallback(adapter.itemList, productList))
-            } else {
-                productList.removeAt(position)
-                adapter.addAll(productList, ProductListDiffCallback(adapter.itemList, productList))
-                adapter.notifyItemRemoved(position)
-            }
-        }
-    }
-    override var adapter: CreateProductsAdapter = CreateProductsAdapter(callbacks, listener)
-    override val itemDecorator: RecyclerView.ItemDecoration? = null
     private lateinit var donor: Donor
     private val calendar = Calendar.getInstance()
     private val year = calendar.get(Calendar.YEAR)
@@ -65,8 +45,8 @@ class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
     val clearButtonVisibility: ObservableField<Int> = ObservableField(View.GONE)
     val confirmButtonVisibility: ObservableField<Int> = ObservableField(View.GONE)
     val completeButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
-    private var confirmNeeded = false
-    private val productList: MutableList<Product> = mutableListOf()
+    var confirmNeeded = false
+    val productList: MutableList<Product> = mutableListOf()
 
     @Inject
     lateinit var uiViewModel: UIViewModel
@@ -78,49 +58,39 @@ class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
             .viewModelInjectorModule(ViewModelInjectorModule(callbacks.fetchActivity()))
             .build()
             .inject(this)
-        adapter.uiViewModel = uiViewModel
         callbacks.fetchActivity().createProductsListViewModel = this
-    }
-
-    override fun setLayoutManager(): RecyclerView.LayoutManager {
-        return object : LinearLayoutManager(callbacks.fetchActivity().applicationContext) {
-            override fun canScrollHorizontally(): Boolean {
-                return false
-            }
-
-            override fun canScrollVertically(): Boolean {
-                return false
-            }
-        }
     }
     
     var editTextProductDin: ObservableField<String> = ObservableField("")
     fun onTextDinChanged(key: CharSequence, start: Int, before: Int, count: Int) {
-        onTextEntered(key.toString())
+        if (key.isNotEmpty()) {
+            clearButtonVisibility.set(View.VISIBLE)
+            confirmButtonVisibility.set(View.VISIBLE)
+            confirmNeeded = true
+        }
         // within "key", the "count" characters beginning at index "start" have just replaced old text that had length "before"
     }
     var hintTextDin: ObservableField<String> = ObservableField(callbacks.fetchActivity().getString(R.string.product_din_hint_string))
 
     var editTextProductCode: ObservableField<String> = ObservableField("")
     fun onTextCodeChanged(key: CharSequence, start: Int, before: Int, count: Int) {
-        onTextEntered(key.toString())
+        if (key.isNotEmpty()) {
+            clearButtonVisibility.set(View.VISIBLE)
+            confirmButtonVisibility.set(View.VISIBLE)
+            confirmNeeded = true
+        }
     }
     var hintTextCode: ObservableField<String> = ObservableField(callbacks.fetchActivity().getString(R.string.product_code_hint_string))
 
     var editTextProductExpDate: ObservableField<String> = ObservableField("")
     fun onTextExpDateChanged(key: CharSequence, start: Int, before: Int, count: Int) {
-        onTextEntered(key.toString())
+        if (key.isNotEmpty()) {
+            clearButtonVisibility.set(View.VISIBLE)
+            confirmButtonVisibility.set(View.VISIBLE)
+            confirmNeeded = true
+        }
     }
     var hintTextExpDate: ObservableField<String> = ObservableField(callbacks.fetchActivity().getString(R.string.product_expiration_date_hint_string))
-
-    private fun onTextEntered(enteredText: String) {
-        if (enteredText.isEmpty()) {
-            return
-        }
-        clearButtonVisibility.set(View.VISIBLE)
-        confirmButtonVisibility.set(View.VISIBLE)
-        confirmNeeded = true
-    }
 
     fun onCalendarClicked(view: View) {
         Utils.hideKeyboard(view)
@@ -170,15 +140,7 @@ class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
         confirmNeeded = false
     }
 
-    fun onConfirmClicked(view: View) {
-        processNewProduct()
-        adapter.addAll(productList, ProductListDiffCallback(adapter.itemList, productList))
-        clearButtonVisibility.set(View.VISIBLE)
-        confirmButtonVisibility.set(View.VISIBLE)
-        confirmNeeded = false
-    }
-
-    private fun processNewProduct() {
+    fun processNewProduct() {
         val product = Product()
         editTextProductDin.get()?.let {
             product.din = it
@@ -250,10 +212,6 @@ class CreateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
         override fun areContentsTheSame(oldItemPosition: Int, newPosition: Int): Boolean {
             return areItemsTheSame(oldItemPosition, newPosition)
         }
-    }
-
-    interface CreateProductsClickListener {
-        fun onItemClick(view: View, position: Int, editor: Boolean)
     }
 
 }

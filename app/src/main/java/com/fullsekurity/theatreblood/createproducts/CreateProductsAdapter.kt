@@ -14,7 +14,7 @@ import com.fullsekurity.theatreblood.repository.storage.Product
 import com.fullsekurity.theatreblood.ui.UIViewModel
 
 
-class CreateProductsAdapter(val callbacks: Callbacks, val listener: CreateProductsListViewModel.CreateProductsClickListener) : RecyclerViewFilterAdapter<Product, CreateProductsItemViewModel>() {
+class CreateProductsAdapter(val callbacks: Callbacks, val listener: CreateProductsFragment.CreateProductsClickListener) : RecyclerViewFilterAdapter<Product, CreateProductsItemViewModel>() {
 
     private var adapterFilter: AdapterFilter? = null
     lateinit var uiViewModel: UIViewModel

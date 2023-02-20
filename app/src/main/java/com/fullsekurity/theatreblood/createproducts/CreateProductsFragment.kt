@@ -11,6 +11,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.*
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
@@ -20,6 +22,7 @@ import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
 import com.fullsekurity.theatreblood.logger.LogUtils
 import com.fullsekurity.theatreblood.logger.LogUtils.TagFilter.API
 import com.fullsekurity.theatreblood.reassociateproducts.ReassociateProductsListViewModel
+import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFragment
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Constants
@@ -29,12 +32,41 @@ import com.fullsekurity.theatreblood.viewdonorlist.ViewDonorListListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class CreateProductsFragment : Fragment(), Callbacks {
+class CreateProductsFragment : RecyclerViewFragment(), Callbacks {
 
     private lateinit var createProductsListViewModel: CreateProductsListViewModel
     private lateinit var donor: Donor
     private lateinit var binding: CreateProductsFragmentBinding
     private lateinit var mainActivity: MainActivity
+
+    val listener = object : CreateProductsClickListener {
+        override fun onItemClick(view: View, position: Int, editor: Boolean) {
+            view.visibility = View.VISIBLE
+            if (editor) {
+                createProductsListViewModel.editTextProductDin.set(createProductsListViewModel.productList[position].din)
+                createProductsListViewModel.editTextProductCode.set(createProductsListViewModel.productList[position].productCode)
+                createProductsListViewModel.editTextProductExpDate.set(createProductsListViewModel.productList[position].expirationDate)
+                createProductsListViewModel.productList.removeAt(position)
+                adapter.addAll(createProductsListViewModel.productList,
+                    CreateProductsListViewModel.ProductListDiffCallback(
+                        adapter.itemList,
+                        createProductsListViewModel.productList
+                    )
+                )
+            } else {
+                createProductsListViewModel.productList.removeAt(position)
+                adapter.addAll(createProductsListViewModel.productList,
+                    CreateProductsListViewModel.ProductListDiffCallback(
+                        adapter.itemList,
+                        createProductsListViewModel.productList
+                    )
+                )
+                adapter.notifyItemRemoved(position)
+            }
+        }
+    }
+    override var adapter: CreateProductsAdapter = CreateProductsAdapter(this, listener)
+    override val itemDecorator: RecyclerView.ItemDecoration? = null
 
     companion object {
         fun newInstance(donor: Donor): CreateProductsFragment {
@@ -75,10 +107,24 @@ class CreateProductsFragment : Fragment(), Callbacks {
         createProductsListViewModel = ViewModelProvider(this, CreateProductsListViewModelFactory(this)).get(CreateProductsListViewModel::class.java)
         binding.createProductsListViewModel = createProductsListViewModel
         binding.uiViewModel = uiViewModel
+        binding.createProductsFragment = this
+        adapter.uiViewModel = uiViewModel
         uiViewModel.currentTheme = (activity as MainActivity).currentTheme
         createProductsListViewModel.setDonor(donor)
         setupLottieDrawables(binding.root)
         return binding.root
+    }
+
+    override fun setLayoutManager(): RecyclerView.LayoutManager {
+        return object : LinearLayoutManager(requireContext()) {
+            override fun canScrollHorizontally(): Boolean {
+                return false
+            }
+
+            override fun canScrollVertically(): Boolean {
+                return true
+            }
+        }
     }
 
     private fun setupLottieDrawables(view: View) {
@@ -136,6 +182,19 @@ class CreateProductsFragment : Fragment(), Callbacks {
         mainActivity = activity as MainActivity
     }
 
+    fun onConfirmClicked(view: View) {
+        createProductsListViewModel.processNewProduct()
+        adapter.addAll(createProductsListViewModel.productList,
+            CreateProductsListViewModel.ProductListDiffCallback(
+                adapter.itemList,
+                createProductsListViewModel.productList
+            )
+        )
+        createProductsListViewModel.clearButtonVisibility.set(View.VISIBLE)
+        createProductsListViewModel.confirmButtonVisibility.set(View.VISIBLE)
+        createProductsListViewModel.confirmNeeded = false
+    }
+
     override fun fetchActivity(): MainActivity {
         return if (::mainActivity.isInitialized) {
             mainActivity
@@ -146,6 +205,10 @@ class CreateProductsFragment : Fragment(), Callbacks {
 
     override fun fetchRootView(): View {
         return binding.root
+    }
+
+    override fun fetchFragment(): Fragment {
+        return this
     }
 
     override fun fetchRadioButton(resId: Int): RadioButton {
@@ -161,5 +224,9 @@ class CreateProductsFragment : Fragment(), Callbacks {
     override fun fetchDonateProductsListViewModel() : DonateProductsListViewModel? { return null }
     override fun fetchReassociateProductsListViewModel() : ReassociateProductsListViewModel? { return null }
     override fun fetchViewDonorListViewModel() : ViewDonorListListViewModel? { return null }
+
+    interface CreateProductsClickListener {
+        fun onItemClick(view: View, position: Int, editor: Boolean)
+    }
 
 }

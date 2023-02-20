@@ -12,6 +12,10 @@
         <variable
             name="donateProductsListViewModel"
             type="com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel" />
+
+        <variable
+                name="donateProductsFragment"
+                type="com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@{uiViewModel.buttonDrawable}"
-                android:onClick="@{(view) -> donateProductsListViewModel.onSearchClicked(view)}"
+                android:onClick="@{(view) -> donateProductsFragment.onSearchClicked(view)}"
                 app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardButtonWidth)}"
                 app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
                 app:layout_marginRight="@{safeUnbox(uiViewModel.standardLeftAndRightMargin)}"
@@ -98,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:src="@{uiViewModel.largeButtonDrawable}"
                 android:layout_marginTop="10dp"
-                android:onClick="@{(view) -> donateProductsListViewModel.onNewDonorClicked(view)}"
+                android:onClick="@{() -> donateProductsListViewModel.onNewDonorClicked()}"
                 android:visibility="@{safeUnbox(donateProductsListViewModel.newDonorVisible)}"
                 app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
                 app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardLargeButtonWidth)}"
@@ -141,7 +145,7 @@
                 android:visibility="@{safeUnbox(donateProductsListViewModel.listIsVisible ? View.VISIBLE : View.GONE)}"
                 android:paddingBottom="200dp"
                 android:clipToPadding="false"
-                app:recyclerViewViewModel="@{donateProductsListViewModel}"
+                app:recyclerViewFragment="@{donateProductsFragment}"
                 app:layout_constraintTop_toBottomOf="@+id/top_divider"
                 app:layout_constraintLeft_toLeftOf="parent" />
 

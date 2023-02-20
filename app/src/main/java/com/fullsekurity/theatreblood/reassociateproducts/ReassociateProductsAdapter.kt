@@ -8,12 +8,13 @@ import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
+import com.fullsekurity.theatreblood.createproducts.CreateProductsFragment
 import com.fullsekurity.theatreblood.createproducts.CreateProductsItemViewModel
-import com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel
 import com.fullsekurity.theatreblood.databinding.CreateProductsListItemBinding
 import com.fullsekurity.theatreblood.databinding.DonateProductsListItemBinding
 import com.fullsekurity.theatreblood.databinding.ReassociateLabelItemBinding
 import com.fullsekurity.theatreblood.databinding.ReassociateSearchItemBinding
+import com.fullsekurity.theatreblood.donateproducts.DonateProductsFragment
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsItemViewModel
 import com.fullsekurity.theatreblood.donateproducts.DonateProductsListViewModel
 import com.fullsekurity.theatreblood.recyclerview.RecyclerViewFilterAdapter
@@ -29,8 +30,8 @@ import javax.inject.Inject
 
 class ReassociateProductsAdapter(private val callbacks: Callbacks,
                                  private val listener: ReassociateProductsListViewModel.ReassociateProductsClickListener,
-                                 private val donateListener: DonateProductsListViewModel.DonateProductsClickListener,
-                                 private val createListener: CreateProductsListViewModel.CreateProductsClickListener
+                                 private val donateListener: DonateProductsFragment.DonateProductsClickListener,
+                                 private val createListener: CreateProductsFragment.CreateProductsClickListener
                                  ) : RecyclerViewFilterAdapter<Any, RecyclerViewItemViewModel<Any>>() {
 
     private var adapterFilter: AdapterFilter? = null

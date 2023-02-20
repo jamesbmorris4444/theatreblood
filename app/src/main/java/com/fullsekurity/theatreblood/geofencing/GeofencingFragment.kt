@@ -221,6 +221,10 @@ class GeofencingFragment : Fragment(), Callbacks {
         return binding.root
     }
 
+    override fun fetchFragment(): Fragment {
+        return this
+    }
+
     override fun fetchRadioButton(resId:Int): RadioButton {
         return fetchRootView().findViewById(resId)
     }

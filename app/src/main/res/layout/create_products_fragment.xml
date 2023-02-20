@@ -12,6 +12,11 @@
         <variable
                 name="createProductsListViewModel"
                 type="com.fullsekurity.theatreblood.createproducts.CreateProductsListViewModel" />
+
+        <variable
+                name="createProductsFragment"
+                type="com.fullsekurity.theatreblood.createproducts.CreateProductsFragment" />
+
     </data>
 
     <ScrollView
@@ -94,7 +99,7 @@
                                 android:paddingStart="3dp"
                                 android:paddingEnd="10dp"
                                 android:paddingTop="20dp"
-                                android:inputType="textCapCharacters"
+                                android:inputType="text"
                                 app:background_from_res_int="@{uiViewModel.editTextBackgroundResInt}"
                                 app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
                                 app:edit_text_color="@{uiViewModel.editTextProductColor}"
@@ -237,7 +242,7 @@
                                 android:paddingStart="3dp"
                                 android:paddingEnd="10dp"
                                 android:paddingTop="20dp"
-                                android:inputType="textCapCharacters"
+                                android:inputType="text"
                                 app:background_from_res_int="@{uiViewModel.editTextBackgroundResInt}"
                                 app:edit_text_font="@{uiViewModel.editTextProductTypeface}"
                                 app:edit_text_color="@{uiViewModel.editTextProductColor}"
@@ -407,7 +412,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:src="@{uiViewModel.buttonDrawable}"
-                    android:onClick="@{(view) -> createProductsListViewModel.onConfirmClicked(view)}"
+                    android:onClick="@{(view) -> createProductsFragment.onConfirmClicked(view)}"
                     app:layout_width_dynamic="@{safeUnbox(uiViewModel.standardButtonWidth)}"
                     app:layout_height_dynamic="@{safeUnbox(uiViewModel.standardButtonHeight)}"
                     android:visibility="@{safeUnbox(createProductsListViewModel.confirmButtonVisibility)}"
@@ -479,7 +484,7 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="100dp"
                     android:clipToPadding="false"
-                    app:recyclerViewViewModel="@{createProductsListViewModel}"
+                    app:recyclerViewFragment="@{createProductsFragment}"
                     app:layout_constraintTop_toBottomOf="@+id/divider"
                     app:layout_constraintLeft_toLeftOf="parent" />
 

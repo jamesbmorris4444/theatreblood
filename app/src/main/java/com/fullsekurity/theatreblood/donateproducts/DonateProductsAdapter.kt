@@ -13,7 +13,7 @@ import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
 import com.fullsekurity.theatreblood.utils.Utils
 
-class DonateProductsAdapter(private val callbacks: Callbacks, val listener: DonateProductsListViewModel.DonateProductsClickListener?) : RecyclerViewFilterAdapter<Donor, DonateProductsItemViewModel>() {
+class DonateProductsAdapter(private val callbacks: Callbacks, val listener: DonateProductsFragment.DonateProductsClickListener?) : RecyclerViewFilterAdapter<Donor, DonateProductsItemViewModel>() {
 
     private var adapterFilter: AdapterFilter? = null
     lateinit var uiViewModel: UIViewModel

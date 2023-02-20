@@ -3,14 +3,12 @@ package com.fullsekurity.theatreblood.donateproducts
 import android.app.Application
 import android.view.View
 import androidx.databinding.ObservableField
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.fullsekurity.theatreblood.R
 import com.fullsekurity.theatreblood.activity.Callbacks
-import com.fullsekurity.theatreblood.recyclerview.RecyclerViewViewModel
 import com.fullsekurity.theatreblood.repository.Repository
 import com.fullsekurity.theatreblood.repository.storage.Donor
 import com.fullsekurity.theatreblood.ui.UIViewModel
@@ -27,20 +25,12 @@ class DonateProductsListViewModelFactory(private val callbacks: Callbacks) : Vie
     }
 }
 
-class DonateProductsListViewModel(private val callbacks: Callbacks) : RecyclerViewViewModel(callbacks.fetchActivity().application) {
+class DonateProductsListViewModel(private val callbacks: Callbacks) : AndroidViewModel(callbacks.fetchActivity().application) {
 
-    private val listener = object : DonateProductsClickListener {
-        override fun onItemClick(view: View, donorWithRemovedProduct: Donor?, position: Int) {
-            Utils.hideKeyboard(view)
-            callbacks.fetchActivity().loadDonorFragment(adapter.itemList[position], callbacks.fetchActivity().transitionToCreateDonation)
-        }
-    }
-    override var adapter: DonateProductsAdapter = DonateProductsAdapter(callbacks, listener)
-    override val itemDecorator: RecyclerView.ItemDecoration? = null
     val listIsVisible: ObservableField<Boolean> = ObservableField(true)
     val newDonorVisible: ObservableField<Int> = ObservableField(View.GONE)
     val submitVisible: ObservableField<Int> = ObservableField(View.GONE)
-    private var numberOfItemsDisplayed = -1
+    var numberOfItemsDisplayed = -1
     var transitionToCreateDonation = true
 
     @Inject
@@ -53,30 +43,9 @@ class DonateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
             .viewModelInjectorModule(ViewModelInjectorModule(callbacks.fetchActivity()))
             .build()
             .inject(this)
-        adapter.uiViewModel = uiViewModel
     }
 
-    override fun setLayoutManager(): RecyclerView.LayoutManager {
-        return object : LinearLayoutManager(getApplication<Application>().applicationContext) {
-            override fun canScrollHorizontally(): Boolean {
-                return false
-            }
-
-            override fun canScrollVertically(): Boolean {
-                return true
-            }
-        }
-    }
-
-    private fun showDonors(donorList: List<Donor>) {
-        listIsVisible.set(donorList.isNotEmpty())
-        val newDonorList = donorList.sortedBy { donor -> Utils.donorComparisonByString(donor) }
-        adapter.addAll(newDonorList, DonorListDiffCallback(adapter.itemList, newDonorList))
-        numberOfItemsDisplayed = donorList.size
-        setNewDonorVisibility("NONEMPTY")
-    }
-
-    private fun setNewDonorVisibility(key: String) {
+    fun setNewDonorVisibility(key: String) {
         if (key.isNotEmpty() && numberOfItemsDisplayed == 0) {
             newDonorVisible.set(View.VISIBLE)
         } else {
@@ -109,12 +78,7 @@ class DonateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
     var hintTextName: ObservableField<String> = ObservableField(getApplication<Application>().applicationContext.getString(R.string.donor_search_string))
     var editTextNameVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
-    fun onSearchClicked(view: View) {
-        Utils.hideKeyboard(view)
-        repository.handleSearchClick(view, editTextNameInput.get() ?: "", this::showDonors)
-    }
-
-    fun onNewDonorClicked(view: View) {
+    fun onNewDonorClicked() {
         callbacks.fetchActivity().loadDonorFragment(null, transitionToCreateDonation)
         repository.newDonorInProgress = true
         repository.newDonor = null
@@ -129,10 +93,6 @@ class DonateProductsListViewModel(private val callbacks: Callbacks) : RecyclerVi
         override fun areContentsTheSame(oldItemPosition: Int, newPosition: Int): Boolean {
             return areItemsTheSame(oldItemPosition, newPosition)
         }
-    }
-
-    interface DonateProductsClickListener {
-        fun onItemClick(view: View, donorWithRemovedProduct: Donor?, position: Int)
     }
 
 }

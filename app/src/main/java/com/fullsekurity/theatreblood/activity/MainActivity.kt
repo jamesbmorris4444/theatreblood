@@ -22,6 +22,7 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.airbnb.lottie.*
 import com.fullsekurity.theatreblood.R
@@ -451,6 +452,10 @@ class MainActivity : AppCompatActivity(), Callbacks, NavigationView.OnNavigation
 
     override fun fetchRootView(): View {
         return activityMainBinding.root
+    }
+
+    override fun fetchFragment(): Fragment {
+        return Fragment()
     }
 
     override fun fetchRadioButton(resId: Int): RadioButton? { return null }
