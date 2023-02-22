@@ -3,9 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/aborh_and_branch_dropdown_item.xml" value="0.325" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.325" />
         <entry key="app/src/main/res/layout/create_products_list_item.xml" value="0.340625" />
         <entry key="app/src/main/res/layout/donate_products_fragment.xml" value="0.325" />
         <entry key="app/src/main/res/layout/donate_products_list_item.xml" value="0.340625" />
+        <entry key="app/src/main/res/layout/geofencing_fragment.xml" value="0.325" />
         <entry key="app/src/main/res/layout/reassociate_label_item.xml" value="0.340625" />
         <entry key="app/src/main/res/layout/reassociate_products_fragment.xml" value="0.340625" />
         <entry key="app/src/main/res/layout/reassociate_search_item.xml" value="0.325" />
